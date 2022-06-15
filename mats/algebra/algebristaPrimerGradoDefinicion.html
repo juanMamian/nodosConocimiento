@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+
+    <title>Algebrista de primer grado</title>
+</head>
+
+<body>
+    <div id="doc">
+        <recuadro-component tipo="datoPrevio">
+            Un algebrista de primer grado es alguien capaz de descubrir el valor de la incógnita en cualquier ecuación de
+            primer
+            grado.
+        </recuadro-component>
+
+        <recuadro-component tipo="datoPrevio">
+            Para descubrir el valor de la incógnita, la estrategia fundamental es despejar la incógnita.
+        </recuadro-component>
+
+        <recuadro-component tipo="datoPrevio">
+            En algunas ecuaciones, la incógnita no se puede despejar por distintos motivos. Entonces el algebrista
+            manipula
+            la ecuación estratégicamente haciendo uso de sus conocimientos en ecuaciones equivalentes e identidades
+            algebraicas.
+        </recuadro-component>
+        
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+            }
+        },
+
+    })
+</script>
+
+<style>
+    body {
+        padding: 2% 5%;
+    }
+
+    .conclusion {
+        padding: 10px 15px;
+        border-radius: 15px;
+        margin: 10px 5px;
+        width: min(90%, 650px);
+        background-color: rgb(209, 127, 33);
+        margin: 10px auto;
+    }
+
+    .nota {
+        background-color: rgb(233, 185, 150);
+        border-radius: 15px;
+        padding: 15px;
+        margin: 10px auto;
+        width: min(650px, 90%);
+    }
+</style>

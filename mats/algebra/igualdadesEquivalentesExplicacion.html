@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+    <title>Igualdades equivalentes</title>
+</head>
+
+<body>
+    <div id="doc">
+
+        Si se tiene que:
+        <ul>
+            <li><span>\(4 \times 2 \) </span><span>\( = \)</span><span>\(11-3 \)</span></li>
+        </ul>
+
+        <p>
+            Esta igualdad afirma que el número <span class="numeroOriginal">\(4 \times 2\)</span> y el número <span
+                class="numeroOriginal">\(11 - 3\)</span> son iguales.
+        </p>
+
+        <p>
+            Si se construyen dos nuevos números escribiendo:
+        <ul>
+            <li>
+                \((4 \times 2) + 6\)
+            </li>
+            <li>
+                \((11 - 3) + 6\)
+            </li>
+        </ul>
+        </p>
+
+        Sobre ellos se puede deducir que:
+
+        <recuadro-component tipo="datoNuevo" @click.native="toggleMostrandoDeduccion">
+            <div class="deduccion" v-show="!mostrandoDeduccionSimbolos">
+                Si <span class="numeroOriginal">\(4 \times 2\)</span> y <span class="numeroOriginal">\(11 - 3\)</span>
+                son iguales, entonces
+                <span class="numeroOriginal">\((4 \times 2)+6\)</span> y <span class="numeroOriginal">\((11 -
+                    3)+6\)</span> también son iguales.
+            </div>
+            <div class="deduccion" v-show="mostrandoDeduccionSimbolos">
+                \((4 \times 2) = 11-3 => (4 \times 2)+6=(11 -  3)+6 \)
+            </div>
+        </recuadro-component>
+
+        <recuadro-component tipo="instruccionPointer" style="max-width: 300px;">
+            La deducción anterior se puede escribir en símbolos matemáticos. Presiona sobre ella para ver cómo.
+        </recuadro-component>
+
+
+        <p>
+            Este tipo de deducción produce una nueva ecuación. Se dice que esta es una ecuación equivalente a la original.
+        </p>
+
+        <p>
+            Mediante este tipo de deducción se pueden producir muchas ecuaciones equivalentes a la original.
+        </p>
+
+        <bloque-component tipo="ejemplo" textoCabecera="En este cuadro se pueden ver algunas otras deducciones a partir de la ecuación original.">
+            <ul style="line-height: 60px;">
+                <li>
+                    \(4 \times 2  = 11-3 => {(4 \times 2) \times 4}  = {(11-3) \times 4} \)
+                </li>
+                <li>
+                    \(4 \times 2  = 11-3 => {(4 \times 2) \over 9}  = {(11-3) \over 9} \)
+                </li>
+                <li>
+                    \(4 \times 2  = 11-3 => {(4 \times 2) - 6 }  = {(11-3) - 6} \)
+                </li>
+            </ul>
+        </bloque-component>
+
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                operacionesBasicas: [
+                    {
+                        codigo: " + ",
+                        simbolo: " + ",
+                        nombre: "suma",
+                    },
+                    {
+                        codigo: " - ",
+                        simbolo: " - ",
+
+                        nombre: "resta"
+                    },
+                    {
+                        codigo: " \\times ",
+                        simbolo: " \\times ",
+
+                        nombre: "multiplicación"
+                    },
+                    {
+                        codigo: " \\over ",
+                        simbolo: " \\div ",
+
+                        nombre: "división"
+                    }
+                ],
+
+                mostrandoDeduccionSimbolos:false,
+
+            }
+        },
+        computed: {
+            operacionesPosibles() {
+                return this.operacionesBasicas;
+            },
+            mitad1() {
+                const mitad1 = "(4 \\times 2)" + this.operacionesPosibles[this.operacionSeleccionada].codigo + this.numeroAmbosLados;
+                return "\\(" + mitad1 + "\\)";
+            },
+            mitad2() {
+                const mitad2 = "(11 - 3)" + this.operacionesPosibles[this.operacionSeleccionada].codigo + this.numeroAmbosLados;
+                return "\\(" + mitad2 + "\\)";
+            },
+            nuevaEcuacion() {
+                console.log(`substr1: ${this.mitad1.substr(2, this.mitad1.length - 4)}`);
+                console.log(`substr2: ${this.mitad2.substr(2, this.mitad2.length - 4)}`);
+
+                const nueva = "{" + this.mitad1.substr(2, this.mitad1.length - 4) + "}={" + this.mitad2.substr(2, this.mitad2.length - 4) + "}";
+                return "\\(" + nueva + "\\)";
+            }
+        },
+        methods: {
+            toggleMostrandoDeduccion(){
+                this.mostrandoDeduccionSimbolos=!this.mostrandoDeduccionSimbolos;
+                this.$nextTick(()=>{
+                    MathJax.typeset();
+                })
+            }
+        },
+        watch: {
+            numeroAmbosLados() {
+                this.reloadBotonesNuevosNumeros();
+            },
+            operacionSeleccionada() {
+                this.reloadBotonesNuevosNumeros();
+            }
+
+        }
+
+    })
+</script>
+
+<style>
+    body {
+        padding: 2% 5%;
+    }
+
+    .recuadro {
+        width: 80%;
+    }
+
+    #ejemplo1 {
+        border: 2px solid blueviolet;
+        border-radius: 20px;
+        padding: 10px;
+        padding-bottom: 30px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 10px;
+        justify-items: center;
+    }
+
+    .botonAnchoCompleto {
+        grid-column: 1/3;
+    }
+
+    .transversal {
+        grid-column: 1/3;
+    }
+
+    .botonEjemplo {
+        max-width: 600px;
+        margin: 10px auto;
+        padding: 10px 20px;
+    }
+
+    .divAnchoCompleto {
+        grid-column: 1/3;
+    }
+
+    .conclusion {
+        padding: 5px 10px;
+        border-radius: 10px;
+        background-color: rgb(87, 196, 87);
+    }
+
+    .columnaDerecha {
+        grid-column: 2/3;
+    }
+
+    .columnaIzquierda {
+        grid-column: 1/2;
+    }
+
+    .selectorOperacion {
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+        border: 1px solid rgb(73, 73, 73);
+        cursor: pointer;
+        display: inline-block;
+        margin: 10px;
+    }
+
+    .selectorOperacion:hover {
+        background-color: cadetblue;
+    }
+
+    .seleccionado {
+        background-color: cadetblue;
+    }
+
+    .codigo {
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>

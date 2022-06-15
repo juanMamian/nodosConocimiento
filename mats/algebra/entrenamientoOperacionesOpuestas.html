@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenamiento en operaciones opuestas</title>
+</head>
+
+<body>
+    <div id="doc">
+        <center>
+            <label for="selectorNumeroInicial">Selecciona un número</label>
+            <input type="range" min="1" max="50" v-model="numeroInicial">
+            <div id="numeroInicial">{{numeroInicial}}</div>
+        </center>
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc=new Vue({
+        el:"#doc",
+        data(){
+            return {
+                numeroInicial:5,
+                numeroInicialSeleccionado:false
+            }
+        }
+    })
+</script>

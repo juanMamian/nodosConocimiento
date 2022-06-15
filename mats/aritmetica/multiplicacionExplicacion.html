@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+
+    <title>Multiplicación</title>
+</head>
+
+<body>
+    <div id="doc">
+
+        <recuadro-component class="datoPrevio">
+            Multiplicación significa repetición. Así que multiplicar un número significa repetirlo.
+        </recuadro-component>        
+
+        <bloque-component @plegado="multiplicador=1" tipo="ejemplo" textoCabecera="En este cuadro se puede ver un número 6 y multiplicarlo.">
+            <p style="text-align: center;">
+                Este es un número 6:
+            </p>
+            <div class="numero" v-for="rep of multiplicador" :key="'fila'+rep">
+                <div class="bolita" v-for="num of 6" :key="'bolita'+rep+num"></div>
+            </div>
+
+            <div class="boton" id="botonMultiplicar" @click="multiplicador++">
+                ¡Multiplicar!
+            </div>
+
+            <recuadro-component v-show="multiplicador>1" tipo="datoNuevo">
+                ¡Ahora está multiplicado por {{multiplicador}}!
+            </recuadro-component>
+
+
+        </bloque-component>
+
+        <recuadro-component tipo="instruccion">En la sección "El juego de la multiplicación" puedes multiplicar números representados por bolitas.</recuadro-component>
+
+        
+        
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        el: "#doc",
+        data(){
+            return {
+                multiplicador:1,
+            }
+        }
+        
+    })
+</script>
+
+<style>
+    body {
+        padding: 2% 5%;
+    }  
+    .nota {
+        margin: 5px auto;
+        border-radius: 15px;
+        background-color: rgb(233, 185, 150);
+        padding: 15px;
+        width: min(600px, 90%);
+    }
+
+    .numero{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .bolita{
+        width: 20px;
+        height: 20px;
+        margin: 10px;
+        border-radius: 50%;
+        background-color: orange;
+    }
+</style>

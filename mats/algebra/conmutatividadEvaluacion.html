@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+
+    <title>Conmutatividad - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>Comprendo el concepto de conmutatividad si: </p>
+
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Dada cualquier expresión numérica, puedo conmutarla.">
+        </bloque-component>        
+
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Puedo explicar qué es una operación conmutativa.">
+        </bloque-component>        
+
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Conozco una lista de operaciones aritméticas conmutativas.">
+        </bloque-component>        
+
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Dada cualquier expresión numérica, puedo decidir si está formada por una operación conmutativa.">
+        </bloque-component>        
+
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Dada cualquier expresión numérica formada con una operación conmutativa, puedo escribir una nueva expresión numérica que representa el mismo valor.">
+        </bloque-component>        
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+            }
+        },
+
+    })
+</script>

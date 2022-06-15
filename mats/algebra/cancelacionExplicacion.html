@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+    <title>Cancelación de operaciones</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>Si una expresión numérica está construida de forma tal que al evaluarla se deben ejecutar operaciones
+            opuestas de manera consecutiva, se dice que esas operaciones se cancelan. Es decir: el efecto de una es
+            anulado por el efecto de la otra.
+        </p>
+
+        <bloque-component tipo="ejemplo"
+            textoCabecera="En este cuadro se pueden ver algunas expresiones numéricas con operaciones opuestas consecutivas">
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="expresion">
+                        \((3+6) -6\)
+                    </div>
+                    <div class="descripcion">
+                        Para evaluar esta expresión:
+                        <ul>
+                            <li>
+                                Se aplica una <span class="operacionOpuesta operacionOpuesta1">suma de 6</span> sobre el
+                                3.
+                            </li>
+                            <li>
+                                Se aplica una <span class="operacionOpuesta operacionOpuesta2">resta de 6</span> sobre
+                                el resultado anterior.
+                            </li>
+                        </ul>
+
+                        La <span class="operacionOpuesta operacionOpuesta1">suma de 6</span> y la <span
+                            class="operacionOpuesta operacionOpuesta2">resta de 6</span> se aplican de forma
+                        consecutiva.
+
+                        <recuadro-component tipo="descubrimiento">¡Las dos operaciones se cancelan!</recuadro-component>
+                    </div>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="expresion">
+                        \(({12 \over 2}) \times 2\)
+                    </div>
+                    <div class="descripcion">
+                        Para evaluar esta expresión:
+                        <ul>
+                            <li>
+                                Se aplica una <span class="operacionOpuesta operacionOpuesta1">division entre 2</span>
+                                sobre el 12.
+                            </li>
+                            <li>
+                                Se aplica una <span class="operacionOpuesta operacionOpuesta2">multiplicación por
+                                    2</span> sobre el resultado anterior.
+                            </li>
+                        </ul>
+
+                        La <span class="operacionOpuesta operacionOpuesta1">división entre 2</span> y la <span
+                            class="operacionOpuesta operacionOpuesta2">multiplicación por 2</span> se aplican de forma
+                        consecutiva.
+
+                        <recuadro-component tipo="descubrimiento">¡Las dos operaciones se cancelan!</recuadro-component>
+                    </div>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="expresion">
+                        \( \sqrt[2]{ ({3 ^ 2})} \)
+                    </div>
+                    <div class="descripcion">
+                        Para evaluar esta expresión:
+                        <ul>
+                            <li>
+                                Se aplica una <span class="operacionOpuesta operacionOpuesta1">potencia 2</span> sobre
+                                el 3.
+                            </li>
+                            <li>
+                                Se aplica una <span class="operacionOpuesta operacionOpuesta2">raiz 2</span> sobre el
+                                resultado anterior.
+                            </li>
+                        </ul>
+
+                        La <span class="operacionOpuesta operacionOpuesta1">potencia 2</span> y la <span
+                            class="operacionOpuesta operacionOpuesta2">raiz 2</span> se aplican de forma consecutiva.
+
+                        <recuadro-component tipo="descubrimiento">¡Las dos operaciones se cancelan!</recuadro-component>
+                    </div>
+                </div>
+            </div>
+        </bloque-component>
+
+        <p>Operaciones que se cancelan no tienen efecto en el valor de la expresión numérica. Por eso, si se eliminan
+            esas operaciones se obtiene una nueva expresión numérica con el mismo valor que la original.
+        </p>
+
+        <bloque-component tipo="ejemplo"
+            textoCabecera="En este cuadro se pueden ver algunas expresiones numericas que tienen operaciones que se cancelan y se puede escribir una nueva expresión sin ellas.">
+            <div id="ejemplos1">
+                <transition name="travelRight">
+                    <div class="expresion expresionEjemplo1 sinCancelar" v-show="!cancelar1">
+                        <span class="primaria"> \((7 + 2) -2 \)</span>
+                        <span class="secundaria"> \(7\)</span>
+                    </div>
+                </transition>
+
+                <button class="bCancelarOperaciones" v-on:click="cancelar1=!cancelar1">
+                    {{cancelar1? 'Deshacer':'!Cancelar operaciones opuestas consecutivas!'}}</button>
+
+                <transition name="travelLeft">
+                    <div class="expresion expresionEjemplo1 cancelada" v-show="cancelar1">
+                        \( 7 \)
+                    </div>
+                </transition>
+
+                <transition name="travelRight">
+                    <div class="expresion expresionEjemplo1 sinCancelar" v-show="!cancelar2">
+                        <span class="primaria"> \(((6 \times 2) -8 ) + 8 \)</span>
+                        <span class="secundaria"> \(12\)</span>
+                    </div>
+                </transition>
+                <button class="bCancelarOperaciones" v-on:click="cancelar2=!cancelar2">
+                    {{cancelar2? 'Deshacer':'!Cancelar operaciones opuestas consecutivas!'}}</button>
+                <transition name="travelLeft">
+                    <div class="expresion expresionEjemplo1 cancelada" v-show="cancelar2">
+                        <span class="primaria"> \(6 \times 2\)</span>
+                        <span class="secundaria"> \(12\)</span>
+                    </div>
+                </transition>
+                <transition name="travelRight">
+                    <div class="expresion expresionEjemplo1 sinCancelar" v-show="!cancelar3">
+                        <span class="primaria"> \( ({9 \over 3}) \times 3 \)</span>
+                        <span class="secundaria"> \(9\)</span>
+                    </div>
+                </transition>
+                <button class="bCancelarOperaciones" v-on:click="cancelar3=!cancelar3">
+                    {{cancelar3? 'Deshacer':'!Cancelar operaciones opuestas consecutivas!'}}</button>
+                <transition name="travelLeft">
+                    <div class="expresion expresionEjemplo1 cancelada" v-show="cancelar3">
+                        \( 9 \)
+                    </div>
+                </transition>
+                <transition name="travelRight">
+                    <div class="expresion expresionEjemplo1 sinCancelar" v-show="!cancelar4">
+                        <span class="primaria"> \(((32-7) \times 5 ) \over 5 \)</span>
+                        <span class="secundaria"> \(25\)</span>
+                    </div>
+                </transition>
+                <button class="bCancelarOperaciones" v-on:click="cancelar4=!cancelar4">
+                    {{cancelar4? 'Deshacer':'!Cancelar operaciones opuestas consecutivas!'}}</button>
+                <transition name="travelLeft">
+                    <div class="expresion expresionEjemplo1 cancelada" v-show="cancelar4">
+                        <span class="primaria"> \( 32-7 \)</span>
+                        <span class="secundaria"> \(25\)</span>
+                    </div>
+                </transition>
+
+            </div>
+        </bloque-component>
+
+        <recuadro-component tipo="descubrimiento">            
+            Las nuevas expresiones sin las operaciones que se cancelan son más simples que la original pero tienen el mismo valor.
+        </recuadro-component>
+        </div>
+</body>
+
+</html>
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                cancelar1: false,
+                cancelar2: false,
+                cancelar3: false,
+                cancelar4: false,
+            }
+        },
+
+    })
+</script>
+
+<style>
+    body {
+        padding: 2% 5%;
+    }
+
+    button {
+        padding: 5px;
+    }
+
+    .expresion {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+        animation-duration: 0.5s;
+        animation-timing-function: linear;
+    }
+
+    .operacionOpuesta {
+        padding: 1px 4px;
+        border-radius: 1px;
+    }
+
+    .operacionOpuesta1 {
+        background-color: rgba(87, 224, 46, 0.637);
+    }
+
+    .operacionOpuesta2 {
+        background-color: rgba(224, 212, 46, 0.623);
+    }
+
+    #ejemplos1 {
+        display: grid;
+        padding: 20px;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-rows: 100px;
+        border: 2px solid cadetblue;
+        border-radius: 15px;
+        row-gap: 10px;
+        align-items: center;
+    }
+
+    .expresionEjemplo1 {
+        text-align: center;
+    }
+
+    .expresionEjemplo1>.secundaria {
+        display: none;
+        background-color: chocolate;
+        padding: 3px 0px;
+        border-radius: 5px;
+    }
+
+    .expresionEjemplo1:hover>.primaria {
+        display: none;
+    }
+
+    .expresionEjemplo1:hover>.secundaria {
+        display: block;
+    }
+
+    .sinCancelar {
+        grid-column: 1/2;
+    }
+
+    .cancelada {
+        grid-column: 3/4;
+    }
+
+    .bCancelarOperaciones {
+        grid-column: 2/3;
+    }
+
+    .conclusion {
+        padding: 10px 15px;
+        border-radius: 15px;
+        margin: 10px 5px;
+        width: min(90%, 650px);
+        background-color: rgb(209, 127, 33);
+        margin: 10px auto;
+    }
+
+    .nota {
+        background-color: rgb(233, 185, 150);
+        border-radius: 15px;
+        padding: 15px;
+        margin: 10px auto;
+        width: min(650px, 90%);
+    }
+</style>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+
+
+    <title>Operaciones aritméticas opuestas - Evaluación</title>
+
+</head>
+
+<body>
+    <div id="doc">
+
+        <p>Comprendo el concepto de operación aritmética opuesta si: </p>
+        <bloque-component tipo="evaluacion" textoCabecera="Dada cualquier operación aritmética puedo pensar en su operación opuesta.">
+
+        </bloque-component>
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                numEjemplo1:4,
+                numEjemplo2:6,
+                
+            }
+        }
+    })
+</script>
+<style>
+    .notacion {
+        font-size: 18px;
+        padding: 2px 3px;
+        background-color: cadetblue;
+        display: inline-block;
+        border-radius: 2px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    #imagenConjuntos {
+        max-width: 90vw;
+        margin: 10px auto;
+        display: block;
+    }
+    
+
+    .numeroBolitas{
+        display: flex;
+    }    
+
+    .numeroBolitas span{
+        display: flex;
+        flex-wrap: wrap;
+
+    }
+
+    .bolita{
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin: 10px 5px;
+        background-color: brown;
+        position: relative;
+    }
+</style>

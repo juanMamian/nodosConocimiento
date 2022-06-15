@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+    <script id="MathJax-script" async src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+
+
+
+    <title>Expresión numérica</title>
+</head>
+
+<body>
+
+    <div id="doc">
+
+        <recuadro-component tipo="datoPrevio">
+            Los números suelen ser expresados usando su símbolo. Así:
+            <ul>
+                <li>
+                    El seis se representa con el símbolo <span class="resaltado">6</span>
+                </li>
+                <li>
+                    El seiscientos se representa con los símbolos <span class="resaltado">600</span>
+                </li>
+                <li>
+                    El veinticuatro se representa con el símbolo <span class="resaltado">24</span>
+                </li>
+                <li>
+                    El cero se representa con el símbolo <span class="resaltado">0</span>
+                </li>
+            </ul>
+        </recuadro-component>
+
+        Pero los números también pueden ser expresados mediante una operación aritmética.
+
+        <bloque-component tipo="ejemplo"
+            textoCabecera="En este cuadro puedes ver cómo se representan algúnos números mediante una operación aritmética">
+            <div class="listaEjemplos" style="display: flex;">
+                <div class="itemEjemplo" v-for="(numero, index) of numerosEjemplo1"
+                    :key="'numeroExplicito'+numero.numeroExplicito">
+                    <div id="contenedorNumero1">
+                        <transition name="fadeIn">
+                            <div class="numero numeroExplicito" v-show="!mostrandoExpresionNumerica[index]">
+                                {{numero.numeroExplicito}}
+                            </div>
+                        </transition>
+                        <transition name="fadeIn">
+
+                            <div class="numero numeroExpresionNumerica" v-show="mostrandoExpresionNumerica[index]">
+                                {{numero.expresionNumerica}}
+                            </div>
+                        </transition>
+                    </div>
+
+                    <div class="boton" @click="toggleExpresionNumerica(index)">
+                        {{mostrandoExpresionNumerica[index]?'Expresar con su símbolo':'Expresar mediante una operación aritmética'}}
+                    </div>
+                </div>
+            </div>
+
+        </bloque-component>
+
+        
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+
+                numerosEjemplo1: [
+                    {
+                        numeroExplicito: 4,
+                        expresionNumerica: '\\((2 + 2)\\)',
+                    },
+                    {
+                        numeroExplicito: 17,
+                        expresionNumerica: '\\((20 - 3)\\)',
+                    },
+                    {
+                        numeroExplicito: 7,
+                        expresionNumerica: '\\(({21 \\over 3})\\)',
+                    },
+                    {
+                        numeroExplicito: 180,
+                        expresionNumerica: '\\((90 \\times 2)\\)',
+                    },
+
+                ],
+                mostrandoExpresionNumerica: [false, false],
+                numero1: 4,
+                numero2: 8,
+
+                stepEJemplo1: 0,
+                operacionEscogida: "suma",
+
+                versionExpresion1: 0,
+                versionExpresion2: 0,
+
+                expresion1: null,
+                expresion2: null,
+
+                expresionOriginalCreada: false,
+
+                mostrarValor: false,
+            }
+        },
+        methods: {
+            toggleExpresionNumerica(index) {
+                // this.mostrandoExpresionNumerica[index]=!this.mostrandoExpresionNumerica[index];
+                this.$set(this.mostrandoExpresionNumerica, index, !this.mostrandoExpresionNumerica[index]);
+                this.$nextTick(() => {
+                    MathJax.typeset();
+                });
+            },
+        }
+    })
+</script>
+
+<style>
+    body {
+        padding: 2% 5%;
+    }
+
+    .itemEjemplo .boton {
+        width: 160px;
+    }
+
+    #contenedorNumero1 {
+        width: 100%;
+        height: 50px;
+        position: relative;
+    }
+
+    #contenedorNumero1 .numero {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .numero {
+        text-align: center;
+    }
+
+    #ejemplo1 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-content: center;
+        justify-items: center;
+    }
+
+    .transversal {
+        grid-column: 1/3;
+    }
+
+    .instruccion {
+        padding: 5px 15px;
+        border: 1px solid cadetblue;
+        border-radius: 5px;
+    }
+
+    .expresion {
+        padding: 5px 15px;
+        background-color: cadetblue;
+        border-radius: 5px;
+    }
+
+    .operacion {
+        display: inline-block;
+        margin: 10px;
+        border: 1px solid gray;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 40px;
+        height: 30px;
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+    }
+
+    .operacion:hover {
+        background-color: cadetblue;
+    }
+
+    .seleccionada {
+        background-color: cadetblue;
+    }
+
+    .hoverRevelable {
+        border: 1px solid green;
+        border-radius: 5px;
+        padding: 5px;
+        min-width: 100px;
+        text-align: center;
+    }
+
+    .hoverRevelable>.noHover {
+        display: inline-block;
+    }
+
+    .hoverRevelable>.onHover {
+        display: none;
+    }
+
+    .hoverRevelable:hover>.noHover {
+        display: none;
+    }
+
+    .hoverRevelable:hover>.onHover {
+        display: inline-block;
+    }
+
+    .zonaValorExpresion {
+        padding: 10px 15px;
+    }
+
+    .nota {
+        background-color: rgb(233, 185, 150);
+        border-radius: 15px;
+        padding: 15px;
+        margin: 10px auto;
+        width: min(650px, 90%);
+    }
+
+    .conclusion {
+        padding: 10px 15px;
+        border-radius: 15px;
+        margin: 10px 5px;
+        width: min(90%, 650px);
+        background-color: rgb(209, 127, 33);
+        margin: 10px auto;
+    }
+
+    .aparecer-enter {
+        opacity: 0;
+        ;
+    }
+
+    .aparecer-enter-active {
+        transition: opacity 0.5s;
+    }
+
+    .aparecer-enter-to {
+        opacity: 1;
+    }
+
+    .travelUp-enter-active {
+        animation: travelUp 0.5s;
+        animation-iteration-count: 1;
+    }
+
+    .travelUp-leave-active {
+        animation: travelUp 0.5s;
+        animation-iteration-count: 1;
+        animation-direction: reverse;
+    }
+
+    .travelDown-enter-active {
+        animation: travelDown 0.5s;
+        animation-iteration-count: 1;
+    }
+
+    .travelDown-leave-active {
+        animation: travelDown 0.5s;
+        animation-iteration-count: 1;
+        animation-direction: reverse;
+    }
+
+    @keyframes travelUp {
+        0% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateY(0%);
+            opacity: 1;
+        }
+    }
+
+    @keyframes travelDown {
+        0% {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateY(0%);
+            opacity: 1;
+        }
+    }
+</style>

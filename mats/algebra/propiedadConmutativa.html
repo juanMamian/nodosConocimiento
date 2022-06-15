@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propiedad conmutativa</title>
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+     
+    <script id="MathJax-script" async src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <link rel="stylesheet" href="numerosColores.css">
+    <link rel="stylesheet" href="figuras.css">
+</head>
+
+<body>
+    <div id="doc">
+        <div class="nota">
+            <img src="bombillo.png" alt="idea" style="width: 25px;">
+            Al realizar una conmutación se genera una nueva expresión numérica. Esa nueva expresión numérica puede ser del mismo valor que la original
+            o puede tener un valor distinto.
+        </div>
+        <br><br>
+        <div class="nota">
+            <img src="bombillo.png" alt="idea" style="width: 25px;">
+            Si la nueva expresión numérica generada al realizar la conmutación es de igual valor que la original, se dice que la expresión
+            original es conmutativa.
+        </div>
+
+        
+        <div class="recuadro">
+            <div class="tituloEjemplo">Ejemplo 1</div>
+
+            <p>La expresión: </p>
+            <div class="expresion">
+                \( 4 +6 \)
+            </div>
+
+            Es un 10.
+
+            <p>Si se conmuta, se obtiene la siguiente expresión:</p>
+
+            <div class="expresion">
+                \( 6+ 4 \)
+            </div>
+
+            <p>Que también es un 10.</p>
+
+            <div class="conclusion">
+                <img src="conclusion.png" alt="Conclusión" class="conclusionsita">
+                Así que es una expresión conmutativa
+            </div>
+        </div>
+<br>
+        <div class="recuadro">
+            <div class="tituloEjemplo">Ejemplo 2</div>
+
+            <p>La expresión: </p>
+            <div class="expresion">
+                \( 12 \over 6 \)
+            </div>
+
+            Es un 2.
+
+            <p>Si se conmuta, se obtiene la siguiente expresión:</p>
+
+            <div class="expresion">
+                \( 6 \over 12 \)
+            </div>
+
+            <p>Que es un 0.5</p>
+
+            <div class="conclusion">
+                <img src="conclusion.png" alt="Conclusión" class="conclusionsita">
+                Así que no es una expresión conmutativa
+            </div>
+        </div>
+
+        
+
+
+    </div>
+</body>
+
+</html>
+
+<style>
+    body {
+        padding: 2% 5%;
+    }
+
+    .bombillito {
+        width: 25px;
+    }
+
+    .definicion {
+        border: 2px solid cadetblue;
+        padding: 10px 15px;
+        border-radius: 15px;
+        margin: 30px auto;
+        width: min(90%, 500px);
+    }
+    .tituloEjemplo{
+        font-size: 13px;
+        font-style: italic;
+        color: rgb(71, 71, 71);
+    }
+    .expresion {
+        padding: 10px 15px;
+        border-radius: 15px;
+        background-color: cadetblue;
+        width: 150px;
+        text-align: center;
+        margin: 10px 5px;
+    }
+    .conclusion{
+        
+        padding: 10px 15px;
+        border-radius: 15px;
+        margin: 10px 5px;
+        width: min(90%, 500px);
+        background-color: rgb(209, 127, 33);
+    }
+    .conclusionsita{
+        width: 25px;
+    }
+    .nota {
+        margin: 5px auto;
+        border-radius: 15px;
+        background-color: rgb(233, 185, 150);
+        padding: 15px;
+        width: min(600px, 90%);
+    }
+    .recuadro{
+        display: block;
+        margin: 10px auto;
+        width: min(600px, 90%);
+    }
+</style>

@@ -7,49 +7,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
-     
-    <script id="MathJax-script" async src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
-    <link rel="stylesheet" href="estilosGenerales.css">
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+
 
     <title>Representación gráfica de funciones</title>
 </head>
 
 <body>
     <div id="doc">
- 
-        <p>Si se tiene una función:</p>
 
-        <p>Al aplicar la función a un número, ésta señala un segundo número. Es decir que se genera una
+        <p>Si se tiene una función, </p>
+
+        <recuadro-component tipo="datoPrevio">Al aplicar la función a un número, ésta señala un segundo número. Es decir que se genera una
             pareja de números.
-        </p>
+        </recuadro-component>
 
-        <div class="nota">
-            <img src="bombillo.png" alt="Idea" class="iconoTexto">
+        <recuadro-component tipo="datoPrevio">
             Una pareja de números se puede representar como un punto en el plano cartesiano.
-        </div>
+        </recuadro-component>
 
-        <p>
-            Cada vez que se aplica la función a un número, se genera una nueva pareja de números, la cual puede ser representada como un punto en el plano cartesiano.
-        </p>
-   
-        <div class="instruccion">
-            <img src="signal.png" alt="Instrucción" class="iconoTexto">
+    <p>
+        Cada vez que se aplica la función a un número, se genera una nueva pareja de números, la cual puede ser
+        representada como un punto en el plano cartesiano.
+    </p>
+
+    <bloque-component tipo="ejemplo">
+
+        <template #cabecera>
+            En este cuadro se puede generar parejas de números usando una función y se pueden representar como puntos en el plano cartesiano.
+        </template>
+
+        <recuadro-component class="instruccion">
             <ul>
-                <li>
-                    Escoge distintos números para que la función señale diversos números, generando parejas de números.
+                <li style="margin-top:20px">
+                    Escoge distintos números para que la función señale diversos números.
                 </li>
-                <li>
-                    Presiona el boton de ubicar en el plano para representar esas parejas de números como puntos en el plano cartesiano.                    
+                <li style="margin-top:20px">
+                    Presiona el boton de ubicar en el plano para representar esas parejas de números como puntos en el
+                    plano cartesiano.
                 </li>
-                <li>
+                <li style="margin-top:20px">
                     Genera muchos puntos con la función.
                 </li>
-                <li>
+                <li style="margin-top:20px">
                     Puedes presionar sobre la función para cambiarla.
                 </li>
             </ul>
-        </div>
+        </recuadro-component>
 
 
         <div id="renglonFuncion" style="text-align: center;">
@@ -58,14 +72,16 @@
                     <div class="triangulo"></div>
                 </div> -->
                 <input type="number" v-model="numeroSeleccionado" style="width:40px">
-                
+
                 <!-- <div class="flecha" style="transform: rotateZ(90deg); border: none;" @click="numeroSeleccionado--">
                     <div class="triangulo"></div>
                 </div> -->
-            </div><div class="lineaConexion enRenglon">
-            <div class="triangulo" style="border-left-color: chocolate;"></div>            
+            </div>
+            <div class="lineaConexion enRenglon">
+                <div class="triangulo" style="border-left-color: chocolate;"></div>
 
-            </div><div id="placeFuncion" class="enRenglon" style="cursor: pointer;" @click="cambiarFuncion">
+            </div>
+            <div id="placeFuncion" class="enRenglon" style="cursor: pointer;" @click="cambiarFuncion">
                 <transition name="bajarFuncion">
                     <div class="funcion" v-show="funcionSeleccionada==0">
                         \(f(x)=x+2\)
@@ -81,23 +97,24 @@
                         \(f(x)=2-x\)
                     </div>
                 </transition>
-            
-            </div><div class="lineaConexion enRenglon">
-                <div class="triangulo" style="border-left-color: chocolate;"></div>            
-            </div><div class="placeVariable enRenglon" :key="'numeroSignaled'+numeroSignaled">
+
+            </div>
+            <div class="lineaConexion enRenglon">
+                <div class="triangulo" style="border-left-color: chocolate;"></div>
+            </div>
+            <div class="placeVariable enRenglon"style="font-size:24px" :key="'numeroSignaled'+numeroSignaled">
                 \({{numeroSignaled}}\)
             </div>
 
         </div>
 
-       <center> <button @click="marcarPuntoFuncion">Ubicar en el plano el punto ({{numeroSeleccionado}}, {{numeroSignaled}})</button></center>
+     <div class="boton" @click="marcarPuntoFuncion">Ubicar en el plano el punto ({{numeroSeleccionado}},
+                {{numeroSignaled}})</div>
 
         <div id="planoCartesiano">
 
             <div id="zonaEjes" @mousedown.left.self="planoAgarrado=true" @mouseup.left="mouseUpPlano"
-                @mousemove="panPlano"
-                @touchstart="inicioPanMobile" @touchmove.stop.prevent="panPlanoMobile"
-                >
+                @mousemove="panPlano" @touchstart="inicioPanMobile" @touchmove.stop.prevent="panPlanoMobile">
                 <div class="eje" id="ejeHorizontal" :style="[posEjeH]">
                     <div class="bolita" :class="{bolitaOrigen:Math.ceil(posEsquina.x)+numero-2==0}"
                         v-for="numero of numerosHorizontales+2"
@@ -109,7 +126,8 @@
                 </div>
 
                 <transition-group name="popIn">
-                <div class="bolitaFuncion" v-for="(punto, index) of puntosFuncion" :key="index" :style="[posicionesPuntosFuncion[index]]"></div>
+                    <div class="bolitaFuncion" v-for="(punto, index) of puntosFuncion" :key="index"
+                        :style="[posicionesPuntosFuncion[index]]"></div>
                 </transition-group>
 
                 <div class="eje" id="ejeVertical" :style="[posEjeV]">
@@ -126,11 +144,11 @@
         </div>
 
 
-        <div class="nota">
-            <img src="bombillo.png" alt="Idea" class="iconoTexto">
-            Cuando se generan todos los puntos posibles de una función, la imágen resultante en el plano cartesiano es llamada <span class="subrayado">la representación gráfica de la función</span>
-        </div>
-
+        <recuadro-component tipo="datoPrevio">
+            Cuando se generan todos los puntos posibles de una función, la imágen resultante en el plano cartesiano es
+            llamada <span class="resaltado">la representación gráfica de la función</span>
+        </recuadro-component>
+    </bloque-component>
 
     </div>
 </body>
@@ -140,6 +158,11 @@
 <script>
     const doc = new Vue({
         el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
         data() {
             return {
                 sizePlano: {
@@ -164,23 +187,23 @@
                 funcionSeleccionada: 0,
                 stepGeneracionPareja: 0,
 
-                puntosFuncion:[],
+                puntosFuncion: [],
 
-                lastPlanoX:0,
-                lastPlanoY:0,
+                lastPlanoX: 0,
+                lastPlanoY: 0,
             }
         },
         methods: {
-            inicioPanMobile(e){
+            inicioPanMobile(e) {
                 this.lastPlanoX = e.changedTouches[0].clientX;
                 this.lastPlanoY = e.changedTouches[0].clientY;
             },
-            panPlanoMobile(e){
+            panPlanoMobile(e) {
                 const deltaX = e.changedTouches[0].clientX - this.lastPlanoX;
                 const deltaY = e.changedTouches[0].clientY - this.lastPlanoY;
                 this.lastPlanoX = e.changedTouches[0].clientX;
                 this.lastPlanoY = e.changedTouches[0].clientY;
-                
+
                 this.desplazarVista(deltaX, deltaY);
             },
             panPlano(e) {
@@ -200,25 +223,25 @@
                 this.planoPanned = false,
                     this.planoAgarrado = false
             },
-            marcarPuntoFuncion(){
+            marcarPuntoFuncion() {
                 console.log(`Marcando en ${this.numeroSeleccionado}, ${this.numeroSignaled}`);
-                const indexP=this.puntosFuncion.findIndex(p=>p.x==this.numeroSeleccionado);
-                if(indexP>-1){
+                const indexP = this.puntosFuncion.findIndex(p => p.x == this.numeroSeleccionado);
+                if (indexP > -1) {
                     this.puntosFuncion.splice(indexP, 1);
                 }
-                this.puntosFuncion.push({x: Number(this.numeroSeleccionado), y: this.numeroSignaled})
+                this.puntosFuncion.push({ x: Number(this.numeroSeleccionado), y: this.numeroSignaled })
             },
-            cambiarFuncion(){
+            cambiarFuncion() {
                 this.funcionSeleccionada++
-                if(this.funcionSeleccionada>2)this.funcionSeleccionada=0;
+                if (this.funcionSeleccionada > 2) this.funcionSeleccionada = 0;
 
-                this.puntosFuncion=[];
+                this.puntosFuncion = [];
             }
         },
         computed: {
-            estiloNumero(){
+            estiloNumero() {
                 return {
-                    fontSize: Math.round(this.distanciaNumeros/3)+"px"
+                    fontSize: Math.round(this.distanciaNumeros / 3) + "px"
                 }
             },
             factorZoom() {
@@ -250,33 +273,33 @@
                     return Number(this.numeroSeleccionado) + 2;
                 }
                 if (this.funcionSeleccionada == 1) {
-                    return (Number(this.numeroSeleccionado)*2) - 4;
+                    return (Number(this.numeroSeleccionado) * 2) - 4;
                 }
                 if (this.funcionSeleccionada == 2) {
-                    return 2-Number(this.numeroSeleccionado);
+                    return 2 - Number(this.numeroSeleccionado);
                 }
             },
-            posicionesPuntosFuncion(){
-                nuevoPosiciones=[]
-                this.puntosFuncion.forEach(punto=>{
+            posicionesPuntosFuncion() {
+                nuevoPosiciones = []
+                this.puntosFuncion.forEach(punto => {
                     nuevoPosiciones.push({
-                        left: (((punto.x-this.posEsquina.x)*this.distanciaNumeros)-5)+"px",
-                        top: (((this.posEsquina.y-punto.y)*this.distanciaNumeros)-5)+"px",
+                        left: (((punto.x - this.posEsquina.x) * this.distanciaNumeros) - 5) + "px",
+                        top: (((this.posEsquina.y - punto.y) * this.distanciaNumeros) - 5) + "px",
                     })
                 });
                 return nuevoPosiciones;
             }
         },
-        watch: {            
-            numeroSeleccionado() {                
+        watch: {
+            numeroSeleccionado() {
                 this.versiony++;
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     MathJax.typeset();
                 })
             },
-            funcionSeleccionada() {                
+            funcionSeleccionada() {
                 this.versiony++;
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     MathJax.typeset();
                 })
             }
@@ -284,15 +307,15 @@
         mounted() {
 
             const elemPlano = document.getElementById("planoCartesiano");
-            const anchoVentana=screen.width;
-            var ancho=Math.round(anchoVentana*0.7);
-            if(ancho>650)ancho=650
-            const alto=ancho;
-            elemPlano.style.height=alto+"px";
-            elemPlano.style.width=ancho+"px";
+            const anchoVentana = screen.width;
+            var ancho = Math.round(anchoVentana * 0.7);
+            if (ancho > 650) ancho = 650
+            const alto = ancho;
+            elemPlano.style.height = alto + "px";
+            elemPlano.style.width = ancho + "px";
 
-            this.distanciaNumeros=Math.ceil(ancho/13);
-            if(this.distanciaNumeros<30)this.distanciaNumeros=30;
+            this.distanciaNumeros = Math.ceil(ancho / 13);
+            if (this.distanciaNumeros < 30) this.distanciaNumeros = 30;
 
             this.$set(this.sizePlano, "x", ancho);
             this.$set(this.sizePlano, "y", alto);
@@ -343,13 +366,13 @@
         z-index: 1;
     }
 
-    .bolitaFuncion{
+    .bolitaFuncion {
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background-color: rgb(14, 55, 56);
+        background-color: rgb(243, 119, 18);
         position: absolute;
-        
+
         z-index: 3;
     }
 
@@ -412,7 +435,7 @@
         background-color: chocolate;
         width: 30px;
         position: relative;
-        top:-5px
+        top: -5px
     }
 
     .flecha {
@@ -460,15 +483,17 @@
         display: inline-block;
     }
 
-    .bajarFuncion-enter{
+    .bajarFuncion-enter {
         transform: translateY(-80%);
-        opacity: 0.3;        
+        opacity: 0.3;
     }
-    .bajarFuncion-enter-to{
+
+    .bajarFuncion-enter-to {
         transform: translateY(0%);
-        opacity: 1;        
+        opacity: 1;
     }
-    .bajarFuncion-enter-active{
+
+    .bajarFuncion-enter-active {
         transition: all 0.5s;
     }
 </style>

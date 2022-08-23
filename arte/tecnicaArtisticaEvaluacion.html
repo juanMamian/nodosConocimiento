@@ -1,15 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
-    <script id="MathJax-script" async
-        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
@@ -20,51 +15,38 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
+   
 
-    <title>Plano cartesiano - evaluación</title>
+    <title>Técnica artística - evaluación</title>
 </head>
-
-<body>
-    <div id="doc">
-        <p>Comprendo el concepto de plano cartesiano si: </p>
-
+<body>    
+    <div id="doc">      
+        <p>Tengo una técnica artística si:</p>
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Puedo imaginar y representar el plano cartesiano mediante un dibujo.
-            </template>
-        </bloque-component>
-
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dado cualquier punto en el plano, puedo determinar la pareja de números que lo representan.
-            </template>
-        </bloque-component>
-
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dada cualquier pareja de números, puedo encontrar en el plano el punto que representan.
-            </template>
-        </bloque-component>
-
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dado cualquier punto en el plano y conocida su pareja de números correspondiente, identifico a
-                la abscisa y la
-                ordenada.
+                Puedo ejecutar correctamente alguna técnica artística
             </template>            
-        </bloque-component>
+        </bloque-component>          
     </div>
 </body>
-
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
-        components: {
+    const doc=new Vue({
+        el:"#doc",
+        components:{
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
+        data(){
+            return {
+
+            }
+        }
     })
 </script>
+
+<style>
+ 
+</style>

@@ -6,10 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
     <script id="MathJax-script" async
         src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
-
 
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
@@ -21,47 +20,30 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
 
-    <title>Distributividad - evaluación</title>
-
+    <title>Representación gráfica de una función - evaluación</title>
 </head>
 
 <body>
     <div id="doc">
-        <p>
-            Tengo conocimientos acerca de distributividad si:
-        </p>
+        <p>Comprendo el concepto de representación gráfica de una función si: </p>
 
-        <bloque-component tipo="evaluacion" textoCabecera="Conozco una lista de operaciones que son distributivas sobre otras.">
-        </bloque-component>
-
-        <bloque-component tipo="evaluacion" textoCabecera="Dada cualquier expresión en donde una operación está aplicada sobre una expresión, puedo escribir otra expresión idéntica donde la operación esté aplicada de forma distribuida.">
-        </bloque-component>
-
-        <bloque-component tipo="evaluacion" textoCabecera="Dada cualquier expresión en donde una operación está aplicada de forma distribuida, puedo escribir otra expresión idéntica donde la operación esté aplicada sobre toda la expresión.">
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada cualquier función, puedo construir su representación gráfica sobre el plano cartesiano.
+            </template>
         </bloque-component>
     </div>
-
 </body>
 
 </html>
 
 <script>
-    const doc = new Vue({
+    const app = new Vue({
         el: "#doc",
         components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-        data() {
-            return {
-
-            }
-        },
-
     })
 </script>
-
-<style>
-   
-</style>

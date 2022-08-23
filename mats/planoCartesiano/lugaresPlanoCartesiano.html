@@ -6,10 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
-     
-    <script id="MathJax-script" async src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
-    <link rel="stylesheet" href="estilosGenerales.css">
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
     <title>Lugares en el plano cartesiano</title>
 </head>
@@ -18,23 +25,22 @@
 
         <p>Cada punto del plano cartesiano es indicado por una pareja de números</p>
 
-        <div class="instruccion">
-            <img src="signal.png" alt="Instrucción" class="iconoTexto">
+        <recuadro-component tipo="instruccionPointer">
             En el siguiente plano cartesiano, presiona el botón para escoger un punto del plano y ver los números que lo señalan.
-        </div>
+        </recuadro-component>
 
         <div id="planoCartesiano">            
-            <button class="botonCrearPlano botonInternoPlano" id="botonEscogerPunto" @click="escogerPunto" v-show="stepCoordenadasPuntoEscogido==0">
+            <div class="boton botonInternoPlano" id="botonEscogerPunto" @click="escogerPunto" v-show="stepCoordenadasPuntoEscogido==0">
                 Escoger un punto del plano
-            </button>
-            <button class="botonCrearPlano botonInternoPlano" id="botonReiniciarEscogerPunto" @click="stepCoordenadasPuntoEscogido=0" v-show="stepCoordenadasPuntoEscogido>=10">
+            </div>
+            <div class="boton botonInternoPlano" id="botonReiniciarEscogerPunto" @click="stepCoordenadasPuntoEscogido=0" v-show="stepCoordenadasPuntoEscogido>=10">
                 Reiniciar
-            </button>
+            </div>
 
             <transition name="popIn">
                 <div :style="[estiloPosPuntoEscogido]" id="puntoEscogido" v-show="puntoEscogido.x!=null && puntoEscogido.y!=null && stepCoordenadasPuntoEscogido>=1" :key="puntoEscogido.x+puntoEscogido.y">
-                    <button class="botonRevelarCoords" id="botonRevelarAbscisa" :style=[posBotonRevelarAbscisa] v-show="stepCoordenadasPuntoEscogido==4" @click="stepCoordenadasPuntoEscogido++">Primer número</button>
-                    <button class="botonRevelarCoords" id="botonRevelarOrdenada" :style=[posBotonRevelarOrdenada] v-show="stepCoordenadasPuntoEscogido==7" @click="stepCoordenadasPuntoEscogido++">Segundo número</button>
+                    <div class="boton botonRevelarCoords" id="botonRevelarAbscisa" :style=[posBotonRevelarAbscisa] v-show="stepCoordenadasPuntoEscogido==4" @click="stepCoordenadasPuntoEscogido++">Primer número</div>
+                    <div class="boton botonRevelarCoords" id="botonRevelarOrdenada" :style=[posBotonRevelarOrdenada] v-show="stepCoordenadasPuntoEscogido==7" @click="stepCoordenadasPuntoEscogido++">Segundo número</div>
 
                     <transition name="despliegueV" @after-enter="stepCoordenadasPuntoEscogido++">
                         <div class="lineaMarca" id="lineaMarcaV" :style="[estiloLineaMarcaV]" v-show="stepCoordenadasPuntoEscogido>=5"></div>
@@ -57,7 +63,7 @@
 
                     <div class="mensajePuntoEscogido" :style="[posicionMensajePuntoEscogido]" v-show="stepCoordenadasPuntoEscogido==2">
                         Este punto es señalado por dos números
-                        <button @click="stepCoordenadasPuntoEscogido++">¿Cuáles números?</button>
+                        <div class="boton" @click="stepCoordenadasPuntoEscogido++">¿Cuáles números?</div>
                     </div>
                 </div>
             </transition>
@@ -81,15 +87,12 @@
             </div>
         </div>        
 
-        <div class="nota">
-            <img src="bombillo.png" alt="Idea" class="iconoTexto">
-            El primer número corresponde al eje horizontal. Es llamado <span class="subrayado">La abscisa</span>
-        </div>
-        <br>
-        <div class="nota">
-            <img src="bombillo.png" alt="Idea" class="iconoTexto">
-            El segundo número corresponde al eje vertical. Es llamado <span class="subrayado">La ordenada</span>
-        </div>
+        <recuadro-component tipo="datoPrevio">
+            El primer número corresponde al eje horizontal. Es llamado <span class="resaltado">La abscisa</span>
+        </recuadro-component>
+        <recuadro-component tipo="datoPrevio">
+            El segundo número corresponde al eje vertical. Es llamado <span class="resaltado">La ordenada</span>
+        </recuadro-component>
     </div>
 </body>
 </html>
@@ -97,6 +100,11 @@
 <script>
     const doc = new Vue({
         el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
         data() {
             return {                   
                 sizePlano:{
@@ -360,7 +368,7 @@
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background-color: cadetblue;
+        background-color: #ea6e32;
         position: absolute;
         transform: translate(-5px, -5px);
         z-index: 5;

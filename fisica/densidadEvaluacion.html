@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,55 +12,45 @@
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
 
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
    
 
-    <title>Evaluación - Polígono</title>
+    <title>Densidad - Evaluación</title>
 </head>
-<body>
-    <div id="doc">   
-        Comprendo el concepto de polígono si: 
 
-        <bloque-component tipo="evaluación" textoCabecera="Puedo imaginar y representar mediante un dibujo distintos polígonos">        
+<body>
+    <div id="doc">
+       Comprendo el concepto de densidad si:
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo explicar qué es la densidad de un material.
+            </template>
         </bloque-component>
-        <bloque-component tipo="evaluación" textoCabecera="Dada una representación de una figura geométrica puedo decidir si es un polígono o no">        
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada una descripción suficiente de un cuerpo, puedo determinar su densidad.
+            </template>
         </bloque-component>
 
         
     </div>
 </body>
+
 </html>
 
 <script>
-    const doc=new Vue({
-        el:"#doc",
-        components:{
+    const doc = new Vue({
+        el: "#doc",
+        components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
-        },
-        data(){
-            return {
-
-            }
-        }
+        },       
     })
 </script>
-
-<style>
- #lineaUnitaria{
-     margin: 10px auto;
-     width: 50px;
-     height: 5px;
-     background-color: black;
- }
-
- .recursoImagen{
-     max-width: 100%;
-     margin: 0px auto;
-     display: block;
- }
-</style>

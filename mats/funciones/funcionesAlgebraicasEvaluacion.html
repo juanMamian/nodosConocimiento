@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
     <script id="MathJax-script" async
@@ -21,42 +19,33 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
 
-    <title>Plano cartesiano - evaluación</title>
+    <title>Funciones algebraicas - evaluación</title>
 </head>
-
 <body>
     <div id="doc">
-        <p>Comprendo el concepto de plano cartesiano si: </p>
+    <p>Manejo el tema de funciones algebraicas si: </p>
 
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Puedo imaginar y representar el plano cartesiano mediante un dibujo.
-            </template>
-        </bloque-component>
+    <bloque-component tipo="evaluacion">
+        <template #cabecera>        
+        Dada una función, puedo determinar si es una función algebráica o no.
+        </template>
+    </bloque-component>    
 
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dado cualquier punto en el plano, puedo determinar la pareja de números que lo representan.
-            </template>
-        </bloque-component>
+    <bloque-component tipo="evaluacion">
+        <template #cabecera>        
+        Dada una función algebraica, puedo aplicarla sobre cualquier número y determinar cuál número es señalado por la función.
+        </template>
+    </bloque-component>
 
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dada cualquier pareja de números, puedo encontrar en el plano el punto que representan.
-            </template>
-        </bloque-component>
-
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dado cualquier punto en el plano y conocida su pareja de números correspondiente, identifico a
-                la abscisa y la
-                ordenada.
-            </template>            
-        </bloque-component>
-    </div>
+    <bloque-component tipo="evaluacion">
+        <template #cabecera>        
+        Dada una función algebraica puedo determinar el dominio y el rango de la función.
+        </template>
+    </bloque-component>
+</div>
 </body>
-
 </html>
+
 
 <script>
     const doc = new Vue({
@@ -66,5 +55,12 @@
             bloqueComponent,
             enlaceComponent
         },
+        data() {
+            return {
+                ejemplo1Desplegado: false,
+                ejemplo2Desplegado: false,
+                ejemplo3Desplegado: false,
+            }
+        }
     })
 </script>

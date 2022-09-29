@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
-   
+
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
@@ -17,26 +17,27 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
 
-    <title>Relaciones - evaluación</title>
+
+    <title>Estructura básica de un programa Arduino</title>
 </head>
+
 <body>
     <div id="doc">
-    <p>Comprendo el concepto de relaciones si: </p>
 
-    <bloque-component tipo="evaluacion" textoCabecera="Dado cualquier par de conjuntos puedo pensar en algunas relaciones.">
-        
-    </bloque-component>
+        <recuadro-component tipo="datoPrevio">
+            La <span class="resaltado">placa de desarrollo Arduino</span> es una placa usada
+            para controlar sistemas de control electrónicos.
+        </recuadro-component>
 
-    <bloque-component tipo="evaluacion" textoCabecera="Dada cualquier relación, puedo escribir el conjunto rango y el conjunto dominio.">
+        <recuadro-component tipo="datoPrevio">            
+            En <a href="https://arduino.cl/que-es-arduino/" target="_blank">este</a> enlace se puede aprender más sobre la placa arduino.
+        </recuadro-component>
         
-    </bloque-component>
+    </div>
 
-    <bloque-component tipo="evaluacion" textoCabecera="Dada una representación de un par de conjuntos y dada una relación, puedo representar mediante una linea la conexión realizada por la relación al recibir cualquiera de los elementos del dominio.">
-        
-    </bloque-component>
-    
-</div>
+
 </body>
+
 </html>
 
 <script>
@@ -49,8 +50,12 @@
         },
         data() {
             return {
-               
+                mostrandoInfo: null,
             }
-        },       
+        },
     })
 </script>
+
+<style>
+   
+</style>

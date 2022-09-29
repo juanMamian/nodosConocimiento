@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
-   
+
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
@@ -17,26 +17,28 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
 
-    <title>Relaciones - evaluación</title>
+
+    <title>Lenguaje de etiquetas</title>
 </head>
+
 <body>
     <div id="doc">
-    <p>Comprendo el concepto de relaciones si: </p>
+        Comprendo el lenguaje de etiquetas si:
+        <bloque-component tipo="evaluacion">
 
-    <bloque-component tipo="evaluacion" textoCabecera="Dado cualquier par de conjuntos puedo pensar en algunas relaciones.">
-        
-    </bloque-component>
+            <template #cabecera>
+                Puedo marcar correctamente cualquier texto para ser interpretado por una persona.
+            </template>
+        </bloque-component>
 
-    <bloque-component tipo="evaluacion" textoCabecera="Dada cualquier relación, puedo escribir el conjunto rango y el conjunto dominio.">
-        
-    </bloque-component>
-
-    <bloque-component tipo="evaluacion" textoCabecera="Dada una representación de un par de conjuntos y dada una relación, puedo representar mediante una linea la conexión realizada por la relación al recibir cualquiera de los elementos del dominio.">
-        
-    </bloque-component>
-    
-</div>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo interpretar correctamente un texto marcado.
+            </template>
+        </bloque-component>
+    </div>
 </body>
+
 </html>
 
 <script>
@@ -49,8 +51,23 @@
         },
         data() {
             return {
-               
+                marca: null,
             }
-        },       
+        }
     })
 </script>
+
+<style>
+    .textoMarcar {
+        text-align: center;
+        margin: 10px auto;
+        font-size: 20px;
+        cursor: pointer;
+        margin-bottom: 30px;
+
+    }
+
+    .etiqueta {
+        color: brown;
+    }
+</style>

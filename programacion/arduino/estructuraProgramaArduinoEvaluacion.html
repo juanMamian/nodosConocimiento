@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -16,35 +16,40 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
-    <title>Porcentajes - Evaluación</title>
+
+
+    <title>Estructura básica de un programa Arduino - evaluación</title>
 </head>
 
 <body>
     <div id="doc">
-        <p>Manejo el tema de porcentajes si: </p>
+
+        Comprendo la estructura fundamental de los programas en Arduino si:
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dado cualquier número, puedo determinar cuánto es su 1%.
+                Puedo nombrar las zonas de la estructura de los programas arduino y explicar su uso.
             </template>
         </bloque-component>
-
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dado cualquier número, puedo determinar cuánto es cualquier cantidad de por cientos.
+                Puedo escribir un programa arduino completo con la estructura básica.
             </template>
         </bloque-component>
-
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dado el valor de cualquier porcentaje, puedo determinar el número original.
+                Dado un programa Arduino, puedo señalar las zonas estructurales.
             </template>
         </bloque-component>
+    </div>
+
+
+
+
     </div>
 </body>
 
 </html>
-
 
 <script>
     const doc = new Vue({
@@ -56,8 +61,43 @@
         },
         data() {
             return {
-                marca: null,
+                mostrandoInfo: null,
             }
-        }
+        },
     })
 </script>
+
+<style>
+    .estructura {
+        margin-top: 20px;
+    }
+
+    .zona {
+        width: min(500px, 80%);
+        min-height: 50px;
+        margin: 5px auto;
+        padding: 10px 5px;
+    }
+
+    .nombreZona {
+
+        text-align: center;
+    }
+
+
+    .zona .recuadro {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .fondoOpaco {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.253);
+    }
+</style>

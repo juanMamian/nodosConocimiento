@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
-   
+    
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
@@ -17,26 +17,35 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
 
-    <title>Relaciones - evaluación</title>
+
+    <title>Potencia</title>
 </head>
+
 <body>
     <div id="doc">
-    <p>Comprendo el concepto de relaciones si: </p>
+        Comprendo el concepto de potencia si:
 
-    <bloque-component tipo="evaluacion" textoCabecera="Dado cualquier par de conjuntos puedo pensar en algunas relaciones.">
-        
-    </bloque-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dado cualquier número, puedo calcular el valor que tiene en cualquiera de sus niveles de potencia.
+            </template>
+        </bloque-component>
 
-    <bloque-component tipo="evaluacion" textoCabecera="Dada cualquier relación, puedo escribir el conjunto rango y el conjunto dominio.">
-        
-    </bloque-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada cualquier expresión de un número elevado a alguna potencia puedo calcular el valor correspondiente.
+            </template>
+        </bloque-component>
 
-    <bloque-component tipo="evaluacion" textoCabecera="Dada una representación de un par de conjuntos y dada una relación, puedo representar mediante una linea la conexión realizada por la relación al recibir cualquiera de los elementos del dominio.">
-        
-    </bloque-component>
-    
-</div>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+            Conozco el valor de la potencia 0 de todos los números.
+            </template>
+        </bloque-component>
+
+    </div>
 </body>
+
 </html>
 
 <script>
@@ -47,10 +56,25 @@
             bloqueComponent,
             enlaceComponent
         },
-        data() {
-            return {
-               
-            }
-        },       
     })
 </script>
+
+<style>
+    .numero {
+        display: flex;
+    }
+
+
+
+    .numeroCuadrado {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .expresionMultiplicacion {
+        text-align: center;
+        font-size: 27px;
+        color: brown;
+        font-weight: bold;
+    }
+</style>

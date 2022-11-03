@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>La <i>celula</i> es una cosa</h1>
+
+        <div id="pedazo1" class="pedazos">
+        <h3>explicacion</h3>
+        </div>
+
+        <div id="pedazo2" class="pedazos" onclick="ocultarTodo()">
+            otro pedazo
+        </div>
+    
+</body>
+</html>
+
+<style>
+    .pedazos{
+        background-color: brown;
+        margin: 20px;
+    }
+</style>
+
+<script>
+    const ocultarTodo = function(){        
+        document.getElementById("pedazo1").style.display="none";
+    }
+</script>

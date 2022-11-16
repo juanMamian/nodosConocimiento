@@ -24,28 +24,35 @@
     <div id="doc">
 
         <p>
-            Cuando un cuerpo se arrastra sobre una superficie, experimenta una resistencia al movimiento
+            Cuando se intenta arrastrar un cuerpo sobre una superficie, experimenta una resistencia al movimiento
             .
         </p>
 
         <p>
-            Este fenómeno se describe mediante la <span class="resultado">fuerza de fricción</span> asi:
+            Este fenómeno se describe mediante el concepto de <span class="resultado">fricción</span> así:
         </p>
 
         <recuadro-component tipo="datoPrevio">
-            Cuando un cuerpo se arrastra sobre una superficie, experimenta
+            Cuando un cuerpo que se encuentra sobre una superficie es empujado por una fuerza, experimenta
             una fuerza que se opone al movimiento llamada <span class="resaltado">fuerza de fricción</span>.
         </recuadro-component>
 
+        <recuadro-component tipo="datoPrevio">
+            La fuerza de fricción iguala la magnitud de la fuerza que empuja al cuerpo.
+        </recuadro-component>
 
         <recuadro-component tipo="datoPrevio">
             La fuerza de fricción tiene una magnitud máxima
+        </recuadro-component>       
+
+        <recuadro-component tipo="datoPrevio">
+            La magnitud máxima de la fuerza de fricción es más pequeña cuando el cuerpo está en movimiento sobre la superficie.
         </recuadro-component>
 
         <bloque-component tipo="herramientaInteractiva" @desplegado="reiniciar(); mostrandoMovimientoCuerpo=true"
             @plegado="mostrandoMovimientoCuerpo=false">
             <template #cabecera>
-                En este cuadro se puede ver la máxima fuerza de fricción entre un cuerpo y una superficie y
+                En este cuadro se puede ver la máxima fuerza de fricción que puede experimentar un cuerpo que se encuentra sobre una superficie y
                 se puede aplicar cada vez más fuerza sobre el cuerpo hasta superar el máximo valor de la fuerza de
                 fricción.
             </template>
@@ -54,8 +61,8 @@
                 Presiona en los botones para subir o bajar la intensidad de fuerza aplicada sobre el cuerpo.
             </recuadro-component>
             <div id="zonaControlFuerza">
-                <div class="boton" @click="fuerzaAplicada=fuerzaAplicada>0?fuerzaAplicada-1:fuerzaAplicada">-</div>
-                <div class="boton" @click="fuerzaAplicada=fuerzaAplicada<100?fuerzaAplicada+1:fuerzaAplicada">+</div>
+                <div class="boton" @click="fuerzaAplicada=fuerzaAplicada>0?fuerzaAplicada-0.5:fuerzaAplicada">-</div>
+                <div class="boton" @click="fuerzaAplicada=fuerzaAplicada<100?fuerzaAplicada+0.5:fuerzaAplicada">+</div>
             </div>
             <div id="zonaInteraccion">
                 <div id="cuerpo" :style="[{left: 'calc(50% + '+posCuerpo+'px)'}]">
@@ -187,7 +194,11 @@
                 console.log("Moviendo cuerpo");
                 var fuerzaResultante = this.fuerzaAplicada - this.fuerzaFriccion;
                 if (fuerzaResultante > 0) {
+                    this.estadoFriccion=1;
                     this.posCuerpo = this.posCuerpo + Math.round(fuerzaResultante * 3);
+                }
+                else{
+                    this.estadoFriccion=0;
                 }
 
                 this.$nextTick(() => {
@@ -213,6 +224,7 @@
 <style>
     #zonaInteraccion {
         position: relative;
+        overflow: hidden;
         min-height: 200px;
     }
 

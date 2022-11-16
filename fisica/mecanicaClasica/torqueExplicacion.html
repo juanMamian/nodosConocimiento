@@ -39,14 +39,14 @@
             </recuadro-component>
 
             <div class="zonaInteraccion" ref="zonaInteraccion" @mouseleave="finCreacionFuerza">
-                <canvas class="canvasInteraccion" ref="canvasInteraccion" @mouseup.left="finCreacionFuerza"
+                <canvas class="canvasInteraccion" ref="canvasInteraccion" @touchend.stop="finCreacionFuerza" @mouseup.left="finCreacionFuerza"
                     @mousemove="retrazarVector">
 
                 </canvas>
 
 
-                <div class="cuerpoRotatorio" @mouseup.left="finCreacionFuerza"
-                    @mousedown.left="inicioCreacionFuerza($event)" :style="[{transform: 'rotateZ('+rotacion+'rad)'}]">
+                <div class="cuerpoRotatorio" @mouseup.stop="finCreacionFuerza" @mouseup.left="finCreacionFuerza"
+                    @mousedown.left="inicioCreacionFuerza($event)" @touchstart.stop.prevent="inicioCreacionFuerza($event)" :style="[{transform: 'rotateZ('+rotacion+'rad)'}]">
                     <div class="ejeRotacion" ref="ejeRotacion"></div>
                     <!-- <div id="vectorFuerza" :style="[{left: brazoFuerza+'px'}]">
                         <div id="flechaVector">
@@ -65,17 +65,17 @@
 
         <p>
             La aplicación de fuerza sobre el cuerpo que está unido a un eje de rotación
-            genera en él una especie de <span class="resaltado">deseo de rotar</span>.
+            genera en él un <span class="resaltado">estímulo rotatorio</span>.
         </p>
 
         <recuadro-component tipo="datoPrevio">
-            El deseo de rotar experimentado por un cuerpo cuando se aplica fuerza sobre él, se llama <span
+            El estímulo rotatorio experimentado por un cuerpo cuando se aplica fuerza sobre él se llama <span
                 class="resaltado">torque</span>
         </recuadro-component>
 
         <p>
             Cuando se aplica una fuerza sobre un cuerpo unido a un eje,
-            sólo la parte de fuerza que es perpendicular a la rotación 
+            sólo la parte de fuerza que está en la dirección de la rotación 
             genera torque.
             
         </p>
@@ -169,11 +169,12 @@
         },
         methods: {
             inicioCreacionFuerza(e) {
+                console.log("Creación de fuerza");
                 this.creandoFuerza = true;
                 const boundaryCuerpo = e.target.getBoundingClientRect();
 
-                const posX = e.clientX - boundaryCuerpo.left;
-                const posY = e.clientY - boundaryCuerpo.top;
+                const posX = (e.clientX) - boundaryCuerpo.left;
+                const posY = (e.clientY) - boundaryCuerpo.top;
 
                 const boundary = this.$refs.canvasInteraccion.getBoundingClientRect();
 
@@ -519,8 +520,7 @@
 
 <style>
     .zonaInteraccion {
-        padding: 210px 10px;
-        border: 2px dashed gray;
+        padding: 210px 10px;        
         position: relative;
     }
 

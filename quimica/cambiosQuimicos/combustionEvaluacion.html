@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,52 +15,58 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
+   
 
-
-    <title>Rapidez - Evaluación</title>
+    <title>Combustión - Evaluación</title>
 </head>
+<body>  
+   
+    <div id="doc">      
 
-<body>
-    <div id="doc">
-        Comprendo el concepto de rapidez si:
+        <p>Comprendo el concepto de combustión si:</p>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo nombrar los ingredientes indispensables para que ocurra la combustión.
+            </template>
+        </bloque-component>
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Puedo explicar en qué consiste la rapidez.
+                Puedo hablar de algunos ejemplos cotidianos de combustión.
             </template>
-        </bloque-component>   
+        </bloque-component>
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dada cualquier descripción suficiente del movimiento de un cuerpo, puedo expresar su rapidez.
+                Puedo representar la combustión a través de una ecuación química
+                que incluya compuestos y elementos químicos.
             </template>
-        </bloque-component>    
+        </bloque-component>
+
         
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dada cualquier descripción suficiente del movimiento de un cuerpo, puedo calcular su rapidez media.
-            </template>
-        </bloque-component>    
-
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dada la rapidez media de un movimiento y su duración, puedo calcular la distancia recorrida.
-            </template>
-        </bloque-component>    
-
-
+               
+        
+           
     </div>
 </body>
-
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
-        components: {
+    const doc=new Vue({
+        el:"#doc",
+        components:{
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
+        data(){
+            return {
+
+            }
+        }
     })
 </script>
+
+<style>
+ 
+</style>

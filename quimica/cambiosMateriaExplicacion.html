@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,52 +15,41 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
+   
 
-
-    <title>Rapidez - Evaluación</title>
+    <title>Cambios de la materia</title>
 </head>
-
-<body>
-    <div id="doc">
-        Comprendo el concepto de rapidez si:
-
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Puedo explicar en qué consiste la rapidez.
-            </template>
-        </bloque-component>   
-
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dada cualquier descripción suficiente del movimiento de un cuerpo, puedo expresar su rapidez.
-            </template>
-        </bloque-component>    
+<body>  
+   
+    <div id="doc">      
+        <p>Cambios de la materia</p>
         
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dada cualquier descripción suficiente del movimiento de un cuerpo, puedo calcular su rapidez media.
-            </template>
-        </bloque-component>    
-
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dada la rapidez media de un movimiento y su duración, puedo calcular la distancia recorrida.
-            </template>
-        </bloque-component>    
+        <recuadro-component tipo="datoPrevio">
+            Los cambios de la materia pueden ser físicos o químicos.
+        </recuadro-component>
 
 
+           
     </div>
 </body>
-
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
-        components: {
+    const doc=new Vue({
+        el:"#doc",
+        components:{
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
+        data(){
+            return {
+
+            }
+        }
     })
 </script>
+
+<style>
+ 
+</style>

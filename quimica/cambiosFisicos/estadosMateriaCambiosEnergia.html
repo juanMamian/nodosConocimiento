@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+
+
+
+    <title>Cambios de energía en los cambios de estado de la materia</title>
+</head>
+
+<body>
+
+    <div id="doc">
+
+        <h4>
+            Absorción de energía
+        </h4>
+
+        <recuadro-component tipo="datoPrevio">
+            Durante:
+
+            <ul>
+                <li>
+                    Ebullición o vaporización
+                </li>
+                <li>
+                    Fusión
+                </li>
+                <li>
+                    Sublimación
+                </li>
+            </ul>
+
+            Las sustancias absorben energía térmica haciendo que las partículas aumenten 
+            su movimiento, aumentando su energía cinética y disminuyendo las fuerzas
+            de atracción entre ellas.
+
+        </recuadro-component>
+
+<hr>
+        <h4>
+            Liberación de energía
+        </h4>
+        <recuadro-component tipo="datoPrevio">
+            Durante:
+
+            <ul>
+                <li>
+                    Condensación
+                </li>
+                <li>
+                    Solidificación
+                </li>
+                <li>
+                    Sublimación inversa
+                </li>
+            </ul>
+
+            Las sustancias liberan energía térmica haciendo que las partículas
+            disminuyan su movimiento, es decir su energía cinética, aumentando las fuerzas
+            de atracción entre ellas.            
+
+        </recuadro-component>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+
+            }
+        }
+    })
+</script>
+
+<style>
+
+</style>

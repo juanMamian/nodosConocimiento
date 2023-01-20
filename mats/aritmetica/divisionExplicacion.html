@@ -53,8 +53,8 @@
                 <div class="boton" v-show="stepEjemplo1==3" @click="stepEjemplo1++">¡Repartir parejo en 3 grupos!</div>
 
                 <transition name="fadeInEsperando" v-on:after-enter="stepEjemplo1++">
-                    <recuadro-component tipo="descubrimiento" v-show="stepEjemplo1>=4">
-                        Cada grupo es un número 4. ¡12 dividido entre 3 da como resultado 4!
+                    <recuadro-component tipo="descubrimiento" v-show="stepEjemplo1>=4" style="text-align: center;">
+                        Cada grupo es un número 4. <br> ¡12 dividido entre 3 da como resultado 4!
                     </recuadro-component>
                 </transition>
         </bloque-component>

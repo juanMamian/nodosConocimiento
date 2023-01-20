@@ -29,15 +29,18 @@
         <p>Tengo la habilidad de un calculista básico si: </p>
 
 
+        <!-- Suma -->
         <bloque-component tipo="evaluacion" textoCabecera="Puedo calcular cualquier suma entre números naturales.">
 
         </bloque-component>
 
+        <!-- Resta -->
         <bloque-component tipo="evaluacion"
             textoCabecera="Puedo calcular cualquier resta positiva entre números naturales.">
 
         </bloque-component>
 
+        <!-- Division -->
         <bloque-component tipo="evaluacion"
             textoCabecera="Puedo calcular cualquier división entera entre números naturales.">
             <div class="contenedorFlex">
@@ -90,22 +93,18 @@
             </div>
         </bloque-component>
 
+        <!-- Multiplicación -->
         <bloque-component tipo="evaluacion"
             textoCabecera="Puedo calcular cualquier multiplicación entre números naturales.">
             <div class="contenedorFlex">
-                <div class="bloqueRango">
-                    Multiplicando entre
-                    <input type="number" :max="maxMultiplicando" v-model="minMultiplicando" class="limiteRango"></input>
-                    y
-                    <input type="number" :min="minMultiplicando" v-model="maxMultiplicando" class="limiteRango"></input>
-                </div>
+                
+                <div class="bloqueDificultad">
+                    <span class="descripcion">
+                        Dificultad
+                    </span>
 
-                <div class="bloqueRango">
-                    Multiplicador entre
-                    <input type="number" :max="maxMultiplicador" v-model="minMultiplicador" class="limiteRango"></input>
-                    y
-                    <input type="number" :min="minMultiplicador" v-model="maxMultiplicador" class="limiteRango"></input>
-                </div>
+                    <input type="range" ref="inputDificultadMultiplicacion" id="inputDificultadMultiplicacion" v-model="dificultadMultiplicacion" min="1" max="3">
+                </div>                
 
                 <div class="boton" style="margin-top: 40px;" @click="generarMultiplicacion"
                     :class="{deshabilitado:estadoRespuestaMultiplicacion!='correcto' && expresionMultiplicacion }">
@@ -161,6 +160,7 @@
                 versionExpresionMultiplicacion: 0,
                 expresionMultiplicacion: null,
 
+                dificultadMultiplicacion:1,
                 minMultiplicando: 1,
                 maxMultiplicando: 10,
                 minMultiplicador: 1,
@@ -192,6 +192,31 @@
         },
         methods: {
             generarMultiplicacion() {
+                if(this.dificultadMultiplicacion===1){
+                    this.minMultiplicando=2;
+                    this.maxMultiplicando=5;
+
+                    this.minMultiplicador=2;
+                    this.maxMultiplicador=4;
+                }
+                else if(this.dificultadMultiplicacion===2){
+                    this.minMultiplicando=4;
+                    this.maxMultiplicando=7;
+
+                    this.minMultiplicador=3;
+                    this.maxMultiplicador=5;
+                }
+                else if(this.dificultadMultiplicacion===3){
+                    this.minMultiplicando=6;
+                    this.maxMultiplicando=12;
+
+                    this.minMultiplicador=4;
+                    this.maxMultiplicador=8;
+                }
+                else{
+                    console.log("Dificultad desconocida");
+                }
+
                 if (this.minMultiplicando >= this.maxMultiplicando || this.minMultiplicador >= this.maxMultiplicador) {
                     console.log("Rango no válido");
                     return;

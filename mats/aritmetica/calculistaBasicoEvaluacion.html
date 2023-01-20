@@ -32,6 +32,48 @@
         <!-- Suma -->
         <bloque-component tipo="evaluacion" textoCabecera="Puedo calcular cualquier suma entre números naturales.">
 
+            <div class="contenedorFlex">
+                <div class="bloqueDificultad">
+                    <span class="descripcion">
+                        Dificultad
+                    </span>
+
+                    <input type="range" ref="inputDificultadSuma" id="inputDificultadSuma" v-model="dificultadSuma" min="1" max="3">
+                </div>  
+
+                <div class="boton" style="margin-top: 40px;" @click="generarSuma"
+                    :class="{deshabilitado:estadoRespuestaSuma!='correcto' && expresionSuma }">
+                    {{estadoRespuestaSuma=='correcto'?'¡Generar una nueva suma':'¡Generar una suma!'}}
+                </div>
+
+                <transition name="travelTop">
+                    <div class="operacionReto" style="text-align: center; font-size: 35px;"
+                        :key="versionExpresionSuma" v-show="expresionSuma">
+                        {{expresionSuma}}
+                    </div>
+                </transition>
+
+                <div class="bloqueConfirmarRespuesta" v-show="expresionSuma">
+                    <span>Confirma aquí tu respuesta</span>
+                    <input type="number" :class="{deshabilitado: estadoRespuestaSuma=='correcto'}"
+                        v-model="inputResultadoSuma" style="max-width: 70px;">
+
+                    <div class="boton" @click="confirmarSuma"
+                        :class="{deshabilitado: !inputResultadoSuma}"
+                        v-show="estadoRespuestaSuma!='correcto'">Aceptar</div>
+
+                </div>
+
+                <transition name="popIn">
+                    <div class="bloqueInfoResultado" v-show="estadoRespuestaSuma"
+                        :key="versionInputResultadoSuma">
+                        <div class="mensajeInfoResultado"
+                            :style="[{backgroundColor: estadoRespuestaSuma=='correcto'?'#269d26':'#ea4b4b'}]">
+                            {{estadoRespuestaSuma=='correcto'?'¡Correcto!':'Incorrecto... ¡Sigue intentando!'}}
+                        </div>
+                    </div>
+                </transition>
+            </div>
         </bloque-component>
 
         <!-- Resta -->
@@ -194,7 +236,23 @@
         },
         data() {
             return {
-                
+                // Suma
+                versionExpresionSuma: 0,
+                expresionSuma: null,
+
+                dificultadSuma:1,
+                minMinuendo: 1,
+                maxMinuendo: 10,
+                minSustraendo: 1,
+                maxSustraendo: 10,
+
+                minuendo: 1,
+                sustraendo: 1,
+
+                estadoRespuestaSuma: null,
+                inputResultadoSuma: null,
+                versionInputResultadoSuma: 0,
+
 
                 // Resta
                 versionExpresionResta: 0,
@@ -430,6 +488,64 @@
                     this.estadoRespuestaResta = "incorrecto";
                 }
                 this.versionInputResultadoResta++;
+            },
+            generarSuma() {
+                
+                if(Number(this.dificultadSuma)===1){
+                    this.minSumando=5;
+                    this.maxSumando=10;
+
+                    this.minSumador=2;
+                    this.maxSumador=8;
+                }
+                else if(Number(this.dificultadSuma)===2){
+                    this.minSumando=10;
+                    this.maxSumando=20;
+
+                    this.minSumador=5;
+                    this.maxSumador=15;
+                }
+                else if(Number(this.dificultadSuma)===3){
+                    this.minSumando=15;
+                    this.maxSumando=30;
+
+                    this.minSumador=12;
+                    this.maxSumador=25;
+                }
+                else{
+                    console.log("Dificultad desconocida");
+                    return;
+                }
+
+
+                const sumando=Math.round(Math.random() * (this.maxSumando - this.minSumando) + this.minSumando);
+                const sumador=Math.round(Math.random() * (this.maxSumador - this.minSumador) + this.minSumador);
+
+
+                this.sumando = sumando;
+                this.sumador = sumador;
+
+                this.expresionSuma = `\\(${this.sumando} + ${this.sumador} \\)`;
+
+                this.inputResultadoSuma = null;
+                this.estadoRespuestaSuma = null;
+
+                this.versionExpresionSuma++;
+
+                this.$nextTick(() => {
+                    MathJax.typeset();
+                })
+            },
+            confirmarSuma() {
+                var respuesta = this.sumando + this.sumador;
+                console.log(`Comparando ${respuesta} con ${this.inputResultadoSuma}`)
+                if (this.inputResultadoSuma == respuesta) {
+                    this.estadoRespuestaSuma = "correcto";
+                }
+                else {
+                    this.estadoRespuestaSuma = "incorrecto";
+                }
+                this.versionInputResultadoSuma++;
             }
 
         }

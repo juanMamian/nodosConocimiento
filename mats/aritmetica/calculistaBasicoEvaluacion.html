@@ -44,19 +44,13 @@
         <bloque-component tipo="evaluacion"
             textoCabecera="Puedo calcular cualquier división entera entre números naturales.">
             <div class="contenedorFlex">
-                <div class="bloqueRango">
-                    Division entre
-                    <input type="number" :max="maxNumerador" v-model="minNumerador" class="limiteRango"></input>
-                    y
-                    <input type="number" :min="minNumerador" v-model="maxNumerador" class="limiteRango"></input>
-                </div>
+                <div class="bloqueDificultad">
+                    <span class="descripcion">
+                        Dificultad
+                    </span>
 
-                <div class="bloqueRango">
-                    Multiplicador entre
-                    <input type="number" :max="maxDenominador" v-model="minDenominador" class="limiteRango"></input>
-                    y
-                    <input type="number" :min="minDenominador" v-model="maxDenominador" class="limiteRango"></input>
-                </div>
+                    <input type="range" ref="inputDificultadDivision" id="inputDificultadDivision" v-model="dificultadDivision" min="1" max="3">
+                </div>  
 
                 <div class="boton" style="margin-top: 40px;" @click="generarDivision"
                     :class="{deshabilitado:estadoRespuestaDivision!='correcto' && expresionDivision }">
@@ -177,10 +171,11 @@
                 versionExpresionDivision: 0,
                 expresionDivision: null,
 
-                minNumerador: 1,
-                maxNumerador: 10,
-                minDenominador: 1,
-                maxDenominador: 10,
+                dificultadDivision:1,
+                minDivisor: 1,
+                maxDivisor: 10,
+                minResultadoDivision: 1,
+                maxResultadoDivision: 10,
 
                 numerador: 1,
                 denominador: 1,
@@ -192,21 +187,21 @@
         },
         methods: {
             generarMultiplicacion() {
-                if(this.dificultadMultiplicacion===1){
+                if(Number(this.dificultadMultiplicacion)===1){
                     this.minMultiplicando=2;
                     this.maxMultiplicando=5;
 
                     this.minMultiplicador=2;
                     this.maxMultiplicador=4;
                 }
-                else if(this.dificultadMultiplicacion===2){
+                else if(Number(this.dificultadMultiplicacion)===2){
                     this.minMultiplicando=4;
                     this.maxMultiplicando=7;
 
                     this.minMultiplicador=3;
                     this.maxMultiplicador=5;
                 }
-                else if(this.dificultadMultiplicacion===3){
+                else if(Number(this.dificultadMultiplicacion)===3){
                     this.minMultiplicando=6;
                     this.maxMultiplicando=12;
 
@@ -215,6 +210,7 @@
                 }
                 else{
                     console.log("Dificultad desconocida");
+                    return;
                 }
 
                 if (this.minMultiplicando >= this.maxMultiplicando || this.minMultiplicador >= this.maxMultiplicador) {
@@ -257,24 +253,42 @@
                 this.versionInputResultadoMultiplicacion++;
             },
             generarDivision() {
-                if (this.minNumerador >= this.maxNumerador || this.minDenominador >= this.maxDenominador) {
-                    console.log("Rango no válido");
+                
+                if(Number(this.dificultadDivision)===1){
+                    this.minResultadoDivision=2;
+                    this.maxResultadoDivision=6;
+
+                    this.minDivisor=2;
+                    this.maxDivisor=5;
+                }
+                else if(Number(this.dificultadDivision)===2){
+                    this.minResultadoDivision=4;
+                    this.maxResultadoDivision=6;
+
+                    this.minDivisor=3;
+                    this.maxDivisor=6;
+                }
+                else if(Number(this.dificultadDivision)===3){
+                    this.minResultadoDivision=6;
+                    this.maxResultadoDivision=12;
+
+                    this.minDivisor=4;
+                    this.maxDivisor=8;
+                }
+                else{
+                    console.log("Dificultad desconocida");
                     return;
                 }
 
-                var minNumerador = parseInt(this.minNumerador);
-                var maxNumerador = parseInt(this.maxNumerador);
 
-                var minDenominador = parseInt(this.minDenominador);
-                var maxDenominador = parseInt(this.maxDenominador);
+                const resDivision=Math.round(Math.random() * (this.maxResultadoDivision - this.minResultadoDivision) + this.minResultadoDivision);
+                const divisor=Math.round(Math.random() * (this.maxDivisor - this.minDivisor) + this.minDivisor);
 
-                var numero1 = Math.round(Math.random() * (maxNumerador - minNumerador) + minNumerador);
-                var numero2 = Math.round(Math.random() * (maxDenominador - minDenominador) + minDenominador);
 
-                this.numerador = numero1;
-                this.denominador = numero2;
+                this.numerador = resDivision*divisor;
+                this.denominador = divisor;
 
-                this.expresionDivision = `\\(${numero1} \\over ${numero2} \\)`;
+                this.expresionDivision = `\\(${this.numerador} \\over ${this.denominador} \\)`;
 
                 this.inputResultadoDivision = null;
                 this.estadoRespuestaDivision = null;

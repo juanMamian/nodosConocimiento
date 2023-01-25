@@ -10,9 +10,11 @@
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/anuncioFullScreen.js"></script>
 
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/anuncioFullScreenEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
@@ -22,8 +24,8 @@
 <body>
     <div id="doc">
         <recuadro-component tipo="datoPrevio">
-            Las divisiones que se pueden realizar repartiendo todas las unidades (Bolitas) son llamadas
-            divisiones enteras o divisiones exactas.
+            En una división, si todas las unidades quedan repartidas decimos que es una
+            división exacta.
         </recuadro-component>
 
         <recuadro-component tipo="datoPrevio">
@@ -33,22 +35,28 @@
             <span class="resaltado">residuo</span>.
         </recuadro-component>
 
-        <bloque-component tipo="ejemplo" @plegado="reiniciar">
+        <bloque-component tipo="ejemplo" @desplegado="posicionarBolitas" @plegado="reiniciar">
             <template #cabecera>
                 En este cuadro se muestra una división en la que sobran algunas unidades.
             </template>
 
             <div class="zonaInteraccion" ref="zonaInteraccion" style="position: relative;">
 
-                <div class="zonaNumero">
-                    <div ref="bolitas" class="bolitaNumero" v-for="bolita of numerador" :key="'bolita'+bolita">
+                <div class="zonaNumero" ref="zonaNumero">
+                    <div ref="bolitas" class="bolitaNumero bolitaAbsolute" v-for="bolita of numerador"
+                        :key="'bolita'+bolita">
 
                     </div>
                 </div>
 
-                <div class="boton" @click="instanciaReparticion++" :class="{deshabilitado:reparticionTerminada}">
+                <div class="boton" @click="aumentarInstanciaReparticion" >
                     Repartir
                 </div>
+                <anuncio-full-screen @cerrarme="anunciarFinReparticion=false" v-show="anunciarFinReparticion">
+                    <template #contenido>
+                        ¡Ya no hay suficientes unidades para repartir parejo!
+                    </template>
+                </anuncio-full-screen>
                 <div class="zonaCajas" ref="zonaCajas">
                     <div class="caja" ref="cajitas" v-for="num of denominador" :key="'caja'+num"></div>
                 </div>
@@ -56,7 +64,7 @@
 
             <transition name="travelTop">
                 <recuadro-component tipo="datoNuevo" v-show="reparticionTerminada">
-                    ¡No se puede seguir repartiendo parejo!
+                    ¡Ya no se puede seguir repartiendo parejo!
                 </recuadro-component>
             </transition>
 
@@ -72,7 +80,7 @@
                 </recuadro-component>
             </transition>
 
-          
+
 
 
 
@@ -88,17 +96,19 @@
         components: {
             recuadroComponent,
             bloqueComponent,
-            enlaceComponent
+            enlaceComponent,
+            anuncioFullScreen
         },
         data() {
             return {
-                instanciaReparticion: 0,
+                instanciaReparticion: -1,
                 numerador: 14,
                 denominador: 4,
 
                 gapBolitas: 10,
 
-                mostrarConclusion:false,
+                mostrarConclusion: false,
+                anunciarFinReparticion:false,
             }
         },
         computed: {
@@ -107,50 +117,100 @@
             },
 
         },
-        methods:{
-            reiniciar(){
-                this.mostrarConclusion=false;
-                this.instanciaReparticion=0;
+        methods: {
+            aumentarInstanciaReparticion(){
+                let nuevaInstancia=this.instanciaReparticion;
+                console.log("Entrando en instancia "+nuevaInstancia);
+                if((this.numerador - (nuevaInstancia * this.denominador)) < this.denominador){
+                    this.anunciarFinReparticion=true;
+                }
+                else{
+                    this.instanciaReparticion++
+                }
+                
+            },
+            reiniciar() {
+                this.mostrarConclusion = false;
+                this.instanciaReparticion = -1;
+            },
+            posicionarBolitas() {
+                this.instanciaReparticion = 0;
+
+                setTimeout(()=>{
+                    const posZonaNumero = this.$refs.zonaNumero.getBoundingClientRect();
+                    if (posZonaNumero.width <= 0) {
+                        return;
+                    }
+                    const espacioBolita = 20 + this.gapBolitas;
+                    const bolitasFila = Math.floor(posZonaNumero.width / espacioBolita);
+                    const anchoFila = bolitasFila * espacioBolita;
+                    const numFilas = Math.ceil(this.numerador / bolitasFila);
+                    const altoFila = this.gapBolitas + 20;
+
+                    const altoZonaNumero=Math.round(numFilas*altoFila);
+
+                    this.$refs.zonaNumero.style.height=altoZonaNumero+"px";
+
+
+                    for (var i = 1; (i <= numFilas && i < 20); i++) {
+                        let bolitasEstaFila = i < numFilas ? bolitasFila : (this.numerador % bolitasFila);
+                        let anchoEstaFila = bolitasEstaFila * espacioBolita;
+                        let leftInicioFila = (posZonaNumero.width / 2) - (anchoEstaFila / 2);
+
+                        for (var j = ((i - 1) * bolitasFila); (j < i * bolitasFila && j < this.numerador); j++) {
+                            let posEnFila = j % bolitasFila;
+                            let leftBolita = leftInicioFila + (posEnFila * espacioBolita);
+                            let topBolita = this.gapBolitas + ((i - 1) * altoFila)
+
+                            this.$refs.bolitas[j].style.left = Math.round(leftBolita) + 'px';
+                            this.$refs.bolitas[j].style.top = Math.round(topBolita) + 'px';
+                        }
+                    }
+                }, 100);
+
+
             }
         },
         watch: {
-            instanciaReparticion(instancia) {
-                const bolitaMax = this.denominador * instancia;
+            instanciaReparticion: {
+                handler: function (instancia) {
+                    if (instancia <= 0) {
+                        return;
+                    }
+
+                    const bolitaMax = this.denominador * instancia;
+
+                    for (var i = 0; i < bolitaMax; i++) {
+                        const numCajita = i % this.denominador;
+                        const posicion = Math.floor(i / this.denominador);
 
 
+                        const posCajita = this.$refs.cajitas[numCajita].getBoundingClientRect();
+                        const posZonaInteraccion = this.$refs.zonaInteraccion.getBoundingClientRect();
+                        const leftCajita = posCajita.left - posZonaInteraccion.left;
+                        const topCajita = posCajita.top - posZonaInteraccion.top;
 
-                for (var i = 0; i < bolitaMax; i++) {
-                    const numCajita = i % this.denominador;
-                    const posicion = Math.floor(i / this.denominador);
 
-                    console.log(`La bolita ${i} va en la cajita ${numCajita} en la posición ${posicion}.`);
+                        const widthBolita = this.$refs.bolitas[i].offsetWidth;
+                        const widthAmpliadoBolita = widthBolita + this.gapBolitas;
 
-                    const posCajita = this.$refs.cajitas[numCajita].getBoundingClientRect();
-                    const posZonaInteraccion = this.$refs.zonaInteraccion.getBoundingClientRect();
-                    const leftCajita = posCajita.left - posZonaInteraccion.left;
-                    const topCajita = posCajita.top - posZonaInteraccion.top;
+                        const capacidadFila = Math.floor(posCajita.width / widthAmpliadoBolita);
 
-                    console.log(`La cajita está en ${leftCajita}, ${topCajita}`);
+                        const fila = Math.floor(posicion / capacidadFila);
 
-                    const widthBolita = this.$refs.bolitas[i].offsetWidth;
-                    const widthAmpliadoBolita = widthBolita + this.gapBolitas;
+                        const nuevoLeft = leftCajita + ((posicion % capacidadFila) * widthAmpliadoBolita);
+                        const nuevoTop = topCajita + (fila * widthAmpliadoBolita);
 
-                    const capacidadFila = Math.floor(posCajita.width / widthAmpliadoBolita);
-                    console.log(`En cada fila caben ${capacidadFila} bolitas`);
 
-                    const fila = Math.floor(posicion / capacidadFila);
+                        this.$refs.bolitas[i].style.left = nuevoLeft + 'px';
+                        this.$refs.bolitas[i].style.top = nuevoTop + 'px';
 
-                    const nuevoLeft = leftCajita + ((posicion % capacidadFila) * widthAmpliadoBolita);
-                    const nuevoTop = topCajita + (fila * widthAmpliadoBolita);
-
-                    console.log(`Enviando a ${nuevoLeft}, ${nuevoTop}`);
-
-                    this.$refs.bolitas[i].style.position = "absolute";
-                    this.$refs.bolitas[i].style.left = nuevoLeft + 'px';
-                    this.$refs.bolitas[i].style.top = nuevoTop + 'px';
-
-                }
+                    }
+                }, immediate: true
             }
+        },
+        mounted() {
+            this.instanciaReparticion = -1;
         }
 
     })
@@ -176,9 +236,14 @@
         gap: 10px;
         flex-wrap: wrap;
         justify-content: center;
+        width: 100%;
     }
 
     .bolitaNumero {
         transition: left 0.5s, top 0.3s;
+    }
+
+    .bolitaAbsolute {
+        position: absolute;
     }
 </style>

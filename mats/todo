@@ -4,3 +4,7 @@
 -Purgar de MathJax las páginas que no lo requieren.
 -Revisar el nombre de Principia matematica en el nodo de ley de inercia.
 -Hacer el tipo de recuadro "hipotesis".
+-Había algo en los nodos de recta numérica que se salía por los lados en móviles.
+-La evaluación del nodo de elementosHtml está outdated.
+
+-Hacer unos ejemplos para javascriptBasicoReferenciaElementos.

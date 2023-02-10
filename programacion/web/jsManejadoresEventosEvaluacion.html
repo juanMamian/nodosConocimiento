@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosProgramacion.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+
+
+
+    <title>Manejadores de eventos en javascript - Evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Comprendo los manejadores de eventos si:
+        </p>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada una idea de funcionamiento simple, puedo implementarla usando manejadores de eventos.
+            </template>
+        </bloque-component>        
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                marca: null,
+                textoEtiqueta: '<div ',
+                textoFinEtiqueta: '</div>'
+            }
+        }
+    })
+</script>
+
+<style>
+
+</style>

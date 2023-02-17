@@ -1,4 +1,3 @@
--Crear las secciones de "Elevar" y "raiz" para el nodo de números geométricos.
 -Crear una nueva sección en el nodo de multiplicación acerca del símbolo de la multiplicación.
 -Mas ejemplos para la explicación de operaciones aritméticas opuestas.
 -Purgar de MathJax las páginas que no lo requieren.
@@ -6,8 +5,10 @@
 -Hacer el tipo de recuadro "hipotesis".
 -Había algo en los nodos de recta numérica que se salía por los lados en móviles.
 -La evaluación del nodo de elementosHtml está outdated.
+-Arreglar los botones de ejemplos de cancelación.
+-update el nodo de sumas y restas.
+-Ver la estructura de la red de sistemas arduino. Está de último el nodo de estructura básica de un programa arduino.
 
 -Hacer unos ejemplos para javascriptBasicoReferenciaElementos.
 
--Hacer el nodo de identificación y clase.
 -Colocar los retos en la evaluación de cancelación.

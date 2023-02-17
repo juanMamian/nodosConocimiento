@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
 
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
@@ -17,33 +16,32 @@
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
 
-    <title>Números geométricos - evaluación</title>
+
+
+    <title>Identificación y clase - Evaluación</title>
 </head>
 
 <body>
     <div id="doc">
-        <p>Comprendo el concepto de números geométricos si: </p>
 
+        Comprendo los conceptos de identificación y clase si:
 
-        <bloque-component tipo="evaluacion"
-            textoCabecera="Dado cualquier número puedo determinar si es cuadrado o triangular.">
-
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo asignar correctamente identificación a los elementos de una página web.
+            </template>
         </bloque-component>
 
-        <bloque-component tipo="evaluacion"
-            textoCabecera="Dado cualquier número, puedo elevarlo hasta construir una figura dada.">
-
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo asignar correctamente clases a los elementos de una página web según un criterio dado.
+            </template>
         </bloque-component>
-
-        <bloque-component tipo="evaluacion" textoCabecera="Dado cualquier número geométrico puedo determinar su raiz.">
-
-        </bloque-component>
+        
     </div>
 </body>
 
 </html>
-
-
 
 <script>
     const doc = new Vue({
@@ -55,8 +53,18 @@
         },
         data() {
             return {
-
+                marca: null,
+                textoEtiquetaInicial1: '<div ',
+                textoId: 'id',
+                textoAsign1: '="',
+                textoAsign2: '"',
+                textoEtiquetaInicial2: ' >',
+                textoEtiquetaFinal: '</div>'
             }
         }
     })
 </script>
+
+<style>
+
+</style>

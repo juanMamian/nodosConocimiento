@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
 
-    <script id="MathJax-script" async src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
@@ -34,7 +35,7 @@
                     El seis se representa con el símbolo <span class="resaltado">6</span>
                 </li>
                 <li>
-                    El seiscientos se representa con los símbolos <span class="resaltado">600</span>
+                    El seiscientos se representa con el símbolo <span class="resaltado">600</span>
                 </li>
                 <li>
                     El veinticuatro se representa con el símbolo <span class="resaltado">24</span>
@@ -45,7 +46,9 @@
             </ul>
         </recuadro-component>
 
-        Pero los números también pueden ser expresados mediante una operación aritmética.
+        <p>
+            Pero los números también pueden ser expresados mediante una operación aritmética entre dos números.
+        </p>
 
         <bloque-component tipo="ejemplo"
             textoCabecera="En este cuadro puedes ver cómo se representan algúnos números mediante una operación aritmética">
@@ -67,14 +70,15 @@
                     </div>
 
                     <div class="boton" @click="toggleExpresionNumerica(index)">
-                        {{mostrandoExpresionNumerica[index]?'Expresar con su símbolo':'Expresar mediante una operación aritmética'}}
+                        {{mostrandoExpresionNumerica[index]?'Expresar con su símbolo':'Expresar mediante una operación
+                        aritmética'}}
                     </div>
                 </div>
             </div>
 
         </bloque-component>
 
-        
+
 
     </div>
 </body>
@@ -82,6 +86,11 @@
 </html>
 
 <script>
+    function generarExpresionNumerica(valor){
+        let numero1=Math.random
+    }
+
+
     const doc = new Vue({
         el: "#doc",
         components: {

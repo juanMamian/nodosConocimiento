@@ -6,32 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+    <script id="MathJax-script" async
+    src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/funciones/mixinsMaths.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
    
 
     <title>Evaluación - Expresión numérica</title>
 </head>
 <body>
+    <p>
+        Comprendo las expresiones numéricas si:
+    </p>
     <div id="doc">     
         <bloque-component tipo="evaluacion" textoCabecera="Puedo expresar cualquier número en forma de expresión numérica usando cualquier operación aritmética.">
 
+            
         </bloque-component> 
         <bloque-component tipo="evaluacion" textoCabecera="Puedo descubrir el valor de cualquier expresión numérica.">
+            <recuadro-component id="expresionReto" tipo="reto" v-if="expresionReto" :key="'ecuacion'+versionEcuacion">
+                \({{expresionReto}}\)
+            </recuadro-component>
 
+            <div class="boton" @click="generarExpresion">Generar expresión numérica</div>
         </bloque-component>   
     </div>
 </body>
 </html>
 
 <script>
+
+
     const doc=new Vue({
         el:"#doc",
         components:{
@@ -39,14 +54,29 @@
             bloqueComponent,
             enlaceComponent
         },
+        mixins:[mixinExpresionesNumericas],
         data(){
             return {
-
+                expresionReto:null,
+                versionEcuacion:0,
+            }
+        },
+        methods:{
+            generarExpresion(){
+                let valor=Math.round(Math.random()*20);
+                let ecuacion=this.expresionNumericaGenerarExpresionNumerica({valor}, {keepInteger:true});
+                this.expresionReto=this.expresionNumericaToMathJax(ecuacion);
+                this.versionEcuacion++;
+                this.$nextTick(()=>{
+                    MathJax.typeset();
+                })
             }
         }
     })
 </script>
 
 <style>
- 
+#expresionReto{
+    font-size: 40px;
+} 
 </style>

@@ -10,14 +10,16 @@
     <script id="MathJax-script" async
         src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadro.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/funciones/mixinsMaths.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/components/enlaceEstilo.css">
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -52,45 +54,43 @@
 
         <bloque-component tipo="ejemplo"
             textoCabecera="En este cuadro puedes ver cómo se representan algúnos números mediante una operación aritmética">
+
+            
             <div class="listaEjemplos" style="display: flex;">
-                <div class="itemEjemplo" v-for="(numero, index) of numerosEjemplo1"
-                    :key="'numeroExplicito'+numero.numeroExplicito">
+                <div class="itemEjemplo" v-for="(expresion, index) of expresiones"
+                    :key="'expresion'+index">
                     <div id="contenedorNumero1">
                         <transition name="fadeIn">
                             <div class="numero numeroExplicito" v-show="!mostrandoExpresionNumerica[index]">
-                                {{numero.numeroExplicito}}
+                                {{expresion.valor}}
                             </div>
                         </transition>
                         <transition name="fadeIn">
 
                             <div class="numero numeroExpresionNumerica" v-show="mostrandoExpresionNumerica[index]">
-                                {{numero.expresionNumerica}}
+                                \({{expresionNumericaToMathJax(expresion)}}\)
                             </div>
                         </transition>
                     </div>
 
                     <div class="boton" @click="toggleExpresionNumerica(index)">
-                        {{mostrandoExpresionNumerica[index]?'Expresar con su símbolo':'Expresar mediante una operación
-                        aritmética'}}
+                        {{mostrandoExpresionNumerica[index]?'Expresar con su símbolo':'Expresar mediante una operación aritmética'}}
                     </div>
                 </div>
             </div>
 
         </bloque-component>
 
-
+     
 
     </div>
 </body>
 
 </html>
 
-<script>
-    function generarExpresionNumerica(valor){
-        let numero1=Math.random
-    }
-
-
+<script>  
+    
+    
     const doc = new Vue({
         el: "#doc",
         components: {
@@ -98,25 +98,31 @@
             bloqueComponent,
             enlaceComponent
         },
+        mixins:[mixinExpresionesNumericas],
         data() {
             return {
 
                 numerosEjemplo1: [
                     {
-                        numeroExplicito: 4,
-                        expresionNumerica: '\\((2 + 2)\\)',
+                        valor: 4,
+                        operacion:"suma",
+                        numero1: 1,
+
                     },
                     {
-                        numeroExplicito: 17,
-                        expresionNumerica: '\\((20 - 3)\\)',
+                        valor: 17,
+                        operacion: 'resta',
+                        numero1: 22
                     },
                     {
-                        numeroExplicito: 7,
-                        expresionNumerica: '\\(({21 \\over 3})\\)',
+                        valor: 7,
+                        operacion: 'division',
+                        numero1: 21
                     },
                     {
-                        numeroExplicito: 180,
-                        expresionNumerica: '\\((90 \\times 2)\\)',
+                        valor: 180,
+                        operacion: 'multiplicacion',
+                        numero1: 60,
                     },
 
                 ],
@@ -136,6 +142,15 @@
                 expresionOriginalCreada: false,
 
                 mostrarValor: false,
+
+                lastAleatorio:null,
+            }
+        },
+        computed:{
+            expresiones(){
+                return this.numerosEjemplo1.map(num=>{
+                    return this.expresionNumericaGenerarExpresionNumerica(num);
+                });
             }
         },
         methods: {
@@ -145,7 +160,8 @@
                 this.$nextTick(() => {
                     MathJax.typeset();
                 });
-            },
+            },            
+           
         }
     })
 </script>
@@ -323,4 +339,6 @@
             opacity: 1;
         }
     }
+
+    
 </style>

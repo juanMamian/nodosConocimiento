@@ -12,6 +12,12 @@ const maxGradoPotenciacion=6;
 const minDenominadorEntero=2;
 const maxDenominadorEntero=30;
 
+const minBasePotencia=2;
+const maxBasePotencia=5;
+
+const minExponentePotencia=2;
+const maxExponentePotencia=4;
+
 function getBaseLog(base, res){
     return Math.log(res) / Math.log(base);
 }
@@ -220,6 +226,9 @@ function generarExpresionNumerica(expresion, opciones) {
     if (expresion.valor) {
         if (!expresion.numero1 && !expresion.numero2) { //Generando ámbos números base
             expresion.numero1 = generarNumero();
+            if(expresion.operacion==='potenciacion'){
+
+            }
             if(expresion.operacion==='division' && opciones.keepInteger){
                 let rangoDenominadorEntero=maxDenominadorEntero-minDenominadorEntero;
                 let denominador=Math.round(Math.random()*rangoDenominadorEntero) + minDenominadorEntero;

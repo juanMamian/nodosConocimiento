@@ -49,6 +49,7 @@ background-color: #66c644;
     max-width: 300px;
     margin: 10px auto;
     font-size: 15px;
+    color: black;
 }
 
 .deshabilitado{
@@ -70,6 +71,34 @@ justify-content:center;
 .zonaInteraccion{
 border: 2px dashed gray;
 padding: 5px;
+}
+
+.bloqueSeleccionDificultad{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto;
+}
+
+.bloqueSeleccionDificultad .valorDificultad{
+    font-size: 18px;
+}
+
+.bloqueRespuestaUsuario{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto;
+    gap: 10px;
+}
+
+.bloqueRespuestaUsuario input{
+    padding: 10px 10px;
+    font-size: 20px;
+    background-color: rgba(255, 255, 255, 0.19);
 }
 
 .contenedorFlex {

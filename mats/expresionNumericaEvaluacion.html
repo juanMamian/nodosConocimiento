@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +8,7 @@
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
 
     <script id="MathJax-script" async
-    src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/funciones/mixinsMaths.js"></script>
 
@@ -15,59 +16,102 @@
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
-   
+
 
     <title>Evaluación - Expresión numérica</title>
 </head>
+
 <body>
     <p>
         Comprendo las expresiones numéricas si:
     </p>
-    <div id="doc">     
-        <bloque-component tipo="evaluacion" textoCabecera="Puedo expresar cualquier número en forma de expresión numérica usando cualquier operación aritmética.">
+    <div id="doc">
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Puedo expresar cualquier número en forma de expresión numérica usando cualquier operación aritmética.">
 
-            
-        </bloque-component> 
+        </bloque-component>
         <bloque-component tipo="evaluacion" textoCabecera="Puedo descubrir el valor de cualquier expresión numérica.">
-            <recuadro-component id="expresionReto" tipo="reto" v-if="expresionReto" :key="'ecuacion'+versionEcuacion">
-                \({{expresionReto}}\)
-            </recuadro-component>
+            <recuadro-component tipo="instruccionPointer">
 
+                <div class="bloqueSeleccionDificultad">
+
+                    Selecciona el nivel de dificultad
+
+                    <input type="range" step="1" min="1" max="3" v-model="dificultadExpresion" id="inputDificultad">
+
+                    <div class="valorDificultad">
+                        {{dificultadExpresion}}
+                    </div>
+                </div>
+            </recuadro-component>
             <div class="boton" @click="generarExpresion">Generar expresión numérica</div>
-        </bloque-component>   
+
+            <transition name="travelTop">
+                <recuadro-component id="expresionReto" tipo="reto" v-if="expresionReto"
+                    :key="'ecuacion'+versionEcuacion">
+
+                    <span style="font-size: 48px;">
+                        \({{expresionReto}}\)
+                    </span>
+                    <div class="bloqueRespuestaUsuario">
+                        <recuadro-component tipo="instruccionTeclado">
+                            Escribe aquí tu respuesta
+                        </recuadro-component>
+
+                        <input type="number" style="width: 140px" id="inputRespuesta">
+
+                        <div class="boton">Comprobar</div>
+                    </div>
+                </recuadro-component>
+            </transition>
+
+        </bloque-component>
     </div>
 </body>
+
 </html>
 
 <script>
 
 
-    const doc=new Vue({
-        el:"#doc",
-        components:{
+    const doc = new Vue({
+        el: "#doc",
+        components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-        mixins:[mixinExpresionesNumericas],
-        data(){
+        mixins: [mixinExpresionesNumericas],
+        data() {
             return {
-                expresionReto:null,
-                versionEcuacion:0,
+                expresionReto: null,
+                versionEcuacion: 0,
+                dificultadExpresion: 1,
             }
         },
-        methods:{
-            generarExpresion(){
-                let valor=Math.round(Math.random()*20);
-                let ecuacion=this.expresionNumericaGenerarExpresionNumerica({valor}, {keepInteger:true});
-                this.expresionReto=this.expresionNumericaToMathJax(ecuacion);
+        methods: {
+            generarExpresion() {
+                let valor = Math.round(Math.random() * 20);
+                let queSeaPotencia = Math.random() < 0.1;
+
+                let ecuacion = this.expresionNumericaGenerarExpresionNumerica({ valor }, { keepInteger: true });
+
+                if (queSeaPotencia) {
+                    console.log("Será potencia");
+                    ecuacion = this.expresionNumericaGenerarExpresionNumerica({ operacion: "potenciacion" }, { keepInteger: true });
+                }
+                this.expresionReto = this.expresionNumericaToMathJax(ecuacion);
                 this.versionEcuacion++;
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     MathJax.typeset();
                 })
             }
@@ -76,7 +120,7 @@
 </script>
 
 <style>
-#expresionReto{
-    font-size: 40px;
-} 
+    #expresionReto {
+        font-size: 40px;
+    }
 </style>

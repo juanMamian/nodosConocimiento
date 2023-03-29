@@ -16,10 +16,14 @@
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -49,16 +53,17 @@
         </recuadro-component>
 
         <p>
-            Pero los números también pueden ser expresados mediante una operación aritmética entre dos números.
+            Pero los números también pueden ser expresados mediante operaciones aritméticas.
         </p>
 
-        <bloque-component tipo="ejemplo"
-            textoCabecera="En este cuadro puedes ver cómo se representan algúnos números mediante una operación aritmética">
+        <bloque-component tipo="ejemplo">
 
-            
+            <template #cabecera>
+                En este cuadro puedes ver cómo se representan algúnos números mediante operaciones aritméticas.
+            </template>
+
             <div class="listaEjemplos" style="display: flex;">
-                <div class="itemEjemplo" v-for="(expresion, index) of expresiones"
-                    :key="'expresion'+index">
+                <div class="itemEjemplo" v-for="(expresion, index) of expresiones" :key="'expresion'+index">
                     <div id="contenedorNumero1">
                         <transition name="fadeIn">
                             <div class="numero numeroExplicito" v-show="!mostrandoExpresionNumerica[index]">
@@ -73,7 +78,7 @@
                         </transition>
                     </div>
 
-                    <div class="boton" @click="toggleExpresionNumerica(index)">
+                    <div class="boton" @click="toggleExpresionNumerica(index)" style="max-width: 150px;">
                         {{mostrandoExpresionNumerica[index]?'Expresar con su símbolo':'Expresar mediante una operación aritmética'}}
                     </div>
                 </div>
@@ -81,16 +86,137 @@
 
         </bloque-component>
 
-     
+        <recuadro-component tipo="datoPrevio">
+            Una expresión numérica es una operación entre <span class="resaltado">dos</span> números. Esos números se
+            conocen
+            como <span class="resaltado">operandos</span>.
+        </recuadro-component>
+
+        <recuadro-component tipo="datoPrevio">
+            En una expresión numérica hay un símbolo que indica la operación. Ese símbolo se conoce como <span
+                class="resaltado">el operador</span>
+        </recuadro-component>
+
+        <bloque-component tipo="ejemplo">
+
+            <template #cabecera>
+                En este cuadro se puede ver ejemplos de expresiones numéricas y se señala el operador y los operandos.
+            </template>
+
+            <div class="listaEjemplos">
+
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( 4 \times 2 \)
+                    </div>
+
+                    <recuadro-component tipo="datoNuevo">
+                        <ul>
+                            <li>
+                                El primer operando es <span class="resaltado">\( 4 \)</span>
+                            </li>
+                            <li>
+                                El operador es <span class="resaltado">\( \times \)</span>
+                            </li>
+                            <li>
+                                El segundo operando es <span class="resaltado">\( 2 \)</span>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                </div>
+
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( \sqrt[3]{125} \)
+                    </div>
+
+                    <recuadro-component tipo="datoNuevo">
+                        <ul>
+                            <li>
+                                El primer operando es <span class="resaltado">\( 3 \)</span>
+                            </li>
+                            <li>
+                                El operador es <span class="resaltado">\( \sqrt[]{} \)</span>
+                            </li>
+                            <li>
+                                El segundo operando es <span class="resaltado">\( 125 \)</span>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                </div>
+
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( 3 + 16 \)
+                    </div>
+
+                    <recuadro-component tipo="datoNuevo">
+                        <ul>
+                            <li>
+                                El primer operando es <span class="resaltado">\( 3 \)</span>
+                            </li>
+                            <li>
+                                El operador es <span class="resaltado">\( + \)</span>
+                            </li>
+                            <li>
+                                El segundo operando es <span class="resaltado">\( 16 \)</span>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                </div>
+
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( 15 ^ 3 \)
+                    </div>
+
+                    <recuadro-component tipo="datoNuevo">
+                        <ul>
+                            <li>
+                                El primer operando es <span class="resaltado">\( 15 \)</span>
+                            </li>
+                            <li>
+                                El operador no se ve.
+                            </li>
+                            <li>
+                                El segundo operando es <span class="resaltado">\( 3 \)</span>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                </div>
+
+            </div>
+
+        </bloque-component>
+
+        <recuadro-component tipo="datoPrevio">
+            En una expresión numérica, hay una operación aplicada sobre un número inicial.
+
+            <ul>
+                <li>
+                    El primer operando indica el número inicial.
+                </li>
+                <li>
+                    El operador indica la operación que se aplica.
+                </li>
+                <li>
+                    El segundo operando indica la magnitud de la operación
+                </li>
+            </ul>
+        </recuadro-component>
 
     </div>
 </body>
 
 </html>
 
-<script>  
-    
-    
+<script>
+
+
     const doc = new Vue({
         el: "#doc",
         components: {
@@ -98,14 +224,14 @@
             bloqueComponent,
             enlaceComponent
         },
-        mixins:[mixinExpresionesNumericas],
+        mixins: [mixinExpresionesNumericas],
         data() {
             return {
 
                 numerosEjemplo1: [
                     {
                         valor: 4,
-                        operacion:"suma",
+                        operacion: "suma",
                         numero1: 1,
 
                     },
@@ -143,12 +269,12 @@
 
                 mostrarValor: false,
 
-                lastAleatorio:null,
+                lastAleatorio: null,
             }
         },
-        computed:{
-            expresiones(){
-                return this.numerosEjemplo1.map(num=>{
+        computed: {
+            expresiones() {
+                return this.numerosEjemplo1.map(num => {
                     return this.expresionNumericaGenerarExpresionNumerica(num);
                 });
             }
@@ -160,8 +286,8 @@
                 this.$nextTick(() => {
                     MathJax.typeset();
                 });
-            },            
-           
+            },
+
         }
     })
 </script>
@@ -170,175 +296,4 @@
     body {
         padding: 2% 5%;
     }
-
-    .itemEjemplo .boton {
-        width: 160px;
-    }
-
-    #contenedorNumero1 {
-        width: 100%;
-        height: 50px;
-        position: relative;
-    }
-
-    #contenedorNumero1 .numero {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    .numero {
-        text-align: center;
-    }
-
-    #ejemplo1 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        align-content: center;
-        justify-items: center;
-    }
-
-    .transversal {
-        grid-column: 1/3;
-    }
-
-    .instruccion {
-        padding: 5px 15px;
-        border: 1px solid cadetblue;
-        border-radius: 5px;
-    }
-
-    .expresion {
-        padding: 5px 15px;
-        background-color: cadetblue;
-        border-radius: 5px;
-    }
-
-    .operacion {
-        display: inline-block;
-        margin: 10px;
-        border: 1px solid gray;
-        border-radius: 8px;
-        cursor: pointer;
-        width: 40px;
-        height: 30px;
-        text-align: center;
-        padding: 10px;
-        font-weight: bold;
-    }
-
-    .operacion:hover {
-        background-color: cadetblue;
-    }
-
-    .seleccionada {
-        background-color: cadetblue;
-    }
-
-    .hoverRevelable {
-        border: 1px solid green;
-        border-radius: 5px;
-        padding: 5px;
-        min-width: 100px;
-        text-align: center;
-    }
-
-    .hoverRevelable>.noHover {
-        display: inline-block;
-    }
-
-    .hoverRevelable>.onHover {
-        display: none;
-    }
-
-    .hoverRevelable:hover>.noHover {
-        display: none;
-    }
-
-    .hoverRevelable:hover>.onHover {
-        display: inline-block;
-    }
-
-    .zonaValorExpresion {
-        padding: 10px 15px;
-    }
-
-    .nota {
-        background-color: rgb(233, 185, 150);
-        border-radius: 15px;
-        padding: 15px;
-        margin: 10px auto;
-        width: min(650px, 90%);
-    }
-
-    .conclusion {
-        padding: 10px 15px;
-        border-radius: 15px;
-        margin: 10px 5px;
-        width: min(90%, 650px);
-        background-color: rgb(209, 127, 33);
-        margin: 10px auto;
-    }
-
-    .aparecer-enter {
-        opacity: 0;
-        ;
-    }
-
-    .aparecer-enter-active {
-        transition: opacity 0.5s;
-    }
-
-    .aparecer-enter-to {
-        opacity: 1;
-    }
-
-    .travelUp-enter-active {
-        animation: travelUp 0.5s;
-        animation-iteration-count: 1;
-    }
-
-    .travelUp-leave-active {
-        animation: travelUp 0.5s;
-        animation-iteration-count: 1;
-        animation-direction: reverse;
-    }
-
-    .travelDown-enter-active {
-        animation: travelDown 0.5s;
-        animation-iteration-count: 1;
-    }
-
-    .travelDown-leave-active {
-        animation: travelDown 0.5s;
-        animation-iteration-count: 1;
-        animation-direction: reverse;
-    }
-
-    @keyframes travelUp {
-        0% {
-            transform: translateY(-100%);
-            opacity: 0;
-        }
-
-        100% {
-            transform: translateY(0%);
-            opacity: 1;
-        }
-    }
-
-    @keyframes travelDown {
-        0% {
-            transform: translateY(100%);
-            opacity: 0;
-        }
-
-        100% {
-            transform: translateY(0%);
-            opacity: 1;
-        }
-    }
-
-    
 </style>

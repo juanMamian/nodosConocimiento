@@ -9,6 +9,8 @@
     --paletaMain: #E2C044;
     --paletaPrevio: #F06449;
     --paletaActual: #26547C;
+    --paletaCheck: #209c49;
+    --paletaFail: #cc2f2f;
 }
 
 body{
@@ -16,6 +18,10 @@ body{
     padding: 3vh 2vw;
     font-size: 19px;
 }
+li{
+    margin: 10px 0px;
+}
+
 .fondoGris{
 	position:fixed;
 	top: 0px;
@@ -56,6 +62,8 @@ background-color: #66c644;
     opacity: 0.4;
     pointer-events: none;
 }
+
+/* #region listas de ejemplos */
 .listaEjemplos{
 display:flex;
 flex-wrap:wrap;
@@ -66,7 +74,14 @@ justify-content:center;
     border-spacing: 10px;
     padding: 5%;
     margin: 15px 10px;
+    text-align: center;
 }
+
+.itemEjemplo.anchoMediano{
+    max-width: min(300px, 90%);
+}
+/* #endregion */
+
 
 .zonaInteraccion{
 border: 2px dashed gray;
@@ -176,8 +191,8 @@ pointer-events:none;
 }
 
 @keyframes travelRight{
-	0%{left:100%; opacity: 0}	
-	100%{left :0%; opacity: 1}
+	0%{transform:translateX(100%); opacity: 0}	
+	100%{transform: translateX(0%); opacity: 1}
 }
 
 .travelLeft-enter-active{

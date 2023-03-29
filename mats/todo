@@ -1,3 +1,4 @@
+-En el generador de expresiones el Math.pow no logra ejecutar una potencia a una fracción negativa y por lo tanto no puede generar una subexpresión para radicación de números negativos.
 -Crear una nueva sección en el nodo de multiplicación acerca del símbolo de la multiplicación.
 -Hacer evaluacion del nodo de voltaje.
 -Corregir el nodo de funciones en javascript porque dice que para ejecutar la función hay que escribir el nombre de la variable.
@@ -10,6 +11,8 @@
 -Arreglar los botones de ejemplos de cancelación.
 -update el nodo de sumas y restas.
 -Ver la estructura de la red de sistemas arduino. Está de último el nodo de estructura básica de un programa arduino.
+-La siguiente fuente no es encontrada: http://192.168.1.100:3000/public/resources/libraries/MathJax/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff
+-Que los nodos de operaciones aritméticas básicas tengan algunos retos de evaluación.
 
 -Hacer unos ejemplos para javascriptBasicoReferenciaElementos.
 

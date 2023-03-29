@@ -30,6 +30,10 @@
     background-color: var(--paletaActual);
     color: whitesmoke;
 }
+.recuadro.instruccionTeclado .iconoRecuadro{
+    height: 20px;
+}
+
 .recuadro.reto{
     background-color: var(--paletaActual);
     color: whitesmoke;
@@ -39,9 +43,52 @@
     height: 30px;
     margin-right: 20px;
 }
-.textoRecuadro{
+.recuadro.infoResultado .textoRecuadro{
     flex-grow: 1;
     text-align: center;
     font-size: 16px;
 }
+
+.recuadro.instruccionPointer .textoRecuadro{
+    flex-grow: 1;
+    text-align: center;
+    font-size: 16px;
+}
+
+.recuadro.instruccionTeclado .textoRecuadro{
+    flex-grow: 1;
+    text-align: center;
+    font-size: 16px;
+}
+
+
+.recuadro.instruccion .textoRecuadro{
+    flex-grow: 1;
+    text-align: center;
+    font-size: 16px;
+}
+
+.recuadro.reto .textoRecuadro{
+    flex-grow: 1;
+    text-align: center;
+    font-size: 16px;
+}
+
+.recuadro.infoResultado{
+    flex-grow: 0;
+    width: fit-content;
+    color:black;
+}
+
+.recuadro.infoResultado.correcto{
+    background-color: var(--paletaCheck);
+}
+.recuadro.infoResultado.incorrecto{
+    background-color: var(--paletaFail);
+}
+
+.recuadro.infoResultado .textoRecuadro{
+    flex-grow: 0;
+}
+
 

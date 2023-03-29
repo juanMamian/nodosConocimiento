@@ -4,9 +4,10 @@
         <div v-if="spoiler" id="textoSpoiler">¡Spoiler alert!</div>
         <div class="textoCabecera">
             {{textocabecera}}
+            <slot name="cabecera">
+            </slot>
         </div>
-        <slot name="cabecera">
-        </slot>
+
     </div>
     <div class="boton" v-on:click="desplegado=!desplegado">
         {{desplegado?textoCerrarBoton:textoBoton}}

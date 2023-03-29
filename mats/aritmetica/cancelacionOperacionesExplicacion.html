@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+
+    <title>Cancelación de operaciones</title>
+
+</head>
+
+<body>
+    <div id="doc">
+        <recuadro-component tipo="datoPrevio">
+            Las operaciones aritméticas son operaciones que se aplican sobre algún numero.
+        </recuadro-component>
+
+        <recuadro-component tipo="datoPrevio">
+            Cuando una operación aritmética es aplicada en algún número, tiene un <span class="resaltado">efecto</span>
+            sobre ese número transformándolo.
+        </recuadro-component>
+
+        <bloque-component tipo="ejemplo" @plegado=reiniciarEjemplo1>
+            <template #cabecera>
+                En este cuadro se ven ejemplos de efectos causados por algunas operaciones aritméticas.
+            </template>
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo anchoMediano">
+                    <recuadro-component tipo="datoPrevio">
+                        Este {{ejemplo1Modificador1===1?'es':'era'}} un {{ejemplo1Numero1}}
+                    </recuadro-component>
+                    <transition-group name="fadeIn">
+                        <div class="numeroEnBolitas" v-for="rep of ejemplo1Modificador1"
+                            :key="'ejemplo1Numero1Repeticion'+rep">
+                            <div class="bolitaNumero" v-for="numero of ejemplo1Numero1" :key="'ejemplo1Numero'+numero">
+
+                            </div>
+                        </div>
+                    </transition-group>
+
+                    <div class="boton" @click="ejemplo1Numero1Aplicar"
+                        :class="{deshabilitado: ejemplo1Modificador1!=1}">
+                        Aplicar una multiplicación por 3</div>
+
+                    <transition name="fadeIn">
+                        <div v-show="ejemplo1MostrandoExplicacion1">
+
+                            <recuadro-component tipo="datoNuevo">
+                                El número {{ejemplo1Numero1}} se repitió y ahora es un
+                                {{ejemplo1Numero1*ejemplo1Modificador1}}.
+                            </recuadro-component>
+
+                            <div class="boton" @click="ejemplo1Modificador1=1; ejemplo1MostrandoExplicacion1=false">
+                                Reiniciar
+                            </div>
+                        </div>
+                    </transition>
+                </div>
+
+                <div class="itemEjemplo anchoMediano">
+
+                    <recuadro-component tipo="datoPrevio">
+                        Este {{ejemplo1Modificador2==0?'es':'era'}} un {{ejemplo1Numero2}}
+                    </recuadro-component>
+
+                    <div class="numeroEnBolitas">
+                        <transition-group class="contenedorTransicion" tag="div" name="travelRight">
+                            <div class="bolitaNumero" v-for="numero of ejemplo1Numero2-ejemplo1Modificador2"
+                                :key="'ejemplo1Numero2'+numero">
+
+                            </div>
+                        </transition-group>
+                    </div>
+
+                    <div class="boton" @click="ejemplo1Numero2Aplicar"
+                        :class="{deshabilitado: ejemplo1Modificador2!=0}">
+                        Aplicar una resta de 6</div>
+
+
+
+                    <transition name="fadeIn">
+                        <div v-show="ejemplo1MostrandoExplicacion2">
+
+                            <recuadro-component tipo="datoNuevo">
+                                Hubo un efecto de <span class="resaltado">sustracción</span> en el número
+                                {{ejemplo1Numero2}} y ahora hay un
+                                {{ejemplo1Numero2-ejemplo1Modificador2}}.
+                            </recuadro-component>
+
+                            <div class="boton" @click="ejemplo1Modificador2=0; ejemplo1MostrandoExplicacion2=false">
+                                Reiniciar
+                            </div>
+                        </div>
+                    </transition>
+                </div>
+
+                <div class="itemEjemplo anchoMediano" ref="ejemplo1Numero3Contenedor">
+
+                    <recuadro-component tipo="datoPrevio">
+                        Este {{ejemplo1Modificador3==0?'es':'era'}} un {{ejemplo1Numero3}}
+                    </recuadro-component>
+
+                    <div class="numeroEnBolitas">
+                        <transition-group class="contenedorTransicion" tag="div" name="travelRight">
+                            <div class="bolitaNumero" :style="[ejemplo1Numero3PosicionBolita[numero-1] || {}]" style="position:relative" ref="ejemplo1Numero3Bolitas"
+                                v-for="numero of ejemplo1Numero3" :key="'ejemplo1Numero3'+numero">
+
+                            </div>
+                        </transition-group>
+                    </div>
+
+
+
+                    <div class="boton" @click="ejemplo1Numero3Aplicar"
+                        :class="{deshabilitado: ejemplo1Modificador3!=0}">
+                        Aplicar una division entre 3</div>
+
+                    <div class="contenedorCajitasDivision" ref="ejemplo1Numero3ContenedorCajitas">
+                        <div class="cajitaDivision" v-for="cajita of ejemplo1Magnitud3" ref="ejemplo1Numero3Cajitas"
+                            :key="'ejemplo1Numero3cajita'+cajita">
+
+                        </div>
+                    </div>
+
+                    <transition name="fadeIn">
+                        <div v-show="ejemplo1MostrandoExplicacion3">
+
+                            <recuadro-component tipo="datoNuevo">
+                                Hubo un efecto de <span class="resaltado">sustracción</span> en el número
+                                {{ejemplo1Numero3}} y ahora hay un
+                                {{ejemplo1Numero3-ejemplo1Modificador3}}.
+                            </recuadro-component>
+
+                            <div class="boton" @click="ejemplo1Modificador3=0; ejemplo1MostrandoExplicacion3=false">
+                                Reiniciar
+                            </div>
+                        </div>
+                    </transition>
+                </div>
+            </div>
+        </bloque-component>
+
+
+
+        <recuadro-component tipo="datoPrevio">
+            Si dos operaciones aritméticas causan efectos inversos cuando son aplicadas se dice que son <span
+                class="resaltado">operaciones aritméticas opuestas</span>.
+        </recuadro-component>
+
+        <bloque-component tipo="ejemplo"
+            textoCabecera="En este cuadro se ven ejemplos de algunas operaciones aritméticas opuestas.">
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo itemEjemplo1" style="width: 300px;">
+                    <div class="numeroBolitas">
+                        <transition-group name="travelRight">
+                            <div class="bolita" v-for="num of numEjemplo1" :key="'bolitaEjemplo1'+num"></div>
+                        </transition-group>
+                    </div>
+
+                    <div class="boton" :class="{deshabilitado: numEjemplo1!=4}" @click="numEjemplo1+=3">
+                        Sumar 3
+                    </div>
+
+                    <div class="boton" :class="{deshabilitado: numEjemplo1!=7}" @click="numEjemplo1-=3">
+                        Restar 3
+                    </div>
+                </div>
+
+                <div class="itemEjemplo itemEjemplo1" style="width: 300px;">
+                    <div class="numeroBolitas">
+                        <transition-group name="travelRight">
+                            <div class="bolita" v-for="num of numEjemplo2" :key="'bolitaEjemplo1'+num"></div>
+                        </transition-group>
+                    </div>
+
+                    <div class="boton" :class="{deshabilitado: numEjemplo2!=6}" @click="numEjemplo2-=1">
+                        Restar 1
+                    </div>
+
+                    <div class="boton" :class="{deshabilitado: numEjemplo2!=5}" @click="numEjemplo2+=1">
+                        Sumar 1
+                    </div>
+                </div>
+            </div>
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                ejemplo1Numero1: 5,
+                ejemplo1Modificador1: 1,
+                ejemplo1Magnitud1: 3,
+                ejemplo1MostrandoExplicacion1: false,
+
+                ejemplo1Numero2: 15,
+                ejemplo1Modificador2: 0,
+                ejemplo1Magnitud2: 6,
+                ejemplo1MostrandoExplicacion2: false,
+
+
+                ejemplo1Numero3: 12,
+                ejemplo1Modificador3: 0,
+                ejemplo1Magnitud3: 3,
+                ejemplo1MostrandoExplicacion3: false,
+                ejemplo1Numero3PosicionBolita: [],
+
+                ejemplo1Numero4: 18,
+
+                ejemplo1Numero5: 17,
+
+                ejemplo1Numero6: 2,
+
+
+                numEjemplo1: 4,
+                numEjemplo2: 6,
+
+            }
+        },
+        methods: {
+            reiniciarEjemplo1() {
+                this.ejemplo1Modificador1 = 1;
+                this.ejemplo1MostrandoExplicacion1 = false;
+
+                this.ejemplo1Modificador2 = 0;
+                this.ejemplo1MostrandoExplicacion2 = false;
+
+                this.ejemplo1Modificador3 = 0;
+                this.ejemplo1MostrandoExplicacion3 = false;
+
+            },
+            ejemplo1Numero1Aplicar() {
+
+                if (this.ejemplo1Modificador1 >= this.ejemplo1Magnitud1) {
+                    return;
+                }
+                this.ejemplo1Modificador1++;
+
+                if (this.ejemplo1Modificador1 < this.ejemplo1Magnitud1) {
+                    setTimeout(() => {
+                        this.ejemplo1Numero1Aplicar();
+                    }, 300);
+                }
+            },
+            ejemplo1Numero2Aplicar() {
+                if (this.ejemplo1Modificador2 >= this.ejemplo1Magnitud2) {
+                    return
+                }
+
+                console.log("aumentando reductor");
+                this.ejemplo1Modificador2++;
+
+                if (this.ejemplo1Modificador2 < this.ejemplo1Magnitud2) {
+                    setTimeout(() => {
+                        this.ejemplo1Numero2Aplicar();
+                    }, 300)
+                }
+            },
+            ejemplo1Numero3Aplicar() {
+                if (this.ejemplo1Modificador3 >= this.ejemplo1Magnitud3) {
+                    return
+                }
+
+                this.ejemplo1Modificador3++;
+
+                if (this.ejemplo1Modificador3 < this.ejemplo1Magnitud3) {
+                    setTimeout(() => {
+                        this.ejemplo1Numero3Aplicar();
+                        this.ejemplo1Numero3PosicionarBolitas();
+                    }, 300)
+                }
+            },
+            ejemplo1Numero3PosicionarBolitas(num) {
+
+                for (const num of this.ejemplo1Numero3) {
+                    let numCajita = Math.floor(num / this.ejemplo1Magnitud3);
+                    let bolitasPorCajita = Math.floor(this.ejemplo1Numero3 / this.ejemplo1Magnitud3);
+
+                    let contenedor = this.$refs.ejemplo1Numero3Contenedor;
+                    let cajita = this.$refs.ejemplo1Numero3Cajitas[numCajita - 1];
+
+                    let posCajita = {
+                        x: cajita.offsetLeft - contenedor.offsetLeft,
+                        y: cajita.offsetTop - contenedor.offsetTop
+                    }
+
+                    let turnoEnCajita = num % this.ejemplo1Magnitud3;
+
+                    let gap = 10;
+                    let widthBolita = this.$refs.ejemplo1Numero3Bolitas[0].offsetWidth;
+                    let widthBolitaCompleta = gap + widthBolita;
+
+                    let widthBolitasEnCajita = (gap + widthBolita) * bolitasPorCajita;
+
+                    let leftBolita = posCajita.x + (cajita.offsetWidth / 2) - (widthBolitasEnCajita / 2) - (gap / 2) + turnoEnCajita * (widthBolitaCompleta);
+                    let topBolita = posCajita.y;
+
+                    let elemBolita=this.$refs.ejemplo1Numero3Bolitas[num];
+                    let posBolita={
+                        x: elemBolita.offsetLeft - contenedor.offsetLeft,
+                        y: elemBolita.offsetTop - contenedor.offsetTop,
+                    }
+
+                    let deltaLeft=leftBolita - posBolita.x;
+                    let deltaTop= topBolita - posBolita.y;
+
+                    this.ejemplo1Numero3PosicionBolita[num] = {
+                        left: deltaLeft + 'px',
+                        top: deltaTop + 'px',
+                    }
+                }
+
+            }
+        },
+        watch: {
+            ejemplo1Modificador1(val, prev) {
+                if (val == this.ejemplo1Magnitud1) {
+                    setTimeout(() => {
+                        this.ejemplo1MostrandoExplicacion1 = true;
+                    }, 1000)
+                }
+            },
+            ejemplo1Modificador2(val, prev) {
+                if (val == this.ejemplo1Magnitud2) {
+                    setTimeout(() => {
+                        this.ejemplo1MostrandoExplicacion2 = true;
+                    }, 1000)
+                }
+            },
+            ejemplo1Modificador3(val, prev) {
+                if (val == this.ejemplo1Magnitud3) {
+                    setTimeout(() => {
+                        this.ejemplo1MostrandoExplicacion2 = true;
+                    }, 1000)
+                }
+            }
+
+        }
+    })
+</script>
+<style>
+    .notacion {
+        font-size: 18px;
+        padding: 2px 3px;
+        background-color: cadetblue;
+        display: inline-block;
+        border-radius: 2px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    #imagenConjuntos {
+        max-width: 90vw;
+        margin: 10px auto;
+        display: block;
+    }
+
+
+    .numeroBolitas {
+        display: flex;
+    }
+
+    .numeroBolitas span {
+        display: flex;
+        flex-wrap: wrap;
+
+    }
+
+    .bolita {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin: 10px 5px;
+        background-color: brown;
+        position: relative;
+    }
+
+    .fadeIn-before-enter {
+        opacity: 0;
+    }
+
+    .cajitaDivision {
+        min-width: 50px;
+        min-height: 50px;
+        margin: 10px 10px;
+        border: 1px solid black;
+    }
+</style>

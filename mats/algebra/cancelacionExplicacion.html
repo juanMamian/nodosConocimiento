@@ -15,19 +15,55 @@
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
     <title>Cancelación de operaciones</title>
 </head>
 
 <body>
-    <div id="doc">
-        <p>Si una expresión numérica está construida de forma tal que al evaluarla se deben ejecutar operaciones
-            opuestas de manera consecutiva, se dice que esas operaciones se cancelan. Es decir: el efecto de una es
-            anulado por el efecto de la otra.
+    <div id="doc">        
+        <p>
+            Si una expresión numérica está hecha con <span class="resaltado">cierta operación</span> y se usa para hacer 
+            otra con <span class="resaltado">la operación contraria</span>, se tiene un caso de cancelación de operaciones.
         </p>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestran expresiones numéricas hechas con cierta operación que son el primer operando de expresiones
+                hechas con la operación contraria.
+            </template>
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( 3 + 6 - 6 \)
+                    </div>
+
+                    <recuadro-component tipo="datoPrevio">
+                        <ul>
+                            <li>
+                                El primer operando de esta expresión es la expresión \( 3 + 6 \). Está hecha con una suma
+                                de magnitud 6.
+                            </li>
+                            <li>
+                                Esta expresión está hecha con una <span class="resaltado">resta</span> de magnitud 6.
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                    <recuadro-component tipo="datoNuevo">
+                        
+                    </recuadro-component>
+                </div>
+            </div>
+
+        </bloque-component>
 
         <bloque-component tipo="ejemplo"
             textoCabecera="En este cuadro se pueden ver algunas expresiones numéricas con operaciones opuestas consecutivas">
@@ -174,10 +210,11 @@
             </div>
         </bloque-component>
 
-        <recuadro-component tipo="descubrimiento">            
-            Las nuevas expresiones sin las operaciones que se cancelan son más simples que la original pero tienen el mismo valor.
+        <recuadro-component tipo="descubrimiento">
+            Las nuevas expresiones sin las operaciones que se cancelan son más simples que la original pero tienen el
+            mismo valor.
         </recuadro-component>
-        </div>
+    </div>
 </body>
 
 </html>

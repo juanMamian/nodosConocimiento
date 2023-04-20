@@ -1,7 +1,7 @@
 
 @font-face{
     font-family: 'Salsa';
-    src: url("http://192.168.1.100:3000/public/resources/fonts/Salsa/Salsa-Regular.ttf");
+    src: url("http://192.168.1.105:3000/public/resources/fonts/Salsa/Salsa-Regular.ttf");
     font-style:normal ;
 }
 
@@ -50,17 +50,17 @@ justify-content:center;
     margin: 15px 10px;
 }
 
-.fadeIn-enter-active{
-	animation: fadeIn 0.8s;
+.fade-enter-active{
+	animation: fade 0.8s;
 	animation-iteration-count: 1;
 }
-.fadeIn-leave-active{
-	animation: fadeIn 0.8s;
+.fade-leave-active{
+	animation: fade 0.8s;
 	animation-iteration-count: 1;
 	animation-direction:reverse;
 }
 
-@keyframes fadeIn{
+@keyframes fade{
 	0%{opacity: 0}	
 	100%{opacity :1}
 }

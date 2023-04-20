@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
      
 
     <title>Restas</title>
@@ -32,7 +32,7 @@
                 </button>
 <br>
                 <div id="contenedorNumeroSeis" class="contenedorNumeroBolitas" v-show="stepEjemplo1>0">
-                    <transition name="fadeIn" v-on:after-enter="stepEjemplo1++">
+                    <transition name="fade" v-on:after-enter="stepEjemplo1++">
                         <div id="numeroSeis" class="numeroBolitas" v-show="stepEjemplo1>=2">
                             <transition-group name="salirRestadas" v-on:after-leave="stepEjemplo1=5">
                                 <div class="bolita" v-for="numero of 6" :key="'numero1'+numero" v-show="stepEjemplo1<4 || numero<5">
@@ -45,7 +45,7 @@
 
                 <button v-show="stepEjemplo1==3" @click="stepEjemplo1++">¡Restar 2!</button>
 
-                <transition name="fadeIn" v-on:after-enter="stepEjemplo1++">
+                <transition name="fade" v-on:after-enter="stepEjemplo1++">
                     <div class="expresion transversal" v-show="stepEjemplo1>=5">Ahora es un número 4</div>
                 </transition>
             </center>
@@ -169,23 +169,23 @@
         display: inline-block;
     }
 
-    .fadeIn-leave-to{
+    .fade-leave-to{
         opacity: 0;
     }
 
-    .fadeIn-leave-active{
+    .fade-leave-active{
         transition: opacity 0.1s;;
     }
 
-    .fadeIn-enter {
+    .fade-enter {
         opacity: 0;
     }
 
-    .fadeIn-enter-active {
+    .fade-enter-active {
         transition: opacity 0.8s;
     }
 
-    .fadeIn-enter-to {
+    .fade-enter-to {
         opacity: 1;
     }
 

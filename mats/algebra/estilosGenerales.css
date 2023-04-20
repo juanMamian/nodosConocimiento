@@ -74,19 +74,19 @@ li{
     transition: transform 0.2s;
     cursor: pointer;
   }
-.fadeIn-enter-active{
-    animation: fadeIn 1.5s;
+.fade-enter-active{
+    animation: fade 1.5s;
 }
 
-.fadeInAndOut-enter-active{
-    animation: fadeIn 1.5s;
+.fadeAndOut-enter-active{
+    animation: fade 1.5s;
 }
 
-.fadeInAndOut-leave-active{
-    animation: fadeIn 1.5s reverse;
+.fadeAndOut-leave-active{
+    animation: fade 1.5s reverse;
 }
 
-@keyframes fadeIn{
+@keyframes fade{
     0%{opacity: 0;}
     100%{opacity: 1;}
 }

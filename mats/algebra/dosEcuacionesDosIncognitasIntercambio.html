@@ -8,18 +8,18 @@
     <title>Dos ecuaciones con dos incógnitas - Intercambio</title>
 
     <script id="MathJax-script" async
-        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+        src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
 
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 </head>
 
@@ -75,7 +75,7 @@
 
             </div>
             <br>
-            <transition name="fadeIn">
+            <transition name="fade">
                 <recuadro-component tipo="descubrimiento" v-show="stepEjemplo1>=3">
                     Se ha descubierto que la incógnita <span class="resaltado">a</span> tiene el mismo valor que la
                     expresión <span class="resaltado">\(10-b\)</span>. Por lo tanto son intercambiables.
@@ -108,7 +108,7 @@
                     <transition name="bajar">
                         <p v-show="intercambiarEjemplo2==false">Esta es la ecuación original</p>
                     </transition>
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <div class="boton" id="botonIntercambiarEjemplo2" v-show="stepEjemplo1===5"
                             v-on:click.prevent="intercambiarEjemplo2=!intercambiarEjemplo2">
                              <span v-show="!intercambiarEjemplo2">Intercambiar <span class="resaltado">\(a\)</span> por <span class="resaltado">\(10 - b\)</span></span>

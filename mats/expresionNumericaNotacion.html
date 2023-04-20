@@ -5,26 +5,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
 
     <script id="MathJax-script" async
-        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+        src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/funciones/mixinsMaths.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/funciones/mixinsMaths.js"></script>
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -71,7 +71,7 @@
                         </div>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo1">
                             Se entiende que <span class="resaltado"> \(4+6\)</span> es un operando de la división y, por
@@ -96,7 +96,7 @@
                         </div>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo2">
                             Se entiende que <span class="resaltado"> \(12 \times 18 \)</span> es un operando de la
@@ -122,7 +122,7 @@
                         </div>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo3">
                             Se entiende que <span class="resaltado"> \(6 + 10 \)</span> es un operando de la raiz y, por
@@ -147,7 +147,7 @@
                         </div>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo4">
                             Por la posición del símbolo <span class="resaltado">\(+\)</span> Se entiende que <span
@@ -183,14 +183,14 @@
                         </div>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" modo="incorrecto" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo2_1">
                             Ahora parece que el primer operando de la <span class="resaltado">operación potencia</span>
                             es el número 5.
                         </recuadro-component>
                     </transition>
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" modo="incorrecto" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo2_1">
                             ¡Ya no se entiende que \( 2 \times 5\) es una expresión numérica!
@@ -215,7 +215,7 @@
                         </div>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" modo="incorrecto" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo2_2">
                             Ahora parece que el primer operando de la <span class="resaltado">operación
@@ -224,7 +224,7 @@
                         </recuadro-component>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" modo="incorrecto" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo2_2">
                             ¡Ya no se entiende que \( 12 - 3 \) es una expresión numérica!
@@ -249,7 +249,7 @@
                         </div>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" modo="incorrecto" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo2_3">
                             Ahora parece que el segundo operando de la <span class="resaltado">operación resta</span> es
@@ -257,7 +257,7 @@
                         </recuadro-component>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" modo="incorrecto" style="max-width: 250px"
                             v-show="revelarComentarioEjemplo2_3">
                             ¡Ya no se entiende que \(2 + 13\) es una expresión numérica!
@@ -306,7 +306,7 @@
                         Escribir la expresión numérica con todos sus paréntesis
                     </div>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px" v-show="revelarItemEjemplo3_1">
                             Ya que la multiplicación está por encima de la suma en la lista, se debe entender que el 6
                             está
@@ -337,7 +337,7 @@
                         Escribir la expresión numérica con todos sus paréntesis
                     </div>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px" v-show="revelarItemEjemplo3_2">
                             Ya que la potencia está por encima de la resta en la lista, se debe entender que el 4 está
                             conectado con la potencia.
@@ -368,7 +368,7 @@
                         Escribir la expresión numérica con todos sus paréntesis
                     </div>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px" v-show="revelarItemEjemplo3_3">
                             Ya que la potencia está por encima de la multiplicación en la lista, se debe entender que el
                             14 está
@@ -416,7 +416,7 @@
                         Escribir la expresión numérica con todos sus paréntesis
                     </div>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px" v-show="revelarItemEjemplo4_1">
                             Se debe entender que está conectado con la suma porque está a la izquierda.
                         </recuadro-component>
@@ -444,7 +444,7 @@
                         Escribir la expresión numérica con todos sus paréntesis
                     </div>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px" v-show="revelarItemEjemplo4_2">
                             Se debe entender que está conectado con la resta de la izquierda.
                         </recuadro-component>
@@ -472,7 +472,7 @@
                         Escribir la expresión numérica con todos sus paréntesis
                     </div>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <recuadro-component tipo="datoNuevo" style="max-width: 250px" v-show="revelarItemEjemplo4_3">
                             Se debe entender que está conectado con la multiplicación de la izquierda.
                         </recuadro-component>

@@ -1,287 +1,326 @@
-
-@font-face{
-    font-family: 'Salsa';
-    src: url("http://192.168.1.100:3000/public/resources/fonts/Salsa/Salsa-Regular.ttf");
-    font-style:normal ;
+@font-face {
+  font-family: "Salsa";
+  src: url("http://192.168.1.105:3000/public/resources/fonts/Salsa/Salsa-Regular.ttf");
+  font-style: normal;
 }
 
-:root{
-    --paletaMain: #E2C044;
-    --paletaPrevio: #F06449;
-    --paletaActual: #26547C;
-    --paletaCheck: #209c49;
-    --paletaFail: #cc2f2f;
+:root {
+  --paletaMain: #e2c044;
+  --paletaPrevio: #f06449;
+  --paletaActual: #26547c;
+  --paletaCheck: #209c49;
+  --paletaFail: #cc2f2f;
 }
 
-body{
-    font-family: "Salsa", Arial;
-    padding: 3vh 2vw;
-    font-size: 19px;
+body {
+  font-family: "Salsa", Arial;
+  padding: 3vh 2vw;
+  font-size: 19px;
 }
-li{
-    margin: 10px 0px;
-}
-
-.fondoGris{
-	position:fixed;
-	top: 0px;
-	left: 0px;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.233);
-	z-index: 100;
-}
-.fondoGris .recuadro{
-	position: absolute;
-		top: 50%;
-		left:50%;
-		transform: translate(-50%, -50%);
-}
-.selector.seleccionado{
-background-color: #66c644;
-}
-.resaltado{
-    background-color: var(--paletaActual);
-    padding: 0px 5px;
-    border-radius: 5px;
-    color: whitesmoke;
+li {
+  margin: 10px 0px;
 }
 
-.boton{
-    cursor: pointer;
-    background-color: var(--paletaMain);
-    padding: 10px;
-    text-align: center;
-    max-width: 300px;
-    margin: 10px auto;
-    font-size: 15px;
-    color: black;
+.fondoGris {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.233);
+  z-index: 100;
+}
+.fondoGris .recuadro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.selector.seleccionado {
+  background-color: #66c644;
+}
+.resaltado {
+  background-color: var(--paletaActual);
+  padding: 0px 5px;
+  border-radius: 5px;
+  color: whitesmoke;
 }
 
-.deshabilitado{
-    opacity: 0.4;
-    pointer-events: none;
+.boton {
+  cursor: pointer;
+  background-color: var(--paletaMain);
+  padding: 10px;
+  text-align: center;
+  max-width: 300px;
+  margin: 10px auto;
+  font-size: 15px;
+  color: black;
+}
+
+.deshabilitado {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 /* #region listas de ejemplos */
-.listaEjemplos{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
+.listaEjemplos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .itemEjemplo {
-    border: 3px dotted gray;
-    border-spacing: 10px;
-    padding: 5%;
-    margin: 15px 10px;
-    text-align: center;
+  border: 3px dotted gray;
+  border-spacing: 10px;
+  padding: 5%;
+  margin: 15px 10px;
+  text-align: center;
 }
 
-.itemEjemplo.anchoMediano{
-    max-width: min(300px, 90%);
+.itemEjemplo.anchoMediano {
+  max-width: min(300px, 90%);
 }
 /* #endregion */
 
-
-.zonaInteraccion{
-border: 2px dashed gray;
-padding: 5px;
+.zonaInteraccion {
+  border: 2px dashed gray;
+  padding: 5px;
 }
 
-.bloqueSeleccionDificultad{
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 10px auto;
+.bloqueSeleccionDificultad {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
 }
 
-.bloqueSeleccionDificultad .valorDificultad{
-    font-size: 18px;
+.bloqueSeleccionDificultad .valorDificultad {
+  font-size: 18px;
 }
 
-.bloqueRespuestaUsuario{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 10px auto;
-    gap: 10px;
+.bloqueRespuestaUsuario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+  gap: 10px;
 }
 
-.bloqueRespuestaUsuario input{
-    padding: 10px 10px;
-    font-size: 20px;
-    background-color: rgba(255, 255, 255, 0.19);
+.bloqueRespuestaUsuario input {
+  padding: 10px 10px;
+  font-size: 20px;
+  background-color: rgba(255, 255, 255, 0.19);
 }
 
 .contenedorFlex {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-    }
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 .operacionReto {
-        margin: 10px 10px;
-        background-color: #449ae6;
-        border-radius: 20px;
-        padding: 10px 30px;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    
-    .bloqueInfoResultado {
-        margin: 10px auto;
-        display: flex;
-        justify-content: center;
-    }
-
-    .mensajeInfoResultado {
-        padding: 20px;
-        text-align: center;
-        align-self: center;
-        border-radius: 20px;
-
-    }
-    .bolitaNumero{
-        width: 20px;
-        height: 20px;
-	border-radius: 50%;
-	margin: 5px;
-	background-color: red;
-	flex-shrink: 0;
-    }
-.fadeIn-enter-active{
-	animation: fadeIn 0.8s;
-	animation-iteration-count: 1;
-}
-.fadeIn-leave-active{
-	animation: fadeIn 0.8s;
-	animation-iteration-count: 1;
-	animation-direction:reverse;
+  margin: 10px 10px;
+  background-color: #449ae6;
+  border-radius: 20px;
+  padding: 10px 30px;
+  justify-content: center;
+  align-items: center;
 }
 
-.inputRespuestaEvaluacion{
-font-size: 19px;
-display: block;
-margin: 10px auto;
-padding: 5px 3px;
-border-radius: 5px;
+.bloqueInfoResultado {
+  margin: 10px auto;
+  display: flex;
+  justify-content: center;
 }
 
-@keyframes fadeIn{
-	0%{opacity: 0}	
-	100%{opacity :1}
+.mensajeInfoResultado {
+  padding: 20px;
+  text-align: center;
+  align-self: center;
+  border-radius: 20px;
+}
+.bolitaNumero {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin: 5px;
+  background-color: red;
+  flex-shrink: 0;
+}
+.fade-enter-active {
+  animation: fade 0.8s;
+  animation-iteration-count: 1;
+}
+.fade-leave-active {
+  animation: fade 0.8s;
+  animation-iteration-count: 1;
+  animation-direction: reverse;
+}
+.fadeIn-enter-active {
+  animation: fade 0.8s;
 }
 
-.travelRight-enter-active{
-animation: travelRight;
-animation-duration: 1s;
-animation-iteration-count: 1;
-pointer-events:none;
+input {
+  font-size: 22px;
+  padding: 5px 5px;
+}
+.inputRespuestaEvaluacion {
+  font-size: 19px;
+  display: block;
+  margin: 10px auto;
+  padding: 5px 3px;
+  border-radius: 5px;
 }
 
-.travelRight-leave-active{
-animation: travelRight;
-animation-duration: 1s;
-animation-iteration-count: 1;
-animation-direction: reverse;
-pointer-events:none;
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-@keyframes travelRight{
-	0%{transform:translateX(100%); opacity: 0}	
-	100%{transform: translateX(0%); opacity: 1}
+.travelRight-enter-active {
+  animation: travelRight;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  pointer-events: none;
 }
 
-.travelLeft-enter-active{
-animation: travelLeft;
-animation-duration: 1s;
-animation-iteration-count: 1;
-pointer-events:none;
+.travelRight-leave-active {
+  animation: travelRight;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-direction: reverse;
+  pointer-events: none;
 }
 
-.travelLeft-leave-active{
-animation: travelLeft;
-animation-duration: 1s;
-animation-iteration-count: 1;
-animation-direction: reverse;
-pointer-events:none;
+@keyframes travelRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
 }
 
-
-@keyframes travelLeft{
-	0%{left:-100%; opacity: 0}	
-	100%{left :0%; opacity: 1}
+.travelLeft-enter-active {
+  animation: travelLeft;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  pointer-events: none;
 }
 
-.travelTop-enter-active{
-animation: travelTop;
-animation-duration: 1s;
-animation-iteration-count: 1;
-pointer-events:none;
+.travelLeft-leave-active {
+  animation: travelLeft;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-direction: reverse;
+  pointer-events: none;
 }
 
-.travelTop-leave-active{
-animation: travelTop;
-animation-duration: 1s;
-animation-iteration-count: 1;
-animation-direction: reverse;
-pointer-events:none;
+@keyframes travelLeft {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  100% {
+    left: 0%;
+    opacity: 1;
+  }
 }
 
-.travelBottom-enter-active{
-animation: travelBottom;
-animation-duration: 1s;
-animation-iteration-count: 1;
-pointer-events:none;
+.travelTop-enter-active {
+  animation: travelTop;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  pointer-events: none;
+  opacity: 0;
 }
 
-.travelBottom-leave-active{
-animation: travelLeft;
-animation-duration: 1s;
-animation-iteration-count: 1;
-animation-direction: reverse;
-pointer-events:none;
-}
-@keyframes travelBottom{
-	0%{transform: translateY(-100%); opacity: 0}	
-	100%{transform: translateY(0%); opacity: 1}
+.travelTop-leave-active {
+  animation: travelTop;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-direction: reverse;
+  pointer-events: none;
 }
 
-.popIn-enter-active{
-animation:popIn;
-animation-duration: 0.3s;
-animation-iteration-count:1;
-animation-direction: reverse;
-}
-.popInOut-enter-active{
-animation:popIn;
-animation-direction: reverse;
-animation-duration: 0.3s;
-animation-iteration-count:1;
-animation-direction: reverse;
+.travelBottom-enter-active {
+  animation: travelBottom;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  pointer-events: none;
 }
 
-@keyframes popIn{
-0%{transform: scale(1)}		
-50%{transform: scale(1.1)}
-100%{transform: scale(1)}
+.travelBottom-leave-active {
+  animation: travelLeft;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-direction: reverse;
+  pointer-events: none;
+}
+@keyframes travelBottom {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
 }
 
-.unfoldHorizontal-enter-active{
-animation: unfoldHorizontal 1s;
+.popIn-enter-active {
+  animation: popIn;
+  animation-duration: 0.3s;
+  animation-iteration-count: 1;
+  animation-direction: reverse;
+}
+.popInOut-enter-active {
+  animation: popIn;
+  animation-direction: reverse;
+  animation-duration: 0.3s;
+  animation-iteration-count: 1;
+  animation-direction: reverse;
 }
 
-@keyframes unfoldHorizontal{
-0%{transform: scaleX(0.1)}
-100%{transform: scaleX(1.05)}
+@keyframes popIn {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
-
-@keyframes travelTop{
-	0%{transform:translateY(-100%); opacity: 0;}	
-	100%{transform: translateY(0%); opacity: 1;}
+.unfoldHorizontal-enter-active {
+  animation: unfoldHorizontal 1s;
 }
 
+@keyframes unfoldHorizontal {
+  0% {
+    transform: scaleX(0.1);
+  }
+  100% {
+    transform: scaleX(1.05);
+  }
+}
+
+@keyframes travelTop {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}

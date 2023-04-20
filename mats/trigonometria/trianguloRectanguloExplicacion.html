@@ -5,16 +5,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -45,7 +45,7 @@
                         <div id="lineaDiagonal" class="deRectangulo" v-show="mostrarLineaDiagonal && !mostrarTrianguloRectangulo"></div>
                     </transition>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <div id="trianguloRectangulo" v-show="mostrarTrianguloRectangulo">
                             <div id="lineaDiagonal" class="deTrianguloRectangulo"></div>
                         </div>
@@ -57,7 +57,7 @@
             <div class="boton" v-show="mostrarRectangulo" :class="{deshabilitado:mostrarLineaDiagonal}" @click="mostrarLineaDiagonal=true; setAparicionTrianguloRectangulo()">
                 Dividir el rectángulo mediante una linea diagonal
             </div>
-            <transition name="fadeIn">
+            <transition name="fade">
                 <recuadro-component tipo="descubrimiento" v-show="mostrarTrianguloRectangulo">¡Este es un triángulo rectángulo!</recuadro-component>
             </transition>
         </bloque-component>

@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
     <script id="MathJax-script" async
-    src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
     <title>División</title>
 </head>
@@ -38,7 +38,7 @@
                 </div>
                 <br>
                 <div id="contenedorNumeroDoce" class="contenedorNumeroBolitas" v-show="stepEjemplo1>0">
-                    <transition name="fadeIn" v-on:after-enter="stepEjemplo1++">
+                    <transition name="fade" v-on:after-enter="stepEjemplo1++">
                         <div id="numeroDoce" class="numeroBolitas" v-show="stepEjemplo1>=2">
                             <transition-group name="salirRestadas" v-on:after-leave="stepEjemplo1=5">
                                 <div class="bolita" v-for="numero of 12" :key="'numero1'+numero"
@@ -52,7 +52,7 @@
 
                 <div class="boton" v-show="stepEjemplo1==3" @click="stepEjemplo1++">¡Repartir parejo en 3 grupos!</div>
 
-                <transition name="fadeInEsperando" v-on:after-enter="stepEjemplo1++">
+                <transition name="fadeEsperando" v-on:after-enter="stepEjemplo1++">
                     <recuadro-component tipo="descubrimiento" v-show="stepEjemplo1>=4" style="text-align: center;">
                         Cada grupo es un número 4. <br> ¡12 dividido entre 3 da como resultado 4!
                     </recuadro-component>
@@ -162,19 +162,19 @@
         margin: 10px auto;
     }
 
-    .fadeIn-enter {
+    .fade-enter {
         opacity: 0;
     }
 
-    .fadeIn-enter-active {
+    .fade-enter-active {
         transition: opacity 0.8s;
     }
 
-    .fadeIn-enter-to {
+    .fade-enter-to {
         opacity: 1;
     }
 
-    .fadeInEsperando-enter-active{
+    .fadeEsperando-enter-active{
         animation: entrarEsperando 4s
     }
 

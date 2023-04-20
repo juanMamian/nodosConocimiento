@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
+
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css"
+    />
+
+    <title>Operaciones aritméticas</title>
+  </head>
+
+  <body>
+    <div id="doc">
+      <p>
+        Se conoce como operaciones aritméticas a las operaciones que se realizan
+        sobre números.
+      </p>
+
+      <p>
+        Se conoce como
+        <span class="resaltado">Operaciones aritméticas básicas</span> a:
+      </p>
+      <ul>
+        <li>Suma</li>
+        <li>Resta</li>
+        <li>Multiplicación</li>
+        <li>División</li>
+      </ul>
+
+      <p>A partir de ellas se construyen otras dos operaciones aritméticas:</p>
+      <ul>
+        <li>Potenciación</li>
+        <li>Radicación</li>
+      </ul>
+
+      <recuadro-component tipo="datoPrevio">
+        Una operación aritmética se realiza
+        <span class="resaltado">sobre un número</span>.
+      </recuadro-component>
+
+      <recuadro-component tipo="datoPrevio">
+        La operación aritmética tiene una
+        <span class="resaltado">magnitud</span> expresada por un número.
+      </recuadro-component>
+
+      <bloque-component
+        tipo="herramientaInteractiva"
+        @plegado="reiniciarHerramienta1"
+      >
+        <template #cabecera>
+          En este cuadro se puede escoger un número, seleccionar una operación
+          que se realizará sobre él y determinar la magnitud de la operación.
+        </template>
+
+        <div class="faseHerramienta1" v-show="faseHerramienta1===0">
+          <recuadro-component tipo="instruccionTeclado">
+            Selecciona un número
+          </recuadro-component>
+          <input
+            type="number"
+            ref="inputNumeroInicial"
+            id="inputNumeroInicial"
+            v-model="numeroInicialHerramienta1"
+            :max="maxNumeroInicial"
+            :min="minNumeroInicial"
+          />
+
+          <div class="boton" @click="stepFase">Aceptar</div>
+        </div>
+
+        <transition name="fadeIn" appear>
+          <div class="faseHerramienta1" v-show="faseHerramienta1>=1">
+            <transition-group name="travelTop" @after-enter="afterEnterRep">
+              <div
+                class="numeroEnBolitas"
+                v-if="numeroInicialHerramienta1"
+                v-for="rep of reps"
+                :key="'rep'+rep"
+                :style="[{animationDelay: ((Number(rep) - 2) * delayBolitas) + 's'}]"
+              >
+                <transition-group
+                  tag="div"
+                  class="contenedorTransicion"
+                  :name="operacion==='suma' || operacion==='resta'?'travelRight': ''"
+                >
+                  <div
+                    class="bolitaNumero"
+                    :key="'bolita'+num"
+                    :style="[{animationDelay: (!operacion?'0':operacion==='suma'? ( Number(num-1)  - numeroInicialHerramienta1) * delayBolitas: (numeroConEfectoOperacion - num) * delayBolitas ) + 's'  }]"
+                    v-for="num of numeroConEfectoOperacion"
+                  ></div>
+                </transition-group>
+              </div>
+            </transition-group>
+          </div>
+        </transition>
+
+        <transition name="fadeIn">
+          <div class="faseHerramienta1" v-show="faseHerramienta1===2">
+            <recuadro-component tipo="instruccionPointer">
+              Selecciona una operación para ejecutar sobre este número.
+            </recuadro-component>
+          </div>
+        </transition>
+
+        <transition name="fadeIn">
+          <div
+            class="contenedorSelectoresOperacion"
+            v-show="faseHerramienta1===2"
+          >
+            <div
+              class="selectorOperacion"
+              @click="setOperacion('suma')"
+              v-show="!operacion || operacion==='suma'"
+            >
+              Suma
+            </div>
+            <div
+              class="selectorOperacion"
+              @click="setOperacion('resta')"
+              v-show="!operacion || operacion==='resta'"
+            >
+              Resta
+            </div>
+            <div
+              class="selectorOperacion"
+              @click="setOperacion('multiplicacion')"
+              v-show="!operacion || operacion==='multiplicacion'"
+            >
+              Multiplicación
+            </div>
+            <div
+              class="selectorOperacion"
+              @click="setOperacion('division')"
+              v-show="!operacion || operacion==='division'"
+            >
+              División
+            </div>
+          </div>
+        </transition>
+
+        <transition name="fadeIn">
+          <div class="faseHerramienta1" v-show="faseHerramienta1===4">
+            <recuadro-component tipo="instruccionTeclado">
+              Selecciona la magnitud de la {{operacion}} que se realizará.
+            </recuadro-component>
+            <input
+              type="number"
+              v-model="magnitud"
+              ref="inputMagnitud"
+              id="inputMagnitud"
+              :min="minMagnitud"
+              :max="!operacion?1:operacion==='multiplicacion'?maxMagnitudMultiplicacion:operacion==='suma'?maxMagnitudSuma:operacion==='resta'?numeroInicialHerramienta1:''"
+            />
+            <div class="boton" @click="setMagnitud">Aceptar</div>
+          </div>
+        </transition>
+
+        <transition name="fadeIn">
+          <div class="faseHerramienta1" v-show="faseHerramienta1===6">
+            <recuadro-component tipo="datoNuevo">
+              Sobre el {{numeroInicialHerramienta1}} se realizó una {{operacion}} de magnitud {{magnitud}} 
+              y ahora se tiene {{numeroFinal}}
+            </recuadro-component>
+          </div>
+        </transition>
+      </bloque-component>
+    </div>
+  </body>
+</html>
+
+<script>
+  let timeOutCallToFinish=null;
+  const doc = new Vue({
+    el: "#doc",
+    components: {
+      recuadroComponent,
+      bloqueComponent,
+      enlaceComponent,
+    },
+    data() {
+      return {
+        delayBolitas: 0.8,
+
+        numeroInicialHerramienta1: null,
+        faseHerramienta1: 0,
+        operacion: null,
+        magnitud: null,
+
+        maxNumeroInicial: 30,
+        minNumeroInicial: 1,
+
+        minMagnitud: 1,
+        maxMagnitudSuma: 20,
+        maxMagnitudMultiplicacion: 10,
+      };
+    },
+    computed: {
+      numeroFinal() {
+        if (!this.operacion || !this.magnitud) {
+          return Number(this.numeroInicialHerramienta1);
+        }
+        return this.operacion === "suma"
+          ? this.numeroInicialHerramienta1 + this.magnitud
+          : this.operacion === "resta"
+          ? this.numeroInicialHerramienta1 - this.magnitud
+          : this.operacion === "multiplicacion"
+          ? this.numeroInicialHerramienta1 * this.magnitud
+          : this.operacion === "division"
+          ? this.numeroInicialHerramienta1 / this.magnitud
+          : this.numeroInicialHerramienta1;
+      },
+      reps() {
+        if (this.faseHerramienta1 < 5) {
+          return 1;
+        }
+        if (
+          this.operacion != "multiplicacion" ||
+          !this.magnitud ||
+          this.magnitud < 0
+        ) {
+          return 1;
+        }
+
+        return Number(this.magnitud);
+      },
+      numeroConEfectoOperacion() {
+        if (this.faseHerramienta1 < 5) {
+          return Number(this.numeroInicialHerramienta1);
+        }
+        let modificacion = 0;
+        if (this.operacion === "suma") {
+          modificacion = Number(this.magnitud);
+        } else if (this.operacion === "resta") {
+          modificacion = -Number(this.magnitud);
+        }
+        return Number(this.numeroInicialHerramienta1) + modificacion;
+      },
+    },
+    methods: {
+      afterEnterRep() {
+        console.log("After enter rep");
+        if (
+          this.faseHerramienta1 === 5 &&
+          this.operacion === "multiplicacion"
+        ) {
+          //Hay que hacer un call to finish
+          clearTimeout(timeOutCallToFinish);
+          timeOutCallToFinish = setTimeout(() => {
+            this.faseHerramienta1 = 6;
+          }, this.delayBolitas * 2 * 1000);
+        }
+      },
+      iniciarOperacion() {
+        if (
+          !this.numeroInicialHerramienta1 ||
+          !this.operacion ||
+          !this.magnitud
+        ) {
+          return;
+        }
+        //Para la suma, se agranda progresivamente el sumador.
+        //Para la resta se agranda progresivamente el restador.
+        //Para la multiplicación se agranda progresivamente el multiplicador.
+        //Para la división, se crean bolitas viajeras encima de las bolitas verdaderas, se agrandan progresivamente las cajas, se agranda progresivamente el repartidor y, cuando el repartidor ha terminado, se reducen las cajas a 1.
+      },
+      setOperacion(op) {
+        this.operacion = op;
+        if (this.faseHerramienta1 === 2) {
+          this.stepFase();
+        }
+      },
+      reiniciarHerramienta1() {
+        this.numeroInicialHerramienta1 = null;
+        this.operacion = null;
+        this.faseHerramienta1 = 0;
+        this.magnitud = null;
+      },
+      setMagnitud() {
+        let nuevaMagnitud = this.$refs.inputMagnitud.value;
+        if (!nuevaMagnitud) {
+          return;
+        }
+        if (this.operacion === "suma") {
+          if (
+            nuevaMagnitud < this.minMagnitud ||
+            nuevaMagnitud > this.maxMagnitudSuma
+          ) {
+            this.mensajesUsuario.push({
+              mensaje: "Magnitud no permitida",
+              tipo: "userInputError",
+            });
+            return;
+          }
+        } else if (this.operacion === "resta") {
+          if (
+            nuevaMagnitud < this.minMagnitud ||
+            nuevaMagnitud > this.numeroInicialHerramienta1
+          ) {
+            this.mensajesUsuario.push({
+              mensaje: "Magnitud no permitida",
+              tipo: "UserInputError",
+            });
+            return;
+          }
+        } else if (this.operacion === "multiplicacion") {
+          if (
+            nuevaMagnitud < this.minMagnitud ||
+            nuevaMagnitud > this.maxMagnitudMultiplicacion
+          ) {
+            this.mensajesUsuario.push({
+              mensaje: "Magnitud no permitida",
+              tipo: "UserInputError",
+            });
+            return;
+          }
+        } else if (this.operacion === "division") {
+          let magnitudesPermitidas = [];
+          if (
+            nuevaMagnitud < this.minMagnitud ||
+            !magnitudesPermitidas.includes(nuevaMagnitud)
+          ) {
+            this.mensajesUsuario.push({
+              mensaje: "Magnitud no permitida",
+              tipo: "UserInputError",
+            });
+          }
+        } else {
+          console.log("Operación " + this.operacion + " no conocida");
+          return;
+        }
+
+        this.magnitud = nuevaMagnitud;
+        this.stepFase();
+      },
+      stepFase() {
+        console.log("Stepping fase");
+        if (this.faseHerramienta1 === 0) {
+          if (!this.numeroInicialHerramienta1) {
+            return;
+          }
+        } else if (this.faseHerramienta1 === 2) {
+          if (!this.operacion) {
+            return;
+          }
+        }
+        this.faseHerramienta1++;
+      },
+    },
+    watch: {
+      faseHerramienta1(fase) {
+        if (fase === 1) {
+          setTimeout(() => {
+            this.faseHerramienta1 = 2;
+          }, 1000);
+        }
+        if (fase === 3) {
+          this.faseHerramienta1 = 4;
+        }
+        if (fase === 4) {
+          this.iniciarOperacion();
+        }
+      },
+    },
+  });
+</script>
+<style>
+  .faseHerramienta1 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  .contenedorSelectoresOperacion {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px auto;
+  }
+  .selectorOperacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: var(--paletaMain);
+    cursor: pointer;
+  }
+  .travelRight-enter-from {
+  }
+  .travelRight-enter-active {
+    opacity: 0;
+  }
+</style>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
 
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
@@ -12,37 +12,30 @@
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosProgramacion.css">
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
-
-
-    <title>Javascript básico - Explicación</title>
+    <title>Operaciones aritméticas - evaluación</title>
 </head>
-
 <body>
-    <div id="doc">
-        <recuadro-component tipo="datoPrevio">
-            Javascript es un lenguaje de programación que se usa para dar instrucciones a los elementos de una página
-            web.
-        </recuadro-component>
-
-        <recuadro-component tipo="datoPrevio">
-            Los navegadores de internet incluyen entre sus herramientas una consola. En ella se pueden escribir
-            instrucciones javascript que serán ejecutadas inmediatamente.
-        </recuadro-component>
-
-        <recuadro-component tipo="datoPrevio">
-            Si un documento web tiene un elemento <span class="programacionNombreObjeto">script</span> con instrucciones
-            javascript, éstas serán leidas y ejecutadas.
-        </recuadro-component>
+    <p>Comprendo las operaciones aritméticas si: </p>
 
 
-    </div>
+    <bloque-component tipo="evaluacion">
+        <template #cabecera>
+            Puedo nombrar todas las operaciones aritméticas básicas.
+        </template>
+    </bloque-component>
+
+    <bloque-component tipo="evaluacion">
+        <template #cabecera>
+            las operaciones aritméticas básicas.
+        </template>
+    </bloque-component>
+        
+
 </body>
-
 </html>
 
 <script>
@@ -55,12 +48,8 @@
         },
         data() {
             return {
-                marca: null,
+
             }
         }
     })
 </script>
-
-<style>
-
-</style>

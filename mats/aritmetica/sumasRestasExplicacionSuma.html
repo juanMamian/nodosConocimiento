@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
      
 
     <title>Sumas</title>
@@ -33,7 +33,7 @@
                 ¡Imaginar un 2!
             </button>
             <div class="contenedorNumeroBolitas" style="grid-row: 3;">
-                <transition name="fadeIn">
+                <transition name="fade">
                     <div class="numeroBolitas" v-show="stepEjemplo1>=1 && mostrandoNum1" :style="{right:stepEjemplo1>1?'0px':'50%'}">
                         <div class="bolita" v-for="numero of 3" :key="'numero1'+numero"></div>
                     </div>
@@ -41,7 +41,7 @@
             </div>
 
             <div class="contenedorNumeroBolitas" style="grid-row: 3;">
-                <transition name="fadeIn">
+                <transition name="fade">
                     <div class="numeroBolitas" v-show="stepEjemplo1>=1 && mostrandoNum2" :style="{left:stepEjemplo1>1?'0px':'50%'}">
                         <div class="bolita" v-for="numero of 2" :key="'numero1'+numero"></div>
                     </div>
@@ -50,7 +50,7 @@
 
             <button class="transversal" v-show="stepEjemplo1==1 && mostrandoNum1 && mostrandoNum2" style="grid-row: 4; align-self: center;" @click="stepEjemplo1=2" >¡Sumar estos números!</button>
 
-            <transition name="fadeIn">
+            <transition name="fade">
                 <div class="expresion transversal" v-show="stepEjemplo1>=2">Ahora están sumados. Es un número 5</div>
             </transition>
             
@@ -165,13 +165,13 @@
         display: inline-block;
     }
 
-    .fadeIn-enter{
+    .fade-enter{
         opacity: 0;
     }
-    .fadeIn-enter-active{
+    .fade-enter-active{
         transition: opacity 0.8s;
     }
-    .fadeIn-enter-to{
+    .fade-enter-to{
         opacity: 1;
     }
 </style>

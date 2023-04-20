@@ -6,21 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
     <title>Cancelación de operaciones</title>
@@ -48,7 +48,7 @@
                     <recuadro-component tipo="datoPrevio">
                         Se {{ejemplo1Modificador1===1?'tiene':'tenía'}} un {{ejemplo1Numero1}}
                     </recuadro-component>
-                    <transition-group name="fadeIn">
+                    <transition-group name="fade">
                         <div class="numeroEnBolitas" v-for="rep of ejemplo1Modificador1"
                             :key="'ejemplo1Numero1Repeticion'+rep">
                             <div class="bolitaNumero" v-for="numero of ejemplo1Numero1" :key="'ejemplo1Numero'+numero">
@@ -61,7 +61,7 @@
                         :class="{deshabilitado: ejemplo1Modificador1!=1}">
                         Aplicar una multiplicación por 3</div>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <div v-show="ejemplo1MostrandoExplicacion1">
 
                             <recuadro-component tipo="datoNuevo">
@@ -97,7 +97,7 @@
 
 
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <div v-show="ejemplo1MostrandoExplicacion2">
 
                             <recuadro-component tipo="datoNuevo">
@@ -158,7 +158,7 @@
                         </transition-group>
                     </div>
 
-                    <transition name="fadeIn">
+                    <transition name="fade">
                         <div v-show="ejemplo1MostrandoExplicacion3">
 
                             <recuadro-component tipo="datoNuevo">
@@ -513,7 +513,7 @@
         background-color: brown;
     }
 
-    .fadeIn-before-enter {
+    .fade-before-enter {
         opacity: 0;
     }
 

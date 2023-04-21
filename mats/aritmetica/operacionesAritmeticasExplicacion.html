@@ -70,6 +70,7 @@
       </recuadro-component>
 
       <bloque-component
+        id="bloqueHerramientaInteractiva"
         tipo="herramientaInteractiva"
         @plegado="reiniciarHerramienta1"
       >
@@ -77,7 +78,7 @@
           En este cuadro se puede escoger un número, seleccionar una operación
           que se realizará sobre él y determinar la magnitud de la operación.
         </template>
-
+        {{faseHerramienta1}}
         <div class="faseHerramienta1" v-show="faseHerramienta1===0">
           <recuadro-component tipo="instruccionTeclado">
             Selecciona un número
@@ -89,14 +90,26 @@
             v-model="numeroInicialHerramienta1"
             :max="maxNumeroInicial"
             :min="minNumeroInicial"
+            @keypress.enter="$refs.botonAceptarNumeroInicial.click()"
           />
 
-          <div class="boton" @click="stepFase">Aceptar</div>
+          <div class="boton" @click="stepFase" ref="botonAceptarNumeroInicial">
+            Aceptar
+          </div>
         </div>
 
         <transition name="fadeIn" appear>
           <div class="faseHerramienta1" v-show="faseHerramienta1>=1">
-            <transition-group name="travelTop" @after-enter="afterEnterRep">
+            <div
+              class="bolitaNumero bolitaViajera"
+              :style="[{opacity: dividiendo && !cerrandoCajitas?1:0}]"
+              v-for="bolitaV of operacion==='division'?Number(numeroInicialHerramienta1):0"
+              ref="bolitaViajera"
+            ></div>
+            <transition-group
+              name="travelTop"
+              @after-enter="afterTransicionEfectoOperacion"
+            >
               <div
                 class="numeroEnBolitas"
                 v-if="numeroInicialHerramienta1"
@@ -108,16 +121,42 @@
                   tag="div"
                   class="contenedorTransicion"
                   :name="operacion==='suma' || operacion==='resta'?'travelRight': ''"
+                  @after-enter="afterTransicionEfectoOperacion"
+                  @after-leave="afterTransicionEfectoOperacion"
                 >
                   <div
                     class="bolitaNumero"
                     :key="'bolita'+num"
-                    :style="[{animationDelay: (!operacion?'0':operacion==='suma'? ( Number(num-1)  - numeroInicialHerramienta1) * delayBolitas: (numeroConEfectoOperacion - num) * delayBolitas ) + 's'  }]"
+                    ref="bolitaInicial"
+                    :style="[{animationDelay: (!operacion?'0':operacion==='suma'? ( Number(num-1)  - numeroInicialHerramienta1) * delayBolitas: (numeroConEfectoOperacion - num) * delayBolitas ) + 's'  }, {opacity: dividiendo?0:1}]"
                     v-for="num of numeroConEfectoOperacion"
                   ></div>
                 </transition-group>
               </div>
             </transition-group>
+
+            <div id="contenedorCajitas">
+              <transition-group
+                tag="div"
+                class="contenedorTransicion"
+                :name="divisionCompletada?'':'travelTop'"
+                @after-enter="callInitDivision"
+              >
+                <div
+                  class="cajitaDivision"
+                  :key="'cajita'+cajita"
+                  ref="cajita"
+                  :style="[{animationDelay: divisionCompletada?'0s':(cajita - 1) * delayBolitas + 's'}]"
+                  v-for="cajita of operacion==='division' && faseHerramienta1>=5?cerrandoCajitas?1:Number(magnitud):0"
+                >
+                  <div
+                    class="bolitaNumero"
+                    :style="[{opacity: divisionCompletada?1:0}]"
+                    v-for="bolitaRef of Math.round(numeroInicialHerramienta1 / magnitud)"
+                  ></div>
+                </div>
+              </transition-group>
+            </div>
           </div>
         </transition>
 
@@ -177,16 +216,20 @@
               id="inputMagnitud"
               :min="minMagnitud"
               :max="!operacion?1:operacion==='multiplicacion'?maxMagnitudMultiplicacion:operacion==='suma'?maxMagnitudSuma:operacion==='resta'?numeroInicialHerramienta1:''"
+              @keypress.enter="$refs.botonAceptarMagnitud.click()"
             />
-            <div class="boton" @click="setMagnitud">Aceptar</div>
+            <div class="boton" @click="setMagnitud" ref="botonAceptarMagnitud">
+              Aceptar
+            </div>
           </div>
         </transition>
 
         <transition name="fadeIn">
           <div class="faseHerramienta1" v-show="faseHerramienta1===6">
             <recuadro-component tipo="datoNuevo">
-              Sobre el {{numeroInicialHerramienta1}} se realizó una {{operacion}} de magnitud {{magnitud}} 
-              y ahora se tiene {{numeroFinal}}
+              Sobre el {{numeroInicialHerramienta1}} se realizó una
+              {{operacion}} de magnitud {{magnitud}} y ahora se tiene
+              {{numeroFinal}}
             </recuadro-component>
           </div>
         </transition>
@@ -196,7 +239,10 @@
 </html>
 
 <script>
-  let timeOutCallToFinish=null;
+  let timeOutCallToFinish = null;
+  let timeOutCallToDivision = null;
+  let timeOutDivisionCompletada = null;
+  let timeOutCerrandoCajitas = null;
   const doc = new Vue({
     el: "#doc",
     components: {
@@ -206,6 +252,10 @@
     },
     data() {
       return {
+        cerrandoCajitas: false,
+        divisionCompletada: false,
+        dividiendo: false,
+        mensajesUsuario: [],
         delayBolitas: 0.8,
 
         numeroInicialHerramienta1: null,
@@ -264,12 +314,93 @@
       },
     },
     methods: {
-      afterEnterRep() {
-        console.log("After enter rep");
-        if (
-          this.faseHerramienta1 === 5 &&
-          this.operacion === "multiplicacion"
-        ) {
+      callInitDivision() {
+        console.log("Call to animación división");
+        clearTimeout(timeOutCallToDivision);
+        timeOutCallToDivision = setTimeout(() => {
+          this.iniciarAnimacionDivision();
+        }, this.delayBolitas * 1.2 * 1000);
+      },
+      iniciarAnimacionDivision() {
+        console.log("Iniciar animación división");
+        this.dividiendo = true;
+
+        this.$nextTick(() => {
+          this.$refs.bolitaViajera.forEach((viajera, index) => {
+            console.log("Animando" + index);
+            let numBolita = index + 1;
+
+            let posInicial = {
+              x: this.$refs.bolitaInicial[index].offsetLeft,
+              y: this.$refs.bolitaInicial[index].offsetTop,
+            };
+
+            viajera.style.left = posInicial.x + "px";
+            viajera.style.top = posInicial.y + "px";
+
+            //Seleccionar cajita:
+            let cajita = index % this.magnitud;
+
+            //Seleccionar pos en cajita.
+            let pos = Math.floor(index / this.magnitud);
+
+            let laCaja = this.$refs.cajita[cajita];
+            let bolitasCaja = laCaja.querySelectorAll(".bolitaNumero");
+            let laBolitaRef = bolitasCaja[pos];
+
+            let posFinal = {
+              x: laBolitaRef.offsetLeft,
+              y: laBolitaRef.offsetTop,
+            };
+
+            setTimeout(() => {
+              viajera.animate(
+                [
+                  {
+                    left: posInicial.x + "px",
+                    top: posInicial.y + "px",
+                  },
+                  {
+                    left: posFinal.x + "px",
+                    top: posFinal.y + "px",
+                  },
+                ],
+                { duration: 500, iterations: 1 }
+              );
+              viajera.style.left = posFinal.x + "px";
+              viajera.style.top = posFinal.y + "px";
+              if (numBolita === this.$refs.bolitaViajera.length) {
+                timeOutDivisionCompletada = setTimeout(() => {
+                  this.divisionCompletada = true;
+                  timeOutCerrandoCajitas = setTimeout(() => {
+                    console.log("Cerrando cajitas");
+                    this.cerrandoCajitas = true;
+                    this.$refs.cajita[0].animate(
+                      [
+                        {
+                          transform: "scale(1)",
+                        },
+                        {
+                          transform: "scale(1.1)",
+                        },
+                        {
+                          transform: "scale(1)",
+                        },
+                      ],
+                      { duration: 200, iterations: 1 }
+                    ).finished.then(()=>{
+                      this.stepFase();
+                    })
+
+                  }, 800);
+                }, 1000);
+              }
+            }, index * 500);
+          });
+        });
+      },
+      afterTransicionEfectoOperacion() {
+        if (this.faseHerramienta1 === 5) {
           //Hay que hacer un call to finish
           clearTimeout(timeOutCallToFinish);
           timeOutCallToFinish = setTimeout(() => {
@@ -301,6 +432,11 @@
         this.operacion = null;
         this.faseHerramienta1 = 0;
         this.magnitud = null;
+        this.dividiendo = false;
+        this.divisionCompletada = false;
+        this.cerrandoCajitas = false;
+        clearTimeout(timeOutCerrandoCajitas);
+        clearTimeout(timeOutDivisionCompletada);
       },
       setMagnitud() {
         let nuevaMagnitud = this.$refs.inputMagnitud.value;
@@ -370,6 +506,8 @@
             return;
           }
         }
+        if (this.faseHerramienta1 === 5) {
+        }
         this.faseHerramienta1++;
       },
     },
@@ -391,6 +529,9 @@
   });
 </script>
 <style>
+  #bloqueHerramientaInteractiva {
+    position: relative;
+  }
   .faseHerramienta1 {
     display: flex;
     flex-direction: column;
@@ -418,5 +559,31 @@
   }
   .travelRight-enter-active {
     opacity: 0;
+  }
+
+  #contenedorCajitas {
+    width: 100%;
+  }
+  #contenedorCajitas .contenedorTransicion {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cajitaDivision {
+    padding: 10px 10px;
+    background-color: whitesmoke;
+    border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .bolitaViajera {
+    background-color: burlywood !important;
+    position: absolute;
   }
 </style>

@@ -186,6 +186,7 @@ input {
   animation-duration: 1s;
   animation-iteration-count: 1;
   pointer-events: none;
+  opacity: 0;
 }
 
 .travelRight-leave-active {

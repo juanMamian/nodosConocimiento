@@ -93,7 +93,11 @@
             @keypress.enter="$refs.botonAceptarNumeroInicial.click()"
           />
 
-          <div class="boton" @click="stepFase" ref="botonAceptarNumeroInicial">
+          <div
+            class="boton"
+            @click="setNumeroInicial"
+            ref="botonAceptarNumeroInicial"
+          >
             Aceptar
           </div>
         </div>
@@ -107,6 +111,8 @@
               ref="bolitaViajera"
             ></div>
             <transition-group
+              id="contenedorNumeroRep"
+              tag="div"
               name="travelTop"
               @after-enter="afterTransicionEfectoOperacion"
             >
@@ -128,7 +134,7 @@
                     class="bolitaNumero"
                     :key="'bolita'+num"
                     ref="bolitaInicial"
-                    :style="[{animationDelay: (!operacion?'0':operacion==='suma'? ( Number(num-1)  - numeroInicialHerramienta1) * delayBolitas: (numeroConEfectoOperacion - num) * delayBolitas ) + 's'  }, {opacity: dividiendo?0:1}]"
+                    :style="[{animationDelay: (!operacion?'0':operacion==='suma'? ( Number(num-1)  - numeroInicialHerramienta1) * delayBolitas: (numeroConEfectoOperacion - num) * delayBolitas ) + 's'  }, {visibility: dividiendo?'hidden':'visible'}]"
                     v-for="num of numeroConEfectoOperacion"
                   ></div>
                 </transition-group>
@@ -375,23 +381,24 @@
                   timeOutCerrandoCajitas = setTimeout(() => {
                     console.log("Cerrando cajitas");
                     this.cerrandoCajitas = true;
-                    this.$refs.cajita[0].animate(
-                      [
-                        {
-                          transform: "scale(1)",
-                        },
-                        {
-                          transform: "scale(1.1)",
-                        },
-                        {
-                          transform: "scale(1)",
-                        },
-                      ],
-                      { duration: 200, iterations: 1 }
-                    ).finished.then(()=>{
-                      this.stepFase();
-                    })
-
+                    this.$refs.cajita[0]
+                      .animate(
+                        [
+                          {
+                            transform: "scale(1)",
+                          },
+                          {
+                            transform: "scale(1.1)",
+                          },
+                          {
+                            transform: "scale(1)",
+                          },
+                        ],
+                        { duration: 200, iterations: 1 }
+                      )
+                      .finished.then(() => {
+                        this.stepFase();
+                      });
                   }, 800);
                 }, 1000);
               }
@@ -439,7 +446,7 @@
         clearTimeout(timeOutDivisionCompletada);
       },
       setMagnitud() {
-        let nuevaMagnitud = this.$refs.inputMagnitud.value;
+        let nuevaMagnitud = Number(this.$refs.inputMagnitud.value);
         if (!nuevaMagnitud) {
           return;
         }
@@ -477,7 +484,12 @@
             return;
           }
         } else if (this.operacion === "division") {
-          let magnitudesPermitidas = [];
+          let magnitudesPermitidas = [1, this.numeroInicialHerramienta1];
+          for (let i = 2; i < this.numeroInicialHerramienta1 / 2; i++) {
+            if (this.numeroInicialHerramienta1 % i === 0) {
+              magnitudesPermitidas.push(i);
+            }
+          }
           if (
             nuevaMagnitud < this.minMagnitud ||
             !magnitudesPermitidas.includes(nuevaMagnitud)
@@ -486,6 +498,7 @@
               mensaje: "Magnitud no permitida",
               tipo: "UserInputError",
             });
+            return;
           }
         } else {
           console.log("Operación " + this.operacion + " no conocida");
@@ -509,6 +522,20 @@
         if (this.faseHerramienta1 === 5) {
         }
         this.faseHerramienta1++;
+      },
+      setNumeroInicial() {
+        let nuevoNumeroInicial = this.$refs.inputNumeroInicial.value;
+        if (
+          nuevoNumeroInicial < this.minNumeroInicial ||
+          nuevoNumeroInicial > this.maxNumeroInicial
+        ) {
+          this.mensajesUsuario.push({
+            mensaje: "Número no permitido",
+            tipo: "UserInputError",
+          });
+          return;
+        }
+        this.stepFase();
       },
     },
     watch: {
@@ -585,5 +612,10 @@
   .bolitaViajera {
     background-color: burlywood !important;
     position: absolute;
+  }
+  #contenedorNumeroRep{
+    display: flex;
+    flex-direction:column;
+    gap: 20px;
   }
 </style>

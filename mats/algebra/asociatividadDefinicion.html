@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <script id="MathJax-script" async
+        src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
     <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
 
 
@@ -18,22 +21,29 @@
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
-    <title>Igualdades equivalentes - evaluación</title>
+
+    <title>Asociatividad - definición</title>
+
 </head>
 
 <body>
     <div id="doc">
-        <p>Comprendo el concepto de cancelación de operaciones aritméticas en una expresión numérica si: </p>
+        <p>
+        Si la aplicación doble de una operación causa siempre el mismo efecto que una aplicación asociada de ellas, se dice que es una  
+        <span class="resaltado">operación asociativa</span>.
+        </p>
 
-        <bloque-component tipo="evaluacion"
-            textoCabecera="Puedo identificar operaciones que se cancelan en una expresión numérica.">
-        </bloque-component>        
+        <recuadro-component tipo="datoNuevo">
+            La suma es una operación asociativa.
+        </recuadro-component>
 
-        <bloque-component tipo="evaluacion"
-            textoCabecera="Dada una expresión numérica con operaciones que se cancelan, puedo reescribirla sin ellas generando una nueva expresión numérica más simple y con el mismo valor que la original.">
-        </bloque-component>        
+        <recuadro-component tipo="datoNuevo">
+            La multiplicación es una operación asociativa.
+        </recuadro-component>
+
 
     </div>
+
 </body>
 
 </html>
@@ -53,3 +63,6 @@
 
     })
 </script>
+
+<style>
+</style>

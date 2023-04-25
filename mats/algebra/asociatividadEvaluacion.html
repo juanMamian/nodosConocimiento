@@ -1,11 +1,16 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <script id="MathJax-script" async
+        src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
     <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
+
 
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
@@ -16,26 +21,43 @@
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
-    <title>Operaciones aritméticas - evaluación</title>
+
+    <title>Asociatividad - asociación</title>
+
 </head>
+
 <body>
-    <p>Comprendo las operaciones aritméticas si: </p>
+    <div id="doc">
+        <p>
+        Comprendo el concepto de asociatividad si: 
+        </p>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo explicar qué es la asociatividad.
+            </template>
+        </bloque-component>
 
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Conozco una lista de operaciones aritméticas asociativas.
+            </template>
+        </bloque-component>
 
-    <bloque-component tipo="evaluacion">
-        <template #cabecera>
-            Puedo nombrar todas las operaciones aritméticas básicas y las dos operaciones adicionales que se construyen a partir de ellas.
-        </template>
-    </bloque-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Conozco una lista de operaciones aritméticas asociativas.
+            </template>
+        </bloque-component>
 
-    <bloque-component tipo="evaluacion">
-        <template #cabecera>
-            Dado un número, una operación aritmética y una magnitud para esa operación aritmética, puedo realizar la acción correspondiente.
-        </template>
-    </bloque-component>
-        
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada una expresión numérica en la que hay una aplicación doble de una operación asociativa, puedo escribir una expresión equivalente. 
+            </template>
+        </bloque-component>
+    </div>
 
 </body>
+
 </html>
 
 <script>
@@ -48,8 +70,11 @@
         },
         data() {
             return {
-
             }
-        }
+        },
+
     })
 </script>
+
+<style>
+</style>

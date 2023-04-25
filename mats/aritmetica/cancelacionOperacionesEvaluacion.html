@@ -8,6 +8,7 @@
 
     <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
 
+
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
@@ -17,18 +18,27 @@
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
-
-    <title>Operaciones aritméticas opuestas - Evaluación</title>
-
+    <title>Igualdades equivalentes - evaluación</title>
 </head>
 
 <body>
     <div id="doc">
+        <p>Comprendo el concepto de cancelación de operaciones si: </p>
 
-        <p>Comprendo el concepto de operación aritmética opuesta si: </p>
-        <bloque-component tipo="evaluacion" textoCabecera="Dada cualquier operación aritmética puedo pensar en su operación opuesta.">
-
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo explicar qué es la cancelación de operaciones.
+            </template>
         </bloque-component>
+
+
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Dada una descripción de una operación aplicada sobre un número puedo escoger la operación que cancelara su efecto.">
+        </bloque-component>        
+
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Dada una descripción de operaciones aplicadas sobre un número puedo decidir si hay cancelación e identificar el resultado final.">
+        </bloque-component>        
     </div>
 </body>
 
@@ -44,49 +54,8 @@
         },
         data() {
             return {
-                numEjemplo1:4,
-                numEjemplo2:6,
-                
             }
-        }
+        },
+
     })
 </script>
-<style>
-    .notacion {
-        font-size: 18px;
-        padding: 2px 3px;
-        background-color: cadetblue;
-        display: inline-block;
-        border-radius: 2px;
-    }
-
-    li {
-        margin-bottom: 10px;
-    }
-
-    #imagenConjuntos {
-        max-width: 90vw;
-        margin: 10px auto;
-        display: block;
-    }
-    
-
-    .numeroBolitas{
-        display: flex;
-    }    
-
-    .numeroBolitas span{
-        display: flex;
-        flex-wrap: wrap;
-
-    }
-
-    .bolita{
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        margin: 10px 5px;
-        background-color: brown;
-        position: relative;
-    }
-</style>

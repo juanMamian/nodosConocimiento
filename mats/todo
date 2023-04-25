@@ -1,4 +1,10 @@
 -En el generador de expresiones el Math.pow no logra ejecutar una potencia a una fracción negativa y por lo tanto no puede generar una subexpresión para radicación de números negativos.
+-Hacer herramientas de autoevaluación para los nodos
+    -distributividad.
+    -conmutatividad.
+    -asociatividad.
+    -expresión algebraica.
+-Hacer una herramienta de autoevaluación para el nodo de distributividad.
 -Crear una nueva sección en el nodo de multiplicación acerca del símbolo de la multiplicación.
 -Hacer evaluacion del nodo de voltaje.
 -Corregir el nodo de funciones en javascript porque dice que para ejecutar la función hay que escribir el nombre de la variable.

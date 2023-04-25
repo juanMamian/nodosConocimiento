@@ -69,7 +69,40 @@
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dada cualquier expresión numérica puedo identificar el operador y los operandos.
+                Dada cualquier expresión numérica puedo describirla en términos de realización de operaciones aritméticas.
+            </template>
+
+            <recuadro-component tipo="instruccionPointer">
+
+                <div class="bloqueSeleccionDificultad">
+
+                    Selecciona el nivel de dificultad
+
+                    <input type="range" step="1" min="1" max="4" v-model="dificultadExpresion2"
+                        id="inputDificultadExpresion2">
+
+                    <div class="valorDificultad">
+                        {{dificultadExpresion2}}
+                    </div>
+                </div>
+                <div class="boton" @click="generarExpresion2">Generar expresión numérica</div>
+            </recuadro-component>
+
+            <transition name="travelTop">
+                <recuadro-component id="expresionReto2" tipo="reto" v-if="expresionReto2"
+                    :key="'expresion'+versionExpresion2">
+
+                    <span style="font-size: 48px;">
+                        \({{expresionString2}}\)
+                    </span>
+
+                </recuadro-component>
+            </transition>
+        </bloque-component>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada cualquier expresión numérica puedo señalar los operandos de cada operación.
             </template>
 
             <recuadro-component tipo="instruccionPointer">
@@ -98,51 +131,20 @@
 
                 </recuadro-component>
             </transition>
-
         </bloque-component>
+
+
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dada cualquier expresión numérica puedo describir el número inicial, la operación aplicada y la magnitud de la operación.
+                Puedo evaluar cualquier expresión numérica.
             </template>
-
             <recuadro-component tipo="instruccionPointer">
-
                 <div class="bloqueSeleccionDificultad">
 
                     Selecciona el nivel de dificultad
 
-                    <input type="range" step="1" min="1" max="5" v-model="dificultadExpresion3"
-                        id="inputDificultad3">
-
-                    <div class="valorDificultad">
-                        {{dificultadExpresion3}}
-                    </div>
-                </div>
-                <div class="boton" @click="generarExpresion3">Generar expresión numérica</div>
-            </recuadro-component>
-
-            <transition name="travelTop">
-                <recuadro-component id="expresionReto3" tipo="reto" v-if="expresionReto3"
-                    :key="'expresion'+versionExpresion3">
-
-                    <span style="font-size: 48px;">
-                        \({{expresionString3}}\)
-                    </span>
-
-                </recuadro-component>
-            </transition>
-
-        </bloque-component>
-
-        <bloque-component tipo="evaluacion" textoCabecera="Puedo descubrir el valor de cualquier expresión numérica.">
-            <recuadro-component tipo="instruccionPointer">
-
-                <div class="bloqueSeleccionDificultad">
-
-                    Selecciona el nivel de dificultad
-
-                    <input type="range" step="1" min="1" max="5" v-model="dificultadExpresion" id="inputDificultad">
+                    <input type="range" step="1" min="1" max="4" v-model="dificultadExpresion" id="inputDificultad">
 
                     <div class="valorDificultad">
                         {{dificultadExpresion}}
@@ -163,9 +165,9 @@
                             Escribe aquí tu respuesta
                         </recuadro-component>
 
-                        <input type="number" style="width: 140px" id="inputRespuesta" ref="inputRespuestaUsuario">
+                        <input type="number" style="width: 140px" id="inputRespuesta" ref="inputRespuestaUsuario" @keypress.enter="$refs.inputComprobarRespuestaEvaluar.click()">
 
-                        <div class="boton" @click="comprobarRespuesta">Comprobar</div>
+                        <div class="boton" ref="inputComprobarRespuestaEvaluar" @click="comprobarRespuesta">Comprobar</div>
 
 
                     </div>
@@ -208,6 +210,13 @@
                 expresionStringOperador: null,
                 versionExpresionOperador: 0,
                 dificultadExpresionOperador: 1,
+
+                expresionReto2: null,
+                estadoRespuesta2: null,
+                expresionString2: null,
+                versionExpresion2: 0,
+                dificultadExpresion2: 1,
+                versionRespuesta2: 0,
 
                 expresionReto3: null,
                 estadoRespuesta3: null,
@@ -322,6 +331,43 @@
                 })
             },
            
+            generarExpresion2() {
+                this.estadoRespuesta2 = null;
+                let valor = Math.round(Math.random() * 20);
+                let queSeaPotencia = Math.random() < (1 / 6);
+                let operaciones = ["multiplicacion", "suma", "resta", "division", "radicacion"]; //Como la potenciacion no se puede generar para un valor dado, se generarán todas excepto potenciación. Esta será generada aparte sin valor dado
+
+                let opcionesGenerarExpresion = {
+                    keepInteger: true,
+                    maxExponentePotencia: 3,
+                    maxDenominadorEntero: 5,
+                    maxGradoRadicacion: 3,
+                    maxNumero: 50,
+                    minNumero: 50,
+                }
+
+                let laExpresion = this.expresionNumericaGenerarExpresionNumerica({ valor }, { ...opcionesGenerarExpresion, operaciones });
+
+                if (queSeaPotencia) { //Generar una potenciación sin especificar el valor.
+                    console.log("Será potencia");
+                    laExpresion = this.expresionNumericaGenerarExpresionNumerica({ operacion: "potenciacion" }, opcionesGenerarExpresion);
+                }
+
+                let reexpresiones = Math.round(Number(this.dificultadExpresion2) - 1);
+
+                this.expresionReto2 = laExpresion;
+
+                if (reexpresiones > 0) {
+                    let plainExpresion = JSON.parse(JSON.stringify(this.expresionReto2));
+                    this.expresionReto2 = this.expresionNumericaReexpresionarExpresion(plainExpresion, reexpresiones, {}, { ...opcionesGenerarExpresion, operaciones });
+                }
+
+                this.expresionString2 = this.expresionNumericaToMathJax(this.expresionReto2);
+                this.versionExpresion2++;
+                this.$nextTick(() => {
+                    MathJax.typeset();
+                })
+            },
             generarExpresion3() {
                 this.estadoRespuesta3 = null;
                 let valor = Math.round(Math.random() * 20);

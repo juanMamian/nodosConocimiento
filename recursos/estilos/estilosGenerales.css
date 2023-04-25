@@ -37,7 +37,7 @@ li {
   transform: translate(-50%, -50%);
 }
 .selector.seleccionado {
-  background-color: #66c644;
+  background-color: var(--paletaPrevio);
 }
 .resaltado {
   background-color: var(--paletaActual);
@@ -55,6 +55,8 @@ li {
   margin: 10px auto;
   font-size: 15px;
   color: black;
+  box-shadow: 2px 2px 2px 2px gray;
+  border-radius: 3px;
 }
 
 .deshabilitado {
@@ -119,6 +121,25 @@ li {
   align-items: center;
   flex-direction: column;
 }
+
+.mensajeUsuario{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px 20px;
+    border-radius: 5px;
+    border-color: var(--paletaMain);
+    font-size: 14px;
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    animation-duration: 0.3s;
+    background-color: whitesmoke;
+
+}
+
 .operacionReto {
   margin: 10px 10px;
   background-color: #449ae6;
@@ -258,7 +279,7 @@ input {
 }
 
 .travelBottom-leave-active {
-  animation: travelLeft;
+  animation: travelBottom;
   animation-duration: 1s;
   animation-iteration-count: 1;
   animation-direction: reverse;
@@ -266,7 +287,7 @@ input {
 }
 @keyframes travelBottom {
   0% {
-    transform: translateY(-100%);
+    transform: translateY(100%);
     opacity: 0;
   }
   100% {

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script id="MathJax-script" async
+        src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
+
+
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/funciones/mixinsMaths.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+
+    <title>Manipulador algebraico básico - evaluación</title>
+
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Soy un manipulador basico de expresiones numéricas si:
+        </p>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada cualquier expresión numérica, puedo manipularla para conseguir una expresión con cierta forma
+                requerida.
+            </template>
+
+            <recuadro-component tipo="reto">
+                <p>
+                    Selecciona la dificultad
+                </p>
+                <input type="range" name="inputDificultad" min="1" max="1" v-model="dificultad" id="inputDificultad" class="deshabilitado">
+                {{dificultad}}
+
+                <div class="boton" @click="generarReto">
+                    Generar un reto
+                </div>
+
+                <div class="matsExpresion" id="expresionReto" v-if="expresionRetoString" :key="'expresion'+versionExpresion" style="font-size: 30px;">
+                    \( {{ expresionRetoString }} \)
+                </div>
+
+                <div id="textoReto" v-if="textoReto">
+                     {{ textoReto }} 
+                </div>
+            </recuadro-component>
+
+        </bloque-component>
+
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        mixins:[
+            mixinExpresionesNumericas,
+        ],
+        data() {
+            return {
+                dificultad: 1,
+                expresionReto:null,
+                expresionRetoString:null,
+                textoReto:"",
+                versionExpresion:0,
+            }
+        },
+        methods: {
+            generarReto() {
+                console.log("Generando reto");
+                let expresion=this.expresionNumericaGenerarExpresionNumerica({}, {});
+                this.expresionReto=expresion;
+                this.expresionReto=this.expresionNumericaReexpresionarExpresion(this.expresionReto, 1); 
+                this.expresionRetoString=this.expresionNumericaToMathJax(this.expresionReto);
+
+                this.textoReto="Solicítale a un experto un reto acerca de esta expresión";
+                this.versionExpresion++;
+                this.$nextTick(()=>{
+                    MathJax.typeset();
+                })
+            }
+        }
+
+    })
+</script>
+
+<style>
+</style>

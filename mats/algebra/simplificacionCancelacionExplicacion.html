@@ -6,8 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script id="MathJax-script" async
-        src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
     <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
 
 
@@ -24,33 +22,19 @@
     <link rel="stylesheet"
         href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
-
-    <title>Distributividad - evaluación</title>
-
+    <title>Simplificación de expresiones por cancelación - explicación</title>
 </head>
 
 <body>
     <div id="doc">
         <p>
-            Comprendo el concepto de distributividad si:
+        Si en una expresión hay un caso de cancelación de operaciónes entonces una versión alterna en la cual esas operaciones no participan es <span class="resaltado">identica</span> a la original.
         </p>
 
-        <bloque-component tipo="evaluacion" textoCabecera="Puedo explicar qué es la distributividad">
-        </bloque-component>
-        <bloque-component tipo="evaluacion"
-            textoCabecera="Conozco una lista de operaciones que son distributivas sobre otras.">
-        </bloque-component>
-
-
-        <bloque-component tipo="evaluacion"
-            textoCabecera="Dada cualquier expresión numérica puedo decidir si se presenta distribución de alguna operación">
-        </bloque-component>
-
-
-        <bloque-component tipo="evaluacion"
-            textoCabecera="Dada cualquier expresión en la que se presenta distribución, puedo escribir una expresión equivalente teniendo en cuenta la distributividad.">
-        </bloque-component>
-
+        <recuadro-component tipo="datoPrevio">
+            La versión alterna de una expresión en la cual las operaciones que se cancelan no son incluidas se conoce como expresión <span class="resaltado">simplificada</span>.
+        </recuadro-component>
+    </div>
 </body>
 
 </html>
@@ -65,13 +49,8 @@
         },
         data() {
             return {
-
             }
         },
 
     })
 </script>
-
-<style>
-
-</style>

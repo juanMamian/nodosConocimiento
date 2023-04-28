@@ -41,7 +41,6 @@ function getDivisoresEnteros(num) {
 function getSimboloOperacion(operacion) {
     if (!operacionesDefault.includes(operacion)) {
         throw "Operación no conocida";
-        return;
     }
 
     if (operacion === 'suma') {
@@ -201,6 +200,18 @@ function setNumeroFaltante(expresion, opciones) {
 function generarExpresionNumerica(expresion, opciones) {
     let { valor, operacion, numero1, numero2 } = expresion;
     console.log("Generando expresión numérica para el valor " + expresion.valor);
+//    opciones={
+//        keepInteger: "Que el valor de la expresión sea entero",
+//        operaciones: "array de operaciones permitidas para el caso en que no se haya específicado una.",
+//        maxBasePotencia: "",
+//        minBasePotencia:"",
+//        minExponentePotencia: "",
+//        maxExponentePotencia: "",
+//        minGradoRadicacion: "",
+//        maxGradoRadicacion: "",
+//        maxDenominadorEntero: "",
+//        minDenominadorEntero: "",
+//    }
 
     let operaciones = operacionesDefault;
     if (opciones.operaciones) {
@@ -318,6 +329,9 @@ function generarExpresionNumerica(expresion, opciones) {
 }
 
 function reexpresionarExpresion(expresion, reexpresiones, opciones, opcionesGenerarExpresion) {
+    //Esta función recorre una expresión numérica buscando un número escrito de manera explícita para convertirlo en expresión numérica. Repite esa acción 
+    //{{reexpresiones}} veces.
+
     if (!reexpresiones || (typeof reexpresiones) != "number") {
         throw "No se especificó el número de reexpresiones";
     }
@@ -444,7 +458,7 @@ function toMathJax(expresion, opciones) {
 
 const mixinExpresionesNumericas = {
     methods: {
-        expresionNumericaGenerarExpresionNumerica(expresion, opciones) {
+        expresionNumericaGenerarExpresionNumerica(expresion, opciones={keepInteger:true}) {
             return generarExpresionNumerica(expresion, opciones || {})
         },
         expresionNumericaGenerarNumero(opciones) {
@@ -465,7 +479,7 @@ const mixinExpresionesNumericas = {
         expresionNumericaGetSimboloOperacion(operacion) {
             return getSimboloOperacion(operacion);
         },
-        expresionNumericaReexpresionarExpresion(expresion, reexpresiones, opciones, opcionesGenerarExpresion) {
+        expresionNumericaReexpresionarExpresion(expresion={}, reexpresiones={}, opciones={}, opcionesGenerarExpresion={keepInteger:true}) {
             return reexpresionarExpresion(expresion, reexpresiones, opciones, opcionesGenerarExpresion);
         }
     }

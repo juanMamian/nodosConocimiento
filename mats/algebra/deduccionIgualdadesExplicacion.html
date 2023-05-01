@@ -14,11 +14,16 @@
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
-    <title>Igualdades equivalentes</title>
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <title>Deducción de igualdades</title>
 </head>
 
 <body>
@@ -26,37 +31,46 @@
 
         Si se tiene que:
         <ul>
-            <li><span>\(4 \times 2 \) </span><span>\( = \)</span><span>\(11-3 \)</span></li>
+            <li><span class="matsExpresion">\(4 \times 2  = 11-3 \)</span></li>
         </ul>
 
         <p>
-            Esta igualdad afirma que el número <span class="numeroOriginal">\(4 \times 2\)</span> y el número <span
-                class="numeroOriginal">\(11 - 3\)</span> son iguales.
+            Esta igualdad afirma que el número <span class="matsExpresion numeroOriginal">\(4 \times 2\)</span> y el
+            número <span class="matsExpresion numeroOriginal">\(11 - 3\)</span> son iguales.
         </p>
 
         <p>
-            Si se construyen dos nuevos números escribiendo:
+            Si se construyen dos nuevos números aplicando una suma de la misma magnitud a ambos números originales así:
+        </p>
         <ul>
             <li>
-                \((4 \times 2) + 6\)
+                <span class="matsExpresion">
+                    \((4 \times 2) + 6\)
+                </span>
             </li>
             <li>
-                \((11 - 3) + 6\)
+                <span class="matsExpresion">
+                    \((11 - 3) + 6\)
+                </span>
             </li>
         </ul>
-        </p>
 
         Sobre ellos se puede deducir que:
 
+
         <recuadro-component tipo="datoNuevo" @click.native="toggleMostrandoDeduccion">
             <div class="deduccion" v-show="!mostrandoDeduccionSimbolos">
-                Si <span class="numeroOriginal">\(4 \times 2\)</span> y <span class="numeroOriginal">\(11 - 3\)</span>
+                Si <span class="matsExpresion numeroOriginal">\(4 \times 2\)</span> y <span
+                    class="matsExpresion numeroOriginal">\(11 - 3\)</span>
                 son iguales, entonces
-                <span class="numeroOriginal">\((4 \times 2)+6\)</span> y <span class="numeroOriginal">\((11 -
+                <span class="matsExpresion numeroOriginal">\((4 \times 2)+6\)</span> y <span
+                    class="matsExpresion numeroOriginal">\((11 -
                     3)+6\)</span> también son iguales.
             </div>
             <div class="deduccion" v-show="mostrandoDeduccionSimbolos">
-                \((4 \times 2) = 11-3 => (4 \times 2)+6=(11 -  3)+6 \)
+                <span class="">
+                    \((4 \times 2) = 11-3 => (4 \times 2)+6=(11 - 3)+6 \)
+                </span>
             </div>
         </recuadro-component>
 
@@ -66,23 +80,28 @@
 
 
         <p>
-            Este tipo de deducción produce una nueva ecuación. Se dice que esta es una ecuación equivalente a la original.
+            Este tipo de razonamiento permite producir igualdades que son consecuencia de la primera. Es decir: si la primera igualdad es verdadera, entonces estas también lo son. 
         </p>
+
+        <recuadro-component tipo="datoPrevio">
+            Producir igualdades que deben ser verdaderas si la original es verdadera se conoce como <span class="resaltado">deducir igualdades</span>.
+        </recuadro-component>
+
 
         <p>
-            Mediante este tipo de deducción se pueden producir muchas ecuaciones equivalentes a la original.
+        A partir de una igualdad es posible deducir muchas igualdades.
         </p>
-
-        <bloque-component tipo="ejemplo" textoCabecera="En este cuadro se pueden ver algunas otras deducciones a partir de la ecuación original.">
+        <bloque-component tipo="ejemplo"
+            textoCabecera="En este cuadro se pueden ver algunas otras deducciones a partir de la igualdad original.">
             <ul style="line-height: 60px;">
                 <li>
-                    \(4 \times 2  = 11-3 => {(4 \times 2) \times 4}  = {(11-3) \times 4} \)
+                    \(4 \times 2 = 11-3 => {(4 \times 2) \times 4} = {(11-3) \times 4} \)
                 </li>
                 <li>
-                    \(4 \times 2  = 11-3 => {(4 \times 2) \over 9}  = {(11-3) \over 9} \)
+                    \(4 \times 2 = 11-3 => {(4 \times 2) \over 9} = {(11-3) \over 9} \)
                 </li>
                 <li>
-                    \(4 \times 2  = 11-3 => {(4 \times 2) - 6 }  = {(11-3) - 6} \)
+                    \(4 \times 2 = 11-3 => {(4 \times 2) - 6 } = {(11-3) - 6} \)
                 </li>
             </ul>
         </bloque-component>
@@ -129,7 +148,7 @@
                     }
                 ],
 
-                mostrandoDeduccionSimbolos:false,
+                mostrandoDeduccionSimbolos: false,
 
             }
         },
@@ -154,9 +173,9 @@
             }
         },
         methods: {
-            toggleMostrandoDeduccion(){
-                this.mostrandoDeduccionSimbolos=!this.mostrandoDeduccionSimbolos;
-                this.$nextTick(()=>{
+            toggleMostrandoDeduccion() {
+                this.mostrandoDeduccionSimbolos = !this.mostrandoDeduccionSimbolos;
+                this.$nextTick(() => {
                     MathJax.typeset();
                 })
             }
@@ -247,5 +266,8 @@
     .codigo {
         text-align: center;
         margin-top: 10px;
+    }
+    .matsExpresion{
+        font-size: 30px;
     }
 </style>

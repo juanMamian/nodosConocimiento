@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
+
+    <script id="MathJax-script" async
+        src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Deducción de igualdades- encadenamiento</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Cuando se tiene una primera igualdad y se deduce a partir de ella una segunda igualdad, entonces la segunda
+            igualdad es tan verdadera como la primera.
+        </p>
+
+        <p>
+            Y si se toma la segunda igualdad
+            para deducir una tercera igualdad, La tercera igualdad es tan verdadera como la segunda
+        </p>
+
+        <recuadro-component tipo="datoNuevo">
+            Así que la tercera igualdad es tan verdadera como la primera igualdad.
+        </recuadro-component>
+
+        <p>
+            Si se deduce una nueva igualdad y se usa esa nueva igualdad para deducir otra, se tiene una <span
+                class="resaltado">deducción encadenada</span> de igualdades.
+        </p>
+
+        <bloque-component tipo="ejemplo" @plegado="reiniciarBloque">
+            <template #cabecera>
+                En este cuadro se muestran ejemplos de deducción encadenada de igualdades.
+            </template>
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( 16 \times 2 = 32 \)
+                    </div>
+
+                    <div class="boton" @click="ejemplo1Step=1" :class="{deshabilitado: ejemplo1Step !=0}">
+                        Deducir una igualdad
+                    </div>
+
+                    <transition name="travelTop">
+                        <div class="matsExpresion" v-show="ejemplo1Step >= 1">
+                            \( 16 \times 2 + 4 = 32 + 4 \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="boton" @click="ejemplo1Step=2" v-show="ejemplo1Step>=1"
+                            :class="{deshabilitado: ejemplo1Step!=1}">
+                            Deducir una igualdad
+                        </div>
+                    </transition>
+
+                    <transition name="travelTop">
+                        <div class="matsExpresion" v-show="ejemplo1Step >= 2">
+                            \( {{{16 \times 2} + 4 } \over 2} = {{32 + 4} \over 2} \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="boton" @click="ejemplo1Step=3" v-show="ejemplo1Step>=2"
+                            :class="{deshabilitado: ejemplo1Step!=2}">
+                            Deducir una igualdad
+                        </div>
+                    </transition>
+
+                    <transition name="travelTop">
+                        <div class="matsExpresion" v-show="ejemplo1Step>=3">
+                            \( { { { {16 \times 2} + 4} \over 2 }- 10 } = {{{32 + 4} \over 2} }- 10 \)
+                        </div>
+                    </transition>
+
+                </div>
+
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( \sqrt[3]{27} = {6 \over 2 }\)
+                    </div>
+
+                    <div class="boton" @click="ejemplo2Step=1" :class="{deshabilitado: ejemplo2Step !=0}">
+                        Deducir una igualdad
+                    </div>
+
+                    <transition name="travelTop">
+                        <div class="matsExpresion" v-show="ejemplo2Step >= 1">
+                            \( { \sqrt[3]{27} \over 10} = { {6 \over 2} \over 10 }\)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="boton" @click="ejemplo2Step=2" v-show="ejemplo2Step>=1"
+                            :class="{deshabilitado: ejemplo2Step!=1}">
+                            Deducir una igualdad
+                        </div>
+                    </transition>
+
+                    <transition name="travelTop">
+                        <div class="matsExpresion" v-show="ejemplo2Step >= 2">
+                            \( {{ \sqrt[3]{27} \over 10} + 4 } = {{ {6 \over 2} \over 10 } + 4}\)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="boton" @click="ejemplo2Step=3" v-show="ejemplo2Step>=2"
+                            :class="{deshabilitado: ejemplo2Step!=2}">
+                            Deducir una igualdad
+                        </div>
+                    </transition>
+
+                    <transition name="travelTop">
+                        <div class="matsExpresion" v-show="ejemplo2Step>=3">
+                            \( {({{ \sqrt[3]{27} \over 10} + 4 }) ^ 2} = {({{ {6 \over 2} \over 10 } + 4})^2}\)
+                        </div>
+                    </transition>
+
+                </div>
+
+            </div>
+        </bloque-component>
+
+
+        <recuadro-component tipo="datoPrevio">
+            Las ecuaciones que se deducen encadenamente son todas tan verdaderas como la primera.
+        </recuadro-component>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                ejemplo1Step: 0,
+                ejemplo2Step: 0,
+            }
+        },
+        methods: {
+            reiniciarBloque() {
+                this.reiniciarEjemplo1();
+                this.reiniciarEjemplo2();
+            },
+            reiniciarEjemplo1() {
+                this.ejemplo1Step = 0;
+            },
+            reiniciarEjemplo2() {
+                this.ejemplo2Step = 0;
+            }
+        },
+        watch: {
+        }
+
+    })
+</script>
+
+<style>
+    .itemEjemplo {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+    }
+</style>

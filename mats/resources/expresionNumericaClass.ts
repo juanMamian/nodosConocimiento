@@ -1,49 +1,99 @@
+
+interface InfoNumeroAddress {
+    num: number,
+    direccion: Array<0 | 1>
+}
+
+interface opcionesGeneracionExpresion {
+    keepInteger?: boolean,
+    operaciones?: OperacionConocida[],
+
+    minExponentePotencia?: number,
+    maxExponentePotencia?: number,
+
+    minBasePotencia?: number,
+    maxBasePotencia?: number,
+
+    minGradoRadicacion?: number,
+    maxGradoRadicacion?: number,
+
+    minDenominadorEntero?: number,
+    maxDenominadorEntero?: number,
+
+    minResultadoRadicacion?: number,
+    maxResultadoRadicacion?: number,
+}
+
+type OperacionConocida = typeof ExpresionNumerica.operaciones[number];
+
 class ExpresionNumerica {
-    static operaciones = ["suma", "resta", "multiplicacion", "division", "potenciacion", "radicacion"];
+
+    static operaciones = ["suma", "resta", "multiplicacion", "division", "potenciacion", "radicacion"] as const;
     static maxNumero = 250;
     static minNumero = -250;
 
-    valor;
-    explicita; //Quiere decir que no debe entenderse como una expresión sino explícitamente como un número. El único campo que tiene relevancia aquí es "valor".
-    numero1;
-    numero2;
-    operacion;
-    letra;
+    numero1: ExpresionNumerica | null;
+    numero2: ExpresionNumerica | null;
+    operacion: OperacionConocida;
+    letra: string | null;
 
-    set valor(arg){
-        if(this.numero1 && this.numero1.valor && this.numero1.valor != 0 && this.numero2 && this.numero2.valor && this.numero2.valor != 0){
+    _valor: number;
+    set valor(arg: number) {
+        if (this.numero1 && typeof this.numero1.valor === 'number' && this.numero2 && typeof this.numero2.valor === 'number') {
             throw "No se puede fijar valor en una expresión que ya tiene sus operandos fijados"
         }
-        this.valor=arg;
+        this._valor = arg;
+    }
+    get valor() {
+        if(this.explicita){
+            return this._valor
+        }
+        let res = this.operarNumeros();
+        if(typeof res==='number'){
+            return res
+        }
+        throw "Error calculando valor de expresión";
+    }
+    calcularValor() {
+        let res=this.operarNumeros();
+        if(typeof res==='number'){
+            this._valor=res;
+            return
+        }
+        console.log("No se pudo calcular valor de expresión numérica");
     }
 
     maxNumero = 250;
     minNumero = -250;
-
-    operacion;
-    simboloOperacion;
+    rangoNumero = this.maxNumero - this.minNumero;
 
     minResultadoRadicacion = 2;
     maxResultadoRadicacion = 50;
+    rangoResultadoRadicacion = this.maxResultadoRadicacion - this.minResultadoRadicacion;
 
     minGradoRadicacion = 2;
     maxGradoRadicacion = 6;
+    rangoGradoRadicacion = this.maxGradoRadicacion - this.minGradoRadicacion;
 
     minGradoPotenciacion = 2;
     maxGradoPotenciacion = 6;
+    rangoGradoPotenciacion = this.maxGradoPotenciacion - this.minGradoPotenciacion;
 
     minDenominadorEntero = 2;
     maxDenominadorEntero = 30;
+    rangoDenominadorEntero = this.maxDenominadorEntero - this.minDenominadorEntero;
 
     minBasePotencia = 2;
     maxBasePotencia = 15;
+    rangoBasePotencia = this.maxBasePotencia - this.minBasePotencia;
 
     minExponentePotencia = 2;
     maxExponentePotencia = 6;
+    rangoExponentePotencia = this.maxExponentePotencia - this.minExponentePotencia;
 
 
-    constructor(args = {}) {
-        if (args.valor) this.valor = args.valor;
+    constructor(args: { valor?: number, numero1?: ExpresionNumerica, numero2?: ExpresionNumerica, operacion?: OperacionConocida, letra?: string } = {}) {
+        if (args.valor != null) this.valor = Number(args.valor);
 
         if (args.numero1) {
             if (args.numero1 instanceof ExpresionNumerica) {
@@ -62,21 +112,23 @@ class ExpresionNumerica {
             }
         }
         if (args.operacion) {
-            if (ExpresionNumerica.operaciones.includes(args.operacion)){
+            if (ExpresionNumerica.operaciones.includes(args.operacion)) {
                 this.operacion = args.operacion;
             }
             else {
                 throw "La operación " + args.operacion + " no es conocida";
             }
         }
-        if (args.letra){
-            if(typeof args.letra ==='string'){
+        if (args.letra) {
+            if (typeof args.letra === 'string') {
                 this.letra = args.letra;
             }
         }
     }
 
-    fillExpresion(opciones) {
+
+
+    fillExpresion(opciones: opcionesGeneracionExpresion = {}) {
 
         //        datosExpresion={
         //            valor: number,
@@ -85,12 +137,6 @@ class ExpresionNumerica {
         //            numero2: number,
         //            letra: string,
         //        }
-
-        console.log("Filling expresión numérica");
-
-        if (this.valor) {
-            console.log("Para el valor " + this.valor);
-        }
 
         if (opciones.keepInteger) {
             console.log("keeping integer");
@@ -110,7 +156,7 @@ class ExpresionNumerica {
 
         if (opciones.maxExponentePotencia) this.maxExponentePotencia = opciones.maxExponentePotencia;
         if (opciones.minExponentePotencia) this.minExponentePotencia = opciones.minExponentePotencia;
-        this.rangoExponente = this.maxExponentePotencia - this.minExponentePotencia;
+        this.rangoExponentePotencia = this.maxExponentePotencia - this.minExponentePotencia;
 
         if (opciones.maxBasePotencia) this.maxBasePotencia = opciones.maxBasePotencia;
         if (opciones.minBasePotencia) this.minBasePotencia = opciones.minBasePotencia;
@@ -150,39 +196,38 @@ class ExpresionNumerica {
             //Faltan ámbos números.
             if (!this.numero1.valor && !this.numero2.valor) {
 
-                this.numero1.valor = generarNumero(opciones);
+                this.numero1.valor = ExpresionNumerica.generarNumero();
 
                 if (this.operacion === 'potenciacion') {
                     this.numero1.valor = Math.round(Math.random() * this.rangoBasePotencia) + this.minBasePotencia;
-                    this.numero2.valor = Math.round(Math.random() * this.rangoExponente) + this.minExponentePotencia;
+                    this.numero2.valor = Math.round(Math.random() * this.rangoExponentePotencia) + this.minExponentePotencia;
                 }
 
                 if (this.operacion === 'radicacion') {
                     this.numero2.valor = Math.round(Math.random() * this.rangoGradoRadicacion) + this.minGradoRadicacion;
-                    this.numero1.valor = Math.pow(Math.round(Math.random() * this.rangoResultadoRadicacion + this.minResultadoRadicacion), this.numero2);
+                    this.numero1.valor = Math.pow(Math.round(Math.random() * this.rangoResultadoRadicacion + this.minResultadoRadicacion), this.numero2.valor);
                 }
                 if (this.operacion === 'division') {
                     if (opciones.keepInteger) {
-                        let divisores = getDivisoresEnteros(this.numero1);
+                        let divisores = getDivisoresEnterosNumero(this.numero1.valor);
                         this.numero2.valor = divisores[Math.floor(Math.random() * divisores.length)];
                     }
                     else {
                         while (!this.numero2.valor) {
-                            this.numero2.valor = generarNumero(opciones);
+                            this.numero2.valor = ExpresionNumerica.generarNumero();
                         }
                     }
                 }
 
                 //Por si no se ha generado aún los números
                 if (!this.numero1.valor) {
-                    this.numero1.valor = generarNumero(opciones);
+                    this.numero1.valor = ExpresionNumerica.generarNumero();
 
                 }
                 if (!this.numero2.valor) {
-                    this.numero2.valor = generarNumero(opciones);
+                    this.numero2.valor = ExpresionNumerica.generarNumero();
                 }
 
-                this.valor = this.operarNumeros();
             }
 
             //Sólo falta uno de los dos números.
@@ -197,21 +242,26 @@ class ExpresionNumerica {
                     }
                 }
 
-                //Si no se generó en el bloque keepInteger, se genera al azar.
-                if (!this.numero1.valor) {
-                    this.numero1.valor = generarNumero();
+                if (this.operacion === 'radicacion') {
+                    this.numero1.valor = ExpresionNumerica.generarNumero();
+                    if (this.numero2.valor % 2 != 0) {
+                        this.numero1.valor = Math.abs(this.numero1.valor);
+                    }
                 }
-                this.valor = this.operarNumeros();
+                //Si no se generó en los bloques de arriba, se genera al azar.
+                if (!this.numero1.valor) {
+                    this.numero1.valor = ExpresionNumerica.generarNumero();
+                }
             }
             else if (!this.numero2.valor) {
                 if (opciones.keepInteger) {
                     if (this.operacion === "division") {
-                        let divisores = getDivisoresEnteros(this.numero1.valor);
+                        let divisores = getDivisoresEnterosNumero(this.numero1.valor);
                         this.numero2.valor = divisores[Math.floor(Math.random() * divisores.length)];
                     }
                 }
                 if (this.operacion === "potenciacion") {
-                    this.numero2.valor = Math.round(Math.random() * this.rangoExponente + this.minExponentePotencia);
+                    this.numero2.valor = Math.round(Math.random() * this.rangoExponentePotencia + this.minExponentePotencia);
                 }
                 if (this.operacion === "radicacion") {
                     this.numero2.valor = Math.round(Math.random() * this.rangoGradoRadicacion + this.minGradoRadicacion)
@@ -219,9 +269,8 @@ class ExpresionNumerica {
 
                 //Si no se generó en el bloque keepInteger, se genera al azar.
                 if (!this.numero2.valor) {
-                    this.numero2.valor = generarNumero();
+                    this.numero2.valor = ExpresionNumerica.generarNumero();
                 }
-                this.valor = this.operarNumeros();
             }
         }
 
@@ -230,7 +279,6 @@ class ExpresionNumerica {
             if (!this.numero1.valor && !this.numero2.valor) { //Generando ámbos números base
 
                 //Empezando por el número 1.
-                this.numero1.valor = generarNumero();
                 if (this.operacion === 'potenciacion' && opciones.keepInteger) {
                     throw "Error para potenciacion. No es posible generar expresión: No se puede prever que un valor dado tendrá raiz entera de grado n"
                 }
@@ -243,7 +291,7 @@ class ExpresionNumerica {
                     this.numero1.valor = this.valor * denominador;
                 }
                 if (this.operacion === 'multiplicacion' && opciones.keepInteger) {
-                    let divisores = getDivisoresEnteros(this.valor);
+                    let divisores = getDivisoresEnterosNumero(this.valor);
                     let cantDivisores = divisores.length;
                     let indexDivisor = Math.floor(Math.random() * cantDivisores);
 
@@ -252,39 +300,17 @@ class ExpresionNumerica {
             }
 
             if (!this.numero1.valor || !this.numero2.valor) {
-                this.setNumeroFaltante();
+                this.setNumeroFaltante({});
             }
         }
 
-    }
-
-
-    static getDivisoresEnterosNumero(num) {
-        let lista = [];
-        for (var i = Math.floor(num / 2); i > 0; i--) {
-            if (num % i === 0) {
-                lista.push(i);
-            }
-        }
-        if (num % 1 === 0) {
-            lista = [num, ...lista];
-        }
-        return lista;
-    }
-
-    static getBaseLogNum(num) {
-        return Math.log(num) / Math.log(base);
     }
 
     get explicita() {
         if (this.numero1 && this.numero2 && this.operacion) {
             return false;
         }
-        else if (this.valor) {
-            return true;
-        }
-        throw "Operación no usable"
-
+        return true
     }
 
     get simboloOperacion() {
@@ -312,7 +338,7 @@ class ExpresionNumerica {
         }
     }
 
-    static generarNumero(opciones) {
+    static generarNumero(opciones: { maxNumero?: number, minNumero?: number } = {}) {
         let maxNumero = this.maxNumero;
         let minNumero = this.minNumero;
         if (opciones?.maxNumero) {
@@ -365,14 +391,17 @@ class ExpresionNumerica {
             }
             return res;
         }
+
+        throw "Operación no conocida";
     }
 
-    setNumeroFaltante(opciones) {
+    setNumeroFaltante(opciones = {}) {
+        //Si hay operacion, valor y alguno de los dos numerandos, calcula el númerando que falta.
         if (!this.operacion) {
             throw "Falta la operación"
         }
 
-        if (!typeof this.numero1?.valor === 'number' && !typeof this.numero2?.valor === 'number') {
+        if ((!this.numero1 || typeof this.numero1.valor !== 'number') && (!this.numero2 || typeof this.numero2.valor !== 'number')) {
             throw "Ambos números faltaban";
         }
 
@@ -428,7 +457,7 @@ class ExpresionNumerica {
                 this.numero1.valor = Math.pow(this.valor, 1 / this.numero2.valor);
             }
             if (!this.numero2.valor && this.numero2.valor != 0) {
-                this.numero2.valor = ExpresionNumerica.getBaseLog(this.numero1.valor, this.valor);
+                this.numero2.valor = getBaseLogNum(this.numero1.valor, this.valor);
 
                 let num2Rounded = Math.round(this.numero2.valor);
                 if (Math.abs(this.numero2.valor - num2Rounded) < 0.00001) {
@@ -442,7 +471,7 @@ class ExpresionNumerica {
                 this.numero1.valor = Math.pow(this.valor, this.numero2.valor);
             }
             if (!this.numero2.valor && this.numero2.valor != 0) {
-                let potencia = getBaseLog(this.numero1.valor, this.valor);
+                let potencia = getBaseLogNum(this.numero1.valor, this.valor);
                 this.numero2.valor = 1 / potencia;
                 // throw "Aún no desarrollado"
 
@@ -455,7 +484,7 @@ class ExpresionNumerica {
 
     }
 
-    reexpresionar(reexpresiones, opcionesGenerarExpresion) {
+    reexpresionar(this: ExpresionNumerica, reexpresiones: number, opcionesGenerarExpresion: opcionesGeneracionExpresion) {
         //Esta función recorre la expresión numérica buscando un número escrito de manera explícita para convertirlo en expresión numérica. Repite esa acción 
         //{{reexpresiones}} veces.
 
@@ -471,24 +500,17 @@ class ExpresionNumerica {
             let lugarActual = this;
             while (guarda++ < 100) {
 
+                if (lugarActual.explicita) {
+                    console.log("Se reexpresionará el " + lugarActual.valor);
+                    lugarActual.fillExpresion(opcionesGenerarExpresion);
+                    break;
+                }
+
                 let direccion = Math.ceil(Math.random() * 2);
                 console.log("Entrando en dirección " + direccion);
-                numeroActual = direccion === 1 ? lugarActual.numero1 : lugarActual.numero2;
-
-                if (!numeroActual.operacion || !numeroActual.numero1 || !numeroActual.numero2) { //Una expresión que no tiene datos suficientes para ser una expresión será considerada un número explícito.
-                    //Esto es un número explícito porque no tiene datos completos para ser una expresión numérica.
-                    if (!numeroActual.valor) {
-                        throw "Expresión no tenía datos completos";
-                    }
-                    console.log("Se reexpresionará el " + numeroActual.valor);
-                    if (direccion === 1) {
-                        lugarActual.numero1.fillExpresion();
-                    }
-                    else {
-                        lugarActual.numero2.fillExpresion();
-                    }
-
-                    break;
+                lugarActual = direccion === 1 ? lugarActual.numero1 : lugarActual.numero2;
+                if (!lugarActual) {
+                    throw "Error recorriendo árbol: se accedió a una rama vacía";
                 }
 
                 lugarActual = direccion === 1 ? lugarActual.numero1 : lugarActual.numero2
@@ -496,75 +518,75 @@ class ExpresionNumerica {
         }
     }
 
-    toMathJax(opciones) {
+    toMathJax(opciones = {}) {
         let res = "";
         let operacionesAditivas = ["suma", "resta"];
         let operacionesExplicitas = ["division"]
 
-        console.log("Generando string para mathJax");
-        if (!this.operacion || !this.numero1 || !this.numero2) {
-            //Esto debe ser un número explícito porque no tiene datos suficientes para ser una expresión numérica.
-            if (!this.valor && this.valor != 0) {
-                throw "Expresión incompleta";
-            }
-            //Es un número explícito.
+        if (this.explicita) {
             return this.letra || this.valor
-
         }
+
+        if (!this.numero1 || !this.numero2) {
+            throw "Expresión rota"
+        }
+
+        let textoLado1 = this.numero1.toMathJax();
+        let textoLado2 = this.numero2.toMathJax();
+
 
         textoLado1 = "{" + textoLado1 + "}";
 
-        let esNumNegativo = typeof lado1 === 'number' && lado1 < 0;
-        let esAditiva = lado1.operacion && operacionesAditivas.includes(lado1.operacion);
+        //Decidiendo si add paréntesis en el lado1.
+        let esNumNegativo = this.numero1.explicita && this.numero1.valor < 0;
+        let esIncognita1 = this.numero1.explicita && this.numero1.letra;
+        let esAditiva = !this.numero1.explicita && operacionesAditivas.includes(this.numero1.operacion);
         let esAditivaParentesable = (esAditiva && !operacionesAditivas.includes(this.operacion));
-        let parentesable = esAditivaParentesable || esNumNegativo;
+        let parentesable = esAditivaParentesable || (esNumNegativo && !esIncognita1);
         let enOperacionExplicita = operacionesExplicitas.includes(this.operacion) || this.operacion === 'radicacion'; //Para el número 1 la radicación es una operación que explicita la expresión
         let lado1NecesitaParentesis = parentesable && !enOperacionExplicita;
 
-        let enCasoEspecial = this.operacion === 'potencia' && lado1.operacion === 'division';
+        let enCasoEspecial = this.operacion === 'potenciacion' && !this.numero1.explicita && this.numero1.operacion === 'division';
 
         if (enCasoEspecial) {
             lado1NecesitaParentesis = true;
         }
 
         if (lado1NecesitaParentesis) {
-            console.log("Parentesing la expresion");
-            console.table(lado1);
             textoLado1 = "{(" + textoLado1 + ")}";
         }
 
 
         textoLado2 = "{" + textoLado2 + "}";
 
-        esNumNegativo = lado2.explicita && lado2.valor < 0;
-        esAditiva = lado2.operacion && operacionesAditivas.includes(lado2.operacion);
+        //Decidiendo si add paréntesis en el lado2.
+        esNumNegativo = this.numero2.explicita && this.numero2.valor < 0;
+        let esIncognita2 = this.numero2.explicita && this.numero2.letra;
+        esAditiva = !this.numero2.explicita && operacionesAditivas.includes(this.numero2.operacion);
         esAditivaParentesable = (esAditiva && this.operacion != 'suma');
-        parentesable = esAditivaParentesable || esNumNegativo;
+        parentesable = esAditivaParentesable || (esNumNegativo && !esIncognita2);
         enOperacionExplicita = operacionesExplicitas.includes(this.operacion);
-        lado2NecesitaParentesis = parentesable && !enOperacionExplicita;
+        let lado2NecesitaParentesis = parentesable && !enOperacionExplicita;
 
-        enCasoEspecial = !lado2.explicita && (this.operacion === 'potenciacion' || this.operacion === 'radicacion');
+        enCasoEspecial = !this.numero2.explicita && (this.operacion === 'potenciacion' || this.operacion === 'radicacion');
         if (enCasoEspecial) {
             lado2NecesitaParentesis = true;
         }
 
         if (lado2NecesitaParentesis) {
-            console.log("Parentesing la expresion");
-            console.table(lado2);
             textoLado2 = "{(" + textoLado2 + ")}";
         }
 
-
-        if (this.operacion != 'radicacion') {
-
-            res = textoLado1 + this.getSimboloOperacion() + textoLado2;
-        }
-
+        //Listos los dos textos de la expresión. Ahora se deben unir mediante el texto de la operación
         if (this.operacion === 'radicacion') {
-
-            res = `\\sqrt[${textoLado2}]{${textoLado1}}`;
+            return `\\sqrt[${textoLado2}]{${textoLado1}}`;
         }
-        return res;
+
+        let textoOperacion = this.simboloOperacion;
+        if(this.operacion==='multiplicacion' && (esIncognita2 || lado2NecesitaParentesis || this.numero2.operacion==='potenciacion')){
+           textoOperacion=""; 
+        }
+        return textoLado1 + textoOperacion + textoLado2;
     }
 
     getNumsAndAdress() {
@@ -573,11 +595,18 @@ class ExpresionNumerica {
         //direccion es un array que indica como encontrarlo recorriendo el árbol de la expresión.
 
         if (this.explicita) {
-            return [{ num: this.valor, direccion: [] }];
+            let infoEste: InfoNumeroAddress = {
+                num: this.valor,
+                direccion: []
+            }
+            return [infoEste];
+        }
+        if (!this.numero1 || !this.numero2) {
+            throw "Expresion rota"
         }
 
-        let arr1 = this.numero1.getNumsAndAdress();
-        let arr2 = this.numero2.getNumsAndAdress();
+        let arr1 = this.numero1.getNumsAndAdress() as InfoNumeroAddress[];
+        let arr2 = this.numero2.getNumsAndAdress() as InfoNumeroAddress[];
 
         arr1.forEach(infoNum => {
             infoNum.direccion.unshift(0);
@@ -590,16 +619,14 @@ class ExpresionNumerica {
 
     }
 
-    incognitarRandomNumero() {
-        let nums = this.getNumsAndAdress();
+    incognitarRandomNumero(this: ExpresionNumerica) {
+        let nums = this.getNumsAndAdress() as InfoNumeroAddress[];
         //Cada num es un objeto infoNumero.
 
         let numEscogido = nums[Math.floor(Math.random() * nums.length)];
 
-        console.log("se incognitará el " + numEscogido.num + " en la dirección " + numEscogido.direccion);
-
         let numeroActual = this;
-        for (let dir in numEscogido.direccion) {
+        for (let dir of numEscogido.direccion) {
             if (dir === 0) {
                 numeroActual = this.numero1;
                 continue;
@@ -607,6 +634,8 @@ class ExpresionNumerica {
             numeroActual = this.numero2;
         }
         numeroActual.letra = ExpresionNumerica.generarRandomLetra();
+        return numeroActual;
+
     }
 
     static generarRandomLetra() {
@@ -616,3 +645,45 @@ class ExpresionNumerica {
 }
 
 /////////////////////
+//
+function getDivisoresEnterosNumero(num: number) {
+    let lista: number[] = [];
+    let mitadNum = num / 2;
+
+    let factor = 2;
+
+    while (factor * factor <= num) {
+        if (num % factor === 0) {
+            //factor es divisor de num.
+
+            let multiplicador = 1;
+
+            //add también todos los múltiplos de este factor antes de la mitad de num;
+            let multiplo = factor * multiplicador;
+            while (multiplo < mitadNum) {
+
+                if (num % multiplo === 0) {
+                    if (!lista.includes(multiplo)) lista.push(multiplo);
+                    let contraparte = num / multiplo;
+                    if (contraparte != multiplo) {
+                        if (!lista.includes(contraparte)) lista.push(contraparte);
+                    }
+
+                }
+
+                multiplicador++;
+                multiplo = factor * multiplicador;
+
+            }
+        }
+
+
+        factor = factor === 2 ? 3 : factor + 2;
+    }
+    return [1, ...lista, num];
+}
+
+
+function getBaseLogNum(base: number, num: number) {
+    return Math.log(num) / Math.log(base);
+}

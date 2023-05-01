@@ -256,7 +256,7 @@ input {
 }
 
 .travelTop-enter-active {
-  animation: travelTop;
+  animation: traveltop;
   animation-duration: 1s;
   animation-iteration-count: 1;
   pointer-events: none;
@@ -269,6 +269,14 @@ input {
   animation-iteration-count: 1;
   animation-direction: reverse;
   pointer-events: none;
+}
+
+.enterTop-enter-active {
+  animation: traveltop;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  pointer-events: none;
+  opacity: 0;
 }
 
 .travelBottom-enter-active {
@@ -285,17 +293,28 @@ input {
   animation-direction: reverse;
   pointer-events: none;
 }
-@keyframes travelBottom {
+@keyframes travelbottom {
   0% {
-    transform: translateY(100%);
+    transform: translatey(100%);
     opacity: 0;
   }
   100% {
-    transform: translateY(0%);
+    transform: translatey(0%);
     opacity: 1;
   }
 }
 
+
+@keyframes traveltop {
+  0% {
+    transform: translatey(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translatey(0%);
+    opacity: 1;
+  }
+}
 .popIn-enter-active {
   animation: popIn;
   animation-duration: 0.3s;

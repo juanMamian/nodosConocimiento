@@ -9,6 +9,7 @@
     -expresión algebraica.
 -Hacer una herramienta de autoevaluación para el nodo de distributividad.
 -Crear una nueva sección en el nodo de multiplicación acerca del símbolo de la multiplicación.
+-Al convertir a mathjax, las divisiones de divisiones no muestran claramente cuál es operando de quién.
 -Hacer evaluacion del nodo de voltaje.
 -Corregir el nodo de funciones en javascript porque dice que para ejecutar la función hay que escribir el nombre de la variable.
 -Mas ejemplos para la explicación de operaciones aritméticas opuestas.

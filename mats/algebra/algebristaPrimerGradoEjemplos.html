@@ -37,101 +37,65 @@
             </div>
 
             <recuadro-component tipo="datoPrevio">
-                En esta ecuación no se puede proceso de despeje pues la incógnita hace parte
-                de la expresión <span class="resaltado"> \( (k+2) \)</span> que está aplicando una multiplicación
-                sobre el número <span class="resaltado">\( 3 \)</span>.
+                En esta ecuación la única operación que se puede trasladar tiene en su magnitud a la incógnita.
             </recuadro-component>
             <recuadro-component tipo="datoPrevio">
-                Se podrá iniciar el proceso de despeje cuando las operaciones estén aplicadas sobre
-                la incógnita.
+                Se debe manipular esta expresión para poder trasladar operaciones que no tengan como magnitud a la
+                incógnita.
             </recuadro-component>
 
             <div class="boton" @click="stepEjemplo1=1">
-                Reemplazar la expresión <span class="resaltado">\( 3(k+2) \)</span> por <span class="resaltado">\( 3k+ 3
-                    \cdot 2 \)</span> teniendo en cuenta la distributividad de la multiplicación sobre la suma.
+                Reemplazar la expresión <span class="resaltado">\( 3(k+2) \)</span> por <span class="resaltado">\( (k+
+                    2) \cdot 3 \)</span> teniendo en cuenta la conmutatividad de la multiplicación.
             </div>
 
             <transition name="travelTop">
                 <div class="ecuacion" v-show="stepEjemplo1>=1" v-show="stepEjemplo1>=1">
-                    \( 3k + 3 \cdot 2 = 39\)
+                    \( (k + 2) \cdot 3 = 39\)
                 </div>
             </transition>
 
-
             <transition name="fade">
                 <div v-show="stepEjemplo1>=1" class="boton" @click="stepEjemplo1=2">
-                    Reemplazar la expresión <span class="resaltado">\( ( 3 \cdot 2 ) \)</span> por su valor numérico.
+                    Trasladar la operación <span class="resaltado">multiplicación por 3</span>.
                 </div>
             </transition>
 
             <transition name="travelTop">
                 <div class="ecuacion" v-show="stepEjemplo1>=2">
-                    \( 3k + 6 = 39 \)
+                    \( k + 2 = {39 \over 3 }\)
                 </div>
             </transition>
 
             <transition name="fade">
                 <div v-show="stepEjemplo1>=2" class="boton" @click="stepEjemplo1=3">
-                    Reemplazar la expresión <span class="resaltado">\( 3k \)</span> por una expresión idéntica: <span
-                        class="resaltado">\( k \cdot 3 \)</span>.
+                    Trasladar la <span class="resaltado"> suma de 2 <span>
                 </div>
             </transition>
 
             <transition name="travelTop">
                 <div class="ecuacion" v-show="stepEjemplo1>=3">
-                    \( k \cdot 3 + 6 = 39 \)
+                    \( k = {{39 \over 3} - 2}\)
                 </div>
             </transition>
 
             <recuadro-component tipo="descubrimiento" v-show="stepEjemplo1>=3">
-                Esta ecuación está lista para el proceso de despeje.
+                La incógnita está despejada.
             </recuadro-component>
 
-
             <transition name="fade">
-                <div v-show="stepEjemplo1>=3" class="boton" @click="stepEjemplo1=4">
-                    Despejar la expresión <span class="resaltado"> \( k \cdot 3 \)</span>
+                <div v-show="stepEjemplo1>=3" class="boton" @click="stepEjemplo1=4" style="line-height: 28px;">
+                    Reemplazar la expresión de la derecha por su valor numérico.
                 </div>
             </transition>
 
             <transition name="travelTop">
                 <div class="ecuacion" v-show="stepEjemplo1>=4">
-                    \( k \cdot 3 = 39 - 6 \)
-                </div>
-            </transition>
-
-
-            <transition name="fade">
-                <div v-show="stepEjemplo1>=4" class="boton" @click="stepEjemplo1=5">
-                    Despejar <span class="resaltado">k</span>
-                </div>
-            </transition>
-
-            <transition name="travelTop">
-                <div class="ecuacion" v-show="stepEjemplo1>=5">
-                    \( k = { {39 - 6} \over 3} \)
-                </div>
-            </transition>
-
-            <recuadro-component tipo="descubrimiento" v-show="stepEjemplo1>=5">
-                La incógnita está despejada.
-            </recuadro-component>
-
-            <transition name="fade">
-                <div v-show="stepEjemplo1>=5" class="boton" @click="stepEjemplo1=6" style="line-height: 28px;">
-                    Reemplazar la expresión <span class="resaltado" style="padding: 4px 2px;">\( {39 - 6} \over 3
-                        \)</span> por su valor numérico:
-                    <span class="resaltado">\( 11 \)</span>.
-                </div>
-            </transition>
-
-            <transition name="travelTop">
-                <div class="ecuacion" v-show="stepEjemplo1>=6">
                     \( k = { 11 } \)
                 </div>
             </transition>
 
-            <recuadro-component tipo="descubrimiento" v-show="stepEjemplo1>=6">
+            <recuadro-component tipo="descubrimiento" v-show="stepEjemplo1>=4">
                 Se ha descubierto el valor de la incógnita.
             </recuadro-component>
 
@@ -145,13 +109,13 @@
             </div>
 
             <recuadro-component tipo="datoPrevio">
-                En esta ecuación la incógnita está repetida. El objetivo es producir una ecuación equivalente donde no
+                En esta ecuación la incógnita está repetida. El objetivo es deducir una ecuación donde no
                 lo esté.
                 Se buscará que los términos que contienen a la incógnita aparezcan consecutivamente para factorizar.
             </recuadro-component>
 
-            <div class="boton" @click="stepEjemplo2=1">Trasladar la <span class="resaltado">suma de \(3m\)</span>
-                
+            <div class="boton" @click="stepEjemplo2=1">
+                Trasladar la <span class="resaltado">suma de \(3m\)</span>
             </div>
 
 

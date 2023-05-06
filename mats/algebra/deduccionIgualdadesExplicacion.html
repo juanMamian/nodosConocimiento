@@ -28,84 +28,141 @@
 
 <body>
     <div id="doc">
-
-        Si se tiene que:
-        <ul>
-            <li><span class="matsExpresion">\(4 \times 2  = 11-3 \)</span></li>
-        </ul>
-
         <p>
-            Esta igualdad afirma que el número <span class="matsExpresion numeroOriginal">\(4 \times 2\)</span> y el
-            número <span class="matsExpresion numeroOriginal">\(11 - 3\)</span> son iguales.
+            Cuando se tiene una comparación entre dos números, es posible deducir otras comparaciones acerca de números
+            relacionados con los originales.
         </p>
 
         <p>
-            Si se construyen dos nuevos números aplicando una suma de la misma magnitud a ambos números originales así:
+            Cuando se construyen dos nuevos números aplicando la misma operación a los números originales es evidente
+            que la comparación entre ellos es semejante a la comparación entre los dos números originales.
         </p>
-        <ul>
-            <li>
-                <span class="matsExpresion">
-                    \((4 \times 2) + 6\)
-                </span>
-            </li>
-            <li>
-                <span class="matsExpresion">
-                    \((11 - 3) + 6\)
-                </span>
-            </li>
-        </ul>
 
-        Sobre ellos se puede deducir que:
+        <bloque-component tipo='ejemplo' @plegado="reiniciarBloque1">
+            <template #cabecera>
+                En este cuadro se muestran ejemplos de comparación de números y construcción de dos nuevos números
+                aplicando la misma operación en los dos números originales.
+            </template>
+            <div class='listaEjemplos'>
+                <div class='itemEjemplo'>
+                    <div class='matsExpresion' style="font-size: 20px">
+                        \(15 < 32 \) </div>
 
+                            <recuadro-component tipo='datoNuevo'>
+                                Se aplicará una suma de magnitud 5.
+                            </recuadro-component>
 
-        <recuadro-component tipo="datoNuevo" @click.native="toggleMostrandoDeduccion">
-            <div class="deduccion" v-show="!mostrandoDeduccionSimbolos">
-                Si <span class="matsExpresion numeroOriginal">\(4 \times 2\)</span> y <span
-                    class="matsExpresion numeroOriginal">\(11 - 3\)</span>
-                son iguales, entonces
-                <span class="matsExpresion numeroOriginal">\((4 \times 2)+6\)</span> y <span
-                    class="matsExpresion numeroOriginal">\((11 -
-                    3)+6\)</span> también son iguales.
-            </div>
-            <div class="deduccion" v-show="mostrandoDeduccionSimbolos">
-                <span class="">
-                    \((4 \times 2) = 11-3 => (4 \times 2)+6=(11 - 3)+6 \)
-                </span>
-            </div>
-        </recuadro-component>
+                            <div class='contenedorBotonesAplicacion'>
+                                <div class='bloqueGeneracionNumeros'>
+                                    <div class='boton' @click="ejemplo1OperacionAplicada1=true">
+                                        Aplicar la suma en el 15
+                                    </div>
+                                    <transition name="travelTop">
+                                        <div class='matsExpresion' v-show="ejemplo1OperacionAplicada1">
+                                            \(15 + 5\)
+                                        </div>
+                                    </transition>
+                                </div>
+                                <div class='bloqueGeneracionNumeros'>
+                                    <div class='boton' @click="ejemplo1OperacionAplicada2=true">
+                                        Aplicar la suma en el 32
+                                    </div>
+                                    <transition name="travelTop">
+                                        <div class='matsExpresion' v-show="ejemplo1OperacionAplicada2">
+                                            \(32 + 5\)
+                                        </div>
+                                    </transition>
+                                </div>
+                            </div>
 
-        <recuadro-component tipo="instruccionPointer" style="max-width: 300px;">
-            La deducción anterior se puede escribir en símbolos matemáticos. Presiona sobre ella para ver cómo.
-        </recuadro-component>
+                            <transition name="fadeIn">
+                                <recuadro-component tipo='datoNuevo'
+                                    v-show="ejemplo1OperacionAplicada1 && ejemplo1OperacionAplicada2">
+                                    Si el \(15\) es menor que el \( 32 \) entonces es evidente que el \(15 + 5 \)
+                                    también es
+                                    menor que el \( 32 + 5 \).
+                                </recuadro-component>
+                            </transition>
 
+                            <transition name="fadeIn">
+                                <div class='boton' @click="ejemplo1Expresado=true"
+                                    v-show="ejemplo1OperacionAplicada1 && ejemplo1OperacionAplicada2">
+                                    Escribir
+                                </div>
+                            </transition>
+
+                            <transition name="travelTop">
+                                <div class='matsExpresion' v-show="ejemplo1Expresado">
+                                    \( {15 + 5} < {32 + 5} \) </div>
+                            </transition>
+                    </div>
+                    <div class='itemEjemplo'>
+                        <div class='matsExpresion' style="font-size: 20px">
+                            \( 25 = 32 - 7 \) </div>
+
+                        <recuadro-component tipo='datoNuevo'>
+                            Se aplicará una radicación de magnitud 2.
+                        </recuadro-component>
+
+                        <div class='contenedorBotonesAplicacion'>
+                            <div class='bloqueGeneracionNumeros'>
+                                <div class='boton' @click="ejemplo2OperacionAplicada1=true">
+                                    Aplicar la radicación en el 25
+                                </div>
+                                <transition name="travelTop">
+                                    <div class='matsExpresion' v-show="ejemplo2OperacionAplicada1">
+                                        \( \sqrt[2]{25}\)
+                                    </div>
+                                </transition>
+                            </div>
+                            <div class='bloqueGeneracionNumeros'>
+                                <div class='boton' @click="ejemplo2OperacionAplicada2=true">
+                                    Aplicar la radicación en el \(32 - 7 \)
+                                </div>
+                                <transition name="travelTop">
+                                    <div class='matsExpresion' v-show="ejemplo2OperacionAplicada2">
+                                        \( \sqrt[2]{32 - 7}\)
+                                    </div>
+                                </transition>
+                            </div>
+                        </div>
+
+                        <transition name="fadeIn">
+                            <recuadro-component tipo='datoNuevo'
+                                v-show="ejemplo2OperacionAplicada1 && ejemplo2OperacionAplicada2">
+                                Si el \(25\) es menor que el \( 32 - 7 \) entonces es evidente que el \( \sqrt[2]{25} \)
+                                también es
+                                menor que el \( \sqrt[2]{ 32 - 7} \).
+                            </recuadro-component>
+
+                        </transition>
+
+                        <transition name="fadeIn">
+                            <div class='boton' @click="ejemplo2Expresado=true"
+                                v-show="ejemplo2OperacionAplicada1 && ejemplo2OperacionAplicada2">
+                                Escribir
+                            </div>
+                        </transition>
+
+                        <transition name="travelTop">
+                            <div class='matsExpresion' v-show="ejemplo2Expresado">
+                                \( \sqrt[2]{25 + 5} < \sqrt[2]{32 - 7} \) </div>
+                        </transition>
+                    </div>
+
+                </div>
+
+        </bloque-component>
 
         <p>
-            Este tipo de razonamiento permite producir igualdades que son consecuencia de la primera. Es decir: si la primera igualdad es verdadera, entonces estas también lo son. 
+            Este tipo de razonamiento permite producir comparaciones que son consecuencia de la primera. Es decir: si la
+            primera comparación es verdadera, entonces estas también lo son.
         </p>
 
         <recuadro-component tipo="datoPrevio">
-            Producir igualdades que deben ser verdaderas si la original es verdadera se conoce como <span class="resaltado">deducir igualdades</span>.
+            Producir comparaciones que deben ser verdaderas si la original es verdadera es una <span
+                class="resaltado">deducción de comparaciones</span>.
         </recuadro-component>
-
-
-        <p>
-        A partir de una igualdad es posible deducir muchas igualdades.
-        </p>
-        <bloque-component tipo="ejemplo"
-            textoCabecera="En este cuadro se pueden ver algunas otras deducciones a partir de la igualdad original.">
-            <ul style="line-height: 60px;">
-                <li>
-                    \(4 \times 2 = 11-3 => {(4 \times 2) \times 4} = {(11-3) \times 4} \)
-                </li>
-                <li>
-                    \(4 \times 2 = 11-3 => {(4 \times 2) \over 9} = {(11-3) \over 9} \)
-                </li>
-                <li>
-                    \(4 \times 2 = 11-3 => {(4 \times 2) - 6 } = {(11-3) - 6} \)
-                </li>
-            </ul>
-        </bloque-component>
-
 
     </div>
 </body>
@@ -122,6 +179,15 @@
         },
         data() {
             return {
+                ejemplo1OperacionAplicada1: false,
+                ejemplo1OperacionAplicada2: false,
+                ejemplo1Expresado: false,
+
+                ejemplo2OperacionAplicada1: false,
+                ejemplo2OperacionAplicada2: false,
+                ejemplo2Expresado: false,
+
+
                 operacionesBasicas: [
                     {
                         codigo: " + ",
@@ -173,6 +239,20 @@
             }
         },
         methods: {
+            reiniciarBloque1() {
+                this.reiniciarEjemplo1();
+                this.reiniciarEjemplo2();
+            },
+            reiniciarEjemplo1() {
+                this.ejemplo1OperacionAplicada1 = false;
+                this.ejemplo1OperacionAplicada2 = false;
+                this.ejemplo1Expresado = false;
+            },
+            reiniciarEjemplo2() {
+                this.ejemplo2OperacionAplicada1 = false;
+                this.ejemplo2OperacionAplicada2 = false;
+                this.ejemplo2Expresado = false;
+            },
             toggleMostrandoDeduccion() {
                 this.mostrandoDeduccionSimbolos = !this.mostrandoDeduccionSimbolos;
                 this.$nextTick(() => {
@@ -267,7 +347,14 @@
         text-align: center;
         margin-top: 10px;
     }
-    .matsExpresion{
-        font-size: 30px;
+
+    .matsExpresion {
+        font-size: 20px;
+    }
+
+    .contenedorBotonesAplicacion {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
     }
 </style>

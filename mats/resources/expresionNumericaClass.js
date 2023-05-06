@@ -21,7 +21,16 @@ class ExpresionNumerica {
             this._valor = res;
             return;
         }
-        console.log("No se pudo calcular valor de expresión numérica");
+    }
+    logToConsole() {
+        var _a, _b;
+        console.log({
+            valor: this.valor,
+            numero1: (_a = this.numero1) === null || _a === void 0 ? void 0 : _a.valor,
+            operacion: this.operacion,
+            numero2: (_b = this.numero2) === null || _b === void 0 ? void 0 : _b.valor,
+            letra: this.letra,
+        });
     }
     constructor(args = {}) {
         this.maxNumero = 250;
@@ -126,6 +135,12 @@ class ExpresionNumerica {
             this.minDenominadorEntero = opciones.minDenominadorEntero;
         this.rangoDenominadorEntero = this.maxDenominadorEntero - this.minDenominadorEntero;
         let operaciones = opciones.operaciones ? ExpresionNumerica.operaciones.filter(opD => opciones.operaciones.includes(opD)) : ExpresionNumerica.operaciones;
+        if (this.valor && this.valor < 0) {
+            operaciones = operaciones.filter(op => op != "radicacion");
+        }
+        if (opciones.keepInteger && this.valor != null && !isNaN(this.valor)) { // Si hay valor fijado no se puede garantizar que se podrá generar una potencia entera.
+            operaciones = operaciones.filter(op => op != 'potenciacion');
+        }
         if (this.operacion && !ExpresionNumerica.operaciones.includes(this.operacion)) {
             throw `La operación ${this.operacion} no es conocida`;
         }
@@ -134,13 +149,12 @@ class ExpresionNumerica {
             this.operacion = operaciones[indexOperacion];
         }
         //A partir de aquí ya hay operación
-        console.log("Operación: " + this.operacion);
         //Se crean los dos números vacíos.
         if (!this.numero1)
             this.numero1 = new ExpresionNumerica();
         if (!this.numero2)
             this.numero2 = new ExpresionNumerica();
-        if (!this.valor) { //NO se ha fijado valor de la expresión.
+        if (this.valor == null || isNaN(this.valor)) { //NO se ha fijado valor de la expresión.
             //Faltan ámbos números.
             if (!this.numero1.valor && !this.numero2.valor) {
                 this.numero1.valor = ExpresionNumerica.generarNumero();
@@ -214,23 +228,28 @@ class ExpresionNumerica {
         //Generando números para un valor dado
         if (this.valor) {
             if (!this.numero1.valor && !this.numero2.valor) { //Generando ámbos números base
+                this.numero1 = new ExpresionNumerica();
+                this.numero2 = new ExpresionNumerica();
                 //Empezando por el número 1.
                 if (this.operacion === 'potenciacion' && opciones.keepInteger) {
                     throw "Error para potenciacion. No es posible generar expresión: No se puede prever que un valor dado tendrá raiz entera de grado n";
                 }
-                if (this.operacion === 'radicacion') {
+                else if (this.operacion === 'radicacion') {
                     let exponente = Math.floor(Math.random() * this.rangoGradoRadicacion) + this.minGradoRadicacion;
                     this.numero1.valor = Math.pow(this.valor, exponente);
                 }
-                if (this.operacion === 'division' && opciones.keepInteger) {
+                else if (this.operacion === 'division' && opciones.keepInteger) {
                     let denominador = Math.round(Math.random() * this.rangoDenominadorEntero) + this.minDenominadorEntero;
                     this.numero1.valor = this.valor * denominador;
                 }
-                if (this.operacion === 'multiplicacion' && opciones.keepInteger) {
+                else if (this.operacion === 'multiplicacion' && opciones.keepInteger) {
                     let divisores = getDivisoresEnterosNumero(this.valor);
                     let cantDivisores = divisores.length;
                     let indexDivisor = Math.floor(Math.random() * cantDivisores);
                     this.numero1.valor = divisores[indexDivisor];
+                }
+                else {
+                    this.numero1.valor = ExpresionNumerica.generarNumero();
                 }
             }
             if (!this.numero1.valor || !this.numero2.valor) {
@@ -239,7 +258,8 @@ class ExpresionNumerica {
         }
     }
     get explicita() {
-        if (this.numero1 && this.numero2 && this.operacion) {
+        var _a, _b;
+        if (((_a = this.numero1) === null || _a === void 0 ? void 0 : _a.valor) && ((_b = this.numero2) === null || _b === void 0 ? void 0 : _b.valor) && this.operacion) {
             return false;
         }
         return true;
@@ -302,8 +322,6 @@ class ExpresionNumerica {
             return Math.pow(this.numero1.valor, this.numero2.valor);
         }
         if (this.operacion === 'radicacion') {
-            console.log("operando " + this.numero1.valor + " y 1/" + this.numero2.valor);
-            console.log(Math.pow(this.numero1.valor, 1 / this.numero2.valor));
             let res = Math.pow(this.numero1.valor, 1 / this.numero2.valor);
             if (Math.abs(res - Math.round(res)) < 0.0001) {
                 res = Math.round(res);
@@ -391,27 +409,29 @@ class ExpresionNumerica {
     reexpresionar(reexpresiones, opcionesGenerarExpresion) {
         //Esta función recorre la expresión numérica buscando un número escrito de manera explícita para convertirlo en expresión numérica. Repite esa acción 
         //{{reexpresiones}} veces.
-        if (!reexpresiones || (typeof reexpresiones) != "number") {
+        console.log("iniciando reexpresion");
+        if (reexpresiones == null || (typeof reexpresiones) != "number") {
             throw "No se especificó el número de reexpresiones";
         }
-        console.log(`Reexpresionando ${reexpresiones} veces la expresión`);
+        if (reexpresiones < 0)
+            reexpresiones = 0;
         for (var i = 0; i < reexpresiones; i++) {
             //Encontrar el lugar donde se hará reexpresión.
             let guarda = 0;
             let lugarActual = this;
             while (guarda++ < 100) {
                 if (lugarActual.explicita) {
-                    console.log("Se reexpresionará el " + lugarActual.valor);
                     lugarActual.fillExpresion(opcionesGenerarExpresion);
                     break;
                 }
+                if (!lugarActual.numero1 || !lugarActual.numero2) {
+                    throw "Expresión rota. No se puede reexpresionar";
+                }
                 let direccion = Math.ceil(Math.random() * 2);
-                console.log("Entrando en dirección " + direccion);
                 lugarActual = direccion === 1 ? lugarActual.numero1 : lugarActual.numero2;
                 if (!lugarActual) {
                     throw "Error recorriendo árbol: se accedió a una rama vacía";
                 }
-                lugarActual = direccion === 1 ? lugarActual.numero1 : lugarActual.numero2;
             }
         }
     }
@@ -548,4 +568,14 @@ function getDivisoresEnterosNumero(num) {
 }
 function getBaseLogNum(base, num) {
     return Math.log(num) / Math.log(base);
+}
+class ExpresionNumericaBuilder {
+    static generarExpresionNumericaRecursiva(datosExpresion, recursiones, opciones) {
+        let laExpresion = new ExpresionNumerica(datosExpresion);
+        laExpresion.fillExpresion();
+        if (recursiones && recursiones > 0) {
+            laExpresion.reexpresionar(recursiones, opciones);
+        }
+        return laExpresion;
+    }
 }

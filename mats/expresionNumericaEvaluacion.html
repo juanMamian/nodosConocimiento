@@ -10,7 +10,9 @@
     <script id="MathJax-script" async
         src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
-    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/funciones/mixinsMaths.js"></script>
+
+    <script
+        src="http://192.168.1.105:3000/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
 
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
@@ -27,7 +29,7 @@
 
 
 
-    <title>Evaluación - Expresión numérica</title>
+    <title>Expresión numérica - evaluación</title>
 </head>
 
 
@@ -36,6 +38,7 @@
     <p>
         Comprendo las expresiones numéricas si:
     </p>
+    
     <div id="doc">
         <bloque-component tipo="evaluacion"
             textoCabecera="Puedo expresar cualquier número en forma de expresión numérica usando cualquier operación aritmética.">
@@ -69,7 +72,8 @@
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dada cualquier expresión numérica puedo describirla en términos de realización de operaciones aritméticas.
+                Dada cualquier expresión numérica puedo describirla en términos de realización de operaciones
+                aritméticas.
             </template>
 
             <recuadro-component tipo="instruccionPointer">
@@ -111,7 +115,7 @@
 
                     Selecciona el nivel de dificultad
 
-                    <input type="range" step="1" min="1" max="5" v-model="dificultadExpresionOperador"
+                    <input type="range" step="1" min="1" max="4" v-model="dificultadExpresionOperador"
                         id="inputDificultadOperador">
 
                     <div class="valorDificultad">
@@ -155,7 +159,7 @@
 
             <transition name="travelTop">
                 <recuadro-component id="expresionReto" tipo="reto" v-if="expresionReto"
-                    :key="'ecuacion'+versionEcuacion">
+                    :key="'ecuacion'+versionExpresion">
 
                     <span style="font-size: 48px;">
                         \({{expresionString}}\)
@@ -165,9 +169,11 @@
                             Escribe aquí tu respuesta
                         </recuadro-component>
 
-                        <input type="number" style="width: 140px" id="inputRespuesta" ref="inputRespuestaUsuario" @keypress.enter="$refs.inputComprobarRespuestaEvaluar.click()">
+                        <input type="number" style="width: 140px" id="inputRespuesta" ref="inputRespuestaUsuario"
+                            @keypress.enter="$refs.inputComprobarRespuestaEvaluar.click()">
 
-                        <div class="boton" ref="inputComprobarRespuestaEvaluar" @click="comprobarRespuesta">Comprobar</div>
+                        <div class="boton" ref="inputComprobarRespuestaEvaluar" @click="comprobarRespuesta">Comprobar
+                        </div>
 
 
                     </div>
@@ -195,15 +201,14 @@
             bloqueComponent,
             enlaceComponent
         },
-        mixins: [mixinExpresionesNumericas],
         data() {
             return {
                 expresionReto: null,
                 estadoRespuesta: null,
                 expresionString: null,
-                versionEcuacion: 0,
+                versionExpresion: 0,
                 dificultadExpresion: 1,
-                versionRespuesta: 0,                
+                versionRespuesta: 0,
 
                 expresionRetoOperador: null,
                 estadoRespuestaOperador: null,
@@ -233,6 +238,7 @@
         methods: {
             generarExpresion() {
                 this.estadoRespuesta = null;
+                console.log("Generando con dificultad " + this.dificultadExpresion);
                 let valor = Math.round(Math.random() * 20);
                 let queSeaPotencia = Math.random() < (1 / 6);
                 let operaciones = ["multiplicacion", "suma", "resta", "division", "radicacion"]; //Como la potenciacion no se puede generar para un valor dado, se generarán todas excepto potenciación. Esta será generada aparte sin valor dado
@@ -246,24 +252,29 @@
                     minNumero: 50,
                 }
 
-                let ecuacion = this.expresionNumericaGenerarExpresionNumerica({ valor }, { ...opcionesGenerarExpresion, operaciones });
 
+                let laExpresion = null;
                 if (queSeaPotencia) { //Generar una potenciación sin especificar el valor.
                     console.log("Será potencia");
-                    ecuacion = this.expresionNumericaGenerarExpresionNumerica({ operacion: "potenciacion" }, opcionesGenerarExpresion);
+                    laExpresion = new ExpresionNumerica();
+                    laExpresion.fillExpresion({operacion: "potenciacion"}, opcionesGenerarExpresion);
+                }
+                else {
+                    laExpresion = new ExpresionNumerica({valor}, {...opcionesGenerarExpresion, operaciones});
+                    laExpresion.fillExpresion();
                 }
 
                 let reexpresiones = Math.round(Number(this.dificultadExpresion) - 1);
 
-                this.expresionReto = ecuacion;
 
                 if (reexpresiones > 0) {
-                    let plainExpresion = JSON.parse(JSON.stringify(this.expresionReto));
-                    this.expresionReto = this.expresionNumericaReexpresionarExpresion(plainExpresion, reexpresiones, {}, { ...opcionesGenerarExpresion, operaciones });
+                    laExpresion.reexpresionar(reexpresiones, {...opcionesGenerarExpresion, operaciones});
                 }
+                console.log("Generada");
 
-                this.expresionString = this.expresionNumericaToMathJax(this.expresionReto);
-                this.versionEcuacion++;
+                this.expresionReto=laExpresion;
+                this.expresionString = laExpresion.toMathJax();
+                this.versionExpresion++;
                 this.$nextTick(() => {
                     MathJax.typeset();
                 })
@@ -295,74 +306,77 @@
 
             generarExpresionOperador() {
                 this.estadoRespuestaOperador = null;
-                let valor = Math.round(Math.random() * 20);
-                let queSeaPotencia = Math.random() < (1 / 6);
-                let operaciones = ["multiplicacion", "suma", "resta", "division", "radicacion"]; //Como la potenciacion no se puede generar para un valor dado, se generarán todas excepto potenciación. Esta será generada aparte sin valor dado
+                console.log("creando con dificultad " + this.dificultadExpresionOperador);
+                let laExpresion=null;
+                if (this.dificultadExpresionOperador < 4) {
+                    laExpresion = ExpresionNumericaBuilder.generarExpresionNumericaRecursiva({}, this.dificultadExpresionOperador - 1, {keepInteger: true});
+                }
+                else if (this.dificultadExpresionOperador == 4) {
+                    //Se hará una serie de términos sumados o restados los cuales son multiplicaciones o divisiones.
+                    let expresiones = []
+                    for (let i = 0; i < 4; i++) {
+                        let termino = new ExpresionNumerica();
+                        termino.fillExpresion({}, {keepInteger: true, operaciones: ["multiplicacion", "division", "potenciacion"]});
+                        expresiones.push(termino);
+                    }
 
-                let opcionesGenerarExpresion = {
-                    keepInteger: true,
-                    maxExponentePotencia: 3,
-                    maxDenominadorEntero: 5,
-                    maxGradoRadicacion: 3,
-                    maxNumero: 50,
-                    minNumero: 50,
+                    let expresionFinal = expresiones[0];
+                    for (let i = 1; i < expresiones.length; i++) {
+                        expresionFinal = new ExpresionNumerica({
+                            numero1: expresionFinal,
+                            operacion: Math.random() < 0.5 ? "suma" : "resta",
+                            numero2: expresiones[i],
+                        });
+                    }
+                    laExpresion=expresionFinal;
+
+                }
+                else {
+                    throw "Dificultad " + this.dificultadExpresionOperador + " no desarrollada"
                 }
 
-                let ecuacion = this.expresionNumericaGenerarExpresionNumerica({ valor }, { ...opcionesGenerarExpresion, operaciones });
-
-                if (queSeaPotencia) { //Generar una potenciación sin especificar el valor.
-                    console.log("Será potencia");
-                    ecuacion = this.expresionNumericaGenerarExpresionNumerica({ operacion: "potenciacion" }, opcionesGenerarExpresion);
-                }
-
-                let reexpresiones = Math.round(Number(this.dificultadExpresionOperador) - 1);
-
-                this.expresionRetoOperador = ecuacion;
-
-                if (reexpresiones > 0) {
-                    let plainExpresion = JSON.parse(JSON.stringify(this.expresionRetoOperador));
-                    this.expresionRetoOperador = this.expresionNumericaReexpresionarExpresion(plainExpresion, reexpresiones, {}, { ...opcionesGenerarExpresion, operaciones });
-                }
-
-                this.expresionStringOperador = this.expresionNumericaToMathJax(this.expresionRetoOperador);
+                this.expresionRetoOperador = laExpresion;
+                this.expresionStringOperador =this.expresionRetoOperador.toMathJax(); 
                 this.versionExpresionOperador++;
                 this.$nextTick(() => {
                     MathJax.typeset();
                 })
             },
-           
+
             generarExpresion2() {
                 this.estadoRespuesta2 = null;
-                let valor = Math.round(Math.random() * 20);
-                let queSeaPotencia = Math.random() < (1 / 6);
-                let operaciones = ["multiplicacion", "suma", "resta", "division", "radicacion"]; //Como la potenciacion no se puede generar para un valor dado, se generarán todas excepto potenciación. Esta será generada aparte sin valor dado
 
-                let opcionesGenerarExpresion = {
-                    keepInteger: true,
-                    maxExponentePotencia: 3,
-                    maxDenominadorEntero: 5,
-                    maxGradoRadicacion: 3,
-                    maxNumero: 50,
-                    minNumero: 50,
+                console.log("creando con dificultad " + this.dificultadExpresion2);
+                let laExpresion=null;
+                if (this.dificultadExpresion2 < 4) {
+                    laExpresion = ExpresionNumericaBuilder.generarExpresionNumericaRecursiva({}, this.dificultadExpresion2 - 1, {keepInteger: true});
                 }
+                else if (this.dificultadExpresion2 == 4) {
+                    //Se hará una serie de términos sumados o restados los cuales son multiplicaciones o divisiones.
+                    let expresiones = []
+                    for (let i = 0; i < 4; i++) {
+                        let termino = new ExpresionNumerica();
+                        termino.fillExpresion({}, {keepInteger: true, operaciones: ["multiplicacion", "division", "potenciacion"]});
+                        expresiones.push(termino);
+                    }
 
-                let laExpresion = this.expresionNumericaGenerarExpresionNumerica({ valor }, { ...opcionesGenerarExpresion, operaciones });
+                    let expresionFinal = expresiones[0];
+                    for (let i = 1; i < expresiones.length; i++) {
+                        expresionFinal = new ExpresionNumerica({
+                            numero1: expresionFinal,
+                            operacion: Math.random() < 0.5 ? "suma" : "resta",
+                            numero2: expresiones[i],
+                        });
+                    }
+                    laExpresion=expresionFinal;
 
-                if (queSeaPotencia) { //Generar una potenciación sin especificar el valor.
-                    console.log("Será potencia");
-                    laExpresion = this.expresionNumericaGenerarExpresionNumerica({ operacion: "potenciacion" }, opcionesGenerarExpresion);
                 }
-
-                let reexpresiones = Math.round(Number(this.dificultadExpresion2) - 1);
+                else {
+                    throw "Dificultad " + this.dificultadExpresion2 + " no desarrollada"
+                }
 
                 this.expresionReto2 = laExpresion;
-
-                if (reexpresiones > 0) {
-                    let plainExpresion = JSON.parse(JSON.stringify(this.expresionReto2));
-                    this.expresionReto2 = this.expresionNumericaReexpresionarExpresion(plainExpresion, reexpresiones, {}, { ...opcionesGenerarExpresion, operaciones });
-                }
-
-                this.expresionString2 = this.expresionNumericaToMathJax(this.expresionReto2);
+                this.expresionString2 = laExpresion.toMathJax();
                 this.versionExpresion2++;
                 this.$nextTick(() => {
                     MathJax.typeset();
@@ -383,11 +397,11 @@
                     minNumero: 50,
                 }
 
-                let laExpresion = this.expresionNumericaGenerarExpresionNumerica({ valor }, { ...opcionesGenerarExpresion, operaciones });
+                let laExpresion = this.expresionNumericaGenerarExpresionNumerica({valor}, {...opcionesGenerarExpresion, operaciones});
 
                 if (queSeaPotencia) { //Generar una potenciación sin especificar el valor.
                     console.log("Será potencia");
-                    laExpresion = this.expresionNumericaGenerarExpresionNumerica({ operacion: "potenciacion" }, opcionesGenerarExpresion);
+                    laExpresion = this.expresionNumericaGenerarExpresionNumerica({operacion: "potenciacion"}, opcionesGenerarExpresion);
                 }
 
                 let reexpresiones = Math.round(Number(this.dificultadExpresion3) - 1);
@@ -396,7 +410,7 @@
 
                 if (reexpresiones > 0) {
                     let plainExpresion = JSON.parse(JSON.stringify(this.expresionReto3));
-                    this.expresionReto3 = this.expresionNumericaReexpresionarExpresion(plainExpresion, reexpresiones, {}, { ...opcionesGenerarExpresion, operaciones });
+                    this.expresionReto3 = this.expresionNumericaReexpresionarExpresion(plainExpresion, reexpresiones, {}, {...opcionesGenerarExpresion, operaciones});
                 }
 
                 this.expresionString3 = this.expresionNumericaToMathJax(this.expresionReto3);

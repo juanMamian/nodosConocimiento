@@ -38,6 +38,7 @@ li {
 }
 .selector.seleccionado {
   background-color: var(--paletaPrevio);
+  box-shadow: 1px 1px 1px 1px gray;
 }
 .resaltado {
   background-color: var(--paletaActual);

@@ -1,6 +1,8 @@
 -En el generador de expresiones el Math.pow no logra ejecutar una potencia a una fracción negativa y por lo tanto no puede generar una subexpresión para radicación de números negativos.
 -Terminar de hacer el generador de retos para manipulados basico de expresiones. Por el momento genera una expresión reexpresionada una sola vez y deja el trabajo de generar un reto para que algún experto se lo invente.
 -Hacer los ejemplos de expresionesSimplificadas en el nodo simplificacionCancelacionExplicacion.html
+-Introducir al nodo de deducción de comparaciones el asunto con las multiplicaciones por números negativos.
+-Revisar si el generador de expresiones respeta el valor de las expresion cuando se hace fillExpresion y reexpresiones.
 -Cambiar el nodo identidadAlgebraica por identidadMatematicas.
 -Hacer herramientas de autoevaluación para los nodos
     -distributividad.

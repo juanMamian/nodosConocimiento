@@ -60,5 +60,5 @@ const recuadroComponent = {
 
         }
     },
-    template: '<div class="recuadro" :class="{datoPrevio, datoNuevo, descubrimiento, instruccion, instruccionPointer, infoResultado, instruccionTeclado, reto, correcto, incorrecto}"> <img class="iconoRecuadro" :src="srcIcono" /> <div class="textoRecuadro"> <slot></slot> </div> </div>',
+    template: '<div class="recuadro" :class="{datoPrevio, datoNuevo, descubrimiento, instruccion, instruccionPointer, infoResultado, instruccionTeclado, reto, correcto, incorrecto}"> <img class="iconoRecuadro" :src="srcIcono" /> <div class="textoRecuadro"> <slot>{{modo}}</slot> </div> </div>',
 }

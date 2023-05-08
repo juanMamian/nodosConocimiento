@@ -32,10 +32,79 @@ interface opcionesGeneracionExpresion {
 }
 
 type OperacionConocida = typeof ExpresionNumerica.operaciones[number];
+type ComparadorEcuacion = "=" | "<" | ">";
+
+type ArgsEcInEcuacion= {
+    miembro1?: ExpresionNumerica,
+    miembro2?: ExpresionNumerica,
+    comparador?: ComparadorEcuacion,
+}
+class EcInEcuacion{
+    miembro1: ExpresionNumerica;
+    miembro2:ExpresionNumerica;
+    _comparador: ComparadorEcuacion;
+    constructor(args: ArgsEcInEcuacion){
+        if(args.miembro1){
+            this.miembro1=args.miembro1;
+        }
+        if(args.miembro2){
+            this.miembro2=args.miembro2;
+        }
+        if(args.comparador){
+            this.comparador=args.comparador;
+        }
+
+    }
+
+    get comparador(){
+        if(this._comparador ){
+            return this._comparador;
+        }
+        if(this.miembro1.valor == null || this.miembro2.valor==null){
+            throw "Imposible decidir comparador: Los miembros de la ecuación están rotos"
+        }
+
+        if(this.miembro1.valor===this.miembro2.valor){
+            return "="
+        }
+        else if(this.miembro1.valor < this.miembro2.valor){
+            return "<"
+        }
+        return ">";
+    }
+    set comparador(comp){
+        this._comparador=comp;
+    }
+
+    toMathJax(){
+        if(!this.comparador){
+            throw "No se puede generar string de EcInecuacion pues no hay comparador";
+        }
+
+        if(!this.miembro1 || !this.miembro2){
+            throw "No se puede generar string de EcInecuacion pues no hay miembros"
+        }
+
+        return "\\({" + this.miembro1.toMathJax() + "}" + this.comparador + "{" + this.miembro2.toMathJax() + "}\\)";
+    }
+}
 
 class ExpresionNumerica {
 
     static operaciones = ["suma", "resta", "multiplicacion", "division", "potenciacion", "radicacion"] as const;
+
+    static getOperacionOpuesta(operacion:OperacionConocida){
+        const indexOp=this.operaciones.indexOf(operacion);
+        if(indexOp < 0){
+            throw "Operación " + operacion + " no conocida";
+        }
+        if(indexOp%2 ===0){
+            return this.operaciones[indexOp + 1];
+        }
+        return this.operaciones[indexOp-1];
+
+    }
+
     static maxNumero = 250;
     static minNumero = -250;
 

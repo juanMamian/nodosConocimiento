@@ -1,4 +1,54 @@
+class EcInEcuacion {
+    constructor(args) {
+        if (args.miembro1) {
+            this.miembro1 = args.miembro1;
+        }
+        if (args.miembro2) {
+            this.miembro2 = args.miembro2;
+        }
+        if (args.comparador) {
+            this.comparador = args.comparador;
+        }
+    }
+    get comparador() {
+        if (this._comparador) {
+            return this._comparador;
+        }
+        if (this.miembro1.valor == null || this.miembro2.valor == null) {
+            throw "Imposible decidir comparador: Los miembros de la ecuación están rotos";
+        }
+        if (this.miembro1.valor === this.miembro2.valor) {
+            return "=";
+        }
+        else if (this.miembro1.valor < this.miembro2.valor) {
+            return "<";
+        }
+        return ">";
+    }
+    set comparador(comp) {
+        this._comparador = comp;
+    }
+    toMathJax() {
+        if (!this.comparador) {
+            throw "No se puede generar string de EcInecuacion pues no hay comparador";
+        }
+        if (!this.miembro1 || !this.miembro2) {
+            throw "No se puede generar string de EcInecuacion pues no hay miembros";
+        }
+        return "\\({" + this.miembro1.toMathJax() + "}" + this.comparador + "{" + this.miembro2.toMathJax() + "}\\)";
+    }
+}
 class ExpresionNumerica {
+    static getOperacionOpuesta(operacion) {
+        const indexOp = this.operaciones.indexOf(operacion);
+        if (indexOp < 0) {
+            throw "Operación " + operacion + " no conocida";
+        }
+        if (indexOp % 2 === 0) {
+            return this.operaciones[indexOp + 1];
+        }
+        return this.operaciones[indexOp - 1];
+    }
     set valor(arg) {
         if (this.numero1 && typeof this.numero1.valor === 'number' && this.numero2 && typeof this.numero2.valor === 'number') {
             throw "No se puede fijar valor en una expresión que ya tiene sus operandos fijados";

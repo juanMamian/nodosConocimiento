@@ -6,66 +6,183 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
-     
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.global.js"></script>
 
-    <title>Sumas</title>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
+    <link rel="stylesheet" <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Sumas - explicación</title>
 </head>
 
 <body>
     <div id="doc">
-        <div class="nota">
-            <img src="bombillo.png" alt="Idea" style="width: 25px;">
-            Sumar significa juntar. Es por eso que sumar dos números significa juntarlos.
-        </div>
+        <recuadro-component tipo='datoPrevio'>
+            Sumar significa poner. Por eso sumar números significa ponerle un número a otro número.
+        </recuadro-component>
 
-        <p>En el siguiente cuadro se suman dos números</p>
-        <div id="ejemplo1" class="cuadroEjemplo">
+        <recuadro-component tipo='datoPrevio'>
+            Cuando dos números están sumados, se usa la palabra <span class='resaltado'>mas</span> entre ellos.
+        </recuadro-component>
 
-            <button class="transversal" v-show="stepEjemplo1==0" style="justify-self: center;" @click="stepEjemplo1=1">Iniciar</button>
-            <button class="transversal" v-show="stepEjemplo1>1" style="justify-self: center;" @click="reiniciarEjemplo1">Reiniciar</button>
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se muestra cómo se usa la palabra más.
+            </template>
 
-            <button class="botonCrearNum" :style="{visibility : stepEjemplo1==1 && !mostrandoNum1 ? 'visible' : 'hidden'}" v-show="stepEjemplo1==1 && !mostrandoNum1" @click="mostrandoNum1=true" style="grid-column: 1/2;">
-                ¡Imaginar un 3!
-            </button>
-
-            <button class="botonCrearNum" :style="{visibility : stepEjemplo1==1 && !mostrandoNum2 ? 'visible' : 'hidden'}" @click="mostrandoNum2=true" style="grid-column: 2/3;">
-                ¡Imaginar un 2!
-            </button>
-            <div class="contenedorNumeroBolitas" style="grid-row: 3;">
-                <transition name="fade">
-                    <div class="numeroBolitas" v-show="stepEjemplo1>=1 && mostrandoNum1" :style="{right:stepEjemplo1>1?'0px':'50%'}">
-                        <div class="bolita" v-for="numero of 3" :key="'numero1'+numero"></div>
-                    </div>
-                </transition>
-            </div>
-
-            <div class="contenedorNumeroBolitas" style="grid-row: 3;">
-                <transition name="fade">
-                    <div class="numeroBolitas" v-show="stepEjemplo1>=1 && mostrandoNum2" :style="{left:stepEjemplo1>1?'0px':'50%'}">
-                        <div class="bolita" v-for="numero of 2" :key="'numero1'+numero"></div>
-                    </div>
-                </transition>
-            </div>
-
-            <button class="transversal" v-show="stepEjemplo1==1 && mostrandoNum1 && mostrandoNum2" style="grid-row: 4; align-self: center;" @click="stepEjemplo1=2" >¡Sumar estos números!</button>
-
-            <transition name="fade">
-                <div class="expresion transversal" v-show="stepEjemplo1>=2">Ahora están sumados. Es un número 5</div>
-            </transition>
+            <recuadro-component tipo='instruccionPointer'>
+                Presiona en cada cuadro para ver otro modo de decirlo.
+            </recuadro-component>
             
-        </div>
 
-        <div class="nota">
-            <img src="bombillo.png" alt="Idea" style="width: 25px;">
-            Para representar una suma se usa el símbolo <span class="resaltado" style="background-color: cadetblue;">+</span>.
+            <div class='listaEjemplos'>
+                <div class='itemEjemplo ejemploFormaMas' ref="ejemploMas1"
+                    @click="$refs.ejemploMas1.classList.toggle('mostrandoFormaMas')">
+                    <div class='formaSumar'>
+                        4 sumado con 3
+                    </div>
+                    <div class='formaMas'>
+                        4 mas 3
+                    </div>
+                </div>
+                <div class='itemEjemplo ejemploFormaMas' ref="ejemploMas2"
+                    @click="$refs.ejemploMas2.classList.toggle('mostrandoFormaMas')">
+                    <div class='formaSumar'>
+                        12 sumado con 8
+                    </div>
+                    <div class='formaMas'>
+                        12 mas 8
+                    </div>
+                </div>
+                <div class='itemEjemplo ejemploFormaMas' ref="ejemploMas3"
+                    @click="$refs.ejemploMas3.classList.toggle('mostrandoFormaMas')">
+                    <div class='formaSumar'>
+                        20 sumado con 1
+                    </div>
+                    <div class='formaMas'>
+                        20 mas 1
+                    </div>
+                </div>
+                <div class='itemEjemplo ejemploFormaMas' ref="ejemploMas4"
+                    @click="$refs.ejemploMas4.classList.toggle('mostrandoFormaMas')">
+                    <div class='formaSumar'>
+                        6 sumado con 13
+                    </div>
+                    <div class='formaMas'>
+                        6 mas 13
+                    </div>
+                </div>
+            </div>
 
-            <p>Gracias a ese símbolo se puede escribir:</p>
-                 <p><span class="resaltado" style="background-color: cadetblue;">Tres sumado con dos</span> </p>
-                 así: 
+        </bloque-component>
 
-                <p> <span style="background-color: cadetblue;" class="resaltado"> 3 + 2 </span> </p>
-        </div>
+
+        <bloque-component tipo='herramientaInteractiva' @plegado="reiniciarBloque">
+            <template #cabecera>
+                En este cuadro se muestra un número y se puede sumar.
+            </template>
+
+            <div class='flexVertical' style="position: relative" ref="contenedorSuma">
+
+                <input id='inputNumeroOriginal' type="range" min="0" max="30" v-model="numeroOriginal">
+
+                <div class='texto'>
+                    Este es el <span class='resaltado'> {{numeroOriginal}} {{numeroSumado > 0?'mas ':''}}{{numeroSumado
+                        || ''}}</span>.
+                </div>
+                <div class='numeroEnBolitas'>
+                    <div class='bolitaNumero' v-for="num of Number(numeroOriginal)" :key="'bolita'+num">
+                    </div>
+                    <div class='bolitaNumero bolitaSumada' v-for="num of Number(numeroSumado)" ref="bolitaSumada"
+                        :key="'bolitaSumada'+num">
+                    </div>
+                </div>
+
+
+
+                <div class='boton selector' :class="{activado: numeroSumado!=0, deshabilitado: numeroSumado!=0}"
+                    @click="iniciarSuma">
+                    Sumarle {{numeroSumar}}
+                </div>
+
+                <div class='numeroEnBolitas'>
+                    <div class='bolitaNumero' v-for="num of Number(numeroSumar) - Number(numeroSumado)"
+                        :key="'bolitaSumar' + num" ref="bolitaSumar"></div>
+                </div>
+                <input id='inputNumeroSumar' type="range" min="0" max="30" v-model="numeroSumar">
+
+                <div class='bolitaNumero bolitaViajera' v-for="num of Number(numeroSumar)" :key="'bolitaViajera'+num"
+                    ref="bolitaViajera">
+                </div>
+
+            </div>
+
+        </bloque-component>
+
+        <p>
+            El símbolo para la suma es <span class='resaltado'>+</span>.
+        </p>
+
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se muestra cómo se usa el símbolo de suma
+            </template>
+            
+            <recuadro-component tipo='instruccionPointer'>
+                Presiona en cada cuadro para ver otro modo de escribir una suma
+            </recuadro-component>
+            <div class='listaEjemplos'>
+                <div class='itemEjemplo ejemploFormaSimbolo' ref="ejemploFormaSimbolo1" @click="$refs.ejemploFormaSimbolo1.classList.toggle('mostrandoFormaSimbolo')">
+                  <div class='formaMas'>
+                      4 mas 12
+                  </div>
+                  <div class='formaSimbolo'>
+                      4+12
+                  </div>
+
+                </div>
+                <div class='itemEjemplo ejemploFormaSimbolo' ref="ejemploFormaSimbolo2" @click="$refs.ejemploFormaSimbolo2.classList.toggle('mostrandoFormaSimbolo')">
+                  <div class='formaMas'>
+                      0 mas 1
+                  </div>
+                  <div class='formaSimbolo'>
+                      0+1
+                  </div>
+
+                </div>
+                <div class='itemEjemplo ejemploFormaSimbolo' ref="ejemploFormaSimbolo3" @click="$refs.ejemploFormaSimbolo3.classList.toggle('mostrandoFormaSimbolo')">
+                  <div class='formaMas'>
+                      20 mas 100
+                  </div>
+                  <div class='formaSimbolo'>
+                      20+100
+                  </div>
+
+                </div>
+                <div class='itemEjemplo ejemploFormaSimbolo' ref="ejemploFormaSimbolo4" @click="$refs.ejemploFormaSimbolo4.classList.toggle('mostrandoFormaSimbolo')">
+                  <div class='formaMas'>
+                      1 mas 1
+                  </div>
+                  <div class='formaSimbolo'>
+                      1+1
+                  </div>
+
+                </div>
+            </div>
+
+        </bloque-component>
+        
+        
 
     </div>
 </body>
@@ -73,105 +190,120 @@
 </html>
 
 <script>
-    const doc = new Vue({
+    const {createApp} = Vue;
+    createApp({
         el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+        },
         data() {
             return {
-                stepEjemplo1: 0,
-                mostrandoNum1:false,
-                mostrandoNum2:false,
+                numeroOriginal: 4,
+                numeroSumar: 3,
+                numeroSumado: 0,
             }
         },
-        methods:{
-            reiniciarEjemplo1(){
-                this.stepEjemplo1=0;
-                this.mostrandoNum1=false;
-                this.mostrandoNum2=false;
+        methods: {
+            reiniciarBloque() {
+                this.numeroOriginal = 4;
+                this.numeroSumar = 3;
+                this.numeroSumado = 0;
+            },
 
-            }
+            iniciarSuma() {
+                if (this.numeroSumado != 0) {
+                    return;
+                }
+                this.sumar();
+            },
+            sumar() {
+                if (this.numeroSumado >= this.numeroSumar) {
+                    return;
+                }
+                let posContenedor = this.$refs.contenedorSuma.getBoundingClientRect();
+                let rectFrom = this.$refs.bolitaSumar[0].getBoundingClientRect();
+                let posFrom = {
+                    x: rectFrom.left - posContenedor.left,
+                    y: rectFrom.top - posContenedor.top,
+                }
+                this.numeroSumado++;
+                let i = this.numeroSumado - 1;
+                this.$nextTick(() => {
+
+                    const rectTo = this.$refs.bolitaSumada[i].getBoundingClientRect();
+                    const posTo = {
+                        x: rectTo.left - posContenedor.left,
+                        y: rectTo.top - posContenedor.top,
+                    }
+                    this.$refs.bolitaViajera[i].animate([
+                        {left: posFrom.x + 'px', top: posFrom.y + 'px', visibility: 'visible'},
+                        {left: posTo.x + 'px', top: posTo.y + 'px', visibility: 'visible'}
+                    ], {duration: 700}).finished.then(() => {
+                        this.$refs.bolitaSumada[i].style.opacity = 1;
+                    });
+                });
+
+                setTimeout(() => {
+                    this.sumar();
+                }, 900);
+            },
+
+        },
+        watch: {
+            numeroOriginal(num) {
+                this.numeroSumado = 0;
+            },
+            numeroSumar(){
+                this.numeroSumado=0;
+            },
+            
         }
-    })
+    }).mount("#doc");
 </script>
 
 <style>
-    body {
-        padding: 2% 5%;
+.ejemploFormaMas{
+    width: min(159px, 90%);
+}
+    .ejemploFormaMas:not(.mostrandoFormaMas) .formaMas {
+        display: none;
+    }
+    .ejemploFormaMas:not(.mostrandoFormaMas) .formaSumar {
+        display: block;
     }
 
-
-    .nota {
-        margin: 5px auto;
-        border-radius: 15px;
-        background-color: rgb(233, 185, 150);
-        padding: 15px;
-        width: min(600px, 90%);
+    .ejemploFormaMas.mostrandoFormaMas .formaMas {
+        display: block;
+    }
+    .ejemploFormaMas.mostrandoFormaMas .formaSumar {
+        display: none;
     }
 
-    .botonCrearNum{
-        justify-self: center;
-    }
-
-    button{
-        padding: 20px 10px
-    }
-
-    .resaltado{
-        padding: 2px 3px;
-        border-radius: 2px;
-    }
-
-    .expresion{
-        font-size: 20px;
-        border-radius: 15px;
-        background-color: rgba(95, 158, 160, 0.582);
-        padding: 15px 10px;
-        display: inline-block;
-        justify-self: center;
-    }
-    .cuadroEjemplo {
-        padding: 20px 20px;
-        border: 2px solid cadetblue;
-        border-radius: 10px;
-        margin: 20px 0px;
-    }
-
-    #ejemplo1 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-
-    }
-
-    .transversal {
-        grid-column: 1/3;
-    }
-    .contenedorNumeroBolitas{
-        position: relative;
-        height: 50px;
-    }
-
-    .numeroBolitas{
-        text-align: center;
-        display: inline-block;
-        position: absolute;
-        transition: left 1s, right 1s;
-    }
-
-    .bolita{
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background-color:chocolate;
-        margin: 5px;
-        display: inline-block;
-    }
-
-    .fade-enter{
+    .bolitaSumada {
         opacity: 0;
     }
-    .fade-enter-active{
-        transition: opacity 0.8s;
+
+    .bolitaViajera {
+        position: absolute;
+        opacity: 0.6;
+        visibility: hidden;
     }
-    .fade-enter-to{
-        opacity: 1;
+
+    .ejemploFormaSimbolo{
+        width: min(150px, 90%);
+    }
+    .ejemploFormaSimbolo:not(.mostrandoFormaSimbolo) .formaMas{
+        display: block;
+    }
+    .ejemploFormaSimbolo:not(.mostrandoFormaSimbolo) .formaSimbolo{
+        display: none;
+    }
+    
+    .ejemploFormaSimbolo.mostrandoFormaSimbolo .formaMas{
+        display: none;
+    }
+    .ejemploFormaSimbolo.mostrandoFormaSimbolo .formaSimbolo{
+        display: block;
     }
 </style>

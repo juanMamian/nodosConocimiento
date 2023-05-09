@@ -5,16 +5,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.global.js"></script>
 
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
     <title>Multiplicación</title>
 </head>
@@ -24,31 +29,85 @@
 
         <recuadro-component class="datoPrevio">
             Multiplicación significa repetición. Así que multiplicar un número significa repetirlo.
-        </recuadro-component>        
+        </recuadro-component>
 
-        <bloque-component @plegado="multiplicador=1" tipo="ejemplo" textoCabecera="En este cuadro se puede ver un número 6 y multiplicarlo.">
-            <p style="text-align: center;">
-                Este es un número 6:
-            </p>
-            <div class="numero" v-for="rep of multiplicador" :key="'fila'+rep">
-                <div class="bolita" v-for="num of 6" :key="'bolita'+rep+num"></div>
+        <p>
+            Para decir que un número está multiplicado varias veces se usa la palabra <span
+                class='resaltado'>por</span>.
+        </p>
+
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se muestra el uso de la palabra <span class='resaltado'>por</span>.
+            </template>
+            <div class='listaEjemplos'>
+                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor1"
+                    @click="$refs.ejemploFormaPor1.classList.toggle('mostrandoFormaPor')">
+                    <div class='formaVeces'>
+                        8 multiplicado 3 veces.
+                    </div>
+                    <div class='formaPor'>
+                        8 multiplicado por 3.
+                    </div>
+                </div>
+                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor2"
+                    @click="$refs.ejemploFormaPor2.classList.toggle('mostrandoFormaPor')">
+                    <div class='formaVeces'>
+                        2 multiplicado 1 vez.
+                    </div>
+                    <div class='formaPor'>
+                        2 multiplicado por 1.
+                    </div>
+                </div>
+                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor3"
+                    @click="$refs.ejemploFormaPor3.classList.toggle('mostrandoFormaPor')">
+                    <div class='formaVeces'>
+                        100 multiplicado 0 veces.
+                    </div>
+                    <div class='formaPor'>
+                        100 multiplicado por 0.
+                    </div>
+                </div>
+                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor4"
+                    @click="$refs.ejemploFormaPor4.classList.toggle('mostrandoFormaPor')">
+                    <div class='formaVeces'>
+                        118 multiplicado 12 veces.
+                    </div>
+                    <div class='formaPor'>
+                        118 multiplicado por 12.
+                    </div>
+                </div>
             </div>
-
-            <div class="boton" id="botonMultiplicar" @click="multiplicador++">
-                ¡Multiplicar!
-            </div>
-
-            <recuadro-component v-show="multiplicador>1" tipo="datoNuevo">
-                ¡Ahora está multiplicado por {{multiplicador}}!
-            </recuadro-component>
-
-
         </bloque-component>
 
-        <recuadro-component tipo="instruccion">En la sección "El juego de la multiplicación" puedes multiplicar números representados por bolitas.</recuadro-component>
 
-        
-        
+        <bloque-component @plegado="multiplicador=1" tipo="ejemplo"
+            textoCabecera="En este cuadro se puede ver un número y multiplicarlo.">
+            <div class='flexVertical'>
+                <input id='inputNumeroOriginal' type="range" min="0" max="12" v-model="numeroOriginal">
+                <p style="text-align: center;">
+                    Este es un número {{numeroOriginal}}.
+                </p>
+                <div id='contenedorMultiplicacion'>
+                    <transition-group name="enterTop">
+                        <div class="numeroEnBolitas" v-for="rep of multiplicador" :key="'fila'+rep"
+                            style="margin: 10px auto">
+                            <div class="bolitaNumero" v-for="num of Number(numeroOriginal)" :key="'bolita'+rep+num">
+                            </div>
+                        </div>
+                    </transition-group>
+                </div>
+
+                <div class="boton" id="botonMultiplicar" @click="multiplicador++" style="margin: 20px auto ">
+                    ¡Multiplicar!
+                </div>
+
+                <recuadro-component v-show="multiplicador>1" tipo="datoNuevo">
+                    ¡Ahora está multiplicado por {{multiplicador}}!
+                </recuadro-component>
+            </div>
+        </bloque-component>
+
 
     </div>
 </body>
@@ -56,45 +115,62 @@
 </html>
 
 <script>
-    const doc = new Vue({
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
         el: "#doc",
-        data(){
+        data() {
             return {
-                multiplicador:1,
+                numeroOriginal: 6,
+                multiplicador: 1,
+            }
+        },
+        methods: {
+            reiniciarBloque1() {
+                this.numeroOriginal = 6;
+                this.multiplicador = 1;
+            },
+
+        },
+        watch: {
+            numeroOriginal() {
+                this.multiplicador = 1;
             }
         }
-        
-    })
+
+    }).mount("#doc");
 </script>
 
 <style>
-    body {
-        padding: 2% 5%;
-    }  
-    .nota {
-        margin: 5px auto;
-        border-radius: 15px;
-        background-color: rgb(233, 185, 150);
-        padding: 15px;
-        width: min(600px, 90%);
-    }
-
-    .numero{
+    #contenedorMultiplicacion {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
     }
 
-    .bolita{
-        width: 20px;
-        height: 20px;
-        margin: 10px;
-        border-radius: 50%;
-        background-color: orange;
+    .ejemploFormaPor {
+        cursor: pointer;
+        width: min(150px, 90%);
+    }
+
+    .ejemploFormaPor:not(.mostrandoFormaPor) .formaVeces {
+        display: block;
+    }
+
+    .ejemploFormaPor:not(.mostrandoFormaPor) .formaPor {
+        display: none;
+    }
+
+    .ejemploFormaPor.mostrandoFormaPor .formaVeces {
+        display: none;
+    }
+
+    .ejemploFormaPor.mostrandoFormaPor .formaPor {
+        display: block;
     }
 </style>

@@ -68,16 +68,20 @@
                 </div>
 
                 <transition name="enterTop">
-                    <div id='reto3' class='matsExpresion' v-if="reto3" :key="'reto3v'+versionReto3" style="font-size: 30px">
+                    <div id='reto3' class='matsExpresion' v-if="reto3" :key="'reto3v'+versionReto3"
+                        style="font-size: 30px">
                         \({{reto3.toMathJax()}}\)
                     </div>
                 </transition>
                 <transition name="fadeIn">
-                    <div class='contenedorBotonesRespuestaPresenciaDistibucionReto3' v-if="presenciaDistribucionReto3!=null">
-                        <div class='boton selector' @click="setRespuestaPresenciaDistribucionReto3(true)" :class="{seleccionado: respuestaPresenciaDistribucionReto3===true}">
+                    <div class='contenedorBotonesRespuestaPresenciaDistibucionReto3'
+                        v-if="presenciaDistribucionReto3!=null">
+                        <div class='boton selector' @click="setRespuestaPresenciaDistribucionReto3(true)"
+                            :class="{seleccionado: respuestaPresenciaDistribucionReto3===true}">
                             Hay distribución
                         </div>
-                        <div class='boton selector' @click="setRespuestaPresenciaDistribucionReto3(false)" :class="{seleccionado: respuestaPresenciaDistribucionReto3===false}">
+                        <div class='boton selector' @click="setRespuestaPresenciaDistribucionReto3(false)"
+                            :class="{seleccionado: respuestaPresenciaDistribucionReto3===false}">
                             No hay distribución
                         </div>
 
@@ -127,26 +131,27 @@
         }
         //Ahora se sabe que esta es una expresión .
 
-        if (!expresion.numero1.numero1 || !expresion.numero1.numero2 || !expresion.numero1.operacion) {
-            return false;
-        }
-        //Ahora se sabe que el numero1 es también una expresión.
 
         let contieneDistribucion = false;
         if (checkOperacionDistribuidaExpresion(expresion.numero1) || checkOperacionDistribuidaExpresion(expresion.numero2)) {
             contieneDistribucion = true;
         }
-        if (expresion.numero1.operacion === "suma" || expresion.numero1.operacion === 'resta') {
-            if (expresion.operacion === "multiplicacion" || expresion.operacion === 'division') {
-                contieneDistribucion = true;
-            }
-        }
-        if (expresion.numero1.operacion === "multiplicacion" || expresion.numero1.operacion === 'division') {
-            if (expresion.operacion === "potenciacion" || expresion.operacion === 'radicacion') {
-                contieneDistribucion = true;
-            }
-        }
 
+
+        if (expresion.numero1.numero1 != null && expresion.numero1.numero2 != null && expresion.numero1.operacion != null) {
+            //Ahora se sabe que el numero1 es también una expresión.
+            if (expresion.numero1.operacion === "suma" || expresion.numero1.operacion === 'resta') {
+                if (expresion.operacion === "multiplicacion" || expresion.operacion === 'division') {
+                    contieneDistribucion = true;
+                }
+            }
+            if (expresion.numero1.operacion === "multiplicacion" || expresion.numero1.operacion === 'division') {
+                if (expresion.operacion === "potenciacion" || expresion.operacion === 'radicacion') {
+                    contieneDistribucion = true;
+                }
+            }
+
+        }
         return contieneDistribucion;
 
     }
@@ -170,8 +175,21 @@
             }
         },
         methods: {
+            generarExpresionPrueba() {
+                let laExpresion = new ExpresionNumerica({operacion: "resta"});
+                laExpresion.numero1 = new ExpresionNumerica({valor: 1});
+                laExpresion.numero2 = new ExpresionNumerica({operacion: "radicacion"});
+                laExpresion.numero2.numero1 = new ExpresionNumerica({
+                    numero1: new ExpresionNumerica({valor: 2}),
+                    numero2: new ExpresionNumerica({valor: 4}),
+                    operacion: "division"
+                })
+                laExpresion.numero2.numero2 = new ExpresionNumerica({valor: 2});
+                return laExpresion;
+            },
+
             generarReto3() {
-                this.reto3=null;
+                this.reto3 = null;
                 this.presenciaDistribucionReto3 = null;
                 this.respuestaPresenciaDistribucionReto3 = null;
 
@@ -179,8 +197,11 @@
                 expresion.fillExpresion({keepInteger: true});
                 expresion.reexpresionar(Number(this.dificultadReto3), {keepInteger: true});
 
+
+
                 this.reto3 = expresion;
-                this.presenciaDistribucionReto3 = checkOperacionDistribuidaExpresion(expresion);
+
+                this.presenciaDistribucionReto3 = checkOperacionDistribuidaExpresion(this.reto3);
                 this.versionReto3++;
             },
             setRespuestaPresenciaDistribucionReto3(res) {

@@ -130,6 +130,13 @@ class ExpresionNumerica {
         }
         throw "Error calculando valor de expresión";
     }
+
+    get fullExpresion(){
+        if(this.numero1 instanceof ExpresionNumerica && this.numero2 instanceof ExpresionNumerica && this.operacion != null){
+            return true
+        }
+        return false;
+    }
     calcularValor() {
         let res = this.operarNumeros();
         if (typeof res === 'number') {

@@ -8,7 +8,7 @@
 
     <script id="MathJax-script" async
         src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
-    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.global.js"></script>
 
 
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
@@ -71,8 +71,8 @@
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
@@ -84,7 +84,7 @@
             }
         },
 
-    })
+    }).mount("#doc");
 </script>
 
 <style>

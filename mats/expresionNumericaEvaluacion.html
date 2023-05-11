@@ -72,6 +72,39 @@
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
+                Dada cualquier expresión numérica puedo señalar los operandos de cada operación.
+            </template>
+
+            <recuadro-component tipo="instruccionPointer">
+
+                <div class="bloqueSeleccionDificultad">
+
+                    Selecciona el nivel de dificultad
+
+                    <input type="range" step="1" min="1" max="4" v-model="dificultadExpresionOperador"
+                        id="inputDificultadOperador">
+
+                    <div class="valorDificultad">
+                        {{dificultadExpresionOperador}}
+                    </div>
+                </div>
+                <div class="boton" @click="generarExpresionOperador">Generar expresión numérica</div>
+            </recuadro-component>
+
+            <transition name="travelTop">
+                <recuadro-component id="expresionRetoOperador" tipo="reto" v-if="expresionRetoOperador"
+                    :key="'expresion'+versionExpresionOperador">
+
+                    <span style="font-size: 48px;">
+                        \({{expresionStringOperador}}\)
+                    </span>
+
+                </recuadro-component>
+            </transition>
+        </bloque-component>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
                 Dada cualquier expresión numérica puedo describirla en términos de realización de operaciones
                 aritméticas.
             </template>
@@ -98,39 +131,6 @@
 
                     <span style="font-size: 48px;">
                         \({{expresionString2}}\)
-                    </span>
-
-                </recuadro-component>
-            </transition>
-        </bloque-component>
-
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dada cualquier expresión numérica puedo señalar los operandos de cada operación.
-            </template>
-
-            <recuadro-component tipo="instruccionPointer">
-
-                <div class="bloqueSeleccionDificultad">
-
-                    Selecciona el nivel de dificultad
-
-                    <input type="range" step="1" min="1" max="4" v-model="dificultadExpresionOperador"
-                        id="inputDificultadOperador">
-
-                    <div class="valorDificultad">
-                        {{dificultadExpresionOperador}}
-                    </div>
-                </div>
-                <div class="boton" @click="generarExpresionOperador">Generar expresión numérica</div>
-            </recuadro-component>
-
-            <transition name="travelTop">
-                <recuadro-component id="expresionRetoOperador" tipo="reto" v-if="expresionRetoOperador"
-                    :key="'expresion'+versionExpresionOperador">
-
-                    <span style="font-size: 48px;">
-                        \({{expresionStringOperador}}\)
                     </span>
 
                 </recuadro-component>

@@ -1,4 +1,8 @@
+"use strict";
 class EcInEcuacion {
+    miembro1;
+    miembro2;
+    _comparador;
     constructor(args) {
         if (args.miembro1) {
             this.miembro1 = args.miembro1;
@@ -39,6 +43,7 @@ class EcInEcuacion {
     }
 }
 class ExpresionNumerica {
+    static operaciones = ["suma", "resta", "multiplicacion", "division", "potenciacion", "radicacion"];
     static getOperacionOpuesta(operacion) {
         const indexOp = this.operaciones.indexOf(operacion);
         if (indexOp < 0) {
@@ -49,6 +54,13 @@ class ExpresionNumerica {
         }
         return this.operaciones[indexOp - 1];
     }
+    static maxNumero = 250;
+    static minNumero = -250;
+    numero1;
+    numero2;
+    operacion;
+    letra;
+    _valor;
     set valor(arg) {
         if (this.numero1 && typeof this.numero1.valor === 'number' && this.numero2 && typeof this.numero2.valor === 'number') {
             throw "No se puede fijar valor en una expresión que ya tiene sus operandos fijados";
@@ -79,37 +91,36 @@ class ExpresionNumerica {
         }
     }
     logToConsole() {
-        var _a, _b;
         console.log({
             valor: this.valor,
-            numero1: (_a = this.numero1) === null || _a === void 0 ? void 0 : _a.valor,
+            numero1: this.numero1?.valor,
             operacion: this.operacion,
-            numero2: (_b = this.numero2) === null || _b === void 0 ? void 0 : _b.valor,
+            numero2: this.numero2?.valor,
             letra: this.letra,
         });
     }
+    maxNumero = 250;
+    minNumero = -250;
+    rangoNumero = this.maxNumero - this.minNumero;
+    minResultadoRadicacion = 2;
+    maxResultadoRadicacion = 50;
+    rangoResultadoRadicacion = this.maxResultadoRadicacion - this.minResultadoRadicacion;
+    minGradoRadicacion = 2;
+    maxGradoRadicacion = 6;
+    rangoGradoRadicacion = this.maxGradoRadicacion - this.minGradoRadicacion;
+    minGradoPotenciacion = 2;
+    maxGradoPotenciacion = 6;
+    rangoGradoPotenciacion = this.maxGradoPotenciacion - this.minGradoPotenciacion;
+    minDenominadorEntero = 2;
+    maxDenominadorEntero = 30;
+    rangoDenominadorEntero = this.maxDenominadorEntero - this.minDenominadorEntero;
+    minBasePotencia = 2;
+    maxBasePotencia = 15;
+    rangoBasePotencia = this.maxBasePotencia - this.minBasePotencia;
+    minExponentePotencia = 2;
+    maxExponentePotencia = 6;
+    rangoExponentePotencia = this.maxExponentePotencia - this.minExponentePotencia;
     constructor(args = {}) {
-        this.maxNumero = 250;
-        this.minNumero = -250;
-        this.rangoNumero = this.maxNumero - this.minNumero;
-        this.minResultadoRadicacion = 2;
-        this.maxResultadoRadicacion = 50;
-        this.rangoResultadoRadicacion = this.maxResultadoRadicacion - this.minResultadoRadicacion;
-        this.minGradoRadicacion = 2;
-        this.maxGradoRadicacion = 6;
-        this.rangoGradoRadicacion = this.maxGradoRadicacion - this.minGradoRadicacion;
-        this.minGradoPotenciacion = 2;
-        this.maxGradoPotenciacion = 6;
-        this.rangoGradoPotenciacion = this.maxGradoPotenciacion - this.minGradoPotenciacion;
-        this.minDenominadorEntero = 2;
-        this.maxDenominadorEntero = 30;
-        this.rangoDenominadorEntero = this.maxDenominadorEntero - this.minDenominadorEntero;
-        this.minBasePotencia = 2;
-        this.maxBasePotencia = 15;
-        this.rangoBasePotencia = this.maxBasePotencia - this.minBasePotencia;
-        this.minExponentePotencia = 2;
-        this.maxExponentePotencia = 6;
-        this.rangoExponentePotencia = this.maxExponentePotencia - this.minExponentePotencia;
         if (args.valor != null)
             this.valor = Number(args.valor);
         if (args.numero1) {
@@ -314,8 +325,7 @@ class ExpresionNumerica {
         }
     }
     get explicita() {
-        var _a, _b;
-        if (((_a = this.numero1) === null || _a === void 0 ? void 0 : _a.valor) && ((_b = this.numero2) === null || _b === void 0 ? void 0 : _b.valor) && this.operacion) {
+        if (this.numero1?.valor && this.numero2?.valor && this.operacion) {
             return false;
         }
         return true;
@@ -346,10 +356,10 @@ class ExpresionNumerica {
     static generarNumero(opciones = {}) {
         let maxNumero = this.maxNumero;
         let minNumero = this.minNumero;
-        if (opciones === null || opciones === void 0 ? void 0 : opciones.maxNumero) {
+        if (opciones?.maxNumero) {
             maxNumero = opciones.maxNumero;
         }
-        if (opciones === null || opciones === void 0 ? void 0 : opciones.minNumero) {
+        if (opciones?.minNumero) {
             minNumero = opciones.minNumero;
         }
         let rangoNumero = maxNumero - minNumero;
@@ -570,6 +580,9 @@ class ExpresionNumerica {
         return [...arr1, ...arr2];
     }
     incognitarRandomNumero() {
+        if (!this.numero1 || !this.numero2 || !this.operacion) {
+            throw "La expresión no está terminada";
+        }
         let nums = this.getNumsAndAdress();
         //Cada num es un objeto infoNumero.
         let numEscogido = nums[Math.floor(Math.random() * nums.length)];
@@ -589,9 +602,6 @@ class ExpresionNumerica {
         return letras.charAt(Math.floor(Math.random() * letras.length));
     }
 }
-ExpresionNumerica.operaciones = ["suma", "resta", "multiplicacion", "division", "potenciacion", "radicacion"];
-ExpresionNumerica.maxNumero = 250;
-ExpresionNumerica.minNumero = -250;
 /////////////////////
 //
 function getDivisoresEnterosNumero(num) {

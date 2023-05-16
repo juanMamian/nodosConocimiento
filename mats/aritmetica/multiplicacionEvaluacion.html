@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.global.js"></script>
+
 
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
     <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
@@ -72,7 +73,8 @@
 </html>
 
 <script>
-    const doc = new Vue({
+    const {createApp} = Vue
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
@@ -119,5 +121,5 @@
 
         }
 
-    })
+    }).mount("#doc")
 </script>

@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
 
-    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/funciones/miscelanea.js"></script>
-    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/funciones/miscelanea.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -57,7 +57,7 @@
 
             <div class="zonaInteraccion" ref="zonaInteraccion" @click.stop="setRecorrido">
                 <div id="zonaTiempo">
-                    <img src="http://192.168.1.105:3000/public/media/iconos/clock.svg" style="height: 12px; margin: 0px 10px; opacity: 0.85;" alt="Tiempo">
+                    <img src="http://192.168.1.100:3000/public/media/iconos/clock.svg" style="height: 12px; margin: 0px 10px; opacity: 0.85;" alt="Tiempo">
                     {{segundosTranscurridos<10?'0'+segundosTranscurridos:segundosTranscurridos}}:{{centesimasTranscurridos<10?'0'+centesimasTranscurridos:centesimasTranscurridos}}
                 </div>
                 <div id="recorrido" ref="recorrido"

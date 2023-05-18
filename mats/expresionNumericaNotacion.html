@@ -5,30 +5,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
 
     <script id="MathJax-script" async
-        src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
-    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/funciones/mixinsMaths.js"></script>
 
-    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet"
-        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosMats.css">
     <link rel="stylesheet"
-        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
-    <title>Expresión numérica</title>
+    <title>Expresión numérica - notación</title>
 </head>
 
 <body>
@@ -48,7 +47,7 @@
             clara y, gracias a eso, se hacen innecesarios algunos paréntesis.
         </p>
 
-        <bloque-component tipo="ejemplo">
+        <bloque-component tipo="ejemplo" id="bloqueEjemplos1">
             <template #cabecera>
                 En este cuadro se muestran expresiones numéricas en las que se puede <span class="resaltado"
                     style="display: inline-block;">quitar</span> los paréntesis pues
@@ -494,8 +493,6 @@
 </html>
 
 <script>
-
-
     const doc = new Vue({
         el: "#doc",
         components: {
@@ -503,7 +500,6 @@
             bloqueComponent,
             enlaceComponent
         },
-        mixins: [mixinExpresionesNumericas],
         data() {
             return {
                 revelarItemEjemplo1: false,
@@ -658,7 +654,7 @@
 </script>
 
 <style>
-    body {
-        padding: 2% 5%;
-    }
+#bloqueEjemplos1 .itemEjemplo{
+    width: min(250px, 90%);
+}
 </style>

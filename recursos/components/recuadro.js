@@ -37,26 +37,26 @@ const recuadroComponent = {
         },
         srcIcono() {
             if(this.modo==='incorrecto'){
-                return "http://192.168.1.105:3000/public/atlasConocimiento/recursos/iconos/circleEquis.svg";
+                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/circleEquis.svg";
             }
 
 
             if (this.descubrimiento) {
-                return "http://192.168.1.105:3000/public/atlasConocimiento/recursos/iconos/iconoDescubrimiento.png";
+                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/iconoDescubrimiento.png";
             }
             else if (this.instruccionPointer) {
-                return "http://192.168.1.105:3000/public/atlasConocimiento/recursos/iconos/handPointer.svg";
+                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/handPointer.svg";
             }
             else if (this.instruccionTeclado) {
-                return "http://192.168.1.105:3000/public/atlasConocimiento/recursos/iconos/iconoInstruccionTeclado.svg";
+                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/iconoInstruccionTeclado.svg";
             }
             else if (this.infoResultado) {
                 if(this.modo==='correcto'){
-                    return "http://192.168.1.105:3000/public/atlasConocimiento/recursos/iconos/circleCheck.svg";
+                    return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/circleCheck.svg";
                 }
-                return "http://192.168.1.105:3000/public/atlasConocimiento/recursos/iconos/circleEquis.svg";
+                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/circleEquis.svg";
             }
-            return "http://192.168.1.105:3000/public/atlasConocimiento/recursos/iconos/bombillo.png";
+            return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/bombillo.png";
 
         }
     },

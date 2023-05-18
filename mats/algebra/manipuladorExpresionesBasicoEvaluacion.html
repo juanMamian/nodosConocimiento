@@ -7,23 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script id="MathJax-script" async
-        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+        src="http://192.168.1.105:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script src="http://192.168.1.105:3000/public/resources/libraries/vue.global.js"></script>
 
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/funciones/mixinsMaths.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+
+    <script
+        src="http://192.168.1.105:3000/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
 
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+        href="http://192.168.1.105:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
     <title>Manipulador algebraico básico - evaluación</title>
@@ -42,25 +45,34 @@
                 requerida.
             </template>
 
-            <recuadro-component tipo="reto">
+            <recuadro-component tipo="instruccionPointer">
                 <p>
                     Selecciona la dificultad
                 </p>
-                <input type="range" name="inputDificultad" min="1" max="1" v-model="dificultad" id="inputDificultad" class="deshabilitado">
-                {{dificultad}}
-
-                <div class="boton" @click="generarReto">
-                    Generar un reto
-                </div>
-
-                <div class="matsExpresion" id="expresionReto" v-if="expresionRetoString" :key="'expresion'+versionExpresion" style="font-size: 30px;">
-                    \( {{ expresionRetoString }} \)
-                </div>
-
-                <div id="textoReto" v-if="textoReto">
-                     {{ textoReto }} 
-                </div>
+                <input type="range" ref="inputDificultadReto1" min="1" max="3" v-model="dificultadReto1"
+                    id="inputDificultadReto1">
+                {{dificultadReto1}}
             </recuadro-component>
+
+            <div class='flexVertical'>
+            <div class="boton" @click="generarReto1">
+                Generar una expresión
+            </div>
+
+            <transition name="enterTop">
+                <div class="matsExpresion" id="reto1" v-if="reto1" :key="'reto1v'+versionReto1"
+                    style="font-size: 30px;">
+                    \( {{ reto1.toMathJax() }} \)
+                </div>
+            </transition>
+
+            <transition name="fadeIn">
+                <div id="textoReto1" v-if="textoReto1">
+                    {{ textoReto1 }}
+                </div>
+            </transition>
+            </div>
+
 
         </bloque-component>
 
@@ -71,8 +83,8 @@
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
@@ -80,30 +92,36 @@
         },
         data() {
             return {
-                dificultad: 1,
-                expresionReto:null,
-                expresionRetoString:null,
-                textoReto:"",
-                versionExpresion:0,
+                dificultadReto1: 1,
+                reto1: null,
+                versionReto1: 0,
+                textoReto1: "",
             }
         },
         methods: {
-            generarReto() {
-                console.log("Generando reto");
-                let expresion=this.expresionNumericaGenerarExpresionNumerica({}, {});
-                this.expresionReto=expresion;
-                this.expresionReto=this.expresionNumericaReexpresionarExpresion(this.expresionReto, 1); 
-                this.expresionRetoString=this.expresionNumericaToMathJax(this.expresionReto);
+            reiniciarReto1() {
+                this.reto1 = null;
+                this.textoReto1 = null;
+            },
 
-                this.textoReto="Solicítale a un experto un reto acerca de esta expresión";
-                this.versionExpresion++;
-                this.$nextTick(()=>{
+            generarReto1() {
+                this.reiniciarReto1();
+                let laExpresion = new ExpresionNumerica();
+                laExpresion.fillExpresion({keepInteger: true});
+                laExpresion.reexpresionar(Number(this.dificultadReto1), {keepInteger: true});
+                this.reto1 = laExpresion;
+                this.versionReto1++;
+            },
+        },
+        watch: {
+            versionReto1() {
+                this.$nextTick(() => {
                     MathJax.typeset();
                 })
-            }
-        }
+            },
 
-    })
+        }
+    }).mount("#doc");
 </script>
 
 <style>

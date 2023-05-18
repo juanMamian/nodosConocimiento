@@ -719,6 +719,10 @@ class ExpresionNumerica {
     }
 
     incognitarRandomNumero(this: ExpresionNumerica) {
+        if(!this.numero1 || !this.numero2 || !this.operacion){
+            throw "La expresión no está terminada"
+        }
+
         let nums = this.getNumsAndAdress() as InfoNumeroAddress[];
         //Cada num es un objeto infoNumero.
 

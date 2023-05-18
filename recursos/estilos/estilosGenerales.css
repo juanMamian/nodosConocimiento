@@ -128,6 +128,13 @@ li {
     align-items:center;
     gap: 30px;
 }
+.flexHorizontal{
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
 
 .mensajeUsuario{
     display: flex;

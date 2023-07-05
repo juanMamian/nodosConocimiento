@@ -29,6 +29,7 @@ max-width: 100%;
 	background-color: whitesmoke;
 	font-size: 14px;
 	font-family: arial;
+    color: black;
 }
 .programacionCodigoActual{
 	font-weight: bold;
@@ -43,3 +44,8 @@ opacity: 0.6;
 	font-size: 14px;
 font-style: italic;
 }
+
+.programacionTipoDato{
+    font-style: italic;
+    color:#091f48;
+    }

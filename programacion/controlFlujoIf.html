@@ -53,8 +53,7 @@
                 Escribir el bloque de instrucciones que se ejecutarán condicionalmente.
             </li>
         </ul>
-
-        <bloque-component tipo="ejemplo">
+        <bloque-component tipo="ejemplo" @plegado="reiniciarBloque1">
             <template #cabecera>
                 En este bloque se muestra la creación de una instrucción especial <span class='resaltado'>if</span> en
                 lenguaje <span class='resaltado'>
@@ -62,19 +61,59 @@
             </template>
 
             <recuadro-component tipo="datoNuevo">
-                Se quiere escribir un saludo especial para un usuario condicionalmente. Sólo si el nombre del usuario es
+                Se quiere escribir un saludo especial para un usuario <br>
+                El saludo debe ejecutarse condicionalmente. Sólo si el nombre del usuario es
                 especial.
-
-                <div class='programacionCodigo'>
-                    <span class="programacionCodigoPrevio" v-show="ejemplo1Step>=1"
-                        :class="{ejemplo1Step>ejemplo1StepFinal?claseFinalEjemplo:ejemplo1Step > 1?'programacionCodigoPrevio':'programacionCodigoActual} ">if</span>
-                    <span class="programacionCodigoPrevio" v-show="ejemplo1Step>=2"
-                        :class="{ejemplo1Step>ejemplo1StepFinal?claseFinalEjemplo:ejemplo1Step > 2?'programacionCodigoPrevio':'programacionCodigoActual} ">(nombreUsuario
-                        ==
-                        'Nabucodonosor')</span>
-                </div>
-
             </recuadro-component>
+
+            <div class='programacionCodigo'>
+                <transition name="fadeIn">
+                    <span v-show="ejemplo1Step>=1"
+                        :class="[ejemplo1Step>ejemplo1StepFinal?claseFinalEjemplo:ejemplo1Step > 1?'programacionCodigoPrevio':'programacionCodigoActual'] ">if</span>
+                </transition>
+                <transition name="fadeIn">
+                    <span v-show="ejemplo1Step>=2"
+                        :class="[ejemplo1Step>ejemplo1StepFinal?claseFinalEjemplo:ejemplo1Step > 2?'programacionCodigoPrevio':'programacionCodigoActual']">
+                        (nombreUsuario == 'Nabucodonosor')</span>
+                </transition>
+                <transition name="fadeIn">
+                    <span v-show="ejemplo1Step>=3"
+                        :class="[ejemplo1Step>ejemplo1StepFinal?claseFinalEjemplo:ejemplo1Step > 3?'programacionCodigoPrevio':'programacionCodigoActual']">
+                        {</span>
+                </transition>
+                <transition name="fadeIn">
+                    <div v-show="ejemplo1Step>=3"
+                        :class="[ejemplo1Step>ejemplo1StepFinal?claseFinalEjemplo:ejemplo1Step > 3?'programacionCodigoPrevio':'programacionCodigoActual']">
+                        <div style="padding-left: 10px">
+                            console.log("que bueno verte otra vez");
+                        </div>
+                        <div style="padding-left: 10px">
+                            console.log("Sigue donde estabas");
+                        </div>
+                        <div>
+                            }
+                        </div>
+                    </div>
+                </transition>
+            </div>
+            {{ejemplo1Step}}
+            <div class='boton' @click="ejemplo1Step++" v-show="ejemplo1Step <= ejemplo1StepFinal"
+                :class="{deshabilitado:ejemplo1Step >= ejemplo1StepFinal}">
+                <span v-show="ejemplo1Step === 0">
+                    Escribir la palabra clave if
+                </span>
+                <span v-show="ejemplo1Step === 1">
+                    Escribir una expresión. Entre paréntesis.
+                </span>
+                <span v-show="ejemplo1Step === 2">
+                    Escribir un bloque de instrucciones. Entre llaves
+                </span>
+            </div>
+
+            <recuadro-component tipo="datoNuevo" v-show="ejemplo1Step > ejemplo1StepFinal">
+                La instrucción if está terminada; este bloque de instrucciones será ejecutado condicionalmente.
+            </recuadro-component>
+
         </bloque-component>
 
     </div>
@@ -92,15 +131,34 @@
         },
         data() {
             return {
-                ejemplo1Step:0,
-                ejemplo1StepFinal: 5,
-                
+                ejemplo1Step: 0,
+                ejemplo1StepFinal: 3,
+
                 claseFinalEjemplo: '',
 
             }
         },
         computed: {
         },
+        methods: {
+            reiniciarBloque1() {
+                this.reiniciarEjemplo1();
+            },
+            reiniciarEjemplo1() {
+                this.ejemplo1Step = 0;
+            },
+        },
+        watch: {
+            ejemplo1Step(step) {
+                if (step === this.ejemplo1StepFinal) {
+                    setTimeout(() => {
+                        this.ejemplo1Step++;
+                    }, 3000);
+
+                }
+
+            }
+        }
     }).mount("#doc");
 </script>
 <style>

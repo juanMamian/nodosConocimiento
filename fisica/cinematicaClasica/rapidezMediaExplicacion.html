@@ -12,10 +12,14 @@
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -25,7 +29,8 @@
 <body>
     <div id="doc">
         <recuadro-component tipo="datoPrevio">
-            Para evaluar con facilidad la rapidez de un movimiento, es útil expresar su <span class="resaltado">rapidez media</span>.
+            Para evaluar con facilidad la rapidez de un movimiento, es útil expresar su <span class="resaltado">rapidez
+                media</span>.
         </recuadro-component>
 
         <recuadro-component tipo="datoPrevio">
@@ -54,7 +59,9 @@
                             :style="[{left: startRecorridoX+'px', top: startRecorridoY+'px', width: magnitudRecorrido+'px', transform: 'translateY(-50%) rotateZ('+direccionRecorrido+'rad)' }]">
                             <div class="unidadRecorrido" :style="[{width: (sizeUnidadRecorrido-2)+'px'}]"
                                 v-for="num of unidadesRecorridas" :key="'unidad'+num"></div>
-                            <div class="marcadorSegundo" v-for="num of segundosTranscurridos" :key="'marcadorSegundo'+num" :style="[{left: ((rapidezMedia || 0)*num*sizeUnidadRecorrido)+'px'}]"></div>
+                            <div class="marcadorSegundo" v-for="num of segundosTranscurridos"
+                                :key="'marcadorSegundo'+num"
+                                :style="[{left: ((rapidezMedia || 0)*num*sizeUnidadRecorrido)+'px'}]"></div>
                         </div>
 
                         <div id="cuerpo" ref="cuerpo" :style="[{left: cuerpoX+'px', top: cuerpoY+'px'}]">
@@ -64,10 +71,12 @@
 
                 <transition name="popIn">
                     <recuadro-component id="anuncioResultado" ref="anuncioResultado" v-show="anuncioResultado"
-                        tipo="datoNuevo">
+                        class="centrado" tipo="datoNuevo">
                         <p style="text-align: center; color: rgb(179, 81, 81);">Rapidez media: </p>
-                        {{anuncioResultado}}<br>
-                        <div class="expresionMagnitudUnidades" style="margin: 10px auto" :key="rapidezMedia">
+                        <p style="text-align: center">
+                            {{anuncioResultado}}</p>
+                        <div class="expresionMagnitudUnidades" style="margin: 10px auto; text-align:center"
+                            :key="rapidezMedia">
                             {{((rapidezMedia*10)%1>0?rapidezMedia.toFixed(1):rapidezMedia) + ' u/s'}}
                         </div>
                     </recuadro-component>
@@ -140,7 +149,7 @@
                 this.finRecorridoX = posX;
                 this.finRecorridoY = posY;
 
-                var { magnitud, direccion } = cartesian2Polar(this.finRecorridoX - this.startRecorridoX, this.finRecorridoY - this.startRecorridoY);
+                var {magnitud, direccion} = cartesian2Polar(this.finRecorridoX - this.startRecorridoX, this.finRecorridoY - this.startRecorridoY);
 
                 this.unidadesRecorridas = Math.ceil(magnitud / this.sizeUnidadRecorrido);
                 magnitud = this.sizeUnidadRecorrido * this.unidadesRecorridas;
@@ -150,8 +159,8 @@
                 this.finRecorridoX = this.startRecorridoX + (magnitud * Math.cos(direccion));
                 this.finRecorridoY = this.startRecorridoY + (magnitud * Math.sin(direccion));
 
-                this.$refs.recorrido.animate([{ width: '0px' }, { width: magnitud + 'px' }], { duration: duracion });
-                this.$refs.cuerpo.animate([{ left: this.cuerpoX + 'px', top: this.cuerpoY + 'px' }, { left: this.finRecorridoX + 'px', top: this.finRecorridoY + 'px' }], { duration: duracion });
+                this.$refs.recorrido.animate([{width: '0px'}, {width: magnitud + 'px'}], {duration: duracion});
+                this.$refs.cuerpo.animate([{left: this.cuerpoX + 'px', top: this.cuerpoY + 'px'}, {left: this.finRecorridoX + 'px', top: this.finRecorridoY + 'px'}], {duration: duracion});
 
                 this.magnitudRecorrido = magnitud;
                 this.direccionRecorrido = direccion;
@@ -179,30 +188,30 @@
                     this.contarTiempo()
                 }, this.stepCronometro);
             },
-            
+
             anunciarResultado() {
-                var rapidezMedia=this.rapidezMedia;
-                console.log("Rapidez media: "+rapidezMedia);
-                if((rapidezMedia*10)%1>0){
+                var rapidezMedia = this.rapidezMedia;
+                console.log("Rapidez media: " + rapidezMedia);
+                if ((rapidezMedia * 10) % 1 > 0) {
                     console.log("1Fixing to 1")
-                    rapidezMedia=rapidezMedia.toFixed(1);
-                }                
-                else{
+                    rapidezMedia = rapidezMedia.toFixed(1);
                 }
-                this.anuncioResultado = rapidezMedia + (rapidezMedia!=1?" unidades recorridas en cada segundo": " unidad recorrida cada segundo");
+                else {
+                }
+                this.anuncioResultado = rapidezMedia + (rapidezMedia != 1 ? " unidades recorridas en cada segundo" : " unidad recorrida cada segundo");
 
                 this.$nextTick(() => {
-                    document.getElementById("anuncioResultado").scrollIntoView({ behavior: "smooth" });
+                    document.getElementById("anuncioResultado").scrollIntoView({behavior: "smooth"});
                 })
             }
         },
         computed: {
-            rapidezMedia(){
-                if(!this.unidadesRecorridas || !this.unidadesRecorridas)return 0
-                return this.unidadesRecorridas/this.duracionRecorrido;
+            rapidezMedia() {
+                if (!this.unidadesRecorridas || !this.unidadesRecorridas) return 0
+                return this.unidadesRecorridas / this.duracionRecorrido;
             },
             centesimasTranscurridos() {
-                return Math.floor(this.tiempoTranscurrido % 1000 / 10);
+                return Math.floor(this.tiempoTranscurrido % 1000 *60 / 1000);
             },
             segundosTranscurridos() {
                 return Math.floor(this.tiempoTranscurrido / 1000);
@@ -246,26 +255,28 @@
 
     }
 
-    #zonaTiempo{
+    #zonaTiempo {
         color: rgb(75, 75, 75);
         font-size: 19px;
         text-align: center;
         position: absolute;
         top: 10px;
         left: 50%;
-        transform:  translateX(-50%);
+        transform: translateX(-50%);
         display: flex;
         align-items: center;
     }
-    .marcadorSegundo{
+
+    .marcadorSegundo {
         height: 28px;
         width: 1px;
         background-color: rgb(20, 17, 172);
         position: absolute;
         top: 50%;
-        transform: translate(-1px, -50%) ;        
+        transform: translate(-1px, -50%);
     }
-    .expresionMagnitudUnidades{
+
+    .expresionMagnitudUnidades {
         padding: 3px 5px;
         border: 2px solid whitesmoke;
         border-radius: 5px;

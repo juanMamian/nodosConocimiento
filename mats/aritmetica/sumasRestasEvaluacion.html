@@ -45,11 +45,12 @@
                 </transition>
 
 
-                <recuadro-component tipo='instruccionTeclado' v-if="resultadoReto1">
+                <recuadro-component tipo='instruccionTeclado' v-show="resultadoReto1!=null">
                     <p>
                         Escribe aquí la respuesta
                     </p>
-                    <input id='inputRespuestaResultadoReto1' type="number" ref="inputRespuestaResultadoReto1" @keypress.enter="$refs.botonSetRespuestaResultadoReto1.click()" @focus="$event.target.select()">
+                    <input id='inputRespuestaResultadoReto1' type="number" ref="inputRespuestaResultadoReto1"
+                        @keypress.enter="$refs.botonSetRespuestaResultadoReto1.click()" @focus="$event.target.select()">
 
                     <div class='boton' @click="setRespuestaResultadoReto1" ref="botonSetRespuestaResultadoReto1">
                         Aceptar
@@ -96,6 +97,7 @@
                 this.reto1 = null;
                 this.resultadoReto1 = null;
                 this.respuestaResultadoReto1 = null;
+                this.$refs.inputRespuestaResultadoReto1.value = null;
                 const minNumero = 0;
                 const maxNumero = 15;
                 const rangoNumero = maxNumero - minNumero;

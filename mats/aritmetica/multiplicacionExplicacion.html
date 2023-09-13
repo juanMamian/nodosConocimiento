@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
 
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
@@ -33,48 +35,68 @@
 
         <p>
             Para decir que un número está multiplicado varias veces se usa la palabra <span
-                class='resaltado'>por</span>.
+                class='resaltado'>por</span>. También se usa el símbolo <span class='resaltado' style="font-size: 40px">\( \times \)</span>.
         </p>
 
         <bloque-component tipo='ejemplo'>
             <template #cabecera>
-                En este cuadro se muestra el uso de la palabra <span class='resaltado'>por</span>.
+                En este cuadro se muestran modos de expresar una multiplicación.
             </template>
             <div class='listaEjemplos'>
-                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor1"
-                    @click="$refs.ejemploFormaPor1.classList.toggle('mostrandoFormaPor')">
-                    <div class='formaVeces'>
-                        8 multiplicado 3 veces.
+                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor1" @click="toggleModoEjemplo1(0)">
+                    <div class='formaVeces' v-show="modosEjemplo1[0]===0">
+                        8 repetido 3 veces
                     </div>
-                    <div class='formaPor'>
-                        8 multiplicado por 3.
+                    <div class='formaPor' v-show="modosEjemplo1[0]===1">
+                        8 multiplicado por 3
                     </div>
-                </div>
-                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor2"
-                    @click="$refs.ejemploFormaPor2.classList.toggle('mostrandoFormaPor')">
-                    <div class='formaVeces'>
-                        2 multiplicado 1 vez.
+                    <div class='formaPor' v-show="modosEjemplo1[0]===2">
+                        8 por 3
                     </div>
-                    <div class='formaPor'>
-                        2 multiplicado por 1.
+                    <div v-show="modosEjemplo1[0]===3" class="modoSimbolo">
+                        \(8 \times 3\)
                     </div>
                 </div>
-                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor3"
-                    @click="$refs.ejemploFormaPor3.classList.toggle('mostrandoFormaPor')">
-                    <div class='formaVeces'>
-                        100 multiplicado 0 veces.
+                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor2" @click="toggleModoEjemplo1(1)">
+                    <div class='formaVeces' v-show="modosEjemplo1[1]==0">
+                        2 repetido 1 vez
                     </div>
-                    <div class='formaPor'>
-                        100 multiplicado por 0.
+                    <div class='formaPor' v-show="modosEjemplo1[1]==1">
+                        2 multiplicado por 1
+                    </div>
+                    <div class='formaPor' v-show="modosEjemplo1[1]==2">
+                        2 por 1
+                    </div>
+                    <div class='formaSimbolo' v-show="modosEjemplo1[1]==3">
+                        \( 2 \times 1\)
                     </div>
                 </div>
-                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor4"
-                    @click="$refs.ejemploFormaPor4.classList.toggle('mostrandoFormaPor')">
-                    <div class='formaVeces'>
-                        118 multiplicado 12 veces.
+                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor3" @click="toggleModoEjemplo1(2)">
+                    <div class='formaVeces' v-show="modosEjemplo1[2]==0">
+                        100 repetido 0 veces
                     </div>
-                    <div class='formaPor'>
-                        118 multiplicado por 12.
+                    <div class='formaPor' v-show="modosEjemplo1[2]==1">
+                        100 multiplicado por 0
+                    </div>
+                    <div class='formaPor' v-show="modosEjemplo1[2]==2">
+                        100 por 0
+                    </div>
+                    <div class='formaSimbolo' v-show="modosEjemplo1[2]==3">
+                        \( 100 \times 0 \)
+                    </div>
+                </div>
+                <div class='itemEjemplo ejemploFormaPor' ref="ejemploFormaPor4" @click="toggleModoEjemplo1(3)">
+                    <div class='formaVeces' v-show="modosEjemplo1[3]==0">
+                        118 repetido 12 veces
+                    </div>
+                    <div class='formaPor' v-show="modosEjemplo1[3]==1">
+                        118 multiplicado por 12
+                    </div>
+                    <div class='formaPor' v-show="modosEjemplo1[3]==2">
+                        118 por 12
+                    </div>
+                    <div class='formaSimbolo' v-show="modosEjemplo1[3]==3">
+                        \( 118 \times 12 \)
                     </div>
                 </div>
             </div>
@@ -85,9 +107,16 @@
             textoCabecera="En este cuadro se puede ver un número y multiplicarlo.">
             <div class='flexVertical'>
                 <input id='inputNumeroOriginal' type="range" min="0" max="12" v-model="numeroOriginal">
+
+                <div class='numeroEnBolitas'>
+                    <div class='bolitaNumero' v-for="num of Number(numeroOriginal)"></div>
+                </div>
                 <p style="text-align: center;">
                     Este es un número {{numeroOriginal}}.
                 </p>
+                <div class="boton" id="botonMultiplicar" @click="multiplicador++" style="margin: 20px auto ">
+                    ¡Multiplicar!
+                </div>
                 <div id='contenedorMultiplicacion'>
                     <transition-group name="enterTop">
                         <div class="numeroEnBolitas" v-for="rep of multiplicador" :key="'fila'+rep"
@@ -98,11 +127,8 @@
                     </transition-group>
                 </div>
 
-                <div class="boton" id="botonMultiplicar" @click="multiplicador++" style="margin: 20px auto ">
-                    ¡Multiplicar!
-                </div>
 
-                <recuadro-component v-show="multiplicador>1" tipo="datoNuevo">
+                <recuadro-component v-show="multiplicador>0" tipo="datoNuevo">
                     ¡Ahora está multiplicado por {{multiplicador}}!
                 </recuadro-component>
             </div>
@@ -126,19 +152,24 @@
         data() {
             return {
                 numeroOriginal: 6,
-                multiplicador: 1,
+                multiplicador: 0,
+                modosEjemplo1: [0, 0, 0, 0],
             }
         },
         methods: {
             reiniciarBloque1() {
                 this.numeroOriginal = 6;
-                this.multiplicador = 1;
+                this.multiplicador = 0;
             },
-
+            toggleModoEjemplo1(index) {
+                if (++this.modosEjemplo1[index] > 3) {
+                    this.modosEjemplo1[index] = 0;
+                }
+            },
         },
         watch: {
             numeroOriginal() {
-                this.multiplicador = 1;
+                this.multiplicador = 0;
             }
         }
 
@@ -151,6 +182,10 @@
         flex-direction: column;
         gap: 10px;
         align-items: center;
+        border: 2px solid var(--paletaActual);
+        min-height:50px;
+        min-width: min(400px, 90%);
+        padding: 30px 10px;
     }
 
     .ejemploFormaPor {
@@ -158,19 +193,7 @@
         width: min(150px, 90%);
     }
 
-    .ejemploFormaPor:not(.mostrandoFormaPor) .formaVeces {
-        display: block;
-    }
-
-    .ejemploFormaPor:not(.mostrandoFormaPor) .formaPor {
-        display: none;
-    }
-
-    .ejemploFormaPor.mostrandoFormaPor .formaVeces {
-        display: none;
-    }
-
-    .ejemploFormaPor.mostrandoFormaPor .formaPor {
-        display: block;
+    .modoSimbolo {
+        font-size: 20px;
     }
 </style>

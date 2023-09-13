@@ -288,7 +288,14 @@
                 }
                 //Ahora revisar unidades.
                 //Primero encontrar separación.
-                const patronUnidadesDistancia = "( *" + this.unidadesDistanciaReto5.nombre + "s? *| *" + this.unidadesDistanciaReto5.abreviacion + " *)";
+                let palabrasNombreUnidades = this.unidadesDistanciaReto5.nombre.split(" ");
+                let patronNombreUnidades = palabrasNombreUnidades[0] + "s?";
+                for (let i = 1; i < palabrasNombreUnidades.length; i++) {
+                    patronNombreUnidades += " " + palabrasNombreUnidades[i];
+                }
+                console.log("El patron de nombre unidades está en: " + patronNombreUnidades);
+
+                const patronUnidadesDistancia = "^(" + patronNombreUnidades + "|" + this.unidadesDistanciaReto5.abreviacion + ")$";
                 const testExpr = new RegExp(patronUnidadesDistancia, "g");
 
                 if (!unidades.match(patronUnidadesDistancia)) {

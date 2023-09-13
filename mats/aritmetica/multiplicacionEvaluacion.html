@@ -44,7 +44,7 @@
                     </div>
                 </transition>
                 <transition name="fadeIn">
-                    <recuadro-component tipo='instruccionTeclado' v-if="resultadoReto1 != null">
+                    <recuadro-component tipo='instruccionTeclado' v-show="resultadoReto1 != null">
                         <p>
                             Escribe aquí tu respuesta
                         </p>
@@ -58,9 +58,10 @@
                     </recuadro-component>
                 </transition>
 
-                <transition name="popIn">
+                <transition name="popIn" @before-enter="$nextTick(()=>{$refs.infoResultadoReto1.$el.scrollIntoView({behavior: 'smooth', block:'center'})})">
                     <recuadro-component tipo='infoResultado'
                         :key="'infoRespuestaResultadoReto1'+versionRespuestaResultadoReto1"
+                        ref="infoResultadoReto1"
                         v-show="respuestaResultadoReto1!=null && resultadoReto1 != null"
                         :modo="respuestaResultadoReto1 === resultadoReto1?'correcto':'incorrecto'">
                     </recuadro-component>
@@ -92,6 +93,11 @@
         },
         methods: {
             setRespuestaResultadoReto1() {
+                let valorIntroducido = this.$refs.inputRespuestaResultadoReto1.value;
+                if (valorIntroducido.length < 1) {
+                    console.log("inválido");
+                    return;
+                }
                 this.respuestaResultadoReto1 = Number(this.$refs.inputRespuestaResultadoReto1.value);
                 this.versionRespuestaResultadoReto1++;
             },
@@ -99,6 +105,7 @@
                 this.reto1 = null;
                 this.resultadoReto1 = null;
                 this.respuestaResultadoReto1 = null;
+                this.$refs.inputRespuestaResultadoReto1.value=null;
 
                 const minNumero = 0;
                 const maxNumero = 12;

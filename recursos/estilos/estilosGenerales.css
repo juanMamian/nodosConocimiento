@@ -10,6 +10,7 @@
   --paletaActual: #26547c;
   --paletaCheck: #209c49;
   --paletaFail: #cc2f2f;
+  --paletaActivo: #f06449
 }
 
 body {
@@ -87,6 +88,7 @@ li {
 .zonaInteraccion {
   border: 2px dashed gray;
   padding: 5px;
+  position:relative;
 }
 
 .bloqueSeleccionDificultad {
@@ -151,6 +153,16 @@ li {
     transform: translateX(-50%);
     animation-duration: 0.3s;
     background-color: whitesmoke;
+
+}
+.contenedorBotonesRespuesta{
+    display: flex;
+    gap: 20px;
+    align-items:center;
+    justify-content:center;
+}
+.botonRespuesta.activo{
+    background-color: var(--paletaActivo);
 
 }
 
@@ -342,6 +354,7 @@ input {
   animation-iteration-count: 1;
   animation-direction: reverse;
 }
+
 
 @keyframes popIn {
   0% {

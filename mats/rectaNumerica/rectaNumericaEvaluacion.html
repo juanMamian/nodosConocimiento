@@ -15,10 +15,14 @@
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -98,7 +102,6 @@
                 <div class="contenedorBolitas">
                     <div class="bolitaNumero" :key="numero" v-for="numero of 200"
                         :class="{bolitaOrigen: (numero+numeroVisibleInicial2)==0, bolitaTocada: (numero+numeroVisibleInicial2)===numeroTocado2,  bolitaSignaled: (numero+numeroVisibleInicial2)===numeroSignaled}"
-                        @click="marcarRespuestaSignaled(numero+numeroVisibleInicial2)"
                         @contextmenu.prevent="numeroTocado2=numeroTocado2===numero+numeroVisibleInicial2?null:numero+numeroVisibleInicial2"
                         :style="{left:  40*(parseInt(numero)+numeroVisibleInicial2+panRectaNumerica2)+'px'}">
                         <div class="nombreNumero"
@@ -113,22 +116,29 @@
                 ¡Señalar {{!numeroSignaled?'un': 'otro'}} punto!
             </div>
 
-            <recuadro-component v-show="numeroSignaled && respuesta2!=numeroSignaled" tipo="instruccionTeclado"
-                v-show="numeroSignaled && numeroSignaled!=0">
-                Identifica el número señalado.
-            </recuadro-component>
+            <div class='contenedorFlex'>
 
-            <input ref="inputRespuesta2" v-show="numeroSignaled && respuesta2!=numeroSignaled"
-                @keypress.enter="setRespuesta2" class="inputRespuestaEvaluacion" type="number"
-                v-show="numeroSignaled && numeroSignaled!=0">
+                <recuadro-component v-show="numeroSignaled && respuesta2!=numeroSignaled" tipo="instruccionTeclado"
+                    v-show="numeroSignaled && numeroSignaled!=0">
+                    Identifica el número señalado.
+                </recuadro-component>
 
-            <transition name="popIn">
-                <div id="mensajeEvaluacion" :key="'respuesta2'+respuesta2" v-show="respuesta2!=null"
-                    :style="{backgroundColor:respuesta2==numeroSignaled?'#55a255':'#d75050'}">
-                    {{respuesta2==numeroSignaled?'¡Correcto!':'Ese no es... ¡Sigue intentando!'}}
-                </div>
-            </transition>
+                <input v-show="numeroSignaled && respuesta2!=numeroSignaled"
+                    @keypress.enter="setRespuesta2" class="inputRespuestaEvaluacion" type="number"
+                    v-show="numeroSignaled && numeroSignaled!=0" ref="inputRespuestaUsuario2">
 
+                <button class='boton' @click="setRespuesta2" v-show="numeroSignaled && respuesta2!=numeroSignaled">
+                    Aceptar
+                </button>
+
+                <transition name="popIn">
+                    <div id="mensajeEvaluacion" :key="'respuesta2'+respuesta2" v-show="respuesta2!=null"
+                        :style="{backgroundColor:respuesta2==numeroSignaled?'#55a255':'#d75050'}">
+                        {{respuesta2==numeroSignaled?'¡Correcto!':'Ese no es... ¡Sigue intentando!'}}
+                    </div>
+                </transition>
+
+            </div>
         </bloque-component>
     </div>
 
@@ -150,7 +160,7 @@
                 numeroGenerado: null,
                 numeroVisibleInicial: -100,
                 panRectaNumerica: 5,
-                numeroTocado:null,
+                numeroTocado: null,
                 respuesta: null,
 
                 generarNegativo: false,
@@ -159,7 +169,7 @@
                 numeroVisibleInicial2: -100,
                 panRectaNumerica2: 5,
                 respuesta2: null,
-                numeroTocado2:null,
+                numeroTocado2: null,
 
             }
         },
@@ -186,11 +196,11 @@
                 if (this.numeroSignaled === 0) {
                     this.numeroSignaled++;
                 }
-                this.$refs.inputRespuesta2.value = null;
-                this.panRectaNumerica2=5;
+                this.$refs.inputRespuestaUsuario2.value = null;
+                this.panRectaNumerica2 = 5;
             },
             setRespuesta2(e) {
-                this.respuesta2 = Number(e.target.value);
+                this.respuesta2 = Number(this.$refs.inputRespuestaUsuario2.value);
             }
         },
         watch: {
@@ -253,7 +263,7 @@
         position: relative;
         transition: left 0.3s;
         position: absolute;
-        top: 65px;
+        top: 70px;
 
     }
 
@@ -294,7 +304,7 @@
         transform: scale(1.3);
     }
 
-    .bolitaTocada{
+    .bolitaTocada {
         background-color: yellow;
     }
 

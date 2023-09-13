@@ -12,10 +12,14 @@
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
     <title>Torque</title>
 </head>
@@ -24,9 +28,7 @@
     <div id="doc">
 
         <p>
-            Cuando un cuerpo está unido a un punto fijo pero puede
-            girar alrededor de él, la aplicación de fuerza afecta
-            su estado de rotación.
+            Una fuerza aplicada sobre un cuerpo puede producir cambios en su rotación.
         </p>
 
         <bloque-component tipo="herramientaInteractiva" @desplegado="configurarCanvas">
@@ -39,14 +41,16 @@
             </recuadro-component>
 
             <div class="zonaInteraccion" ref="zonaInteraccion" @mouseleave="finCreacionFuerza">
-                <canvas class="canvasInteraccion" ref="canvasInteraccion" @touchend.stop="finCreacionFuerza" @mouseup.left="finCreacionFuerza"
-                    @mousemove="retrazarVector">
+                <canvas class="canvasInteraccion" ref="canvasInteraccion" @touchend.stop="finCreacionFuerza"
+                    @mouseup.left="finCreacionFuerza" @mousemove="retrazarVector">
 
                 </canvas>
 
 
                 <div class="cuerpoRotatorio" @mouseup.stop="finCreacionFuerza" @mouseup.left="finCreacionFuerza"
-                    @mousedown.left="inicioCreacionFuerza($event)" @touchstart.stop.prevent="inicioCreacionFuerza($event)" :style="[{transform: 'rotateZ('+rotacion+'rad)'}]">
+                    @mousedown.left="inicioCreacionFuerza($event)"
+                    @touchstart.stop.prevent="inicioCreacionFuerza($event)"
+                    :style="[{transform: 'rotateZ('+rotacion+'rad)'}]">
                     <div class="ejeRotacion" ref="ejeRotacion"></div>
                     <!-- <div id="vectorFuerza" :style="[{left: brazoFuerza+'px'}]">
                         <div id="flechaVector">
@@ -57,33 +61,25 @@
 
             </div>
         </bloque-component>
+        <recuadro-component tipo="datoPrevio">
+            El punto alrededor del cual sucede la rotación se llama <span class="resaltado">eje de rotación</span>.
+        </recuadro-component>
+
 
         <recuadro-component tipo="datoPrevio">
-            El punto que permanece fijo se llama <span class="resaltado">eje de rotación</span> o <span
-                class="resaltado">pivote</span>.
+            La capacidad que tiene una fuerza para generar cambios en la rotación de un cuerpo se llama
+            <span class='resaltado'>torque</span> o <span class='resaltado'>par de torsión</span>.
         </recuadro-component>
 
         <p>
-            La aplicación de fuerza sobre el cuerpo que está unido a un eje de rotación
-            genera en él un <span class="resaltado">estímulo rotatorio</span>.
-        </p>
-
-        <recuadro-component tipo="datoPrevio">
-            El estímulo rotatorio experimentado por un cuerpo cuando se aplica fuerza sobre él se llama <span
-                class="resaltado">torque</span>
-        </recuadro-component>
-
-        <p>
-            Cuando se aplica una fuerza sobre un cuerpo unido a un eje,
-            sólo la parte de fuerza que está en la dirección de la rotación 
-            genera torque.
-            
+            Cuando se aplica una fuerza sobre un cuerpo
+            sólo la componente de fuerza que está en la dirección de la rotación tiene torque
         </p>
 
         <bloque-component tipo="herramientaInteractiva" @desplegado="configurarCanvas2">
             <template #cabecera>
                 En este cuadro se puede aplicar fuerza sobre un cuerpo unido a un eje y ver
-                la componente de fuerza que genera torque.
+                la componente de fuerza que tiene torque.
             </template>
 
             <div class="zonaInteraccion" ref="zonaInteraccion2" @mouseleave="finCreacionFuerza2">
@@ -109,15 +105,9 @@
         </bloque-component>
 
         <recuadro-component tipo="datoPrevio">
-            El torque es proporcional a:
-            <ul>
-                <li>
-                    La fuerza aplicada en dirección de rotación.
-                </li>
-                <li>
-                    La distancia desde el punto de aplicación de fuerza al eje.
-                </li>
-            </ul>
+            El torque de una fuerza que está en dirección de la rotación es proporcional
+            a la distancia desde el punto de aplicación de la fuerza
+            hasta el centro de rotación.
         </recuadro-component>
     </div>
 </body>
@@ -142,6 +132,7 @@
                 rotacion: 0,
                 creandoFuerza: false,
                 brazoFuerza: 0,
+                pullAllowed: true,
 
                 inicioVectorX: 0,
                 inicioVectorY: 0,
@@ -153,15 +144,16 @@
                 rotacion2: 0,
                 creandoFuerza2: false,
                 brazoFuerza2: 0,
+                pullAllowed2: true,
 
                 inicioVector2X: 0,
                 inicioVector2Y: 0,
                 finVectorX2: 0,
                 finVectorY2: 0,
 
-                lapiz2: null,      
-                
-                offsetLineaAccionFuerza2:{
+                lapiz2: null,
+
+                offsetLineaAccionFuerza2: {
                     transform: 'unset',
 
                 }
@@ -169,6 +161,10 @@
         },
         methods: {
             inicioCreacionFuerza(e) {
+                if (!this.pullAllowed) {
+                    console.log("Not yet allowed");
+                    return;
+                }
                 console.log("Creación de fuerza");
                 this.creandoFuerza = true;
                 const boundaryCuerpo = e.target.getBoundingClientRect();
@@ -197,12 +193,20 @@
                     direccionBrazo = Math.PI + direccionBrazo;
                 }
 
+                if (direccionBrazo < 0) {
+                    direccionBrazo += Math.PI * 2;
+                }
+
                 console.log(`Direccion brazo fuerza: ${radToDeg(direccionBrazo)}`);
                 console.log(`Direccion palanca: ${radToDeg(this.rotacion)}`)
 
                 var brazo = Math.sqrt(Math.pow(brazoX, 2) + Math.pow(brazoY, 2));
+                let direccionCuerpo = this.rotacion % (Math.PI * 2);
+                if (direccionCuerpo < 0) {
+                    direccionCuerpo += Math.PI * 2;
+                }
 
-                if (Math.abs(direccionBrazo - this.rotacion) > 0.75) {
+                if (Math.abs(direccionBrazo - direccionCuerpo) > 0.75) {
                     console.log("Brazo de fuerza invertido")
                     brazo = -brazo;
                 }
@@ -232,10 +236,19 @@
                 if (fuerzaX < 0 && fuerzaY > 0) {
                     direccionFuerza = Math.PI + direccionFuerza;
                 }
+                let direccionCuerpo = this.rotacion % (Math.PI * 2);
+                if (direccionCuerpo < 0) {
+                    direccionCuerpo += Math.PI * 2;
+                }
+                console.log("Dirección cuerpo " + direccionCuerpo);
+                console.log("Dirección de fuerza: " + direccionFuerza);
 
-                const direccionRespectoCuerpo = direccionFuerza - this.rotacion;
+                const direccionRespectoCuerpo = direccionFuerza - direccionCuerpo;
+                console.log("Dirección respecto cuerpo: " + direccionRespectoCuerpo);
 
                 const componenteTangencial = moduloFuerza * Math.sin(direccionRespectoCuerpo);
+                console.log("Componente tangencial: " + componenteTangencial);
+                console.log("Brazo fuerza " + this.brazoFuerza);
                 const torque = componenteTangencial * this.brazoFuerza;
 
                 this.lapiz.clearRect(0, 0, this.lapiz.canvas.width, this.lapiz.canvas.height);
@@ -245,6 +258,10 @@
                 console.log(`Rotando con un torque de ${torque}`);
                 const nuevaRotacion = this.rotacion + torque / 9000;
                 this.rotacion = nuevaRotacion
+                this.pullAllowed = false;
+                setTimeout(() => {
+                    this.pullAllowed = true;
+                }, 2000);
             },
             retrazarVector(e) {
                 if (!this.creandoFuerza) return;
@@ -308,7 +325,10 @@
 
             },
             inicioCreacionFuerza2(e) {
-                this.creandoFuerza2= true;
+                if (!this.pullAllowed2) {
+                    return;
+                }
+                this.creandoFuerza2 = true;
                 const boundaryCuerpo = e.target.getBoundingClientRect();
 
                 const posX = e.clientX - boundaryCuerpo.left;
@@ -334,13 +354,21 @@
                 if (brazoX < 0 && brazoY > 0) {
                     direccionBrazo = Math.PI + direccionBrazo;
                 }
+                if (direccionBrazo < 0) {
+                    direccionBrazo += Math.PI * 2;
+                }
 
-                console.log(`Direccion brazo fuerza: ${radToDeg(direccionBrazo)}`);
-                console.log(`Direccion palanca: ${radToDeg(this.rotacion2)}`)
 
                 var brazo = Math.sqrt(Math.pow(brazoX, 2) + Math.pow(brazoY, 2));
 
-                if (Math.abs((direccionBrazo%(Math.PI*2)) - (this.rotacion2%(Math.PI*2))) > 0.75) {
+                let direccionCuerpo = this.rotacion2 % (Math.PI * 2);
+                if (direccionCuerpo < 0) {
+                    direccionCuerpo += Math.PI * 2;
+                }
+                console.log(`Direccion brazo fuerza: ${radToDeg(direccionBrazo)}`);
+                console.log(`Direccion cuerpo: ${radToDeg(direccionCuerpo)}`)
+
+                if (Math.abs((direccionBrazo % (Math.PI * 2)) - (direccionCuerpo % (Math.PI * 2))) > 0.75) {
                     console.log("Brazo de fuerza invertido")
                     brazo = -brazo;
                 }
@@ -370,8 +398,15 @@
                 if (fuerzaX < 0 && fuerzaY > 0) {
                     direccionFuerza = Math.PI + direccionFuerza;
                 }
+                let direccionCuerpo = this.rotacion2 % (Math.PI * 2);
+                if (direccionCuerpo < 0) {
+                    direccionCuerpo += (Math.PI * 2)
+                }
 
-                const direccionRespectoCuerpo = direccionFuerza - this.rotacion2;
+                var direccionRespectoCuerpo = direccionFuerza - direccionCuerpo;
+                if (direccionRespectoCuerpo < 0) {
+                    direccionRespectoCuerpo += Math.PI * 2;
+                }
 
                 const componenteTangencial = moduloFuerza * Math.sin(direccionRespectoCuerpo);
                 const torque = componenteTangencial * this.brazoFuerza2;
@@ -383,6 +418,10 @@
                 console.log(`Rotando2 con un torque de ${torque}`);
                 const nuevaRotacion = this.rotacion2 + torque / 9000;
                 this.rotacion2 = nuevaRotacion
+                this.pullAllowed2 = false;
+                setTimeout(() => {
+                    this.pullAllowed2 = true;
+                }, 2000);
             },
             retrazarVector2(e) {
                 if (!this.creandoFuerza2) return;
@@ -391,7 +430,7 @@
                 const boundary = this.$refs.canvasInteraccion2.getBoundingClientRect();
 
                 this.lapiz2.clearRect(0, 0, canvas.width, canvas.height);
-                this.lapiz2.strokeStyle="#FF0000"
+                this.lapiz2.strokeStyle = "#FF0000"
 
                 const posX = Math.round(e.clientX - boundary.left);
                 const posY = Math.round(e.clientY - boundary.top);
@@ -403,7 +442,7 @@
 
                 const vectorX = posX - this.inicioVector2X;
                 const vectorY = posY - this.inicioVector2Y;
-                const magnitudVector=Math.sqrt(Math.pow(vectorX, 2)+ Math.pow(vectorY, 2));
+                const magnitudVector = Math.sqrt(Math.pow(vectorX, 2) + Math.pow(vectorY, 2));
                 var direccionVector = Math.atan(vectorY / vectorX);
                 if (vectorY < 0 && vectorX < 0) {
                     direccionVector = Math.PI + direccionVector;
@@ -413,12 +452,8 @@
                     direccionVector = Math.PI + direccionVector;
                 }
 
-                if(direccionVector>Math.PI){
-                    direccionVector=-(Math.PI*2)+direccionVector;
-                }
-
-                if(direccionVector<-Math.PI){
-                    direccionVector=(Math.PI*2)+direccionVector;
+                if (direccionVector < 0) {
+                    direccionVector += Math.PI * 2;
                 }
 
                 // this.$set(this.offsetFlechaVector, "top", posY+'px');
@@ -437,46 +472,37 @@
                 this.lapiz2.lineTo(punta1X, punta1Y);
                 this.lapiz2.lineTo(punta2X, punta2Y);
                 this.lapiz2.lineTo(punta3X, punta3Y);
-                this.lapiz2.lineTo(posX, posY);                
+                this.lapiz2.lineTo(posX, posY);
 
                 this.lapiz2.stroke();
 
                 //Componente tangencial
-                var rotacionPalanca=this.rotacion2%(Math.PI*2);
-                if(rotacionPalanca>Math.PI){
-                    rotacionPalanca=-(Math.PI*2)+rotacionPalanca;
+                var rotacionPalanca = this.rotacion2 % (Math.PI * 2);
+                if (rotacionPalanca < 0) {
+                    rotacionPalanca += Math.PI * 2;
                 }
 
-                if(rotacionPalanca<-Math.PI){
-                    rotacionPalanca=(Math.PI*2)+rotacionPalanca;
+                var direccionVectorRespectoPalanca = (direccionVector - rotacionPalanca) % (Math.PI * 2);
+                if (direccionVectorRespectoPalanca < 0) {
+                    direccionVectorRespectoPalanca += Math.PI * 2;
                 }
-
-
-                var direccionVectorRespectoPalanca=(direccionVector-rotacionPalanca);
                 console.log(`Dirección vector: ${direccionVector}`)
-                console.log("Dirección del vector respecto de la palanca: ");
-                console.log(`Original: ${direccionVectorRespectoPalanca}`);
-                direccionVectorRespectoPalanca=direccionVectorRespectoPalanca%(Math.PI*2);
-                console.log(`Sin giros completos: ${direccionVectorRespectoPalanca}`);
-                if(Math.abs(direccionVectorRespectoPalanca>Math.PI)){
-                    direccionVectorRespectoPalanca=Math.PI - direccionVectorRespectoPalanca;
-                }
-                console.log(`Final: ${direccionVectorRespectoPalanca}`);
+                console.log("Dirección del vector respecto de la palanca: " + direccionVectorRespectoPalanca);
 
-                this.lapiz2.strokeStyle="#00FFFF"
-            
-                const componenteTangencial=Math.abs(magnitudVector*Math.sin(direccionVectorRespectoPalanca));
-                 
-                var direccionComponenteTangencial=rotacionPalanca+(Math.PI/2);
-                if(direccionVectorRespectoPalanca<0){
-                    direccionComponenteTangencial=rotacionPalanca-(Math.PI/2);
-                }
-                
-                const tangencialX=componenteTangencial*Math.cos(direccionComponenteTangencial);
-                const tangencialY=componenteTangencial*Math.sin(direccionComponenteTangencial);
+                this.lapiz2.strokeStyle = "#26547c"
 
-                puntaTangencialX=this.inicioVector2X+tangencialX;
-                puntaTangencialY=this.inicioVector2Y+tangencialY;
+                const componenteTangencial = Math.abs(magnitudVector * Math.sin(direccionVectorRespectoPalanca));
+
+                var direccionComponenteTangencial = rotacionPalanca + (Math.PI / 2);
+                if (direccionVectorRespectoPalanca > Math.PI) {
+                    direccionComponenteTangencial = rotacionPalanca - (Math.PI / 2);
+                }
+
+                const tangencialX = componenteTangencial * Math.cos(direccionComponenteTangencial);
+                const tangencialY = componenteTangencial * Math.sin(direccionComponenteTangencial);
+
+                puntaTangencialX = this.inicioVector2X + tangencialX;
+                puntaTangencialY = this.inicioVector2Y + tangencialY;
 
                 this.lapiz2.beginPath();
                 this.lapiz2.moveTo(this.inicioVector2X, this.inicioVector2Y);
@@ -494,8 +520,8 @@
                 this.lapiz2.lineTo(puntaT1X, puntaT1Y);
                 this.lapiz2.lineTo(puntaT2X, puntaT2Y);
                 this.lapiz2.lineTo(puntaT3X, puntaT3Y);
-                this.lapiz2.lineTo(puntaTangencialX, puntaTangencialY); 
-                
+                this.lapiz2.lineTo(puntaTangencialX, puntaTangencialY);
+
                 this.lapiz2.stroke();
 
             },
@@ -520,11 +546,11 @@
 
 <style>
     .zonaInteraccion {
-        padding: 210px 10px;        
+        padding: 210px 10px;
         position: relative;
     }
 
-    .canvasInteraccion{
+    .canvasInteraccion {
         width: 100%;
         height: 100%;
         position: absolute;
@@ -555,6 +581,4 @@
         height: 5px;
         transform: translate(-50%, -50%);
     }
-
-   
 </style>

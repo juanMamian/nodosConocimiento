@@ -153,8 +153,8 @@
                 }
                 segundaExpresion.fillExpresion({keepInteger: true});
 
-                primeraExpresion.reexpresionar(this.dificultadReto1 - 1, {keepInteger: true});
-                segundaExpresion.reexpresionar(this.dificultadReto1 - 2, {keepInteger: true});
+                primeraExpresion.reexpresionar(this.dificultadReto2 - 1, {keepInteger: true});
+                segundaExpresion.reexpresionar(this.dificultadReto2 - 2, {keepInteger: true});
 
                 this.reto2 = new EcInEcuacion({miembro1: primeraExpresion, miembro2: segundaExpresion});
                 this.ladoReto2 = Math.random() < 0.5 ? "izquierdo" : "derecho";

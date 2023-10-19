@@ -42,19 +42,19 @@
                     Este es el código.
                 </div>
                 &lt;div
-                <transition name="fade">
+                <transition name="fadeIn">
                     <span v-show="mostrandoAtributoStyle" class="codigoNuevo">style="
-                        <transition name="fade">
-                            <span v-show="colorEncadenado">color: "red"</span>
+                        <transition name="fadeIn">
+                            <span v-show="colorEncadenado">color: red</span>
                         </transition>
-                        <transition name="fade">
+                        <transition name="fadeIn">
                             <span v-show="anchoEncadenado">; width: 130px</span>
                         </transition>
-                        <transition name="fade">
+                        <transition name="fadeIn">
                             <span v-show="altoEncadenado"> ; height: 50px</span>
                         </transition>
-                        <span v-show="!colorEncadenado" class="textoPlaceHolderCodigo">Aquí van las instrucciones de
-                            estilo</span> "
+                        <span v-show="!colorEncadenado" class="textoPlaceHolderCodigo">
+                            </span> "
                     </span>
                 </transition>
                 &gt;
@@ -63,7 +63,7 @@
             </div>
             <div class="contenedorRepresentacion">
                 
-                <div class="representacionElemento" :style="[{color: colorEncadenado?'red':'black', width: anchoEncadenado?'200px':'unset', height: altoEncadenado?'50px':'unset'}]">
+                <div class="representacionElemento" :style="[{color: colorEncadenado?'red':'black', width: anchoEncadenado?'200px':'100px', height: altoEncadenado?'50px':'30px'}]">
                     <div class="tituloBloque" style="color: black">
                         Así se ve el elemento
                     </div>
@@ -77,12 +77,12 @@
             </div>
 
             <div v-show="mostrandoAtributoStyle">
-                <div class="boton" :class="{deshabilitado:colorEncadenado}" @click="colorEncadenado=true">Escribir una
+                <div class="boton selector" :class="{deshabilitado:colorEncadenado, seleccionado: colorEncadenado}" @click="colorEncadenado=true">Escribir una
                     instruccion CSS para color del texto en el elemento</div>
-                <div class="boton" :class="{deshabilitado:anchoEncadenado || !colorEncadenado}"
+                <div class="boton selector" :class="{deshabilitado:anchoEncadenado || !colorEncadenado, seleccionado: anchoEncadenado}"
                     @click="anchoEncadenado=true">Escribir una
                     instruccion CSS para ancho del elemento</div>
-                <div class="boton" :class="{deshabilitado:altoEncadenado || !anchoEncadenado}"
+                <div class="boton selector" :class="{deshabilitado:altoEncadenado || !anchoEncadenado, seleccionado: altoEncadenado}"
                     @click="altoEncadenado=true">Escribir una
                     instruccion CSS para alto del elemento</div>
             </div>
@@ -151,6 +151,9 @@
 
     .representacionElemento {
         background-color: whitesmoke;
+        transition: width 1s, height 1s;
+        width: 100px;
+        height: 50px;
     }
 
     .tituloBloque{

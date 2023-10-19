@@ -47,7 +47,7 @@
                 <label for="inputCantidadFuerzasReto2">
                     Dificultad
                 </label>
-                <input type="range" ref="inputCantidadFuerzasReto2" v-model="cantidadFuerzasReto2" min="1" max="2">
+                <input type="range" ref="inputCantidadFuerzasReto2" v-model="cantidadFuerzasReto2" min="1" max="3">
                 <div class='infoDificultad'>
                     {{cantidadFuerzasReto2}}
                 </div>
@@ -138,7 +138,7 @@
 
                 console.log("Serán " + this.cantidadFuerzasReto2 + 1 );
 
-                while (this.fuerzasReto2.length < this.cantidadFuerzasReto2 + 1) {
+                while (this.fuerzasReto2.length < Number(this.cantidadFuerzasReto2) + 1) {
                     console.log("pushing fuerza");
                     let magnitud = Math.ceil(Math.random() * 14) + 10;
                     let direccion = Math.random() * Math.PI * 2;

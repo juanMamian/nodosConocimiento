@@ -6,16 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
 
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
     <title>Torque - evaluación</title>
 </head>
@@ -24,42 +28,68 @@
     <div id="doc">
         <p>
             Comprendo el concepto de torque si:
-
-            <bloque-component tipo="evaluacion">
-                <template #cabecera>
-                    Puedo explicar qué es el torque.
-                </template>
-            </bloque-component>
-
-            <bloque-component tipo='evaluacion'>
-                <template #cabecera>
-                   Puedo explicar en qué caso una fuerza no tiene torque. 
-                </template>
-            </bloque-component>
-            
-
-            <bloque-component tipo="evaluacion">
-                <template #cabecera>
-                    Puedo enumerar los factores que afectan la magnitud del torque.
-                </template>
-            </bloque-component>
-
-            <bloque-component tipo="evaluacion">
-                <template #cabecera>
-                    Dadas descripciones de aplicación de fuerza sobre cuerpos puedo analizar el efecto 
-                    rotatorio producido sobre ellos.
-                </template>
-            </bloque-component>
         </p>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo explicar qué es el torque.
+            </template>
+        </bloque-component>
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Puedo explicar en qué caso una fuerza no tiene torque.
+            </template>
+        </bloque-component>
+
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo enumerar los factores que afectan la magnitud del torque.
+            </template>
+        </bloque-component>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dadas descripciones de aplicación de fuerza sobre cuerpos puedo analizar el efecto
+                rotatorio producido sobre ellos.
+            </template>
+
+            <div class='contenedorFlex'>
+                <button class='boton' @click="generarReto4">
+                    Generar reto 4
+                </button>
+                <recuadro-component tipo='datoPrevio' v-show="versionReto4>0">
+                    <div class='flexHorizontal'>
+                        <div class='centroRotacion'></div>
+                        Es el centro de rotación del cuerpo.
+                    </div>
+                </recuadro-component>
+
+                <div class='zonaInteraccion' id="zonaInteraccionReto4">
+                    <transition name="fadeIn">
+                        <div id='cuerpoReto4' :key="versionReto4" v-show="versionReto4 > 0 "
+                            :style="[offsetCuerpoReto4]">
+                            <div id='centroRotacionCuerpoReto4' class="centroRotacion" :style="[offsetCentroRotacionCuerpoReto4]"></div>
+                            <div id='fuerzaReto4' :style="[offsetFuerzaReto4]">
+                                <div id='origenFuerzaReto4'></div>
+                            </div>
+                        </div>
+                    </transition>
+                </div>
+
+            </div>
+
+        </bloque-component>
 
     </div>
 </body>
 
 </html>
 
-<script>    
-    const doc = new Vue({
-        el: "#doc",
+<script>
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
@@ -67,12 +97,129 @@
         },
         data() {
             return {
-
+                versionReto4: 0,
+                cuerpoReto4: {
+                    width: 0,
+                    height: 0,
+                    centroRotacion: {
+                        x: 0,
+                        y: 0,
+                    }
+                },
+                fuerzaReto4: {
+                    magnitud: 0,
+                    direccion: 0,
+                    top: 0,
+                    left: 0,
+                }
             }
         },
-    })
+        computed: {
+            offsetCuerpoReto4() {
+                return {
+                    width: this.cuerpoReto4.width + 'px',
+                    height: this.cuerpoReto4.height + 'px',
+                }
+            },
+            offsetCentroRotacionCuerpoReto4() {
+                return {
+                    left: this.cuerpoReto4.centroRotacion.x + 'px',
+                    top: this.cuerpoReto4.centroRotacion.y + 'px'
+                }
+            },
+            offsetFuerzaReto4() {
+                return {
+                    width: this.fuerzaReto4.magnitud + 'px',
+                    transform: 'rotate(' + this.fuerzaReto4.direccion + 'rad)',
+                    top: this.fuerzaReto4.top + 'px',
+                    left: this.fuerzaReto4.left + 'px',
+                }
+            },
+
+        },
+        methods: {
+            generarReto4() {
+                let nuevoWidth = Math.round(Math.random() * 200) + 20;
+                this.cuerpoReto4.width = nuevoWidth;
+
+                let nuevoHeight = Math.round(Math.random() * 200) + 20;
+                this.cuerpoReto4.height = nuevoHeight;
+
+                let xCentroRotacion = Math.round(Math.random() * this.cuerpoReto4.width * 0.8) + this.cuerpoReto4.width * 0.1;
+                let yCentroRotacion = Math.round(Math.random() * this.cuerpoReto4.height * 0.8) + this.cuerpoReto4.height * 0.1;
+                this.cuerpoReto4.centroRotacion.x = xCentroRotacion;
+                this.cuerpoReto4.centroRotacion.y = yCentroRotacion;
+
+                let nuevaMagnitudFuerza = Math.round(Math.random() * 100) + 50;
+                let nuevaDireccionFuerza = Math.random() * Math.PI * 2;
+                this.fuerzaReto4.magnitud = nuevaMagnitudFuerza;
+                this.fuerzaReto4.direccion = nuevaDireccionFuerza;
+
+                this.fuerzaReto4.left = Math.floor(Math.random() * this.cuerpoReto4.width);
+                this.fuerzaReto4.top = Math.floor(Math.random() * this.cuerpoReto4.height);
+
+                this.versionReto4++;
+            }
+        }
+
+    }).mount("#doc");
 </script>
 
 <style>
-   
+    #zonaInteraccionReto4 {
+        height: 400px;
+        width: min(600px, 90%);
+        margin: 20px auto;
+    }
+
+    #cuerpoReto4 {
+        background-color: var(--paletaPrevio);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .centroRotacion {
+        width: 5px;
+        height: 5px;
+        border: 2px solid black;
+        border-radius: 50%;
+        background-color: var(--paletaActual);
+    }
+
+    #centroRotacionCuerpoReto4 {
+        position: absolute;
+    }
+
+    #fuerzaReto4 {
+        height: 2px;
+        background-color: red;
+        position: absolute;
+        transform-origin: 1px center;
+    }
+
+    #origenFuerzaReto4 {
+        content: '';
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: red;
+        position: absolute;
+        top: 1px;
+        left: 0px;
+        transform: translate(-50%, -50%);
+    }
+
+    #fuerzaReto4::after {
+        content: '';
+        width: 1px;
+        height: 1px;
+        border: 7px solid transparent;
+        border-left-color: red;
+        position: absolute;
+        top: 1px;
+        transform: translateY(-50%);
+        left: 100%;
+    }
 </style>

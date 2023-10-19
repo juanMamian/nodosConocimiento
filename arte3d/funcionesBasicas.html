@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Segunda Explicacion</title>
+</head>
+
+<body>
+    <div id="doc">
+        <recuadro-component tipo="datoPrevio">Crear permite generar formas basicas 
+            como cubos, esferas, cilindros, etc.</recuadro-component>
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestra como entrar en <span class="resaltado">Crear</span> un objeto.
+            </template>
+            <p>Para agregar un mesh a la escena, se puede agregar.</p>
+            <ul>
+                <li>Dirigiendoce al boton <span class="resaltado">ADD</span>, 
+                    donde aparecera un listado bastante amplio de mesh.</li>
+                <li>Uno de los atajos para la generacion de un mesh puede ser el 
+                    <span class="resaltado">Shitf + A</span>. </li>
+            </ul>
+        </bloque-component>
+        <recuadro-component tipo="datoPrevio">Eliminar sirve para eliminar objetos o partes 
+            de un objeto selenccionado.</recuadro-component>
+         <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestra como <span class="resaltado">Eliminar</span>.
+             </template>
+            <p>Para eliminar un mesh, se puede hacer:</p>
+            <ul>
+                <li>Presionando <span class="resaltado">X</span>, al tener el cursor en el 
+                    <span class="resaltado">viewport</span> y 
+                    Presionar x se abrira un menu contextual, en este menu se encontraran multiples opciones 
+                    Pero nos centraremos en las basicas como estas: vertices, bordes, caras</li>
+            </ul>
+        </bloque-component>
+        
+        <recuadro-component tipo="datoPrevio">Mover permite desplazar objetos en el espacio 3D.
+        </recuadro-component>
+         <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestra como <span class="resaltado">desplazar objetos</span> de una posicion a otra.
+            </template>
+            <p>Para mover un objeto, se puede hacer:</p>
+            <ul>
+                <li>
+                    Presionando en la barra de herramientas del viewport estara la opcion de mover objeto, 
+                    al precionar aquella opcion apareceran unas flechar de colores, cada color significara
+                    un eje, <strong>el rojo representa el eje X, el verde representa el eje Y y el azul representa el eje Z</strong>,
+                    al hacer click sobre ellas y desplazar un poco el mause se puede observar como el objeto se mueve
+                    de un lado a otra o en la direccion que se le haya asignado.
+                </li>
+                <li>
+                    Para asignarle una direccion de movimineto a un objeto atravez de atajos se utiliza:  
+                    <p><span class="resaltado">G</span> (Movimineto libre)</p>
+                    <p><span class="resaltado">G + Z</span> (Movimiento en el eje Z)</p>
+                    <p><span class="resaltado">G + X</span> (Movimiento en el eje X)</p>
+                    <p><span class="resaltado">G + Y</span> (Movimiento en el eje Y) </p>
+                </li>
+                
+            </ul>
+        </bloque-component>
+
+        <recuadro-component tipo="datoPrevio">Escalar permite ajustar el tamaño de los objetos.
+        </recuadro-component>
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestra como <span class="resaltado">escalar</span> 
+                un objeto y su cambiar tamaño.
+                </template>
+                <p>Para escalar un objeto se puede hacer con:</p>
+                <ul>
+                    <li>
+                        Presionando la barra de herramientas del viewport estara la opcion <strong>scale</strong>, al presionar
+                        este boton aparecera unas flechas pero esta vez las puntas seran cubos, al presionar y arrastrar se podra escalar
+                        el objeto dependiendo de el eje.  
+                    </li>
+                    <li>
+                        Uno de los atajos para cambiar el tamaño de un objeto es la tecla <span class="resaltado">S</span>,
+                        al presionarla se podra cambiar el tamaño del objeto, al mover el mause se cambiara el tamaño en general
+                        y al presionar las teclas X, Z y Y su tamaño cambiara en un eje determinado.
+                    </li>
+                </ul>
+        </bloque-component>
+        <recuadro-component tipo="datoPrevio">Rotar permite girar objetos alrededor de un eje.
+        </recuadro-component>
+        <bloque-component tipo="Ejemplo">
+            <template #cabecera>
+                En este cuadro se muestra como <span class="resaltado">rotar</span> un objeto.
+            </template>
+            <p>para rotar un objeto se puede hacer con:</p>
+            <ul>
+                <li>
+                    Presionando la barra de herramientas del viewport estara la opcion <strong>rotate</strong>, al presionar 
+                    este boton aparecera una esfera al rededor del objeto con lineas de rotacion correspondientes a cada eje,
+                    al presionar y arrastrar estas lineas se podra rotar el objeto dependiendo de el eje que se seleccione.     
+                </li>
+                <li>
+                    Uno de los atajos para cambiar el eje de rotacion del objeto vendria siendo la <span class="resaltado">R</span>,
+                    al presionarla se podra rotar el objeto, al mover el mause el objeto rotara libremente y al presionar las teclas
+                    X, Y y Z su rotacion cambiara al eje determinado.
+                </li>
+            </ul>
+        </bloque-component>
+        <recuadro-component tipo="datoPrevio">Dupicar permite crear copias identicas de objetos seleccionados.
+        </recuadro-component>
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestra como <span class="resaltado">duplicar</span> un objeto.
+            </template>
+            <ul>
+                <li>
+                    Estando en modo objeto, se hace click derecho sobre el objeto para abrir el menu contextual, y se presiona
+                    <strong>Duplicate object</strong>.
+                </li>
+                <li>
+                    Uno de los atajos para duplicar es presionando <span class="resaltado">Shift + D</span>,despues de esto el objeto
+                    se quedara en la misma posicion del objeto que hemos duplicado asi que habra que moverlo a algun lugar de la escena.
+                </li>
+            </ul>
+        </bloque-component>
+
+        <recuadro-component tipo="datoPrevio">Seleccionar permite elegir objetos o partes especificas de un objeto para 
+            realizar acciones sobre ellos.
+        </recuadro-component>
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestra como <span class="resaltado">seleccionar</span> un objeto.
+            </template>
+                <ul>
+                    <li>
+                        Para seleccionar un objeto se debe hacer click izquierdo encima de este, o presionando la tecla A para seleccionar todo.
+                    </li>
+                    <li>
+                        Para deseleccionar un objeto se hace click izquierdo en una zona vacia de la escena, o presionando dos veces A.
+                    </li>
+                </ul>
+            
+        </bloque-component>s
+    </div>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                mostrandoLista1: false,
+                mostrandoEjemplo: [true, true, true, true, true]
+            }
+        },
+        methods: {
+            toggleEjemplo(num) {
+                this.$set(this.mostrandoEjemplo, num, !this.mostrandoEjemplo[num]);
+            }
+        }
+    });
+</script>
+
+<style>
+    .palabraCambiante {
+        padding: 10px;
+    }
+
+    .palabraCambiante>.primaria {
+        display: inline;
+        user-select: none;
+    }
+
+    .palabraCambiante:hover>.primaria {
+        display: none;
+    }
+
+    .palabraCambiante>.secundaria {
+        display: none;
+        user-select: none;
+    }
+
+    .palabraCambiante:hover>.secundaria {
+        display: inline;
+    }
+
+    .resaltadoHorizontal {
+        padding: 2px 4px;
+    }
+
+    .itemEjemplo {
+        width: min(300px, 80%);
+        text-align: center;
+    }
+</style>

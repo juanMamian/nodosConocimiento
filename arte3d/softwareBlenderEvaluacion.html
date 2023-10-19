@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Software Blender - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+        Conozco el software blender si:
+        </p>
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Puedo abrir y cerrar Blender en un computador.
+            </template>
+            
+        </bloque-component>
+        
+        <bloque-component tipo='evaluacion'>
+
+            <template #cabecera>
+                Puedo explicar qué es blender y nombrar algunos de sus usos.
+            </template>
+            
+        </bloque-component>
+        
+
+        
+    </div>
+</body>
+
+</html>
+
+
+<script>
+    const {createApp} = Vue;
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+            }
+        },
+    }).mount("#doc")
+</script>
+
+
+<style>
+    #listaDivisores {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .itemDivisor {
+        padding: 10px 10px;
+        border: 2px solid var(--paletaPrevio);
+        gap: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 300px;
+    }
+    .resultadoDivision{
+        font-size: 30px;
+    }
+</style>

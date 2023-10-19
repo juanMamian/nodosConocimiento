@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+
+
+    <title>FuncionesBasicas</title>
+</head>
+
+<body>
+    <div id="doc">
+        <bloque-component tipo="ejemplo">
+
+            <template #cabecera>
+                <span class="resaltado">Deshacer</span> se refiere a revertir la ultima accion realizada.
+            </template>
+            <ul>
+                <li>
+                    Para Deshacer puedes presionar el boton Deshacer, que se encuentra en la barra de herramientas
+                    presionando edit.
+                </li>
+                <li>
+                    Atajos: Ctrl + Z.
+                </li>
+            </ul>
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                <span class="resaltado">Rehacer</span> se refiere a volver a aplicar una acción que se deshizo
+                previamente.
+            </template>
+            <ul>
+                <li>
+                    Para rehacer puedes presionar el botón Rehacer, que se encuentra en la barra de herramientas
+                    presionando edit.
+                </li>
+                <li>
+                    Atajo: Ctrl + Shift + Z.
+                </li>
+            </ul>
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                La <span class="resaltado">La selección múltiple</span> de vértices en Blender es cuando seleccionas
+                varios vértices simultáneamente.
+            </template>
+            <ul>
+                <li>
+                    Para hacerlo, puedes usar los siguientes métodos:
+                </li>
+                <li>
+                    Mantén presionada la tecla Shift y haz clic izquierdo en cada vértice que desees seleccionar.
+                </li>
+                <li>
+                    Atajos y herramientas
+                </li>
+                <li>
+                    B (pincel de seleccion) al arrastrar un area rectangular alrededor de los tertices que deseas
+                    seleccionar.
+                </li>
+                <li>
+                    C (Pincel de seleccion) al pintar sobre los vertices que deseas seleccionar
+                </li>
+                <li>
+                    A al precionarla se seleccionando todos los objetos de la escena
+                </li>
+            </ul>
+        </bloque-component>
+
+        <bloque-component tipo="Ejemplo">
+            <template #cabecera>
+                <span class="resaltado">Ocultar</span> se refiere a hacer invisible un objeto en la vista 3D sin
+                eliminarlo.
+            </template>
+            <ul>
+                <li>
+                    En el outliner se encuntran un boton con forma de ojo, al darle click izquierdo se podra ocultar
+                    y volviendole a dar se podra desocultar.
+                </li>
+                <li>
+                    Para ocultar un objeto se puede hacer seleccionando un objeto y presionando la tecla H.
+                </li>
+                <li>
+                    Para desocultar el objeto, presiona Alt+H.
+                </li>
+            </ul>
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                <span class="resaltado">shading</span> en Blender se refieren a las formas en que se muestra
+                y calcula la iluminación en un objeto 3D.
+            </template>
+            <ul>
+                <li>
+                    En la esquina superior derecha se encuentran cuatro diferentes modos de shading.
+                </li>
+            <img style="margin: 10px auto;" src="botonesShading.png" />
+                <li>
+                    Wireframe: Muestra el objeto como una malla de alambre sin superficies sólidas.
+                </li>
+                <li>
+                    Solid: Muestra el objeto con colores sólidos sin considerar la iluminación.
+                </li>
+                <li>
+                    Material: Muestra el objeto con los materiales aplicados, considerando la iluminación básica.
+                </li>
+                <li>
+                    Rendered: Muestra una representación más realista del objeto, teniendo
+                    en cuenta la iluminación global, sombras y texturas.
+                </li>
+                <li>
+                    Atajos: Z
+                </li>
+            </ul>
+
+        </bloque-component>
+
+
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                mostrandoLista1: false,
+                mostrandoEjemplo: [true, true, true, true, true]
+            }
+        },
+        methods: {
+            toggleEjemplo(num) {
+                this.$set(this.mostrandoEjemplo, num, !this.mostrandoEjemplo[num]);
+            }
+        }
+    });
+</script>
+
+<style>
+    .palabraCambiante {
+        padding: 10px;
+    }
+
+    .palabraCambiante>.primaria {
+        display: inline;
+        user-select: none;
+    }
+
+    .palabraCambiante:hover>.primaria {
+        display: none;
+    }
+
+    .palabraCambiante>.secundaria {
+        display: none;
+        user-select: none;
+    }
+
+    .palabraCambiante:hover>.secundaria {
+        display: inline;
+    }
+
+    .resaltadoHorizontal {
+        padding: 2px 4px;
+    }
+
+    .itemEjemplo {
+        width: min(300px, 80%);
+        text-align: center;
+    }
+</style>

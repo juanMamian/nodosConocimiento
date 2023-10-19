@@ -26,89 +26,19 @@
 
 <body>
     <div id="doc">
-
         <p>
-            Una fuerza aplicada sobre un cuerpo puede producir cambios en su rotación.
+            Cuando un cuerpo experimenta una fuerza, la linea recta que pasa por el centro de masa del cuerpo y por el
+            punto de aplicación de la fuerza
+            se llama <span class='resaltado'>brazo de fuerza</span>.
         </p>
 
-        <bloque-component tipo="herramientaInteractiva" @desplegado="configurarCanvas">
+        <bloque-component tipo='herramientaInteractiva'>
             <template #cabecera>
-                En este cuadro se puede aplicar fuerza sobre un cuerpo y ver cómo se afecta su estado de rotación.
+                En este cuadro se puede aplicar una fuerza sobre un cuerpo y visualizar el brazo de fuerza.
             </template>
-
-            <recuadro-component tipo="instruccionPointer">
-                Toca el objeto y arrastra para aplicar una fuerza sobre él.
-            </recuadro-component>
-
-            <div class="zonaInteraccion" ref="zonaInteraccion" @mouseleave="finCreacionFuerza"
-                @touchend.stop="finCreacionFuerza" @mouseup.left="finCreacionFuerza" @mousemove="retrazarVector">
-                <canvas class="canvasInteraccion" ref="canvasInteraccion">
-                </canvas>
-
-                <div class="cuerpoRotatorio" @mouseup.left="finCreacionFuerza"
-                    @mousedown.left="inicioCreacionFuerza($event)" @touchstart.prevent="inicioCreacionFuerza($event)"
-                    @touchmove.stop.prevent="retrazarVector" @touchend.stop.prevent="finCreacionFuerza"
-                    :style="[{transform: 'rotateZ('+rotacion+'rad)'}]">
-                    <div class="ejeRotacion" ref="ejeRotacion"></div>
-                    <!-- <div id="vectorFuerza" :style="[{left: brazoFuerza+'px'}]">
-                        <div id="flechaVector">
-
-                        </div>
-                    </div> -->
-                </div>
-
-            </div>
+            
         </bloque-component>
-        <recuadro-component tipo="datoPrevio">
-            El punto alrededor del cual sucede la rotación se llama <span class="resaltado">eje de rotación</span>.
-        </recuadro-component>
-
-
-        <recuadro-component tipo="datoPrevio">
-            La acción rotatoria generada por una fuerza en un cuerpo se llama
-            <span class='resaltado'>torque</span> o <span class='resaltado'>par de torsión</span>.
-        </recuadro-component>
-
-        <p>
-            Cuando se aplica una fuerza sobre un cuerpo
-            sólo la componente de fuerza que está en la dirección de la rotación genera torque
-        </p>
-
-        <bloque-component tipo="herramientaInteractiva" @desplegado="configurarCanvas2">
-            <template #cabecera>
-                En este cuadro se puede aplicar fuerza sobre un cuerpo unido a un eje y ver
-                la componente de fuerza que genera torque.
-            </template>
-
-            <div class="zonaInteraccion" ref="zonaInteraccion2" @mouseleave="finCreacionFuerza2"
-                @mouseup.left="finCreacionFuerza2" @mousemove="retrazarVector2">
-                <canvas class="canvasInteraccion" ref="canvasInteraccion2">
-                </canvas>
-
-                <div id="lineaAccionFuerza2" :style="[{offsetLineaAccionFuerza2}]">
-
-                </div>
-                <div class="cuerpoRotatorio" @mouseup.left="finCreacionFuerza2"
-                    @mousedown.left="inicioCreacionFuerza2($event)" :style="[{transform: 'rotateZ('+rotacion2+'rad)'}]"
-                    @touchstart.stop.prevent="inicioCreacionFuerza2" @touchend="finCreacionFuerza2"
-                    @touchmove.stop.prevent="retrazarVector2">
-                    <div class="ejeRotacion" ref="ejeRotacion2"></div>
-                    <!-- <div id="vectorFuerza" :style="[{left: brazoFuerza+'px'}]">
-                        <div id="flechaVector">
-
-                        </div>
-                    </div> -->
-                </div>
-
-            </div>
-
-        </bloque-component>
-
-        <recuadro-component tipo="datoPrevio">
-            El torque generado por una fuerza es proporcional
-            a la distancia desde el punto de aplicación de la fuerza
-            hasta el centro de rotación.
-        </recuadro-component>
+        
     </div>
 </body>
 
@@ -196,8 +126,8 @@
 
                 const boundaryEje = this.$refs.ejeRotacion.getBoundingClientRect();
 
-                const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion.offsetWidth ));
-                const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion.offsetHeight ));
+                const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion.offsetWidth));
+                const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion.offsetHeight));
 
                 var direccionBrazo = Math.atan(brazoY / brazoX);
                 if (brazoY < 0 && brazoX < 0) {
@@ -408,8 +338,8 @@
 
                 const boundaryEje = this.$refs.ejeRotacion2.getBoundingClientRect();
 
-                const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion2.offsetWidth ));
-                const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion2.offsetHeight ));
+                const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion2.offsetWidth));
+                const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion2.offsetHeight));
 
                 var direccionBrazo = Math.atan(brazoY / brazoX);
                 if (brazoY < 0 && brazoX < 0) {

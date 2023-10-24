@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Movimiento de la vista- evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Sé mover la vista de blender si:
+        </p>
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Sé ubicar la vista según un criterio dado.
+            </template>
+
+        </bloque-component>
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Sé centrar la vista en un objeto.
+            </template>
+        </bloque-component>
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Sé ubicar la vista en diferentes perspectivas usando el panel numérico.
+            </template>
+        </bloque-component>
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Sé cambiar la vista entre modo ortográfico y perspectiva.
+            </template>
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+
+<script>
+    const {createApp} = Vue;
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                divisoresPosibles: [
+                    {
+                        resultado: 9,
+                        probado: false,
+                        anunciado: false,
+                    }
+                ],
+                numeroEjemplo1: 9,
+                maxDivisorProbado: 0,
+            }
+        },
+    }).mount("#doc")
+</script>
+
+
+<style>
+
+</style>

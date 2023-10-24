@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Vista viewport - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Sé navegar la vista de viewport de Blender si:
+        </p>
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Puedo navegar una escena según cualquier instrucción.
+            </template>
+
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+
+<script>
+    const {createApp} = Vue;
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+            }
+        },
+    }).mount("#doc")
+</script>
+
+
+<style>
+
+</style>

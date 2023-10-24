@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+
+    <title>Conceptos Basicos - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <h1>
+            Distribución de la pantalla.
+        </h1>
+        <p>
+            Dentro de la aplicacion la pantalla se encuentra dividida en partes, las
+            cuales todas
+            tienen una funcion diferente.
+        </p>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se señalan las partes de la aplicación Blender.
+            </template>
+            <div id='contenedorVistaNormalBlender'>
+                <img src="pantallaBlender.png" id="imagenVistaNormalBlender" />
+                <div class='cuadroParteVista' id="cuadroParteViewport"
+                    style="width: 82%; height: 84%; top: 7.3%; left: 0%" @click="zonaClickada=zonasVista[0]">
+                </div>
+                <div class='cuadroParteVista' id="cuadroParteProperties"
+                    style="width: 16.5%; height: 61.5%; top: 36.9%; left: 83%" @click="zonaClickada=zonasVista[1]">
+                </div>
+                <div class='cuadroParteVista' id="cuadroParteOutliner"
+                    style="width: 16.5%; height: 28.4%; top: 7.3%; left: 83%" @click="zonaClickada=zonasVista[2]">
+                </div>
+                <div class='cuadroParteVista' id="cuadroParteBarraHerramientas" @click="zonaClickada=zonasVista[3]"
+                    style="width: 99.4%; height: 2.3%; top: 4%; left: 0.1%">
+                </div>
+
+                <div class='fondoGris' v-if="zonaClickada" @click.self="zonaClickada=null">
+                    <recuadro-component tipo='datoNuevo'>
+                        {{zonaClickada.nombre.charAt(0).toUpperCase() + zonaClickada.nombre.slice(1)}}:
+                        {{zonaClickada.descripcion}}
+                    </recuadro-component>
+
+                </div>
+
+            </div>
+
+        </bloque-component>
+
+        <recuadro-component tipo="datoPrevio">
+            Mesh: tambien llamadas mallas son los modelos que se pueden aparecer y modificar con las herramientas de la
+            aplicacion, por defecto podemos aparecer figuras simples como cubos, circulos, conos etc
+        </recuadro-component>
+
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se ven ejemplos de Mesh.
+            </template>
+            <img src="ejemplosMesh.png" style="width: 100%" />
+        </bloque-component>
+
+
+        <recuadro-component tipo='datoPrevio'>
+            cursor 3D: el cursor 3D es un punto en la escena que se puede posicionar en cualquier sitio y donde este
+            posicionado apareceran los objetos creados.
+        </recuadro-component>
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se ve una imágen del cursor 3D.
+            </template>
+            <img src="ejemploCursor3d.png" style="width: 100%" />
+        </bloque-component>
+
+
+        <recuadro-component tipo="datoPrevio">
+            Modelado 3D: es la principal funcion de blender y es usada para moldear objetos y
+            transformarlos.
+        </recuadro-component>
+        <recuadro-component tipo='datoPrevio'>
+            Animacion: es la tecnica utilizada para lograr movimiento en los personajes, entornos, objetos etc y puede
+            ser utilizada en formato 2D, 3D.
+        </recuadro-component>
+
+
+
+    </div>
+
+</body>
+
+</html>
+
+
+<script>
+    const {createApp} = Vue;
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                zonaClickada: null,
+                zonasVista: [
+                    {
+                        nombre: "viewport",
+                        descripcion: "Es la seccion mas grande dentro de la cual se visualizan y seleccionan todos los objetos creados"
+                    },
+                    {
+                        nombre: "properties",
+                        descripcion: "Este es un panel de control dentro del cual se pueden ajustar las propiedades de los diferentes objetos seleccionados",
+                    },
+                    {
+                        nombre: "outliner",
+                        descripcion: "Es una zona en la cual se pueden controlar todos los elementos que están dentro del viewport y se pueden esconder y aparecer",
+                    },
+                    {
+                        nombre: "barra de herramientas",
+                        descripcion: "Se encuentra ubicada en la parte del extremo superior y permite acceder a diferentes funciones de la aplicacion",
+                    }
+                ]
+            }
+        },
+
+
+    }).mount("#doc")
+</script>
+
+
+<style>
+    .cuadroParteVista {
+        border: 2px dashed var(--paletaPrevio);
+        position: absolute;
+        background-color: #f0644969;
+        cursor: pointer;
+    }
+
+    #contenedorVistaNormalBlender {
+        position: relative;
+    }
+
+    #imagenVistaNormalBlender {
+        width: 100%;
+        margin: 0px auto;
+
+    }
+</style>

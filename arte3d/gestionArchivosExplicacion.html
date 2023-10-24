@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+
+    <title>Gestion de Archivos - Explicacion</title>
+</head>
+
+<body>
+
+    <div id="doc">
+
+        <p>
+
+        </p>
+
+        <recuadro-component tipo="datoPrevio">
+            Es importante saber como manipular el archivo en blender con algunas funciones basicas
+        </recuadro-component>
+
+        <bloque-component tipo="Dato">
+
+            <template #cabecera>
+            <p>Guardar: esta funcion sirve para guardar nuestros progresos 
+
+            el boton se encuentra ubicado en la seccion superior izquierda dentro de la pestaña File aunque tambien se pueden pulsar las teclas (ctrl + S)
+            </p>
+        
+            <p>Guardar como: esta funcion permite guardar el archivo existente en un archivo nuevo y se encuentra dentro de la pestaña File ubicada en la seccion superior izquierda y tambien se pueden pulsar las teclas (shift + ctrl + S)</p>
+
+            <p> </p>
+
+            <p>Abrir: esta funcion sirve para abrir un archivo seleccionado y su boton se encuentra ubicado en la parte superior izquierda dentro de la pestaña File y la combinacion deteclas que esta funcion tiene disponibles son (ctrl + O)</p>
+
+            <p>Crear nuevo: esta funcion permite crear un nuevo archivo que sustituira el que ya estaba abierto no sin antes preguntar si se quiere guardar el actual su boton se encuentra hubicado dentro de la pestaña File ubicada en la esquina superior izquierda y sus teclas de acceso directo son (ctrl + N) </p>
+        </template>
+        </bloque-component>
+
+
+
+
+
+    </div>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+
+</html>
+
+
+<script>
+    const { createApp } = Vue;
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+
+            }
+        },
+
+
+    }).mount("#doc")
+</script>
+
+
+<style>
+
+</style>

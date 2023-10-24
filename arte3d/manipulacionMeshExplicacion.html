@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script
+        src="http://192.168.1.100:3000/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+
+
+    <title>Manipulacion de Mesh
+    </title>
+</head>
+
+<body>
+
+    <div id="doc">
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En el modo de edición puedes manipular los vértices, aristas y caras de un objeto.
+            </template>
+            <ul>
+                <li>
+                    Los vértices son los puntos individuales.
+                </li>
+                <li>
+                    Las aristas son las lineas que conectan los vértices.
+                </li>
+                <li>
+                    Las caras son las superficises planas entre las aristas.
+                </li>
+            </ul>
+        </bloque-component>
+        <recuadro-component tipo="datoPrevio">
+            Puedes seleccionar y editar estos elementos utilizando diferentes herramientas
+            y comandos en el modo de edición.
+        </recuadro-component>
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                Existen 2 formas de cambiar la selección de vértice, arista y cara.
+            </template>
+            <ul>
+                <p>
+                    En la esquina derecha arriba, se pueden observar estos recuadros.
+                </p>
+                <img src="Captura de pantalla de 2023-10-18 10-00-34.png" style="margin-left: 20%; width: 10%;">
+                <p>
+                    Al hacerles click izq se cambiara el modo de selección.
+                </p>
+                <p>
+                    También, puedes usar los numeros de 1 al 3 para cambiar mucho mas rápido de selección.
+                </p>
+            </ul>
+
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                La extrusión es un proceso utilizado para crear geometria tridimensional a partir de una forma bidimensional.    
+            </template>
+            <ul>
+                <p>
+                    En la barra de herramientas del viewport de la izquierda, se encuentra la herramienta Extrude region.
+                </p>
+                <p>
+                    Al precionar esta opción aparecerá una flecha de color amarillo que al hacer click izq generara una 
+                    extrusión en la cara seleccionada.
+                </p>
+                <img src="Captura de pantalla de 2023-10-18 10-54-47.png" style="width: 7%; margin-left: 45%;">
+                <p>
+                    Otra manera de hacer un extrisión es seleccionar una cara, borde o vértice y luego presiona la tecla E en el teclado. 
+                    Arrastra el cursor para ajustar la longitud de la extrusión-
+                </p>
+            </ul>
+            
+          
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                El borde biselado es una herramienta para redondear los bordes de un objeto.
+            </template>
+            <ul>
+                <p>
+                    Puedes hacerlo seleccionando los bordes deseados y aplicando la herramienta Bevel en el panel de herramientas.
+                </p>
+                <img src=" Captura de pantalla de 2023-10-18 11-50-21.png" style="width: 6%; margin-left: 45%;">
+                <p>
+                    También se puede presionando Ctrl + B y ajustando los parámetros en el menú desplegable.
+                </p>
+            </ul>
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                Merge es una herramienta que permite combinar dos o mas elementos de un mesh en uno solo.
+            </template>
+            
+                <recuadro-component tipo="datoPrevio">
+                    Es util cuando se quiere unir verices, bordes o caras para crear una malla mas completa.
+                </recuadro-component>
+                <ul>
+
+
+                <p>
+                    Selecciona los objetivos que deseas fucionar manteniendo presionada la tecla shift mientras los
+                    seleccionas.
+                </p>
+
+
+                <p>
+                    dirigete al menu editar en la barra de herramientas superir y selecciona Merge.
+                </p>
+
+
+                <p>Estas son unos de los botones que con más frecuencia se usan:</p>
+            </ul>
+            <ul>
+                <ul>
+                    <li>
+                        At Center
+                    </li>
+                    <li>
+                        At First
+                    </li>
+                    <li>
+                        At Last
+                    </li>
+                </ul>
+
+
+                <p>Entre muchos más</p>
+                <p style="color: grey;">(Elige la opción más adecuada para tu caso) </p>
+                <p style="margin-left: 3%; color: brown;">
+                    Por ejemplo.
+                </p>
+                <p>
+                    Si quieres fucionar vertices en el centro, selecciona At Center .
+                    Una vez seleccionado la opción, los vertices, bordes o caras se fucionaran en uno solo.
+                    Desde el menu lateral se puede ajustar la tolerancia de fusión para controlar que tan cerca deben
+                    estar los elementos para fusionarse.
+                </p>
+
+            </ul>
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                La edición proporcinal es una herramienta que permite modificar partes de un objeto manteniendo la proporción del objeto.  
+            </template>
+            <ul>
+                <p>
+                    Ingresa al modo edición selecciona un vértice y presiona O en el teclado o en el icono de la barra de herramientas superior.
+                </p>
+               <img src="Captura de pantalla de 2023-10-18 11-32-54.png" style="width: 10%; margin-left: 44%;">
+                <p>
+                    Al activarse veras un circulo alrededor de la seleccion, ahora podrás mover, rotar o escalar, y veras como las partes adyacentes se ajustan proporcinalmente.
+                </p>
+                <p>
+                    Para ajustar el área de influencia de la edición proporcinal, puedes usar la rueda del mouse o presionando + o - para aumentar
+                    o disminuir el radio respecticamente.
+                </p>
+            </ul>
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                Loop Cut es una herramienta que permite agregar bucles o cortes adicionales a una malla.
+            </template>
+            <ul>
+                <p>
+                    Entra en el modo edición y selecciona la herramienta loop cut and slide.
+                </p>
+                <img src="Captura de pantalla de 2023-10-18 10-39-16.png" style="margin-left: 10%; width: 5%;">
+                <p>
+                    Tambien puedes precionar el atajo Ctrl + R.
+                </p>
+                <p>
+                    Al activar esta opción se vera un linea rosada que se desplazara a lo largo de la malla, su posición se puede ajustar 
+                    moviendo el mouse, si quieres ajustar el numero de bucles adicionales se puede utilizar la rueda del mouse(botón 3) o 
+                    escribirun numero en especifico mientras se hace la acción y luego presiona enter.
+                </p>
+                <p>
+                    Para agregar el loop cut en la posición deseada preciona click izq.
+                </p>
+            </ul>
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                La Subdivisión Surface es una herramienta que suaviza y refina las formas de los objetos.  
+            </template>
+            <ul>
+                <p>
+                    Para aplicar la subdivisión selecciona un objeto y ve al panel de propiedades, 
+                    presiona Modifiers, haz click en Add modifier y selecciona Subdivisión Surface. 
+                </p>
+                <p>
+                    Ajusta los parámetros del modificador para controlar el nivel de subdivisión y el suavizado de la figura.
+                </p>
+            </ul>
+        </bloque-component>
+
+        
+
+
+   
+
+
+   
+
+    </div>
+</body>
+
+</html>
+
+<script>
+
+
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+
+                numerosEjemplo1: [
+                    {
+                        valor: 4,
+                        operacion: "suma",
+                        numero1: 1,
+
+                    },
+                    {
+                        valor: 17,
+                        operacion: 'resta',
+                        numero1: 22
+                    },
+                    {
+                        valor: 7,
+                        operacion: 'division',
+                        numero1: 21
+                    },
+                    {
+                        valor: 180,
+                        operacion: 'multiplicacion',
+                        numero1: 60,
+                    },
+
+                ],
+                mostrandoExpresionNumerica: [false, false],
+                numero1: 4,
+                numero2: 8,
+        
+                operacionEscogida: "suma",
+
+                versionExpresion1: 0,
+                versionExpresion2: 0,
+
+                expresion1: null,
+                expresion2: null,
+
+                expresionOriginalCreada: false,
+
+                mostrarValor: false,
+
+                lastAleatorio: null,
+            }
+        },
+        computed: {
+            expresiones() {
+                return this.numerosEjemplo1.map(num => {
+                    let laExpresion=new ExpresionNumerica({valor: num});
+                    laExpresion.fillExpresion();
+                    return laExpresion;
+                });
+            }
+        },
+        methods: {
+            toggleExpresionNumerica(index) {
+                // this.mostrandoExpresionNumerica[index]=!this.mostrandoExpresionNumerica[index];
+                this.$set(this.mostrandoExpresionNumerica, index, !this.mostrandoExpresionNumerica[index]);
+                this.$nextTick(() => {
+                    MathJax.typeset();
+                });
+            },
+
+        }
+    })
+</script>
+

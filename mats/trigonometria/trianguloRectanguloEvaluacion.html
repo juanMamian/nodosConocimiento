@@ -1,101 +1,172 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
 
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
-   
 
-    <title>Evaluación - Razón matemática</title>
+
+    <title>Triángulo rectángulo - evaluación</title>
 </head>
+
 <body>
-    <div id="doc">        
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
-        
-            <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-            <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-            <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
-        
-            <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-            <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-            <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-            <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
-        
-           
-        
-            <title>Evaluación - triángulo rectángulo</title>
-        </head>
-        <body>
-            <div id="doc">       
-                Conozco el triángulo rectángulo si:
-                <bloque-component tipo="evaluacion" textoCabecera="Dado un dibujo de un triángulo puedo decidir si se trata de un triángulo rectángulo o no">
-                    
-                </bloque-component> 
-                <bloque-component tipo="evaluacion" textoCabecera="Puedo explicar las características de un triángulo rectángulo">
-                    
-                </bloque-component> 
-                <bloque-component tipo="evaluacion" textoCabecera="Dado un dibujo de un triángulo rectángulo puedo indicar el nombre que se le da a sus lados">                    
-                </bloque-component> 
+    <div id="doc">
+
+        Conozco el triángulo rectángulo si:
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Dado un dibujo de un triángulo puedo decidir si se trata de un triángulo rectángulo o no">
+
+        </bloque-component>
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Puedo explicar las características de un triángulo rectángulo">
+
+        </bloque-component>
+        <bloque-component tipo="evaluacion"
+            textoCabecera="Dado un dibujo de un triángulo rectángulo puedo indicar el nombre que se le da a sus lados">
+            <button class='boton' @click="generarReto3">
+                Dibujar triángulo
+            </button>
+
+            <div class='zonaInteraccion' id="zonaInteraccionReto3">
+                <div class='ladoTriangulo' v-for="numero of 3" :key="'ladoTriangulo' + numero"
+                    :style="[offsetTrianguloReto3.lados[numero-1]]">
+                </div>
             </div>
-        </body>
-        </html>
-        
-        <script>
-            const doc=new Vue({
-                el:"#doc",
-                components:{
-                    recuadroComponent,
-                    bloqueComponent,
-                    enlaceComponent
-                },
-                data(){
-                    return {
-        
-                    }
-                }
-            })
-        </script>
-        
-        <style>
-         
-        </style>
+        </bloque-component>
     </div>
 </body>
+
 </html>
 
 <script>
-    const doc=new Vue({
-        el:"#doc",
-        components:{
+    const {createApp} = Vue;
+    createApp({
+        components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-        data(){
+        data() {
             return {
+                trianguloReto3: {
+                    lados: [
+                        {
+                            longitud: 0,
+                            x: 0,
+                            y: 0,
+                            rotacion: 0,
+                        },
+                        {
+                            longitud: 0,
+                            x: 0,
+                            y: 0,
+                            rotacion: 0,
+                        },
+                        {
+                            longitud: 0,
+                            x: 0,
+                            y: 0,
+                            rotacion: 0,
+                        }
+
+                    ],
+                }
+            }
+        },
+        computed: {
+            offsetTrianguloReto3() {
+                return {
+                    lados: this.trianguloReto3.lados.map(lado => {
+                        return {
+                            width: lado.longitud + 'px',
+                            transform: 'rotate(' + lado.rotacion + 'rad)',
+                            top: lado.y + 'px',
+                            left: lado.x + 'px',
+                        }
+                    })
+                }
+            }
+        },
+        methods: {
+            reiniciarReto3() {
+                for (var i = 0; i < this.trianguloReto3.lados.length; i++) {
+                    this.trianguloReto3.lado[i].longitud = 0;
+                    this.trianguloReto3.lado[i].rotacion = 0;
+                    this.trianguloReto3.lado[i].x = 0;
+                    this.trianguloReto3.lado[i].y = 0;
+                }
+            },
+            generarReto3() {
+                console.log("Generando reto3");
+                let anguloRectoGenerado = false;
+                let sentidoHorario = Math.random() > 0.5;
+
+                //Lado 1.
+                this.trianguloReto3.lados[0].longitud = Math.random() * 20 + 10;
+                this.trianguloReto3.lados[0].rotacion = Math.random() * Math.PI * 2;
+                console.log("Lado 1: " + this.trianguloReto3.lados[0].longitud + ", " + this.trianguloReto3.lados[0].rotacion);
+
+                //lado 2.
+                this.trianguloReto3.lados[1].longitud = Math.random() * 20 + 10;
+                this.trianguloReto3.lados[1].rotacion = sentidoHorario ? this.trianguloReto3.lados[0].rotacion + (Math.PI / 2) : this.trianguloReto3.lados[0].rotacion - (Math.PI / 2);
+
+                this.trianguloReto3.lados[1].x = Math.round(this.trianguloReto3.lados[0].longitud * Math.cos(this.trianguloReto3.lados[0].rotacion));
+                this.trianguloReto3.lados[1].y = Math.round(this.trianguloReto3.lados[0].longitud * Math.sin(this.trianguloReto3.lados[0].rotacion));
+
+                console.log("Lado 2: " + this.trianguloReto3.lados[1].longitud + ", " + this.trianguloReto3.lados[1].rotacion);
+
+
+                //lado 3.
+
+                let deltaX = this.trianguloReto3.lados[0].longitud * Math.cos(this.trianguloReto3.lados[0].rotacion) + this.trianguloReto3.lados[1].longitud * Math.cos(this.trianguloReto3.lados[1].rotacion);
+                let deltaY = this.trianguloReto3.lados[0].longitud * Math.sin(this.trianguloReto3.lados[0].rotacion) + this.trianguloReto3.lados[1].longitud * Math.sin(this.trianguloReto3.lados[1].rotacion);
+
+                let longitud = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+                let rotacion3 = Math.atan(deltaY / deltaX);
+                if ((deltaY < 0 && deltaX < 0) || (deltaY > 0 && deltaX < 0)) {
+                    rotacion3 = rotacion3 + Math.PI;
+                }
+
+                this.trianguloReto3.lados[2].longitud = longitud;
+                this.trianguloReto3.lados[2].rotacion = rotacion3;
+
+                this.trianguloReto3.lados[2].x = Math.round(this.trianguloReto3.lados[1].x + this.trianguloReto3.lados[1].longitud * Math.cos(this.trianguloReto3.lados[1].rotacion));
+                this.trianguloReto3.lados[2].y = Math.round(this.trianguloReto3.lados[1].y + this.trianguloReto3.lados[1].longitud * Math.sin(this.trianguloReto3.lados[1].rotacion));
+
+                console.log("Lado 3: " + this.trianguloReto3.lados[2].longitud + ", " + this.trianguloReto3.lados[2].rotacion);
 
             }
         }
-    })
+    }).mount("#doc");
 </script>
 
 <style>
- 
+    #zonaInteraccionReto3 {
+        min-height: 400px;
+        position: relative;
+    }
+
+    .ladoTriangulo {
+        height: 2px;
+        background-color: black;
+        min-width: 10px;
+        transform-origin: 1px center;
+        position: absolute;
+    }
 </style>

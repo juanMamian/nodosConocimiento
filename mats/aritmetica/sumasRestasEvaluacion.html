@@ -50,7 +50,7 @@
                         Escribe aquí la respuesta
                     </p>
                     <input id='inputRespuestaResultadoReto1' type="number" ref="inputRespuestaResultadoReto1"
-                        @keypress.enter="$refs.botonSetRespuestaResultadoReto1.click()" @focus="$event.target.select()">
+                        @keypress.enter="$refs.botonSetRespuestaResultadoReto1.click()" @focus="$event.target.select()" class="inputRespuestaEvaluacion">
 
                     <div class='boton' @click="setRespuestaResultadoReto1" ref="botonSetRespuestaResultadoReto1">
                         Aceptar

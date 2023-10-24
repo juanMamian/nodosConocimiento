@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
+
+    <script id="MathJax-script" async
+        src="http://192.168.1.100:3000/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Notación exponencial - Explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+
+        <p>
+            Las expresiones númericas que son potencias de 10 representan números importantes en el sistema numérico
+            decimal.
+        </p>
+
+        <bloque-component tipo='herramientaInteractiva'>
+            <template #cabecera>
+                En este cuadro se muestran potencias de 10 y el número que representan.
+            </template>
+
+            <div class='bloqueUpDown'>
+                <div class='controlUpDown up' @click="exponentePotencia++"></div>
+                <div id='potenciaDiez' :key="exponentePotencia">
+                      {{'\\( 10 ^ ' + exponentePotencia + '\\)'}} 
+                </div>
+                <div class='controlUpDown down' @click="exponentePotencia--"></div>
+                \( 10 ^ {-3} \)
+            </div>
+
+            <transition name="enterTop">
+                <div id='numeroRepresentado' :key="numeroRepresentado">
+                    {{numeroRepresentado}}
+                </div>
+            </transition>
+
+        </bloque-component>
+
+        <p>
+            Al multiplicar un número por una potencia de 10, el resultado tiene una forma semejante al número original.
+        </p>
+
+        <bloque-component tipo='herramientaInteractiva'>
+            <template #cabecera>
+                En este cuadro se selecciona un número y se muestra el resultado de multiplicarlo por potencias de 10.
+            </template>
+
+            <input type="number" v-model="numeroParaMultiplicar" id='inputNumeroParaMultiplicar' />
+            <button class='boton'>Aceptar</button>
+
+            <div id='numeroParaMultiplicar'>
+                \( {{numeroParaMultiplicar}} \times {10 ^ {{exponentePotencia2}}} \)
+            </div>
+
+            <div id='resultadoMultiplicacionPotencia2'>
+                \( {{resultadoMultiplicacionPotencia2}} \)
+            </div>
+
+        </bloque-component>
+
+        <p>
+            Los números que se escriben con muchos dígitos en la notación decimal pueden ser escritos de manera más
+            concisa en forma de una
+            multiplicación de un número corto por una potencia de diez.
+        </p>
+
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se muestran números que se escriben en forma larga y una alternativa en notación decimal.
+            </template>
+
+            <div class='listaEjemplos'>
+                <div class='itemEjemplo'>
+                    <div class='numeroFormaDecimal'>
+                        \( 2000000 \)
+                    </div>
+                    <div class='numeroFormaExponencial'>
+                        \( 2 \times {10 ^ 6} \)
+                    </div>
+                </div>
+            </div>
+
+        </bloque-component>
+
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const {createApp} = Vue;
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+                exponentePotencia: 1,
+                numeroParaMultiplicar: 2,
+                exponentePotencia2: 1,
+            }
+        },
+        computed: {
+            resultadoMultiplicacionPotencia2() {
+                return 2 * Math.pow(10, this.exponentePotencia2);
+            },
+            numeroRepresentado() {
+                return Math.pow(10, this.exponentePotencia);
+            }
+        },
+        methods: {
+        },
+        watch: {
+            exponentePotencia() {
+                setTimeout(() => {
+                    MathJax.typeset();
+                }, 500);
+            }
+        }
+
+    }).mount("#doc");
+</script>
+
+<style>
+.controlUpDown{
+    min-height: 10px;
+    min-width: 10px;
+    width: fit-content;
+}
+    .controlUpDown::after {
+        content: "<";
+    }
+    .controlUpDown.up{
+        transform: rotate(90deg);
+    }
+    .controlUpDown.down{
+        transform: rotate(-90deg);
+    }
+    #potenciaDiez{
+        width: 200px;
+        height: 200px;
+    }
+</style>

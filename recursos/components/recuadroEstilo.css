@@ -43,6 +43,9 @@
     height: 30px;
     margin-right: 20px;
 }
+.recuadro .textoRecuadro{
+    width: 100%;
+}
 .recuadro.infoResultado .textoRecuadro{
     flex-grow: 1;
     text-align: center;

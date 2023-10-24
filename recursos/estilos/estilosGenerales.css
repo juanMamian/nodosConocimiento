@@ -217,6 +217,7 @@ input {
   margin: 10px auto;
   padding: 5px 3px;
   border-radius: 5px;
+  max-width: 90%;
 }
 
 @keyframes fade {

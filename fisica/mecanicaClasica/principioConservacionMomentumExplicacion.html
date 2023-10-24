@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+
+    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
 
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
@@ -22,19 +23,26 @@
 
 
 
-    <title>Principio de conservación del momentum - explicación</title>
+    <title>Principio de conservación del momentum - Explicación</title>
 </head>
 
 <body>
     <div id="doc">
+
         <p>
-            Dado un sistema formado por algunos cuerpos que interactuan entre sí. El momentum total del sistema es la
-            suma de los momentum individuales de cada cuerpo del sistema.
+        En un sistema físico, los cuerpos que lo componen pueden estar ejerciendo fuerza entre sí o pueden estar experimentando alguna fuerza originada en el exterior del sistema.
+        estas fuerzas causan cambios en el momentum de los cuerpos que componen el sistema.
         </p>
 
-        <recuadro-component tipo='datoPrevio'>
-            El <span class='resaltado'>principio de conservación del momentum</span> es una ley física que afirma que en ausencia de fuerzas externas, el momentum total del sistema no cambia.
-        </recuadro-component>
+        <p>
+        Si se suma el momentum de todos los componentes de un sistema físico, se obtiene el <span class="resaltado">Momentum total del sistema</span>.
+        </p>
+
+            El principio de conservación del momentum afirma que:
+        <recuadro-component tipo="datoPrevio">
+            Si un sistema físico no experimenta fuerzas externas, su momentum total no cambia.
+            </recuadro-component>
+
 
     </div>
 </body>
@@ -42,12 +50,12 @@
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-    })
+    }).mount("#doc");
 </script>

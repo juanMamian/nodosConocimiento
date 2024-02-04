@@ -48,6 +48,15 @@ representacionOrdenMagnitudComponente = {
             const ordenSecundario = Math.floor(this.factores.length / 6);
             return `${ordenBase} - ${mil ? 'mil' : ''} - ${this.ordenesSecundarios[ordenSecundario]}`;
         }
+    },
+    watch:{
+        factores(){
+            let ultimoFactor=this.factores[this.factores.length-1];
+            if(this.ultimo && ultimoFactor===10){
+                
+            }
+
+        }
     }
 }
 

@@ -1,0 +1,39 @@
+.ordenMagnitudComponente{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    border: 1px dashed gray;
+    width: fit-content;
+    min-width: 50px;
+    position: relative;
+}
+.ordenMagnitudComponente.ultimo{
+    border-color: red;
+}
+.ordenMagnitudComponente #nombreOrden{
+    width: 100%;
+    font-size: 76%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+}
+@keyframes foldVertical{
+    0%{height: 40px}
+    100%{height: 0px}
+}
+.foldBolitas-leave-active{
+    animation: foldVertical 1s linear;
+}
+.foldBolitas-enter-active{
+    animation: foldVertical 1s reverse linear;
+}
+
+.ordenMagnitudComponente .contenedorSubpartes{
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid red;
+    overflow: hidden;
+    align-items: center;
+}

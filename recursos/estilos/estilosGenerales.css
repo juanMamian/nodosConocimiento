@@ -320,6 +320,9 @@ input {
   animation-direction: reverse;
   pointer-events: none;
 }
+
+
+
 @keyframes travelbottom {
   0% {
     transform: translatey(100%);

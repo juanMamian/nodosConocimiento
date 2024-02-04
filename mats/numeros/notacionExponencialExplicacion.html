@@ -40,20 +40,26 @@
                 En este cuadro se muestran potencias de 10 y el número que representan.
             </template>
 
-            <div class='bloqueUpDown'>
-                <div class='controlUpDown up' @click="exponentePotencia++"></div>
-                <div id='potenciaDiez' :key="exponentePotencia">
-                      {{'\\( 10 ^ ' + exponentePotencia + '\\)'}} 
-                </div>
-                <div class='controlUpDown down' @click="exponentePotencia--"></div>
-                \( 10 ^ {-3} \)
-            </div>
+            <div class="flexVertical">
 
-            <transition name="enterTop">
-                <div id='numeroRepresentado' :key="numeroRepresentado">
-                    {{numeroRepresentado}}
+                <div class='bloqueUpDown'>
+                    <div class='boton controlUpDown up' @click="cambiarExponentePotencia(1)"
+                        :class="{deshabilitado: !exponentePotenciaRotable}"></div>
+                    <div id='potenciaDiez' ref="potenciaDiez">
+                        {{exponentePotenciaMathJax}}
+                    </div>
+                    <div class='boton controlUpDown down' @click="cambiarExponentePotencia(-1)"
+                        :class="{deshabilitado: !exponentePotenciaRotable}"></div>
                 </div>
-            </transition>
+
+                <div class="contenedorPlaceholder" style="min-height: 50px">
+                    <transition name="enterTop">
+                        <div id='numeroRepresentado' :key="numeroRepresentado">
+                            {{numeroRepresentado}}
+                        </div>
+                    </transition>
+                </div>
+            </div>
 
         </bloque-component>
 
@@ -66,44 +72,54 @@
                 En este cuadro se selecciona un número y se muestra el resultado de multiplicarlo por potencias de 10.
             </template>
 
-            <input type="number" v-model="numeroParaMultiplicar" id='inputNumeroParaMultiplicar' />
-            <button class='boton'>Aceptar</button>
+            <div class="flexVertical">
+                <recuadro-component tipo="instruccionTeclado">
+                    <div class="flexVertical">
 
-            <div id='numeroParaMultiplicar'>
-                \( {{numeroParaMultiplicar}} \times {10 ^ {{exponentePotencia2}}} \)
-            </div>
-
-            <div id='resultadoMultiplicacionPotencia2'>
-                \( {{resultadoMultiplicacionPotencia2}} \)
-            </div>
-
-        </bloque-component>
-
-        <p>
-            Los números que se escriben con muchos dígitos en la notación decimal pueden ser escritos de manera más
-            concisa en forma de una
-            multiplicación de un número corto por una potencia de diez.
-        </p>
-
-        <bloque-component tipo='ejemplo'>
-            <template #cabecera>
-                En este cuadro se muestran números que se escriben en forma larga y una alternativa en notación decimal.
-            </template>
-
-            <div class='listaEjemplos'>
-                <div class='itemEjemplo'>
-                    <div class='numeroFormaDecimal'>
-                        \( 2000000 \)
+                        Escribe un número
+                        <input type="number" v-model="numeroParaMultiplicar2" id='inputNumeroParaMultiplicar' />
                     </div>
-                    <div class='numeroFormaExponencial'>
-                        \( 2 \times {10 ^ 6} \)
+                </recuadro-component>
+
+                <recuadro-component tipo="instruccionPointer">
+                    Selecciona un exponente
+                    <div class="flexVertical">
+                        <input type="range" min="-10" max="10" v-model="exponentePotencia2" />
+                        <div id="exponentePotencia2">
+                            {{exponentePotencia2}}
+                        </div>
                     </div>
+                </recuadro-component>
+
+
+                <div id='expresionExponencial2' ref="expresionExponencial2">
+                    \[ {{expresionExponencial2}} \]
+                </div>
+
+                <div id='resultadoMultiplicacionPotencia2' ref="resultadoMultiplicacionPotencia2">
+                    <span class="numeroPuntoFlotante opaco">
+                        {{partesNumeroPuntoFlotante[0]}}
+                    </span>
+                    <span class="numeroPuntoFlotante">
+                        {{partesNumeroPuntoFlotante[1]}}
+                    </span>
+                    <span class="numeroPuntoFlotante" :class="{opaco: partesNumeroPuntoFlotante[2].length==0}">
+                        .
+                    </span>
+                    <span class="numeroPuntoFlotante">
+                        {{partesNumeroPuntoFlotante[2]}}
+                    </span>
+                    <span class="numeroPuntoFlotante opaco">
+                        {{partesNumeroPuntoFlotante[3]}}
+                    </span>
                 </div>
             </div>
 
         </bloque-component>
 
-
+        <recuadro-component tipo="datoPrevio">
+            Cuando se escribe una expresión numérica que es un número multiplicado por una potencia de diez, se dice que es un número en <span class="resaltado">notación exponencial</span>.
+        </recuadro-component>
     </div>
 </body>
 
@@ -120,48 +136,207 @@
         data() {
             return {
                 exponentePotencia: 1,
-                numeroParaMultiplicar: 2,
-                exponentePotencia2: 1,
+                numeroRepresentado: 10,
+                exponentePotenciaRotable: true,
+
+                numeroParaMultiplicar2: 2,
+                exponentePotencia2: 0,
+
+                cifrasVisibles2: 10,
+                anchoCifras2: 10,
+                gapCifras2: 2,
             }
         },
         computed: {
-            resultadoMultiplicacionPotencia2() {
-                return 2 * Math.pow(10, this.exponentePotencia2);
+            partesNumeroPuntoFlotante() {
+                let partes = String(this.numeroParaMultiplicar2).split(".");
+                if (!partes[1]) {
+                    partes[1] = "";
+                }
+                //Trasladar una parte de un lado al otro según el exponente de potencia. 
+                let cifrasHaciaPrimero = "";
+                for (let i = 0; i < this.exponentePotencia2; i++) {
+                    let cifraTrasladar = i < partes[1].length ? partes[1].charAt(i) : "0";
+                    cifrasHaciaPrimero += cifraTrasladar;
+                }
+                if (this.exponentePotencia2 > 0) {
+                    partes[1] = partes[1].slice(this.exponentePotencia2);
+                }
+                let cifrasHaciaSegundo = "";
+                for (let i = 0; i > this.exponentePotencia2; i--) {
+                    let cifraTrasladar = Math.abs(i) < partes[0].length ? partes[0].charAt(partes[0].length + i - 1) : "0";
+                    cifrasHaciaSegundo = cifraTrasladar + cifrasHaciaSegundo;
+                }
+                if (this.exponentePotencia2 < 0) {
+                    let indexRecorte = partes[0].length + Number(this.exponentePotencia2);
+                    if (indexRecorte < 0) {
+                        indexRecorte = 0;
+                    }
+                    partes[0] = partes[0].slice(0, indexRecorte);
+                }
+                partes[0] += cifrasHaciaPrimero;
+                partes[1] = cifrasHaciaSegundo + partes[1];
+                if (partes[0].length < 1) {
+                    partes[0] = "0";
+                }
+
+                let ceros1 = "";
+                let ceros2 = "";
+                for (var i = 0; i < Math.floor(this.cifrasVisibles2 / 2) - partes[0].length; i++) {
+                    ceros1 += "0";
+                }
+
+                for (var i = 0; i < Math.floor(this.cifrasVisibles2 / 2) - partes[1].length; i++) {
+                    ceros2 += "0";
+                }
+                return [
+                    ceros1, partes[0],
+                    partes[1], ceros2,
+                ]
             },
-            numeroRepresentado() {
-                return Math.pow(10, this.exponentePotencia);
+
+            offsetCifras2() {
+                return {
+                    width: this.anchoCifras2 + 'px',
+                    marginLeft: this.gapCifras2 + 'px',
+                }
+            },
+            exponentePotenciaMathJax() {
+                return "\\[ 10^{" + String(this.exponentePotencia) + "} \\]";
+            },
+            expresionExponencial2() {
+                return this.numeroParaMultiplicar2 + " \\times " + "10 ^ {" + this.exponentePotencia2 + "}";
             }
         },
         methods: {
+            cambiarExponentePotencia(delta) {
+                if (delta < 0) {
+                    this.$refs.potenciaDiez.animate([
+                        {
+                            transform: 'translateY(0px)',
+                            opacity: 1,
+                        },
+                        {
+                            transform: 'translateY(-40px)',
+                            opacity: 0,
+                        }
+                    ],
+                        {
+                            duration: 300,
+                        }
+                    ).finished.then(() => {
+                        this.exponentePotencia += delta;
+                        this.$refs.potenciaDiez.animate([
+                            {
+                                transform: 'translateY(40px)',
+                                opacity: 0
+                            },
+                            {
+                                transform: 'translateY(0px)',
+                                opacity: 1,
+                            }
+                        ],
+                            {
+                                duration: 300,
+                            }
+                        ).finished.then(() => {
+                            this.numeroRepresentado = Math.pow(10, this.exponentePotencia);
+                        })
+                    });
+                }
+                else {
+                    this.$refs.potenciaDiez.animate([
+                        {
+                            transform: 'translateY(0px)',
+                            opacity: 1,
+                        },
+                        {
+                            transform: 'translateY(40px)',
+                            opacity: 0,
+                        }
+                    ],
+                        {
+                            duration: 300
+                        }
+                    ).finished.then(() => {
+                        this.exponentePotencia += delta;
+                        this.$refs.potenciaDiez.animate(
+                            [
+                                {
+                                    transform: 'translateY(-40px)',
+                                    opacity: 0,
+                                },
+                                {
+                                    transform: 'translateY(0px)',
+                                    opacity: 1,
+                                }
+                            ],
+                            {
+                                duration: 300
+                            }
+                        ).finished.then(() => {
+                            this.numeroRepresentado = Math.pow(10, this.exponentePotencia);
+                        })
+                    })
+                }
+
+            },
+
         },
         watch: {
             exponentePotencia() {
-                setTimeout(() => {
+                this.$nextTick(() => {
                     MathJax.typeset();
-                }, 500);
+                });
+            },
+            expresionExponencial2() {
+                this.$refs.expresionExponencial2.style.fontSize = '40px';
+                this.$nextTick(() => {
+                    MathJax.typeset();
+                })
+            },
+            resultadoMultiplicacionPotencia2() {
+                //this.$refs.resultadoMultiplicacionPotencia2.style.fontSize='40px';
+            },
+            exponentePotenciaMathJax() {
+                this.$refs.potenciaDiez.style.fontSize = '38px';
             }
+        },
+        mounted() {
+            let anchoPantalla = window.screen.width;
+            this.cifrasVisibles2 = Math.round(0.5 * anchoPantalla / (this.anchoCifras2 + this.gapCifras2));
         }
 
     }).mount("#doc");
 </script>
 
 <style>
-.controlUpDown{
-    min-height: 10px;
-    min-width: 10px;
-    width: fit-content;
-}
+    .controlUpDown {
+        min-height: 10px;
+        min-width: 10px;
+        width: fit-content;
+        cursor: pointer;
+    }
+
     .controlUpDown::after {
         content: "<";
     }
-    .controlUpDown.up{
+
+    .controlUpDown.up {
         transform: rotate(90deg);
     }
-    .controlUpDown.down{
+
+    .controlUpDown.down {
         transform: rotate(-90deg);
     }
-    #potenciaDiez{
-        width: 200px;
-        height: 200px;
+
+    #potenciaDiez {}
+
+    #resultadoMultiplicacionPotencia2 {
+        display: flex;
+    }
+
+    .numeroPuntoFlotante.opaco {
+        opacity: 0.1;
     }
 </style>

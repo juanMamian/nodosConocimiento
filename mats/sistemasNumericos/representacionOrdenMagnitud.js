@@ -1,146 +1,111 @@
-let representacionOrdenMagnitudComponente;
-representacionOrdenMagnitudComponente = {
+let conjuntoNumerico;
+conjuntoNumerico = {
     template: `
-        <div class="ordenMagnitudComponente" :class="{ultimo}" @dblclick.stop="toggleDoblar">
-               <div id="contenedorDobleSubpartes" v-if="!resumida" ref="contenedorDobleSubpartes">
-                    <div id="contenedorSubordenes" class="contenedorSubpartes" v-if="factores.length>1">
-                        <representacion-orden-magnitud-componente :cantidad-original="cantidadOriginal" :cadena-index="cadenaIndex+index" :index="index" :factores="sigFactores" ref="subordenes" v-for="(conjunto, index) of cantidadChildren+1" :ultimo="ultimo && index===factores[0]" :key="cadenaIndex+'suborden'+index" />
-                    </div>
-                    <div id="contenedorBolitas" class="contenedorSubpartes" v-if="factores.length===1"  >
-                        <div class="bolitaNumero" v-for="(bolita, index) of cantidadChildren" :key="'subbolita'+index" >
-                        </div>
-                    </div>
-                </div>
-               <div id="nombreOrden" v-else :style="[estiloNombreOrden]" ref="nombreOrden">  
-                    {{nombreOrden}}
-               </div>
+        <div class="conjuntoNumerico" :class="{bolitaNumero: esUnidad}" @dblclick.stop="toggleDoblar" :style="[estiloConjunto]">
+            <div id="nombreConjunto" v-if="orden>0" :style="[estiloNombreConjunto]" v-show="mostrandoNombre && lleno" ref="nombreConjunto">
+                {{nombreOrden}}
+            </div>
+            <div class="contenedorSubconjuntos" :class="{lleno}" v-if="orden>0" v-show="mostrandoSubconjuntos" ref="contenedorSubconjuntos" :style="[estiloContenedorSubconjuntos]">
+                    <conjunto-numerico v-for="(subnumero, index) of subnumeros" :key="'subnumero'+index" :numero="subnumero" />
+            </div>
         </div>
     `,
-    name: "representacionOrdenMagnitudComponente",
+    name: "conjuntoNumerico",
     components: {
-        representacionOrdenMagnitudComponente
+        conjuntoNumerico
     },
     props: {
-        index: {
+        numero: {
             type: Number,
-        },
-        cadenaIndex: {
-            type: String,
             required: true,
-        },
-        cantidadOriginal: {
-            type: Number,
-        },
-        factores: {
-            type: Array,
-            required: true,
-        },
-        ultimo: {
-            type: Boolean,
-            required: true
         }
     },
     data() {
         return {
-            ordenesBase: ["unidad", "decena", "centena"],
-            ordenesSecundarios: ['', 'millon', 'billon', 'trillon', 'cuatrillon', 'quintillon', 'sextillon'],
-            resumida: false,
-            doblada: false,
-            estiloNombreOrden: {
-                width: '100px',
-                height: '50px'
-            }
+            doblar: false,
+            mostrandoSubconjuntos: true,
+            mostrandoNombre: false,
         }
     },
     methods: {
         toggleDoblar() {
-            if (this.resumida) {
+            if(this.subnumeros.length!=10){
+                return;
+            }
+            if(this.mostrandoSubconjuntos && !this.mostrandoNombre){
+                this.doblar();
+            }
+            else if(!this.mostrandoSubconjuntos && this.mostrandoNombre){
                 this.desdoblar();
             }
-            else {
-                this.doblar();
+            else{
+                console.log(`No había condiciones para toggle doblar`);
             }
         },
-        doblar() {
-            console.log(`Doblando ${this.nombreOrden} ${this.index}`);
-            let anchoInicial = this.$el.offsetWidth;
-            let altoInicial = this.$el.offsetHeight;
-            this.$refs.contenedorDobleSubpartes.animate([
-                {
-                    transform: 'translateY(0px)'
-                },
-                {
-                    transform: 'translateY(100%)'
-                }
-            ], { duration: 1000 }).finished.then(() => {
-                this.resumida = true;
-                this.estiloNombreOrden.width = anchoInicial + 'px';
-                this.estiloNombreOrden.height = altoInicial + 'px';
-                this.$nextTick(() => {
-                    this.$refs.nombreOrden.animate([
-                        {
-                            transform: 'translateY(-100%)'
-                        },
-                        {
-                            transform: 'translateY(0px)'
-                        }
-                    ], { duration: 1000 }).finished.then(() => {
-                        this.estiloNombreOrden.width = undefined;
-                        this.estiloNombreOrden.height = undefined;
-                        this.doblada = true
-                    });
-                })
-            })
-        },
-        desdoblar() {
-            console.log(`Desdoblando ${this.nombreOrden} ${this.index} con ${this.$refs.subordenes.length}`);
+        doblar(){
 
-            this.$refs.subordenes.forEach(suborden => {
-                console.log(`checking suborden antes de desdoblar: ${suborden.dat.doblada}`);
-            })
-            this.resumida = false;
-            this.doblada = false;
         }
+
     },
     computed: {
-        sigFactores() {
-            return this.factores.slice(1);
+        esUnidad(){
+            return this.orden===0;
         },
-        orden() {
-            return this.factores.length;
+        estiloConjunto() {
+            return {
+                borderRadius: this.esUnidad ? '50%' : '10px',
+                borderColor: this.lleno?'black':'transparent',
+            }
         },
-        cantidadChildren() {
-            return this.ultimo ? this.factores[0] : 10;
-        },
-        nombreOrden() {
-            const ordenBase = this.ordenesBase[this.factores.length % 3];
-            const mil = this.factores.length % 6 > 3;
-            const ordenSecundario = Math.floor(this.factores.length / 6);
-            return `${ordenBase}  ${mil ? 'mil' : ''} ${this.ordenesSecundarios[ordenSecundario]}`;
-        }
-    },
-    watch: {
-        factores() {
-            let ultimoFactor = this.factores[this.factores.length - 1];
-            if (this.ultimo && ultimoFactor === 10) {
+        estiloNombreConjunto(){
+            return {
 
             }
         },
-        cantidadChildren(valor, anteriorValor) {
-            if (valor === 10) {
-                this.doblar();
+        estiloContenedorSubconjuntos(){
+            return {
+
             }
         },
-        nombreOrden(nuevo, viejo) {
-            console.log(`${viejo} se convierte en ${nuevo}`);
-            this.resumida = false;
-            this.doblada = false;
+        lleno(){
+            return this.numero===Math.pow(10, this.orden);
+        },
+        orden() {
+            let potencia = -20;
+            while (potencia < 20) {
+                let divisor = Math.pow(10, potencia);
+                if (this.numero / divisor <= 10) {
+                    return potencia + 1;
+                }
+                potencia++;
+            }
+            console.log(`Error, el orden resultó mayor que 20`);
+            return 0;
+        },
+        nombreOrden() {
+            const bases = ['unidad', 'decena', 'centena'];
+            const illones = ['', 'millones', 'billones', 'trillones', 'cuatrillones', 'quintillones', 'sextillones'];
+            const base = bases[this.orden % 3];
+            const mil = this.orden % 6 >= 3;
+            const illon = illones[Math.floor(this.orden / 6)];
+            return base + (mil ? ' mil' : '') + (illon ? ' ' + illon : '');
+        },
+        subnumeros() {
+            let paquete = Math.pow(10, this.orden - 1);
+            let cantidad = this.numero;
+            let subnumeros = [];
+            while (cantidad > paquete) {
+                cantidad -= paquete;
+                subnumeros.push(paquete);
+            }
+            subnumeros.push(cantidad);
+            return subnumeros;
         }
+
+    },
+    watch: {
     },
     mounted() {
-        if (!this.ultimo) {
-            this.doblar();
-        }
     }
 }
 

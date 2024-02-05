@@ -1,47 +1,43 @@
-.ordenMagnitudComponente{
+.conjuntoNumerico {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 10px;
     gap: 10px;
-    flex-direction: column;
-    width: fit-content;
-    min-width: 50px;
     position: relative;
 }
-.ordenMagnitudComponente #nombreOrden{
-    width: 100%;
-    font-size: 76%;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100px;
-}
-@keyframes foldVertical{
-    0%{transform: rotateX(0deg)}
-    100%{transform: rotateX(90deg)}
-}
-.foldBolitas-leave-active{
-    animation: foldVertical 2s linear;
-}
-.foldBolitas-enter-active{
-    animation: foldVertical 2s reverse linear;
+
+.conjuntoNumerico #nombreConjunto {
+    font-size: 11px;
+    text-align: center;
+    padding: 10px;
 }
 
-.ordenMagnitudComponente #contenedorDobleSubpartes{
-    overflow: hidden;
-    border: 1px dashed red;
-}
-.ordenMagnitudComponente .contenedorSubpartes{
+.conjuntoNumerico .contenedorSubconjuntos {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
-    align-items: center;
-    background-color: #acacac;
+    row-gap: 30px;
+    flex-wrap: wrap;
+    position: relative;
 }
-.ordenMagnitudComponente #nombreOrden{
-    border: 1px dashed blue;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: width 1s, height 1s;
+
+.conjuntoNumerico .contenedorSubconjuntos.lleno {
+    opacity: 0.6;
+}
+
+.transicionSubconjuntos-enter-from,
+.transicionSubconjuntos-leave-to {
+    transform: scale(0);
+}
+
+.transicionSubconjuntos-enter-to,
+.transicionSubconjuntos-leave-from {
+    transform: scale(1);
+}
+
+.transicionSubconjuntos-enter-active,
+.transicionSubconjuntos-leave-active {
+    transition: transform 1s;
 }

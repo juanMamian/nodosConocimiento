@@ -2,13 +2,9 @@
     display: flex;
     gap: 10px;
     flex-direction: column;
-    border: 1px dashed gray;
     width: fit-content;
     min-width: 50px;
     position: relative;
-}
-.ordenMagnitudComponente.ultimo{
-    border-color: red;
 }
 .ordenMagnitudComponente #nombreOrden{
     width: 100%;
@@ -20,20 +16,32 @@
     width: 100px;
 }
 @keyframes foldVertical{
-    0%{height: 40px}
-    100%{height: 0px}
+    0%{transform: rotateX(0deg)}
+    100%{transform: rotateX(90deg)}
 }
 .foldBolitas-leave-active{
-    animation: foldVertical 1s linear;
+    animation: foldVertical 2s linear;
 }
 .foldBolitas-enter-active{
-    animation: foldVertical 1s reverse linear;
+    animation: foldVertical 2s reverse linear;
 }
 
+.ordenMagnitudComponente #contenedorDobleSubpartes{
+    overflow: hidden;
+    border: 1px dashed red;
+}
 .ordenMagnitudComponente .contenedorSubpartes{
     display: flex;
     flex-wrap: wrap;
-    border: 1px solid red;
-    overflow: hidden;
+    gap: 10px;
     align-items: center;
+    background-color: #acacac;
+}
+.ordenMagnitudComponente #nombreOrden{
+    border: 1px dashed blue;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 1s, height 1s;
 }

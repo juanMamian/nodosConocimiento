@@ -3,23 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadro.js"></script>
     <script src="representacionOrdenMagnitud.js"></script>
 
     <link rel="stylesheet" href="estiloOrdenMagnitud.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
     <title>Sistema decimal - explicación</title>
 </head>
@@ -30,19 +30,46 @@
             En el sistema decimal las unidades se agrupan en paquetes de diez.
         </p>
 
+        <bloque-component>
+            <template #cabecera>
+                En este cuadro se puede ver cómo se agrupan los números
+            </template>
+
+            <div class="flexVertical">
+                <conjunto-numerico :orden="ordenAgrupacion" :numero="numeroAgrupacion" cadena-index="0" :orden-presentado-inicialmente="ordenAgrupacion>0?ordenAgrupacion-1:0"
+                    :numero-total="numeroAgrupacion" ref="conjuntoContenedorAgrupacion" :key="numeroAgrupacion" :labels="[ordenAgrupacion]">
+                </conjunto-numerico>
+
+                <div v-html="textoDescripcionAgrupacion">
+                </div>
+
+                <button @click="stepUpAgrupacion">{{textoBotonAgrupacion}}</button>
+            </div>
+
+        </bloque-component>
+
         <bloque-component tipo="herramientaInteractiva">
             <template #cabecera>
                 En este cuadro se puede ver cómo se agrupan las unidades en el sistema decimal.
             </template>
 
-            <button class="botonTexto" @click.stop="unidadesMostradas++">
-                Añadir bolita
-            </button>
-            <input type="number" name="inputUnidadesMostradas" v-model="unidadesMostradas">
+            <recuadro-component tipo="instruccionTeclado">
+                <div class="flexVertical">
+                    <div>
+                        Escribe un número
+                    </div>
+                    <input type="number" name="inputUnidadesMostradas" min="0" max="9999" ref="inputUnidadesMostradas"
+                        @keypress.enter="setUnidadesMostradas">
+                    <button class="botonTexto" @click="setUnidadesMostradas">Aceptar</button>
+                </div>
+            </recuadro-component>
 
             {{factoresOrdenesMagnitud}}
             <div id="contenedorRepresentacion">
-                <conjunto-numerico :numero=unidadesMostradas :style="[]" />
+                <conjunto-numerico v-if="unidadesMostradas>0" :numero-total="unidadesMostradas"
+                    :numero="unidadesMostradas" :orden="ordenContenedorUnidadesMostradas" :style="[]" :ultimo="true"
+                    cadena-index="0" key="2-0" :identificador-orden="0">
+                </conjunto-numerico>
             </div>
 
 
@@ -67,9 +94,39 @@
         data() {
             return {
                 unidadesMostradas: 0,
+
+                stepAgrupacion: 0,
             }
         },
         computed: {
+            textoBotonAgrupacion() {
+                return "Continuar";
+            },
+            textoDescripcionAgrupacion() {
+                const bases = ['unidad', 'decena', 'centena'];
+                const illones = ['', 'millones', 'billones', 'trillones', 'cuatrillones', 'quintillones', 'sextillones'];
+
+                const ordenOrigen = Math.floor(this.stepAgrupacion / 2);
+                const baseOrigen = bases[ordenOrigen % 3];
+                const milOrigen = ordenOrigen % 6 >= 3;
+                const illonOrigen = illones[Math.floor(ordenOrigen / 6)];
+                const conjuntoOrigen = baseOrigen + (milOrigen ? ' mil' : '') + (illonOrigen ? ' ' + illonOrigen : '');
+
+                const ordenDestino = ordenOrigen + 1;
+                const baseDestino = bases[ordenDestino % 3];
+                const milDestino = ordenDestino % 6 >= 3;
+                const illonDestino = illones[Math.floor(ordenDestino / 6)];
+                const conjuntoDestino = baseDestino + (milDestino ? ' mil' : '') + (illonDestino ? ' ' + illonDestino : '');
+
+                if (this.stepAgrupacion === 0) {
+                    return "Esta es una unidad"
+                }
+                if (this.stepAgrupacion % 2 === 0) {
+                    return ""
+                }
+                return `A diez ${conjuntoOrigen} se las llama <span class="resaltado"> una ${conjuntoDestino} </span>`;
+
+            },
             factoresOrdenesMagnitud() {
                 let numeroEscrito = String(this.unidadesMostradas);
                 let arrayFinal = [];
@@ -77,12 +134,57 @@
                     arrayFinal.push(parseInt(numeroEscrito.charAt(i)));
                 }
                 return arrayFinal;
+            },
+            ordenContenedorUnidadesMostradas() {
+                return getOrdenContenedorNumero(this.unidadesMostradas);
+            },
+            ordenAgrupacion() {
+                return getOrdenContenedorNumero(this.numeroAgrupacion);
+            },
+            numeroAgrupacion() {
+                return Math.pow(10, Math.ceil(this.stepAgrupacion / 2));
             }
+
         },
         methods: {
-
+            stepUpAgrupacion() {
+                this.stepAgrupacion++;
+            },
+            setUnidadesMostradas() {
+                let nuevoValor = Number(this.$refs.inputUnidadesMostradas.value);
+                if (!nuevoValor) {
+                    console.log(`No había nuevoValor`);
+                    return;
+                }
+                if (nuevoValor < 0 || nuevoValor > 9999) {
+                    alert("Ese número es inválido");
+                    return;
+                }
+                this.unidadesMostradas = nuevoValor;
+            }
+        },
+        watch: {
+            stepAgrupacion(valor) {
+                if (valor > 0 && valor % 2 === 0) {
+                    this.$refs.conjuntoContenedorAgrupacion.doblar();
+                }
+            }
         }
     }).mount("#doc")
+    function getOrdenContenedorNumero(numero) {
+        const ordenInicial = 0;
+        let ordenPosible = ordenInicial;
+
+        while (ordenPosible < 18) {
+            if (Math.pow(10, ordenPosible) >= numero) {
+                return ordenPosible
+            }
+            ordenPosible++;
+        }
+        console.log(`Error: el orden posible se pasó de 20`);
+        return 0;
+
+    }
 </script>
 
 

@@ -1,12 +1,16 @@
 let conjuntoNumerico;
 conjuntoNumerico = {
     template: `
-        <div class="conjuntoNumerico" :class="{bolitaNumero: esUnidad}" @dblclick.stop="toggleDoblar" :style="[estiloConjunto]">
-            <div id="nombreConjunto" v-if="orden>0" :style="[estiloNombreConjunto]" v-show="mostrandoNombre && lleno" ref="nombreConjunto">
+        <div class="conjuntoNumerico" :class="{bolitaNumero: esUnidad}" @dblclick="toggleDoblar" :style="[estiloConjunto]">
+            <div class="labelConjunto" v-show="labels.includes(orden) && !mostrandoNombre && mostrandoSubconjuntos && lleno">
                 {{nombreOrden}}
             </div>
-            <div class="contenedorSubconjuntos" :class="{lleno}" v-if="orden>0" v-show="mostrandoSubconjuntos" ref="contenedorSubconjuntos" :style="[estiloContenedorSubconjuntos]">
-                    <conjunto-numerico v-for="(subnumero, index) of subnumeros" :key="'subnumero'+index" :numero="subnumero" />
+            <div id="nombreConjunto" v-if="orden>0" :style="[estiloNombre]" ref="nombreConjunto" v-show="mostrandoNombre && lleno">
+                {{nombreOrden}}
+            </div>
+            <div class="contenedorSubconjuntos"  :class="{lleno}" v-if="orden>0 && mostrandoSubconjuntos" ref="contenedorSubconjuntos" :style="[estiloContenedorSubconjuntos]">
+                    <conjunto-numerico :ordenPresentadoInicialmente="ordenPresentadoInicialmente" :numero-total="numeroTotal" :orden="orden-1" :cadena-index="cadenaIndex+index" v-for="(subnumero, index) of subnumeros" :ultimo="subnumeros.length===index+1 && ultimo" ref="subconjuntos" :key="orden-1 + '-' + Number(cadenaIndex)*10+index " :numero="subnumero" :identificadorOrden="Number(cadenaIndex)*10+index" >
+                    </conjunto-numerico>
             </div>
         </div>
     `,
@@ -15,72 +19,165 @@ conjuntoNumerico = {
         conjuntoNumerico
     },
     props: {
+        labels: {
+            type: Array,
+            default: []
+        },
+        ordenPresentadoInicialmente: {
+            type: Number,
+            default: 0,
+        },
+        numeroTotal: {
+            type: Number,
+            required: true,
+        },
+        orden: {
+            type: Number,
+            required: true,
+        },
+        identificadorOrden: {
+            type: Number,
+        },
         numero: {
             type: Number,
             required: true,
+        },
+        ultimo: {
+            type: Boolean,
+        },
+        cadenaIndex: {
+            type: String,
         }
     },
     data() {
+        let mostrandoNombre = this.orden === this.ordenPresentadoInicialmente && this.orden != 0;
         return {
-            doblar: false,
-            mostrandoSubconjuntos: true,
-            mostrandoNombre: false,
+            mostrandoSubconjuntos: this.orden > this.ordenPresentadoInicialmente,
+            mostrandoNombre,
+            estiloNombre: {
+                width: '110px',
+                height: '30px',
+            },
+            estiloContenedorSubconjuntos: {
+            },
         }
     },
     methods: {
-        toggleDoblar() {
-            if(this.subnumeros.length!=10){
+        toggleDoblar(evento) {
+            if (this.orden < 1) {
                 return;
             }
-            if(this.mostrandoSubconjuntos && !this.mostrandoNombre){
+            if (!this.lleno) {
+                return;
+            }
+            if (this.mostrandoSubconjuntos && !this.mostrandoNombre) {
+                evento.stopPropagation();
                 this.doblar();
             }
-            else if(!this.mostrandoSubconjuntos && this.mostrandoNombre){
+            else if (!this.mostrandoSubconjuntos && this.mostrandoNombre) {
+                evento.stopPropagation();
                 this.desdoblar();
             }
-            else{
+            else {
                 console.log(`No había condiciones para toggle doblar`);
             }
         },
-        doblar(){
+        ocultarChildren() {
+            let children = this.$refs.subconjuntos;
+            if (children && children.length > 0) {
+                for (let child of children) {
+                    child.ocultarmeAndChildren();
+                }
+            }
+        },
+        ocultarmeAndChildren() {
+            let children = this.$refs.subconjuntos;
+            if (children && children.length > 0) {
+                for (let child of children) {
+                    child.ocultarmeAndChildren();
+                }
+            }
+            this.forceDoblar();
+        },
+        forceDoblar() {
+            this.mostrandoSubconjuntos = false;
+            this.mostrandoNombre = true;
+        },
+        forceDesdoblar() {
+            console.log(`Forcingly desdoblando`);
+            this.mostrandoSubconjuntos = true;
+            this.mostrandoNombre = false;
+        },
+        doblar() {
+            if (!this.lleno) {
+                console.log("No lleno");
+                this.mostrandoSubconjuntos = true;
+                this.mostrandoNombre = false;
+                return;
+            }
+            console.log(`Doblando ${this.cadenaIndex}`);
 
+            if (!this.mostrandoSubconjuntos || this.mostrandoNombre) {
+                console.log("No se podía doblar");
+                return;
+            }
+            let anchoInicial = this.$refs.contenedorSubconjuntos.offsetWidth;
+            let altoInicial = this.$refs.contenedorSubconjuntos.offsetHeight;
+            this.mostrandoNombre = true;
+            this.estiloContenedorSubconjuntos.position = 'absolute';
+            this.estiloNombre.width = anchoInicial + 'px';
+            this.estiloNombre.height = altoInicial + 'px';
+            this.$nextTick(() => {
+                this.$refs.nombreConjunto.animate([
+                    {
+                        transform: 'translateY(-100%)',
+                    },
+                    {
+                        transform: 'translateY(0%)',
+                    },
+
+                ], { duration: 1000 }).finished.then(() => {
+                    this.mostrandoSubconjuntos = false;
+                    this.estiloContenedorSubconjuntos.position = undefined;
+                    this.$refs.nombreConjunto.animate([
+                        {
+                            width: anchoInicial + 'px',
+                            height: altoInicial + 'px',
+                        },
+                        {
+                            width: '110px',
+                            height: '30px',
+                        }
+                    ], { duration: 1000 }).finished.then(() => {
+                        this.estiloNombre.width = '110px';
+                        this.estiloNombre.height = '30px';
+                    })
+                })
+            })
+
+        },
+        desdoblar() {
+            console.log(`Desdoblando`);
+            this.mostrandoNombre = false;
+            this.mostrandoSubconjuntos = true;
         }
 
     },
     computed: {
-        esUnidad(){
-            return this.orden===0;
+        layoutNombre() {
+        },
+        esUnidad() {
+            return this.orden === 0;
         },
         estiloConjunto() {
-            return {
-                borderRadius: this.esUnidad ? '50%' : '10px',
-                borderColor: this.lleno?'black':'transparent',
-            }
-        },
-        estiloNombreConjunto(){
-            return {
+            let colorFondo = 0;
 
-            }
-        },
-        estiloContenedorSubconjuntos(){
             return {
-
+                border: this.lleno ? '1px dashed black' : '',
             }
         },
-        lleno(){
-            return this.numero===Math.pow(10, this.orden);
-        },
-        orden() {
-            let potencia = -20;
-            while (potencia < 20) {
-                let divisor = Math.pow(10, potencia);
-                if (this.numero / divisor <= 10) {
-                    return potencia + 1;
-                }
-                potencia++;
-            }
-            console.log(`Error, el orden resultó mayor que 20`);
-            return 0;
+        lleno() {
+            return this.numero === Math.pow(10, this.orden);
         },
         nombreOrden() {
             const bases = ['unidad', 'decena', 'centena'];
@@ -104,6 +201,11 @@ conjuntoNumerico = {
 
     },
     watch: {
+        mostrandoNombre: {
+            handler: function(nuevo, viejo) {
+            },
+            immediate: true
+        },
     },
     mounted() {
     }

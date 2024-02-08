@@ -2,42 +2,55 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
-    border-radius: 10px;
     gap: 10px;
     position: relative;
 }
 
+.conjuntoNumerico .labelConjunto{
+    position: absolute;
+    bottom: 100%;
+    left: 0px;
+    transform: translateY(50%);
+    color: whitesmoke;
+    font-size: 14px;
+    padding: 3px 5px;
+    background-color: var(--paletaActual);
+    z-index: 3;
+}
 .conjuntoNumerico #nombreConjunto {
     font-size: 11px;
     text-align: center;
     padding: 10px;
+    background-color: #a2a2a2;
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+    justify-content: center;
+    z-index: 1;
 }
 
 .conjuntoNumerico .contenedorSubconjuntos {
     display: flex;
     align-items: center;
     gap: 10px;
+    padding:15px;
     row-gap: 30px;
+    width: fit-content;
     flex-wrap: wrap;
     position: relative;
+    z-index:0;
 }
 
-.conjuntoNumerico .contenedorSubconjuntos.lleno {
-    opacity: 0.6;
-}
 
-.transicionSubconjuntos-enter-from,
-.transicionSubconjuntos-leave-to {
-    transform: scale(0);
+.caerTop-enter-from, .caerTop-leave-to{
+    transform: translateY(-100%);
 }
-
-.transicionSubconjuntos-enter-to,
-.transicionSubconjuntos-leave-from {
-    transform: scale(1);
+.caerTop-leave-from, .caerTop-enter-to{
+    transform: translateY(0%);
 }
-
-.transicionSubconjuntos-enter-active,
-.transicionSubconjuntos-leave-active {
-    transition: transform 1s;
+.caerTop-enter-active, .caerTop-leave-active{
+    transition: transform 1000ms;
+}
+.fade-enter-active{
+    transition: opacity 1s;
 }

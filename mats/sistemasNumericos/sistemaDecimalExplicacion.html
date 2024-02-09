@@ -27,7 +27,7 @@
 <body>
     <div id="doc">
         <p>
-            En el sistema decimal las unidades se agrupan en paquetes de diez.
+            En el sistema decimal las unidades se agrupan en paquetes de diez recursivamente.
         </p>
 
         <bloque-component>
@@ -52,6 +52,10 @@
             </div>
 
         </bloque-component>
+
+        <recuadro-component tipo="datoPrevio">
+            Cada agrupación adicional se conoce como <span class="resaltado">orden de magnitud</span>.
+        </recuadro-component>
 
         <bloque-component tipo="herramientaInteractiva">
             <template #cabecera>

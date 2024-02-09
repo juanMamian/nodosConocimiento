@@ -11,10 +11,14 @@
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -29,13 +33,23 @@
             <template #cabecera>
                 Conozco los órdenes de magnitud del sistema decimal.
             </template>
-        </bloque-component>   
+        </bloque-component>
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dado cualquier número en notación decimal puedo determinar los órdenes de magnitud involucrados y su cantidad.
+                Dado cualquier número en notación decimal puedo describirlo en términos de órdenes de magnitud
             </template>
-        </bloque-component>                                           
+            <div class="flexVertical">
+                <button class="botonTexto">Generar número</button>
+                <transition name="travelTop">
+                    <div class="reto" v-show="reto2">
+                        {{reto2}}
+                    </div>
+                </transition>
+
+            </div>
+
+        </bloque-component>
 
     </div>
 </body>
@@ -50,5 +64,15 @@
             bloqueComponent,
             enlaceComponent
         },
+        data(){
+            return {}
+        },
+        methods:{
+            generarReto2(){
+                const amplitud=10000000;
+                const base=100;
+                this.reto2=Math.random()*amplitud + base;
+            }
+        }
     })
 </script>

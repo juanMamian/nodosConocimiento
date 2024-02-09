@@ -5,7 +5,7 @@ conjuntoNumerico = {
             <div class="labelConjunto" v-show="labels.includes(orden) && !mostrandoNombre && mostrandoSubconjuntos && lleno">
                 {{nombreOrden}}
             </div>
-            <div id="nombreConjunto" v-if="orden>0" :style="[estiloNombre]" ref="nombreConjunto" v-show="mostrandoNombre && lleno">
+            <div id="nombreConjunto" v-if="orden>0" :style="[estiloNombre, {backgroundColor: colorRepresentativo}]" ref="nombreConjunto" v-show="mostrandoNombre && lleno">
                 {{nombreOrden}}
             </div>
             <div class="contenedorSubconjuntos"  :class="{lleno}" v-if="orden>0 && mostrandoSubconjuntos" ref="contenedorSubconjuntos" :style="[estiloContenedorSubconjuntos]">
@@ -160,10 +160,30 @@ conjuntoNumerico = {
             console.log(`Desdoblando`);
             this.mostrandoNombre = false;
             this.mostrandoSubconjuntos = true;
+        },
+        palabraToPlural(palabra) {
+            let vocales = ["a", "e", "i", "o", "u"];
+            if (vocales.includes(palabra.charAt(palabra.length - 1))) {
+                return palabra + "s";
+            }
+            if (palabra.charAt(palabra.length - 1) === "z") {
+                palabra = palabra.slice(palabra.length - 1) + "c";
+            }
+            return palabra + "es"
+
         }
 
     },
     computed: {
+        colorRepresentativo() {
+            let colorBase = 12021615;
+            let intervalo = 2796202.5;
+            let esteColor = colorBase + intervalo * this.orden;
+            if (esteColor > 16777215) {
+                esteColor = esteColor % 16777215;
+            }
+            return "#" + Math.round(esteColor).toString(16);
+        },
         layoutNombre() {
         },
         esUnidad() {
@@ -181,11 +201,38 @@ conjuntoNumerico = {
         },
         nombreOrden() {
             const bases = ['unidad', 'decena', 'centena'];
-            const illones = ['', 'millones', 'billones', 'trillones', 'cuatrillones', 'quintillones', 'sextillones'];
+            const illones = ['', 'millon', 'billon', 'trillon', 'cuatrillon', 'quintillon', 'sextillon'];
             const base = bases[this.orden % 3];
             const mil = this.orden % 6 >= 3;
             const illon = illones[Math.floor(this.orden / 6)];
-            return base + (mil ? ' mil' : '') + (illon ? ' ' + illon : '');
+            let nombreFinal = "";
+            if (this.orden === 0) {
+                return "Unidad"
+            }
+            if (this.orden % 3 != 0) {
+                nombreFinal += base.charAt(0).toUpperCase() + base.slice(1);
+            }
+            if (mil) {
+                if (this.orden % 3 != 0) {
+                    nombreFinal += " de miles"
+                }
+                else {
+                    nombreFinal += "Mil"
+                }
+            }
+            if(illon){
+                if( this.orden%3!=0){//Hay base
+                    nombreFinal+=" de " + this.palabraToPlural(illon);
+                }
+                else if(!mil){//No hay ni base ni miles. Es simplemente el illon con upper case en la inicial.
+                    nombreFinal+=illon.charAt(0).toUpperCase()+illon.slice(1);
+                }
+                else{//es sin base pero con miles.
+                    nombreFinal+=" " + this.palabraToPlural(illon);
+                }
+            }
+
+            return nombreFinal
         },
         subnumeros() {
             let paquete = Math.pow(10, this.orden - 1);

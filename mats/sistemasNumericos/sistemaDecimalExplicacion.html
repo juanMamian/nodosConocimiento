@@ -36,14 +36,19 @@
             </template>
 
             <div class="flexVertical">
-                <conjunto-numerico :orden="ordenAgrupacion" :numero="numeroAgrupacion" cadena-index="0" :orden-presentado-inicialmente="ordenAgrupacion>0?ordenAgrupacion-1:0"
-                    :numero-total="numeroAgrupacion" ref="conjuntoContenedorAgrupacion" :key="numeroAgrupacion" :labels="[ordenAgrupacion]">
+                <conjunto-numerico :orden="ordenAgrupacion" :numero="numeroAgrupacion" cadena-index="0"
+                    :orden-presentado-inicialmente="ordenAgrupacion>0?ordenAgrupacion-1:0"
+                    :numero-total="numeroAgrupacion" ref="conjuntoContenedorAgrupacion" :key="numeroAgrupacion"
+                    :labels="[ordenAgrupacion]">
                 </conjunto-numerico>
 
-                <div v-html="textoDescripcionAgrupacion">
-                </div>
+                <transition name="fadeIn">
+                    <div v-html="textoDescripcionAgrupacion" v-show="mostrarDescripcionAgrupacion">
+                    </div>
+                </transition>
 
-                <button @click="stepUpAgrupacion">{{textoBotonAgrupacion}}</button>
+                <button @click="stepUpAgrupacion"
+                    :class="{deshabilitado: animandoAgrupacion || stepAgrupacion>=36}">{{textoBotonAgrupacion}}</button>
             </div>
 
         </bloque-component>
@@ -64,7 +69,6 @@
                 </div>
             </recuadro-component>
 
-            {{factoresOrdenesMagnitud}}
             <div id="contenedorRepresentacion">
                 <conjunto-numerico v-if="unidadesMostradas>0" :numero-total="unidadesMostradas"
                     :numero="unidadesMostradas" :orden="ordenContenedorUnidadesMostradas" :style="[]" :ultimo="true"
@@ -96,6 +100,9 @@
                 unidadesMostradas: 0,
 
                 stepAgrupacion: 0,
+                numeroAgrupacion: 1,
+                animandoAgrupacion: false,
+                mostrarDescripcionAgrupacion:true,
             }
         },
         computed: {
@@ -104,19 +111,48 @@
             },
             textoDescripcionAgrupacion() {
                 const bases = ['unidad', 'decena', 'centena'];
-                const illones = ['', 'millones', 'billones', 'trillones', 'cuatrillones', 'quintillones', 'sextillones'];
+                const illones = ['', 'millon', 'billon', 'trillon', 'cuatrillon', 'quintillon', 'sextillon'];
 
                 const ordenOrigen = Math.floor(this.stepAgrupacion / 2);
                 const baseOrigen = bases[ordenOrigen % 3];
                 const milOrigen = ordenOrigen % 6 >= 3;
                 const illonOrigen = illones[Math.floor(ordenOrigen / 6)];
-                const conjuntoOrigen = baseOrigen + (milOrigen ? ' mil' : '') + (illonOrigen ? ' ' + illonOrigen : '');
+                const conjuntoOrigen = palabraToPlural(baseOrigen) + (milOrigen ? ' de miles' : '') + (illonOrigen ? ' de ' + palabraToPlural(illonOrigen) : '');
+                let conjuntoOrigenSimplificado = "";
+                if (ordenOrigen % 3 === 0 && ordenOrigen > 2) { //Es una unidad de algún conjunto grande. Se puede escribir sin la palabra unidad.
+                    if (milOrigen) {
+                        conjuntoOrigenSimplificado += "Miles"
+                    }
+                    if (illonOrigen) {
+                        if (milOrigen) {
+                            conjuntoOrigenSimplificado += " de " + palabraToPlural(illonOrigen);
+                        }
+                        else {
+                            conjuntoOrigenSimplificado += palabraToPlural(illonOrigen);
+                            conjuntoOrigenSimplificado = conjuntoOrigenSimplificado.charAt(0).toUpperCase() + conjuntoOrigenSimplificado.slice(1);
+                        }
+                    }
+                }
 
                 const ordenDestino = ordenOrigen + 1;
                 const baseDestino = bases[ordenDestino % 3];
                 const milDestino = ordenDestino % 6 >= 3;
                 const illonDestino = illones[Math.floor(ordenDestino / 6)];
-                const conjuntoDestino = baseDestino + (milDestino ? ' mil' : '') + (illonDestino ? ' ' + illonDestino : '');
+                const conjuntoDestino = baseDestino + (milDestino ? ' de miles' : '') + (illonDestino ? ' de ' + palabraToPlural(illonDestino) : '');
+                let conjuntoDestinoSimplificado = "";
+                if (ordenDestino % 3 === 0 && ordenDestino > 2) {//Es una unidad de un conjunto grande. Puede ser escrito sin la palabra unidad.
+                    if (milDestino) {
+                        conjuntoDestinoSimplificado += "Mil"
+                    }
+                    if (illonDestino) {
+                        if (milDestino) {
+                            conjuntoDestinoSimplificado += " " + palabraToPlural(illonDestino);
+                        }
+                        else {
+                            conjuntoDestinoSimplificado = "Un " + illonDestino;
+                        }
+                    }
+                }
 
                 if (this.stepAgrupacion === 0) {
                     return "Esta es una unidad"
@@ -124,7 +160,11 @@
                 if (this.stepAgrupacion % 2 === 0) {
                     return ""
                 }
-                return `A diez ${conjuntoOrigen} se las llama <span class="resaltado"> una ${conjuntoDestino} </span>`;
+                let textoFinal = `A diez ${conjuntoOrigenSimplificado.length > 0 ? conjuntoOrigenSimplificado : conjuntoOrigen} se las llama <span class="resaltado"> una ${conjuntoDestino}</span>`;
+                if (conjuntoDestinoSimplificado) {
+                    textoFinal += " o simplemente <span class='resaltado'>" + conjuntoDestinoSimplificado + "</span>";
+                }
+                return textoFinal
 
             },
             factoresOrdenesMagnitud() {
@@ -141,13 +181,18 @@
             ordenAgrupacion() {
                 return getOrdenContenedorNumero(this.numeroAgrupacion);
             },
-            numeroAgrupacion() {
-                return Math.pow(10, Math.ceil(this.stepAgrupacion / 2));
-            }
 
         },
         methods: {
             stepUpAgrupacion() {
+                if (this.stepAgrupacion >= 36) {
+                    console.log(`Step máximo alcanzado`);
+                    return;
+                }
+                if (this.animandoAgrupacion) {
+                    console.log(`Error: en animación`);
+                    return;
+                }
                 this.stepAgrupacion++;
             },
             setUnidadesMostradas() {
@@ -165,8 +210,26 @@
         },
         watch: {
             stepAgrupacion(valor) {
-                if (valor > 0 && valor % 2 === 0) {
-                    this.$refs.conjuntoContenedorAgrupacion.doblar();
+                if (valor > 0) {
+                    if (valor % 2 === 0) {//En los pares se pliegan los conjuntos
+                        this.$refs.conjuntoContenedorAgrupacion.doblar();
+                        this.mostrarDescripcionAgrupacion=false;
+                    }
+                    else {//En los impares, se aumenta a 10 la cantidad del conjunto actualmente mostrado.
+                        let base = this.numeroAgrupacion;
+                        let intervalo = 500;
+                        this.animandoAgrupacion = true;
+                        console.log(`Animando agrupacion usando ${base}`);
+                        for (let i = 1; i < 10; i++) {
+                            setTimeout(() => {
+                                this.numeroAgrupacion += base;
+                            }, intervalo * i);
+                        }
+                        setTimeout(() => {
+                            this.animandoAgrupacion = false;
+                            this.mostrarDescripcionAgrupacion=true;
+                        }, 10 * intervalo);
+                    }
                 }
             }
         }
@@ -175,15 +238,25 @@
         const ordenInicial = 0;
         let ordenPosible = ordenInicial;
 
-        while (ordenPosible < 18) {
+        while (ordenPosible < 36) {
             if (Math.pow(10, ordenPosible) >= numero) {
                 return ordenPosible
             }
             ordenPosible++;
         }
-        console.log(`Error: el orden posible se pasó de 20`);
+        console.log(`Error: el orden posible se pasó de 36`);
         return 0;
 
+    }
+    function palabraToPlural(palabra) {
+        let vocales = ["a", "e", "i", "o", "u"];
+        if (vocales.includes(palabra.charAt(palabra.length - 1))) {
+            return palabra + "s";
+        }
+        if (palabra.charAt(palabra.length - 1) === "z") {
+            palabra = palabra.slice(palabra.length - 1) + "c";
+        }
+        return palabra + "es"
     }
 </script>
 

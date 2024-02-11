@@ -1,15 +1,15 @@
 let conjuntoNumerico;
 conjuntoNumerico = {
     template: `
-        <div class="conjuntoNumerico" :class="{bolitaNumero: esUnidad}" @dblclick="toggleDoblar" :style="[estiloConjunto]">
-            <div class="labelConjunto" v-show="labels.includes(orden) && !mostrandoNombre && mostrandoSubconjuntos && lleno">
+        <div class="conjuntoNumerico" :class="{bolitaNumero: esUnidad}"  :style="[estiloConjunto]" @mouseenter="hoveringMe=true">
+            <div class="labelConjunto" ref="label" v-show="labeled && !mostrandoNombre && mostrandoSubconjuntos && lleno" :style="[estiloLabel]" @dblclick="toggleDoblar">
                 {{nombreOrden}}
             </div>
             <div id="nombreConjunto" v-if="orden>0" :style="[estiloNombre, {backgroundColor: colorRepresentativo}]" ref="nombreConjunto" v-show="mostrandoNombre && lleno">
                 {{nombreOrden}}
             </div>
             <div class="contenedorSubconjuntos"  :class="{lleno}" v-if="orden>0 && mostrandoSubconjuntos" ref="contenedorSubconjuntos" :style="[estiloContenedorSubconjuntos]">
-                    <conjunto-numerico :ordenPresentadoInicialmente="ordenPresentadoInicialmente" :numero-total="numeroTotal" :orden="orden-1" :cadena-index="cadenaIndex+index" v-for="(subnumero, index) of subnumeros" :ultimo="subnumeros.length===index+1 && ultimo" ref="subconjuntos" :key="orden-1 + '-' + Number(cadenaIndex)*10+index " :numero="subnumero" :identificadorOrden="Number(cadenaIndex)*10+index" >
+                    <conjunto-numerico :labels="labels" :ordenPresentadoInicialmente="ordenPresentadoInicialmente" :numero-total="numeroTotal" :orden="orden-1" :cadena-index="cadenaIndex+index" v-for="(subnumero, index) of subnumeros" :ultimo="subnumeros.length===index+1 && ultimo" ref="subconjuntos" :key="orden-1 + '-' + Number(cadenaIndex)*10+index " :numero="subnumero" :identificadorOrden="Number(cadenaIndex)*10+index" >
                     </conjunto-numerico>
             </div>
         </div>
@@ -52,6 +52,7 @@ conjuntoNumerico = {
     data() {
         let mostrandoNombre = this.orden === this.ordenPresentadoInicialmente && this.orden != 0;
         return {
+            hoveringMe: false,
             mostrandoSubconjuntos: this.orden > this.ordenPresentadoInicialmente,
             mostrandoNombre,
             estiloNombre: {
@@ -123,36 +124,37 @@ conjuntoNumerico = {
             }
             let anchoInicial = this.$refs.contenedorSubconjuntos.offsetWidth;
             let altoInicial = this.$refs.contenedorSubconjuntos.offsetHeight;
-            this.mostrandoNombre = true;
-            this.estiloContenedorSubconjuntos.position = 'absolute';
+            let anchoLabel = this.$refs.label.offsetWidth;
+            let altoLabel = this.$refs.label.offsetHeight;
             this.estiloNombre.width = anchoInicial + 'px';
             this.estiloNombre.height = altoInicial + 'px';
             this.$nextTick(() => {
-                this.$refs.nombreConjunto.animate([
+                //                this.$refs.nombreConjunto.animate([
+                //                    {
+                //                        width: anchoLabel + 'px',
+                //                        height: altoLabel + 'px',
+                //                    },
+                //                    {
+                //                        width: '110px',
+                //                        height: '30px',
+                //                    },
+                //
+                //                ], { duration: 1000 }).finished.then(() => {
+                //                });
+                console.log(`Iniciando animación`);
+                this.$refs.contenedorSubconjuntos.animate([
                     {
-                        transform: 'translateY(-100%)',
+                        transform: 'scale(1)'
                     },
                     {
-                        transform: 'translateY(0%)',
-                    },
-
+                        transform: 'scale(0)'
+                    }
                 ], { duration: 1000 }).finished.then(() => {
+                    console.log(`Animación completada`);
                     this.mostrandoSubconjuntos = false;
+                    this.mostrandoNombre = true;
                     this.estiloContenedorSubconjuntos.position = undefined;
-                    this.$refs.nombreConjunto.animate([
-                        {
-                            width: anchoInicial + 'px',
-                            height: altoInicial + 'px',
-                        },
-                        {
-                            width: '110px',
-                            height: '30px',
-                        }
-                    ], { duration: 1000 }).finished.then(() => {
-                        this.estiloNombre.width = '110px';
-                        this.estiloNombre.height = '30px';
-                    })
-                })
+                });
             })
 
         },
@@ -175,6 +177,9 @@ conjuntoNumerico = {
 
     },
     computed: {
+        labeled() {
+            return this.labels.includes(this.orden);
+        },
         colorRepresentativo() {
             let colorBase = 12021615;
             let intervalo = 2796202.5;
@@ -183,6 +188,11 @@ conjuntoNumerico = {
                 esteColor = esteColor % 16777215;
             }
             return "#" + Math.round(esteColor).toString(16);
+        },
+        estiloLabel() {
+            return {
+                backgroundColor: this.colorRepresentativo,
+            }
         },
         layoutNombre() {
         },
@@ -193,7 +203,8 @@ conjuntoNumerico = {
             let colorFondo = 0;
 
             return {
-                border: this.lleno ? '1px dashed black' : '',
+                border: this.lleno && this.labeled ? '1px dashed black' : '',
+                borderColor: this.colorRepresentativo,
             }
         },
         lleno() {
@@ -220,15 +231,15 @@ conjuntoNumerico = {
                     nombreFinal += "Mil"
                 }
             }
-            if(illon){
-                if( this.orden%3!=0){//Hay base
-                    nombreFinal+=" de " + this.palabraToPlural(illon);
+            if (illon) {
+                if (this.orden % 3 != 0) {//Hay base
+                    nombreFinal += " de " + this.palabraToPlural(illon);
                 }
-                else if(!mil){//No hay ni base ni miles. Es simplemente el illon con upper case en la inicial.
-                    nombreFinal+=illon.charAt(0).toUpperCase()+illon.slice(1);
+                else if (!mil) {//No hay ni base ni miles. Es simplemente el illon con upper case en la inicial.
+                    nombreFinal += illon.charAt(0).toUpperCase() + illon.slice(1);
                 }
-                else{//es sin base pero con miles.
-                    nombreFinal+=" " + this.palabraToPlural(illon);
+                else {//es sin base pero con miles.
+                    nombreFinal += " " + this.palabraToPlural(illon);
                 }
             }
 
@@ -258,3 +269,39 @@ conjuntoNumerico = {
     }
 }
 
+function getNombreConjuntoNumericoFromPotencia(potencia) {
+    const bases = ['unidad', 'decena', 'centena'];
+    const illones = ['', 'millon', 'billon', 'trillon', 'cuatrillon', 'quintillon', 'sextillon'];
+    const base = bases[potencia % 3];
+    const mil = potencia % 6 >= 3;
+    const illon = illones[Math.floor(potencia / 6)];
+    let nombreFinal = "";
+    if (potencia === 0) {
+        return "Unidad"
+    }
+    if (potencia % 3 != 0) {
+        nombreFinal += base.charAt(0).toUpperCase() + base.slice(1);
+    }
+    if (mil) {
+        if (potencia % 3 != 0) {
+            nombreFinal += " de miles"
+        }
+        else {
+            nombreFinal += "Mil"
+        }
+    }
+    if (illon) {
+        if (potencia % 3 != 0) {//Hay base
+            nombreFinal += " de " + this.palabraToPlural(illon);
+        }
+        else if (!mil) {//No hay ni base ni miles. Es simplemente el illon con upper case en la inicial.
+            nombreFinal += illon.charAt(0).toUpperCase() + illon.slice(1);
+        }
+        else {//es sin base pero con miles.
+            nombreFinal += " " + this.palabraToPlural(illon);
+        }
+    }
+
+    return nombreFinal
+
+}

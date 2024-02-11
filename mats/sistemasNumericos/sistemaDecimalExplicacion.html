@@ -27,7 +27,8 @@
 <body>
     <div id="doc">
         <p>
-            En el sistema decimal las unidades se agrupan en paquetes de diez recursivamente.
+            En el sistema decimal, los números se agrupan en conjuntos de diez. Y esos conjuntos también se agrupan en
+            conjuntos de diez.
         </p>
 
         <bloque-component>
@@ -53,13 +54,10 @@
 
         </bloque-component>
 
-        <recuadro-component tipo="datoPrevio">
-            Cada agrupación adicional se conoce como <span class="resaltado">orden de magnitud</span>.
-        </recuadro-component>
 
         <bloque-component tipo="herramientaInteractiva">
             <template #cabecera>
-                En este cuadro se puede ver cómo se agrupan las unidades en el sistema decimal.
+                En este cuadro se pueden ver los conjuntos formados en cualquier número
             </template>
 
             <recuadro-component tipo="instruccionTeclado">
@@ -70,13 +68,22 @@
                     <input type="number" name="inputUnidadesMostradas" min="0" max="9999" ref="inputUnidadesMostradas"
                         @keypress.enter="setUnidadesMostradas">
                     <button class="botonTexto" @click="setUnidadesMostradas">Aceptar</button>
+
+                    <div id="contenedorOpcionesLabels">
+                        <div class="opcionLabel" v-for="conjunto of conjuntosNumericosPresentes2">
+                            <label :for="'checkbox'+conjunto.orden">{{conjunto.nombre}}</label>
+
+                            <input :id="'checkbox'+conjunto.orden" type="checkbox" v-model="labelsActivas"
+                                :value="conjunto.orden">
+                        </div>
+                    </div>
                 </div>
             </recuadro-component>
 
             <div id="contenedorRepresentacion">
                 <conjunto-numerico v-if="unidadesMostradas>0" :numero-total="unidadesMostradas"
                     :numero="unidadesMostradas" :orden="ordenContenedorUnidadesMostradas" :style="[]" :ultimo="true"
-                    cadena-index="0" key="2-0" :identificador-orden="0">
+                    cadena-index="0" key="unidadesMostradas" :identificador-orden="0" :labels="labelsActivas">
                 </conjunto-numerico>
             </div>
 
@@ -101,15 +108,38 @@
         },
         data() {
             return {
+                labelsActivas: [],
                 unidadesMostradas: 0,
 
                 stepAgrupacion: 0,
                 numeroAgrupacion: 1,
                 animandoAgrupacion: false,
-                mostrarDescripcionAgrupacion:true,
+                mostrarDescripcionAgrupacion: true,
             }
         },
         computed: {
+            factoresOrdenesMagnitud() {
+                let numeroEscrito = String(this.unidadesMostradas);
+                let arrayFinal = [];
+                for (let i = 0; i < numeroEscrito.length; i++) {
+                    arrayFinal.push(parseInt(numeroEscrito.charAt(i)));
+                }
+                return arrayFinal;
+            },
+            conjuntosNumericosPresentes2() {
+                let arrayFinal = [];
+                for (let orden = 1; orden <= this.ordenContenedorUnidadesMostradas; orden++) {
+                    console.log(`Construyendo label de orden ${orden}`);
+                    arrayFinal.push({nombre: getNombreConjuntoNumericoFromPotencia(orden), orden});
+                }
+                return arrayFinal;
+            },
+            ordenContenedorUnidadesMostradas() {
+                return getOrdenContenedorNumero(this.unidadesMostradas);
+            },
+            ordenAgrupacion() {
+                return getOrdenContenedorNumero(this.numeroAgrupacion);
+            },
             textoBotonAgrupacion() {
                 return "Continuar";
             },
@@ -171,20 +201,6 @@
                 return textoFinal
 
             },
-            factoresOrdenesMagnitud() {
-                let numeroEscrito = String(this.unidadesMostradas);
-                let arrayFinal = [];
-                for (let i = 0; i < numeroEscrito.length; i++) {
-                    arrayFinal.push(parseInt(numeroEscrito.charAt(i)));
-                }
-                return arrayFinal;
-            },
-            ordenContenedorUnidadesMostradas() {
-                return getOrdenContenedorNumero(this.unidadesMostradas);
-            },
-            ordenAgrupacion() {
-                return getOrdenContenedorNumero(this.numeroAgrupacion);
-            },
 
         },
         methods: {
@@ -217,7 +233,7 @@
                 if (valor > 0) {
                     if (valor % 2 === 0) {//En los pares se pliegan los conjuntos
                         this.$refs.conjuntoContenedorAgrupacion.doblar();
-                        this.mostrarDescripcionAgrupacion=false;
+                        this.mostrarDescripcionAgrupacion = false;
                     }
                     else {//En los impares, se aumenta a 10 la cantidad del conjunto actualmente mostrado.
                         let base = this.numeroAgrupacion;
@@ -231,7 +247,7 @@
                         }
                         setTimeout(() => {
                             this.animandoAgrupacion = false;
-                            this.mostrarDescripcionAgrupacion=true;
+                            this.mostrarDescripcionAgrupacion = true;
                         }, 10 * intervalo);
                     }
                 }
@@ -273,5 +289,12 @@
         align-items: center;
         padding: 20px;
         margin-top: 50px;
+    }
+    #contenedorOpcionesLabels{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
     }
 </style>

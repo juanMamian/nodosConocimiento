@@ -3,22 +3,22 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -28,6 +28,7 @@
 <body>
     <div id="doc">
         Comprendo el sistema decimal si:
+
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
@@ -40,17 +41,46 @@
                 Dado cualquier número en notación decimal puedo describirlo en términos de órdenes de magnitud
             </template>
             <div class="flexVertical">
-                <button class="botonTexto">Generar número</button>
+                <button class="boton" @click="generarReto2">Generar número</button>
                 <transition name="travelTop">
-                    <div class="reto" v-show="reto2">
+                    <div class="reto" v-show="reto2" :key="reto2">
                         {{reto2}}
                     </div>
                 </transition>
-
             </div>
-
         </bloque-component>
 
+        <bloque-component tipo="evaluacion" ref="evaluacion3">
+            <template #cabecera>
+                Dado cualquier número, puedo determinar su cantidad de conjuntos de cierto orden de magnitud
+            </template>
+            <div class="flexVertical">
+                <button class="boton" @click="generarReto3">
+                    Generar número
+                </button>
+                <div class="reto" :key="reto3">
+                    {{reto3}}
+                </div>
+                <transition name="fadeIn">
+                    <div :key="reto3" v-if="reto3!=null && nombreOrden3!=null">
+                        Determina la cantidad de <span class="resaltado"> {{nombreOrden3}} </span>
+                    </div>
+                </transition>
+                <recuadro-component tipo="instruccionTeclado" v-if="reto3">
+                    <span>Introduce aquí tu respuesta</span>
+                    <input type="number" ref="inputRespuestaReto3" @keydown.enter="evaluarRespuestaReto3">
+                </recuadro-component>
+                <transition name="enterTop" @before-enter="scrollInfoRespuestaReto3">
+                    <recuadro-component tipo="infoResultado" v-show="respuestaCorrectaReto3!=null"
+                        :modo="respuestaCorrectaReto3?'correcto':'incorrecto'" :key="versionRespuestaUsuarioReto3">
+                    </recuadro-component>
+                </transition>
+            </div>
+        </bloque-component>
+
+        <div style="height: 1083px; border: 1px solid black">
+
+        </div>
     </div>
 </body>
 
@@ -64,14 +94,127 @@
             bloqueComponent,
             enlaceComponent
         },
-        data(){
-            return {}
+        data() {
+            return {
+                reto2: null,
+                reto3: null,
+                ordenMagnitudReto3: '',
+                respuestaCorrectaReto3: null,
+                versionRespuestaUsuarioReto3: 0,
+            }
         },
-        methods:{
-            generarReto2(){
-                const amplitud=10000000;
-                const base=100;
-                this.reto2=Math.random()*amplitud + base;
+        methods: {
+            generarReto2() {
+                const amplitud = 10000000;
+                const base = 100;
+                this.reto2 = Math.round(Math.random() * amplitud) + base;
+            },
+            reiniciarReto3() {
+                if (this.$refs.inputRespuestaReto3) {
+                    this.$refs.inputRespuestaReto3.value = null;
+                }
+                this.reto3 = null;
+                this.respuestaCorrectaReto3 = null;
+
+            },
+            generarReto3() {
+                this.reiniciarReto3();
+                const amplitud = 100000;
+                const base = 100;
+                this.reto3 = Math.round(Math.random() * amplitud) + base;
+                let ordenMaximo = 0;
+                console.log(`Calculando orden máximo para ${this.reto3}`);
+                for (let i = 0; i < 20; i++) {
+                    if (this.reto3 / Math.pow(10, i) < 1) {
+                        ordenMaximo = i - 1;
+                        break;
+                    }
+                }
+                console.log(`Resultó ${ordenMaximo}`);
+                let orden = Math.ceil(Math.random() * ordenMaximo);
+                if (orden < 1) {
+                    orden = 1;
+                }
+
+                this.ordenMagnitudReto3 = orden;
+            },
+            evaluarRespuestaReto3() {
+                if (!this.$refs.inputRespuestaReto3?.value) {
+                    console.log(`No hay respuesta`);
+                    return;
+                }
+                let respuestaUsuario = Math.round(Number(this.$refs.inputRespuestaReto3.value));
+                let respuestaCorrecta = Math.floor(this.reto3 / Math.pow(10, this.ordenMagnitudReto3));
+                if (respuestaUsuario === respuestaCorrecta) {
+                    this.respuestaCorrectaReto3 = true;
+                }
+                else {
+                    this.respuestaCorrectaReto3 = false;
+                }
+                this.versionRespuestaUsuarioReto3++;
+            },
+            scrollInfoRespuestaReto3() {
+                this.$nextTick(() => {
+                    let offset = this.$refs.evaluacion3.$el.getBoundingClientRect();
+                    if (this.$refs.evaluacion3?.$el) {
+                        if (offset.bottom > window.innerHeight || offset.bottom < window.innerHeight / 2) {
+                            this.$refs.evaluacion3.$el.scrollIntoView({behavior: "smooth", block: "end"});
+                        }
+                    }
+                    else {
+                        console.log(`No element`);
+                    }
+                })
+            },
+            palabraToPlural(palabra) {
+                let vocales = ["a", "e", "i", "o", "u"];
+                if (vocales.includes(palabra.charAt(palabra.length - 1))) {
+                    return palabra + "s";
+                }
+                if (palabra.charAt(palabra.length - 1) === "z") {
+                    palabra = palabra.slice(palabra.length - 1) + "c";
+                }
+                return palabra + "es"
+            }
+
+        },
+        computed: {
+            nombreOrden3() {
+                const bases = ['unidad', 'decena', 'centena'];
+                const illones = ['', 'millon', 'billon', 'trillon', 'cuatrillon', 'quintillon', 'sextillon'];
+                const base = bases[this.ordenMagnitudReto3 % 3];
+                const mil = this.ordenMagnitudReto3 % 6 >= 3;
+                const illon = illones[Math.floor(this.ordenMagnitudReto3 / 6)];
+                let nombreFinal = "";
+                if (this.ordenMagnitudReto3 === 0) {
+                    return "Unidad"
+                }
+                if (this.ordenMagnitudReto3 % 3 != 0) {
+                    nombreFinal += base.charAt(0).toUpperCase() + base.slice(1);
+                }
+                if (mil) {
+                    if (this.ordenMagnitudReto3 % 3 != 0) {
+                        nombreFinal += " de miles"
+                    }
+                    else {
+                        nombreFinal += "Mil"
+                    }
+                }
+                if (illon) {
+                    if (this.ordenMagnitudReto3 % 3 != 0) {//Hay base
+                        nombreFinal += " de " + this.palabraToPlural(illon);
+                    }
+                    else if (!mil) {//No hay ni base ni miles. Es simplemente el illon con upper case en la inicial.
+                        nombreFinal += illon.charAt(0).toUpperCase() + illon.slice(1);
+                    }
+                    else {//es sin base pero con miles.
+                        nombreFinal += " " + this.palabraToPlural(illon);
+                    }
+                }
+                let palabras = nombreFinal.split(" ");
+                palabras[0] = this.palabraToPlural(palabras[0]);
+                nombreFinal = palabras.join(" ");
+                return nombreFinal
             }
         }
     })

@@ -58,3 +58,25 @@
 .fade-enter-active{
     transition: opacity 1s;
 }
+
+.conjuntoNumericoZoomable{
+    width: 200px;
+    height: 200px;
+    border: 1px dashed black;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+.conjuntoNumericoZoomable .contenedorSubconjuntos{
+    display: flex;
+    flex-direction:column;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+
+}
+.conjuntoNumericoZoomable .filaSubconjuntos{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+}

@@ -10,6 +10,7 @@
     <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlace.js"></script>
     <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadro.js"></script>
     <script src="representacionOrdenMagnitud.js"></script>
+    <script src="conjuntoNumericoZoomable.js"></script>
 
     <link rel="stylesheet" href="estiloOrdenMagnitud.css">
     <link rel="stylesheet"
@@ -30,6 +31,13 @@
             En el sistema decimal, los números se agrupan en conjuntos de diez. Y esos conjuntos también se agrupan en
             conjuntos de diez.
         </p>
+
+        {{zoom1}}
+        <input type="number" name="zoom" v-model="zoom1">
+        <div id="contenedorNumeroZoomable">
+            <conjunto-numerico-zoomable :numero="numero1" :index="0" :orden="ordenNumero1" :zoom="zoom1">
+            </conjunto-numerico-zoomable>
+        </div>
 
         <bloque-component>
             <template #cabecera>
@@ -104,10 +112,14 @@
             recuadroComponent,
             bloqueComponent,
             enlaceComponent,
-            conjuntoNumerico
+            conjuntoNumerico,
+            ConjuntoNumericoZoomable
         },
         data() {
             return {
+                numero1: 500,
+                zoom1: 100,
+
                 labelsActivas: [],
                 unidadesMostradas: 0,
 
@@ -118,6 +130,13 @@
             }
         },
         computed: {
+            ordenNumero1() {
+                let potenciaPosible = 0;
+                while (Math.floor(this.numero1 / Math.pow(10, potenciaPosible)) > 1) {
+                    potenciaPosible++
+                }
+                return potenciaPosible;
+            },
             factoresOrdenesMagnitud() {
                 let numeroEscrito = String(this.unidadesMostradas);
                 let arrayFinal = [];
@@ -290,11 +309,19 @@
         padding: 20px;
         margin-top: 50px;
     }
-    #contenedorOpcionesLabels{
+
+    #contenedorOpcionesLabels {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
         gap: 20px;
+    }
+
+    #contenedorNumeroZoomable {
+        width: min(700px, 90vw);
+        height: min(700px, 90vw);
+        overflow: scroll;
+        margin: 10px auto;
     }
 </style>

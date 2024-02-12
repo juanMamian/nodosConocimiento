@@ -34,7 +34,7 @@
 
         {{zoom1}}
         <input type="number" name="zoom" v-model="zoom1">
-        <div id="contenedorNumeroZoomable">
+        <div id="contenedorNumeroZoomable" @scroll="scroll1">
             <conjunto-numerico-zoomable :numero="numero1" :index="0" :orden="ordenNumero1" :zoom="zoom1">
             </conjunto-numerico-zoomable>
         </div>
@@ -117,7 +117,7 @@
         },
         data() {
             return {
-                numero1: 500,
+                numero1: 900,
                 zoom1: 100,
 
                 labelsActivas: [],
@@ -223,6 +223,9 @@
 
         },
         methods: {
+            scroll1(){
+                console.log(`Scroll en el contenedor 1`);
+            },
             stepUpAgrupacion() {
                 if (this.stepAgrupacion >= 36) {
                     console.log(`Step máximo alcanzado`);
@@ -319,8 +322,8 @@
     }
 
     #contenedorNumeroZoomable {
-        width: min(700px, 90vw);
-        height: min(700px, 90vw);
+        width: min(1000px, 98vw);
+        height: min(1000px, 98vw);
         overflow: scroll;
         margin: 10px auto;
     }

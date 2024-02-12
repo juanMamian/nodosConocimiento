@@ -37,8 +37,7 @@ ConjuntoNumericoZoomable = {
     data() {
         return {
             spacingSubnumeros: 0.5, //El spacing entre números internos es 50% del tamaño de los números internos.
-            baseWidth: 40,
-            baseHeight: 40,
+            baseSize: 40,
             baseGap: 20,
             baseFontSize: 15,
         }
@@ -55,7 +54,6 @@ ConjuntoNumericoZoomable = {
         },
         estiloFilaSubconjuntos() {
             return {
-                gap: (this.baseGap * this.factorZoom) + 'px'
             }
         },
         filasSubconjuntos() {
@@ -89,6 +87,9 @@ ConjuntoNumericoZoomable = {
             const umbral = 0.5
             return this.scaling < umbral;
         },
+        outOfSight(){
+            
+        },
         subnumeros() {
             let porcionMaxima = Math.pow(10, this.orden - 1);
             let cantidadTotal = this.numero;
@@ -105,16 +106,19 @@ ConjuntoNumericoZoomable = {
         },
         estiloConjunto() {
             let factorGap = 0;
-            let iteraciones = 0;
-            while (iteraciones < this.orden) {
+            let iteraciones = 1;
+            let ordenCorregido=Math.ceil(this.orden/2);
+            while (iteraciones <= ordenCorregido) {
+                factorGap += Math.pow(10, iteraciones);
                 iteraciones++;
-                factorGap += Math.pow(4, iteraciones);
             }
-            console.log(`Para orden ${this.orden} se tiene un fg ${factorGap}`);
+            let extension=this.factorZoom * (Math.pow(10, ordenCorregido) * this.baseSize + factorGap*this.baseGap) + 'px';
+            let direccion=ordenCorregido%2!=0?'horizontal':'vertical';
+            console.log(`Para orden ${this.orden} (${direccion}) se tiene un fg ${factorGap}`);
             return {
                 borderRadius: this.orden === 0 ? '50%' : '5px',
-                width: this.factorZoom * (Math.pow(4, this.orden) * this.baseWidth + factorGap*this.baseGap) + 'px',
-                height: this.factorZoom * (Math.pow(4, this.orden) * this.baseHeight + factorGap*this.baseGap) + 'px',
+                width: 
+                height:
                 fontSize: Math.round(this.baseFontSize * this.scaling) + 'px',
                 gridArea: this.index + 1,
                 backgroundColor: this.ofuscado ? this.colorRepresentativo : 'transparent',

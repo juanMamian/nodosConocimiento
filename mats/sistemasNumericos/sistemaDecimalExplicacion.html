@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta httpss-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
     <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloque.js"></script>
@@ -35,7 +35,7 @@
         {{zoom1}}
         <input type="number" name="zoom" v-model="zoom1">
         <div id="contenedorNumeroZoomable" @scroll="scroll1">
-            <conjunto-numerico-zoomable :numero="numero1" :index="0" :orden="ordenNumero1" :zoom="zoom1">
+            <conjunto-numerico-zoomable :numero="numero1" :index="0" :orden="ordenNumero1" :zoom="zoom1" :base="true">
             </conjunto-numerico-zoomable>
         </div>
 
@@ -117,8 +117,8 @@
         },
         data() {
             return {
-                numero1: 900,
-                zoom1: 100,
+                numero1: 32,
+                zoom1: 1,
 
                 labelsActivas: [],
                 unidadesMostradas: 0,
@@ -326,5 +326,6 @@
         height: min(1000px, 98vw);
         overflow: scroll;
         margin: 10px auto;
+        position: relative;
     }
 </style>

@@ -2,10 +2,8 @@ let ConjuntoNumericoZoomable;
 ConjuntoNumericoZoomable = {
     template: `
         <div class="conjuntoNumericoZoomable" :style="estiloConjunto">
-            <div class="contenedorSubconjuntos" v-if="!ofuscado && orden>0">
-                <div class="filaSubconjuntos" v-for="fila of filasSubconjuntos" :style="[estiloFilaSubconjuntos]">
-                    <ConjuntoNumericoZoomable v-for="(subnumero, index) of subnumeros.slice(fila.inicio, fila.final)" :index="index" :numero="subnumero" :orden="orden-1" :zoom="zoom"/>
-                </div>
+            <div class="contenedorSubconjuntos" v-if="!ofuscado && orden>0" :style="[estiloContenedorSubconjuntos]">
+                <ConjuntoNumericoZoomable v-for="(subnumero, index) of subnumeros" :index="index" :numero="subnumero" :orden="orden-1" :zoom="zoom"/>
             </div>
             <div class="nombreConjunto" v-show="ofuscado">
                 {{nombreConjunto}}
@@ -17,6 +15,9 @@ ConjuntoNumericoZoomable = {
         ConjuntoNumericoZoomable
     },
     props: {
+        base: {
+            type: Boolean,
+        },
         numero: {
             type: Number,
             required: true,
@@ -43,6 +44,9 @@ ConjuntoNumericoZoomable = {
         }
     },
     computed: {
+        orientacion() {
+            return this.orden % 2 === 0 ? 'column' : 'row';
+        },
         colorRepresentativo() {
             let colorBase = 12021615;
             let intervalo = 2796202.5;
@@ -51,10 +55,6 @@ ConjuntoNumericoZoomable = {
                 esteColor = esteColor % 16777215;
             }
             return "#" + Math.round(esteColor).toString(16);
-        },
-        estiloFilaSubconjuntos() {
-            return {
-            }
         },
         filasSubconjuntos() {
             let fila1 = {
@@ -77,18 +77,21 @@ ConjuntoNumericoZoomable = {
         nombreConjunto() {
             return getNombreConjuntoNumericoFromPotencia(this.orden);
         },
-        scaling() {
-            const factorZoomOrden = 5.5; //5.5 está basado en una anchura máxima de 4 subnúmeros con spacing de 0.5 veces cada subnúmero. Total: 5.5
-            let scalingUp = Math.pow(factorZoomOrden, this.orden);
-            let scalingFinal = scalingUp * this.zoom / 100;
-            return scalingFinal;
-        },
         ofuscado() {
-            const umbral = 0.5
-            return this.scaling < umbral;
+            let umbral=3;
+            if(this.orientacion==='row'){
+                umbral=umbral*10;
+            }
+            if(this.orden===2 && this.index===0){
+                console.log(`Comparando ${Math.pow(10, Math.floor(this.orden/2))} y ${this.factorZoom} con ${umbral}`);
+            }
+            if(this.orden===1 && this.index===0){
+                console.log(`Comparando decena; ${Math.pow(10, Math.floor(this.orden/2))} y ${this.factorZoom} con ${umbral}`);
+            }
+            return Math.pow(10, Math.floor(this.orden / 2)) * this.factorZoom<umbral;
         },
-        outOfSight(){
-            
+        outOfSight() {
+
         },
         subnumeros() {
             let porcionMaxima = Math.pow(10, this.orden - 1);
@@ -102,27 +105,39 @@ ConjuntoNumericoZoomable = {
             return subnumeros;
         },
         factorZoom() {
-            return this.zoom / 100;
+            return Math.pow(1.2, this.zoom);
+        },
+        estiloContenedorSubconjuntos() {
+            return {
+                flexDirection: this.orden % 2 === 0 ? 'column' : 'row',
+            }
         },
         estiloConjunto() {
-            let factorGap = 0;
-            let iteraciones = 1;
-            let ordenCorregido=Math.ceil(this.orden/2);
-            while (iteraciones <= ordenCorregido) {
-                factorGap += Math.pow(10, iteraciones);
-                iteraciones++;
+            const factorMagnificacion = Math.pow(10, Math.floor(this.orden / 2));
+            let ancho = this.baseSize * factorMagnificacion;
+            if (this.orientacion === 'row') {
+                ancho = ancho * 10;
             }
-            let extension=this.factorZoom * (Math.pow(10, ordenCorregido) * this.baseSize + factorGap*this.baseGap) + 'px';
-            let direccion=ordenCorregido%2!=0?'horizontal':'vertical';
-            console.log(`Para orden ${this.orden} (${direccion}) se tiene un fg ${factorGap}`);
-            return {
+            const alto = this.baseSize * factorMagnificacion;
+            const estiloParaConjuntoBase = {
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: `translate(-50%, -50%) scale(${this.factorZoom})`,
+                width: ancho + 'px',
+                height: alto + 'px',
+                fontSize: '19px',
+            }
+            let estiloFinal = {
                 borderRadius: this.orden === 0 ? '50%' : '5px',
-                width: 
-                height:
-                fontSize: Math.round(this.baseFontSize * this.scaling) + 'px',
-                gridArea: this.index + 1,
-                backgroundColor: this.ofuscado ? this.colorRepresentativo : 'transparent',
+                backgroundColor: this.ofuscado || this.orden === 0 ? this.colorRepresentativo : 'transparent',
+
             }
+            if (this.base) {
+                estiloFinal = { ...estiloFinal, ...estiloParaConjuntoBase };
+            }
+
+            return estiloFinal
         }
     }
 }

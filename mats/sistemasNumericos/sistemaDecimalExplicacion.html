@@ -32,12 +32,9 @@
             conjuntos de diez.
         </p>
 
-        {{zoom1}}
-        <input type="number" name="zoom" v-model="zoom1">
-        <div id="contenedorNumeroZoomable" @scroll="scroll1">
-            <conjunto-numerico-zoomable :numero="numero1" :index="0" :orden="ordenNumero1" :zoom="zoom1" :base="true">
-            </conjunto-numerico-zoomable>
-        </div>
+        <input type="number" v-model="numero1" />
+        <ventana-conjuntos-zoomables :numero="numero1">
+        </ventana-conjuntos-zoomables>
 
         <bloque-component>
             <template #cabecera>
@@ -113,12 +110,12 @@
             bloqueComponent,
             enlaceComponent,
             conjuntoNumerico,
-            ConjuntoNumericoZoomable
+            ConjuntoNumericoZoomable,
+            VentanaConjuntosZoomables
         },
         data() {
             return {
-                numero1: 32,
-                zoom1: 1,
+                numero1: 332,
 
                 labelsActivas: [],
                 unidadesMostradas: 0,
@@ -130,13 +127,6 @@
             }
         },
         computed: {
-            ordenNumero1() {
-                let potenciaPosible = 0;
-                while (Math.floor(this.numero1 / Math.pow(10, potenciaPosible)) > 1) {
-                    potenciaPosible++
-                }
-                return potenciaPosible;
-            },
             factoresOrdenesMagnitud() {
                 let numeroEscrito = String(this.unidadesMostradas);
                 let arrayFinal = [];
@@ -223,7 +213,7 @@
 
         },
         methods: {
-            scroll1(){
+            scroll1() {
                 console.log(`Scroll en el contenedor 1`);
             },
             stepUpAgrupacion() {
@@ -319,13 +309,5 @@
         align-items: center;
         justify-content: center;
         gap: 20px;
-    }
-
-    #contenedorNumeroZoomable {
-        width: min(1000px, 98vw);
-        height: min(1000px, 98vw);
-        overflow: scroll;
-        margin: 10px auto;
-        position: relative;
     }
 </style>

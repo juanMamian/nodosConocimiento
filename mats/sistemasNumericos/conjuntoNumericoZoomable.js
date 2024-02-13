@@ -3,10 +3,10 @@ ConjuntoNumericoZoomable = {
     template: `
         <div class="conjuntoNumericoZoomable" :style="estiloConjunto">
             <div class="contenedorSubconjuntos" v-if="!ofuscado && orden>0" :style="[estiloContenedorSubconjuntos]">
-                <ConjuntoNumericoZoomable v-for="(subnumero, index) of subnumeros" :index="index" :numero="subnumero" :orden="orden-1" :zoom="zoom"/>
+                <ConjuntoNumericoZoomable v-for="(subnumero, index) of subnumeros" :index="index" :numero="subnumero" :orden="orden-1" :zoom="zoom" :ordenMinimo="ordenMinimo"/>
             </div>
-            <div class="nombreConjunto" v-show="ofuscado">
-                {{nombreConjunto}}
+            <div class="nombreConjunto" v-show="ofuscamiento>0" :style="[estiloNombreConjunto]">
+                <span v-show="orden!=0">{{nombreConjunto}}</span>
             </div>
         </div>
     `,
@@ -15,6 +15,10 @@ ConjuntoNumericoZoomable = {
         ConjuntoNumericoZoomable
     },
     props: {
+        ordenMinimo: {
+            type: Number,
+            default: 0,
+        },
         base: {
             type: Boolean,
         },
@@ -51,10 +55,16 @@ ConjuntoNumericoZoomable = {
             let colorBase = 12021615;
             let intervalo = 2796202.5;
             let esteColor = colorBase + intervalo * this.orden;
-            if (esteColor > 16777215) {
+            if (esteColor >= 16777215) {
                 esteColor = esteColor % 16777215;
             }
-            return "#" + Math.round(esteColor).toString(16);
+            let enString = Math.round(esteColor).toString(16);
+            while (enString.length < 6) {
+                enString = "0" + enString;
+            }
+            if (this.orden === 2 && this.index === 0) {
+            }
+            return "#" + enString;
         },
         filasSubconjuntos() {
             let fila1 = {
@@ -77,18 +87,28 @@ ConjuntoNumericoZoomable = {
         nombreConjunto() {
             return getNombreConjuntoNumericoFromPotencia(this.orden);
         },
+        lleno() {
+            return this.subnumeros.length === 10
+        },
+        umbralOfuscacion() {
+            return Math.pow(0.5, this.orden);
+        },
+        unidadesCercaniaUmbral() {
+            return this.umbralOfuscacion / 10;
+        },
+        ofuscamiento() {//En negativo no hay ofuscamiento. Entre 0 y 1 hay ofuscamiento. En 1, se llega al umbral de ofuscado.
+            return (10 - ((this.factorZoom - this.umbralOfuscacion) / this.unidadesCercaniaUmbral)) / 10;
+        },
         ofuscado() {
-            let umbral=3;
-            if(this.orientacion==='row'){
-                umbral=umbral*10;
+            let umbral = Math.pow(0.5, this.orden);
+            if (this.orientacion === 'row') {
             }
-            if(this.orden===2 && this.index===0){
-                console.log(`Comparando ${Math.pow(10, Math.floor(this.orden/2))} y ${this.factorZoom} con ${umbral}`);
+            else {
             }
-            if(this.orden===1 && this.index===0){
-                console.log(`Comparando decena; ${Math.pow(10, Math.floor(this.orden/2))} y ${this.factorZoom} con ${umbral}`);
+            if (this.orden === 2 && this.index === 0) {
+                //console.log(`Primera centena ${this.lleno ? 'llena' : 'incompleta'}: Magnificación por orden: ${Math.pow(10, Math.floor(this.orden / 2))}, factorZoom: ${this.factorZoom}, umbral ${umbral}`);
             }
-            return Math.pow(10, Math.floor(this.orden / 2)) * this.factorZoom<umbral;
+            return this.orden === this.ordenMinimo || this.lleno && this.factorZoom < umbral;
         },
         outOfSight() {
 
@@ -120,24 +140,83 @@ ConjuntoNumericoZoomable = {
             }
             const alto = this.baseSize * factorMagnificacion;
             const estiloParaConjuntoBase = {
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: `translate(-50%, -50%) scale(${this.factorZoom})`,
+                transform: `scale(${this.factorZoom})`,
                 width: ancho + 'px',
                 height: alto + 'px',
-                fontSize: '19px',
+                fontSize: `${19 / this.factorZoom}px`,
+                alignSelf: 'center',
+                justifySelf: 'center',
             }
             let estiloFinal = {
                 borderRadius: this.orden === 0 ? '50%' : '5px',
-                backgroundColor: this.ofuscado || this.orden === 0 ? this.colorRepresentativo : 'transparent',
-
+                backgroundColor: this.ofuscado ? this.colorRepresentativo : 'transparent',
             }
             if (this.base) {
                 estiloFinal = { ...estiloFinal, ...estiloParaConjuntoBase };
             }
 
             return estiloFinal
+        },
+        estiloNombreConjunto() {
+            return {
+                backgroundColor: this.colorRepresentativo,
+                opacity: this.ofuscamiento
+            }
         }
+    },
+    watch: {
+        ofuscamiento() {
+            if (this.orden === 1 && this.index === 0) {
+                console.log(`Primera decena: Ofuscamiento ${this.ofuscamiento}`);
+            }
+        }
+    }
+}
+
+
+const VentanaConjuntosZoomables = {
+    template: `
+        <div class="ventanaConjuntosZoomables" @wheel.ctrl.prevent="zoomView">
+<span style="z-index: 100; position: fixed; top: 2vh; left: 2vw">    {{Math.pow(1.2, zoom)}}</span>
+            <conjunto-numerico-zoomable :numero="numero" :index="0" :orden="ordenNumero" :zoom="zoom" :base="true">
+            </conjunto-numerico-zoomable>
+        </div>
+    `,
+    name: "VentanaConjuntosZoomables",
+    components: {
+        ConjuntoNumericoZoomable
+    },
+    props: {
+        numero: {
+            type: Number,
+            required: true
+        }
+    },
+    data() {
+        return {
+            zoom: 0,
+        }
+    },
+    computed: {
+        ordenNumero() {
+            let potenciaPosible = 0;
+            while (Math.floor(this.numero / Math.pow(10, potenciaPosible)) > 1) {
+                potenciaPosible++
+            }
+            return potenciaPosible;
+        },
+    },
+    methods: {
+        zoomView(evento) {
+            if (evento.deltaY > 0) {
+                this.zoom -= 1;
+            }
+            else {
+                this.zoom += 1;
+            }
+        }
+    },
+    mounted() {
+        console.log("Setting up scroll handler");
     }
 }

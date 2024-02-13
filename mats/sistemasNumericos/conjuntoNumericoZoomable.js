@@ -100,10 +100,11 @@ ConjuntoNumericoZoomable = {
             if (!this.lleno) {
                 return 0;
             }
-            let anchoInicio=350;
-            let anchoFinal=300;
+            let anchoInicio=600;
+            let anchoFinal=340;
+
             if(this.orientacion==='column'){
-                anchoInicio*=0.5;
+                anchoInicio*=0.6;
                 anchoFinal*=0.5;
             }
             const step=(anchoFinal-anchoInicio)/10;

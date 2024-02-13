@@ -2,8 +2,8 @@ let ConjuntoNumericoZoomable;
 ConjuntoNumericoZoomable = {
     template: `
         <div class="conjuntoNumericoZoomable" :style="estiloConjunto">
-            <div class="contenedorSubconjuntos" v-if="!ofuscado && orden>0" :style="[estiloContenedorSubconjuntos]">
-                <ConjuntoNumericoZoomable v-for="(subnumero, index) of subnumeros" :index="index" :numero="subnumero" :orden="orden-1" :zoom="zoom" :ordenMinimo="ordenMinimo"/>
+            <div class="contenedorSubconjuntos" v-if="!this.outOfSight && !ofuscado && orden>0" :style="[estiloContenedorSubconjuntos]">
+                <ConjuntoNumericoZoomable v-for="(subnumero, index) of subnumeros" :index="index" :numero="subnumero" :orden="orden-1" :zoom="zoom" :ordenMinimo="ordenMinimo" :refreshSight="refreshSight"/>
             </div>
             <div class="nombreConjunto" v-show="ofuscamiento>0" :style="[estiloNombreConjunto]">
                 <span v-show="orden!=0">{{nombreConjunto}}</span>
@@ -37,6 +37,10 @@ ConjuntoNumericoZoomable = {
         zoom: {
             type: Number,
             required: true,
+        },
+        refreshSight: {
+            type: Number,
+            required: true
         }
     },
     data() {
@@ -45,6 +49,7 @@ ConjuntoNumericoZoomable = {
             baseSize: 40,
             baseGap: 20,
             baseFontSize: 15,
+            outOfSight: true,
         }
     },
     computed: {
@@ -100,24 +105,18 @@ ConjuntoNumericoZoomable = {
             if (!this.lleno) {
                 return 0;
             }
-            let anchoInicio=600;
-            let anchoFinal=340;
+            let anchoInicio = 600;
+            let anchoFinal = 340;
 
-            if(this.orientacion==='column'){
-                anchoInicio*=0.6;
-                anchoFinal*=0.5;
+            if (this.orientacion === 'column') {
+                anchoInicio *= 0.6;
+                anchoFinal *= 0.5;
             }
-            const step=(anchoFinal-anchoInicio)/10;
-            if(this.orden===2 && this.index===0){
-                console.log(`En la primera centena: ofuscamiento: ${(10-(anchoFinal-this.ancho)/step)/10}`)
-            }
-            return (10-(anchoFinal-this.ancho)/step)/10;
+            const step = (anchoFinal - anchoInicio) / 10;
+            return (10 - (anchoFinal - this.ancho) / step) / 10;
         },
         ofuscado() {
-            return this.orden===this.ordenMinimo || this.ofuscamiento>=1;
-        },
-        outOfSight() {
-
+            return this.orden === this.ordenMinimo || this.ofuscamiento >= 1 || this.outOfSight;
         },
         subnumeros() {
             let porcionMaxima = Math.pow(10, this.orden - 1);
@@ -178,6 +177,19 @@ ConjuntoNumericoZoomable = {
             }
         }
     },
+    watch: {
+        refreshSight: {
+            handler: function() {
+                console.log(`Alive`);
+                let offset = this.$el.getBoundingClientRect();
+                if (offset.bottom < 0 || offset.top > window.innerHeight || offset.left > window.innerWidth || offset.right < 0) {
+                    this.outOfSight = true;
+                    return;
+                }
+                this.outOfSight = false;
+            },
+        }
+    }
 }
 
 
@@ -185,7 +197,7 @@ const VentanaConjuntosZoomables = {
     template: `
         <div class="ventanaConjuntosZoomables" @wheel.ctrl.prevent="zoomView">
 <span style="z-index: 100; position: fixed; top: 2vh; left: 2vw">    {{Math.pow(1.2, zoom)}}</span>
-            <conjunto-numerico-zoomable :numero="numero" :index="0" :orden="ordenNumero" :zoom="zoom" :base="true">
+            <conjunto-numerico-zoomable :numero="numero" :index="0" :orden="ordenNumero" :zoom="zoom" :base="true" :refreshSight="refreshSight">
             </conjunto-numerico-zoomable>
         </div>
     `,
@@ -201,7 +213,10 @@ const VentanaConjuntosZoomables = {
     },
     data() {
         return {
-            zoom: 0,
+            zoom: -10,
+            refreshSight: 0,
+            dateLastRefreshSight: Date.now(),
+
         }
     },
     computed: {
@@ -221,9 +236,26 @@ const VentanaConjuntosZoomables = {
             else {
                 this.zoom += 1;
             }
+        },
+        debounceRefreshSight() {
+            let umbral = 500;
+            if (Date.now() - this.dateLastRefreshSight > umbral) {
+                console.log(`Refreshing sight`);
+                this.refreshSight++;
+                this.dateLastRefreshSight = Date.now();
+            }
+        }
+    },
+    watch: {
+        zoom() {
+            this.debounceRefreshSight();
         }
     },
     mounted() {
         console.log("Setting up scroll handler");
+        window.addEventListener("wheel", this.debounceRefreshSight);
+    },
+    beforeDestroy() {
+        window.removeEventListener("wheel", this.debounceRefreshSight);
     }
 }

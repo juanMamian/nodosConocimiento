@@ -61,19 +61,19 @@
 }
 
 .ventanaConjuntosZoomables {
-    width: min(1000px, 98vw);
-    height: min(1000px, 98vw);
+    width: 98vw;
     overflow: scroll;
     margin: 10px auto;
     position: relative;
     display: grid;
+    box-shadow: 1px 1px 1px 1px gray;
+    padding: 20px 0px;
 }
 
 .conjuntoNumericoZoomable{
     flex-shrink: 0;
     flex-grow:0;
     box-sizing: border-box;
-    flex-basis: calc(10% - 2px);
     transform-origin: top left;
     overflow: hidden;
     position: relative;
@@ -90,6 +90,7 @@
 .conjuntoNumericoZoomable .nombreConjunto{
     display: flex;
     align-items: center;
+    text-align: center;
     justify-content: center;
     height: 100%;
     width: 100%;

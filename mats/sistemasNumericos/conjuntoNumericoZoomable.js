@@ -96,19 +96,24 @@ ConjuntoNumericoZoomable = {
         unidadesCercaniaUmbral() {
             return this.umbralOfuscacion / 10;
         },
-        ofuscamiento() {//En negativo no hay ofuscamiento. Entre 0 y 1 hay ofuscamiento. En 1, se llega al umbral de ofuscado.
-            return (10 - ((this.factorZoom - this.umbralOfuscacion) / this.unidadesCercaniaUmbral)) / 10;
+        ofuscamiento() {
+            if (!this.lleno) {
+                return 0;
+            }
+            let anchoInicio=350;
+            let anchoFinal=300;
+            if(this.orientacion==='column'){
+                anchoInicio*=0.5;
+                anchoFinal*=0.5;
+            }
+            const step=(anchoFinal-anchoInicio)/10;
+            if(this.orden===2 && this.index===0){
+                console.log(`En la primera centena: ofuscamiento: ${(10-(anchoFinal-this.ancho)/step)/10}`)
+            }
+            return (10-(anchoFinal-this.ancho)/step)/10;
         },
         ofuscado() {
-            let umbral = Math.pow(0.5, this.orden);
-            if (this.orientacion === 'row') {
-            }
-            else {
-            }
-            if (this.orden === 2 && this.index === 0) {
-                //console.log(`Primera centena ${this.lleno ? 'llena' : 'incompleta'}: Magnificación por orden: ${Math.pow(10, Math.floor(this.orden / 2))}, factorZoom: ${this.factorZoom}, umbral ${umbral}`);
-            }
-            return this.orden === this.ordenMinimo || this.lleno && this.factorZoom < umbral;
+            return this.orden===this.ordenMinimo || this.ofuscamiento>=1;
         },
         outOfSight() {
 
@@ -132,23 +137,31 @@ ConjuntoNumericoZoomable = {
                 flexDirection: this.orden % 2 === 0 ? 'column' : 'row',
             }
         },
-        estiloConjunto() {
-            const factorMagnificacion = Math.pow(10, Math.floor(this.orden / 2));
-            let ancho = this.baseSize * factorMagnificacion;
+        factorMagnificacion() {
+            return Math.pow(10, Math.floor(this.orden / 2));
+        },
+        ancho() {
+            let ancho = this.baseSize * this.factorMagnificacion * this.factorZoom;
             if (this.orientacion === 'row') {
-                ancho = ancho * 10;
+                ancho *= 10;
             }
-            const alto = this.baseSize * factorMagnificacion;
+            return ancho;
+        },
+        estiloConjunto() {
+            let baseFontSize = 9;
+            if (this.orientacion === 'row') {
+                baseFontSize = 16;
+            }
+            const alto = this.baseSize * this.factorMagnificacion;
             const estiloParaConjuntoBase = {
-                transform: `scale(${this.factorZoom})`,
-                width: ancho + 'px',
-                height: alto + 'px',
-                fontSize: `${19 / this.factorZoom}px`,
                 alignSelf: 'center',
                 justifySelf: 'center',
             }
             let estiloFinal = {
-                borderRadius: this.orden === 0 ? '50%' : '5px',
+                minWidth: this.ancho + 'px',
+                minHeight: alto * this.factorZoom + 'px',
+                borderRadius: this.orden === 0 ? '50%' : this.ofuscado ? `${1 * this.factorMagnificacion * this.factorZoom}px` : '0px',
+                fontSize: `${baseFontSize * this.factorMagnificacion * this.factorZoom}px`,
                 backgroundColor: this.ofuscado ? this.colorRepresentativo : 'transparent',
             }
             if (this.base) {
@@ -164,13 +177,6 @@ ConjuntoNumericoZoomable = {
             }
         }
     },
-    watch: {
-        ofuscamiento() {
-            if (this.orden === 1 && this.index === 0) {
-                console.log(`Primera decena: Ofuscamiento ${this.ofuscamiento}`);
-            }
-        }
-    }
 }
 
 

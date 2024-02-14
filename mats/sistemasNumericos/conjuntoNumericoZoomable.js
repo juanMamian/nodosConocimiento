@@ -2,15 +2,15 @@ let ConjuntoNumericoZoomable;
 ConjuntoNumericoZoomable = {
     template: `
         <div class="conjuntoNumericoZoomable" :style="estiloConjunto">
-            <div class="contenedorSubconjuntos" v-if="!this.outOfSight && !ofuscado && ofuscamiento<=0 && orden>1" :style="[estiloContenedorSubconjuntos]">
+            <div class="contenedorSubconjuntos" v-if="!this.outOfSight && !ofuscado && (childrenVivos || !this.lleno) && orden>1" :style="[estiloContenedorSubconjuntos]">
                 <ConjuntoNumericoZoomable v-for="(subnumero, index) of subnumeros" :index="index" :numero="subnumero" :orden="orden-1" :zoom="zoom" :ordenMinimo="ordenMinimo" :refreshSight="refreshSight"/>
             </div>
-            <div class="contenedorUnidadesPlaceholder" v-show="(ofuscamiento<=1 && ofuscamiento>=0 && lleno) || orden===ordenMinimo+1" :style="[estiloContenedorUnidadesPlaceholder]">
+            <div class="contenedorUnidadesPlaceholder" v-show="(ofuscamiento<=1 && !childrenVivos && lleno) || orden===ordenMinimo+1" :style="[estiloContenedorUnidadesPlaceholder]">
                 <div :class="{bolitaNumero:orden===1}" class="unidadPlaceholder" :style="[estiloUnidadesPlaceholder]" v-for="subnumero of subnumeros">
                     <span v-if="orden>1">{{getNombreConjuntoByOrden(orden-1)}}</span>
                 </div>
             </div>
-            <div class="nombreConjunto" v-show="ofuscamiento>0 && !outOfSight" :style="[estiloNombreConjunto]">
+            <div class="nombreConjunto" v-show="ofuscamiento>0 && !outOfSight && lleno" :style="[estiloNombreConjunto]">
                 <span v-show="orden!=0">{{nombreConjunto}}</span>
             </div>
         </div>
@@ -49,12 +49,25 @@ ConjuntoNumericoZoomable = {
         }
     },
     data() {
+        let baseInicio = 650;
+        let baseFinal = 360;
         return {
             spacingSubnumeros: 0.5, //El spacing entre números internos es 50% del tamaño de los números internos.
             baseSize: 40,
             baseGap: 20,
             baseFontSize: 15,
             outOfSight: true,
+
+            boundariesOfuscamiento: {
+                row: {
+                    inicio: baseInicio,
+                    final: baseFinal,
+                },
+                column: {
+                    inicio: baseInicio * 0.4,
+                    final: baseFinal * 0.5,
+                }
+            },
         }
     },
     computed: {
@@ -122,18 +135,32 @@ ConjuntoNumericoZoomable = {
             if (!this.lleno) {
                 return 0;
             }
-            let anchoInicio = 600;
-            let anchoFinal = 340;
+            let anchoInicio = this.boundariesOfuscamiento.row.inicio;
+            let anchoFinal = this.boundariesOfuscamiento.row.final;
 
             if (this.orientacion === 'column') {
-                anchoInicio *= 0.6;
-                anchoFinal *= 0.5;
+                anchoInicio = this.boundariesOfuscamiento.column.inicio;
+                anchoFinal = this.boundariesOfuscamiento.column.final;
             }
             const step = (anchoFinal - anchoInicio) / 10;
             return (10 - (anchoFinal - this.ancho) / step) / 10;
         },
         ofuscado() {
             return this.orden === this.ordenMinimo || this.ofuscamiento >= 1 || this.outOfSight;
+        },
+        childrenVivos() {//Children están vivos como componentesVue si este conjunto es tan ancho o alto como para alojar children grandes con ofuscamiento < 1;
+            if (this.orientacion === 'row') {
+                if (this.ancho >= this.boundariesOfuscamiento.column.final * 10) {
+                    return true;
+                }
+            }
+            else if (this.orientacion === 'column') {
+                if (this.ancho >= this.boundariesOfuscamiento.row.final) {
+                    return true;
+                }
+            }
+            return false;
+
         },
         subnumeros() {
             let porcionMaxima = Math.pow(10, this.orden - 1);
@@ -149,7 +176,7 @@ ConjuntoNumericoZoomable = {
             return subnumeros;
         },
         factorZoom() {
-            return Math.pow(1.1, this.zoom);
+            return Math.pow(1.05, this.zoom);
         },
         estiloContenedorUnidadesPlaceholder() {
             let factorMagnificacion = Math.pow(10, Math.floor((this.orden - 1) / 2));
@@ -163,7 +190,7 @@ ConjuntoNumericoZoomable = {
                 backgroundColor: this.colorRepresentativoChildren,
                 width: this.anchoChildren + 'px',
                 height: this.altoChildren + 'px',
-
+                fontSize: this.orientacion==='row'? this.anchoChildren*0.22+'px':this.altoChildren*0.7+'px',
             }
         },
         estiloContenedorSubconjuntos() {
@@ -182,13 +209,13 @@ ConjuntoNumericoZoomable = {
             return ancho;
         },
         anchoChildren() {
-            return this.orientacion === 'column' ? this.ancho-5 : (this.ancho / 10)-5;
+            return this.orientacion === 'column' ? this.ancho - 5 : (this.ancho / 10) - 5;
         },
         alto() {
             return this.baseSize * this.factorMagnificacion * this.factorZoom;
         },
         altoChildren() {
-            return this.orientacion === 'row' ? this.alto-5 : (this.alto / 10)-5;
+            return this.orientacion === 'row' ? this.alto - 5 : (this.alto / 10) - 5;
         },
         estiloConjunto() {
             let baseFontSize = 9;
@@ -219,20 +246,26 @@ ConjuntoNumericoZoomable = {
     methods: {
         getNombreConjuntoByOrden(orden) {
             return getNombreConjuntoNumericoFromPotencia(orden);
+        },
+        setOutOfSight() {
+            let offset = this.$el.getBoundingClientRect();
+            if (offset.bottom < 0 || offset.top > window.innerHeight || offset.left > window.innerWidth || offset.right < 0) {
+                this.outOfSight = true;
+                return;
+            }
+            this.outOfSight = false;
         }
     },
     watch: {
         refreshSight: {
             handler: function() {
                 console.log(`Alive`);
-                let offset = this.$el.getBoundingClientRect();
-                if (offset.bottom < 0 || offset.top > window.innerHeight || offset.left > window.innerWidth || offset.right < 0) {
-                    this.outOfSight = true;
-                    return;
-                }
-                this.outOfSight = false;
+                this.setOutOfSight();
             },
         }
+    },
+    mounted() {
+        this.setOutOfSight();
     }
 }
 
@@ -283,6 +316,7 @@ const VentanaConjuntosZoomables = {
             }
         },
         increaseRefreshSight() {
+            console.log("Refreshing sight");
             this.refreshSight++;
             this.dateLastRefreshSight = Date.now();
         },

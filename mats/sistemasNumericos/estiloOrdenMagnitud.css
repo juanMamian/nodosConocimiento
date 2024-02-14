@@ -77,15 +77,16 @@
     transform-origin: top left;
     overflow: hidden;
     position: relative;
+    max-width: fit-content;
 }
 
 .conjuntoNumericoZoomable .contenedorSubconjuntos{
     display: flex;
-    gap: 2px;
+    gap: 5px;
     justify-content:stretch;
     width: 100%;
     height: 100%;
-    z-index:0;
+    z-index:1;
 }
 .conjuntoNumericoZoomable .nombreConjunto{
     display: flex;
@@ -94,10 +95,35 @@
     justify-content: center;
     height: 100%;
     width: 100%;
-    z-index:1;
+    z-index:2;
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
+}
+.conjuntoNumericoZoomable .contenedorUnidadesPlaceholder{
+    display: flex;
+    align-items: stretch;
+    gap: 5px;
+    position:absolute;
+    top: 0px;
+    left: 0px;
+    z-index:1;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.conjuntoNumericoZoomable .contenedorUnidadesPlaceholder .unidadPlaceholder{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    
+}
+
+.conjuntoNumericoZoomable .contenedorUnidadesPlaceholder .bolitaNumero{
+    flex-grow:0;
+    width: unset;
+    height: unset;
 }

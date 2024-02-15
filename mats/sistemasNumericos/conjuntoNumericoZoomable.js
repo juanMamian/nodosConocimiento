@@ -54,7 +54,7 @@ ConjuntoNumericoZoomable = {
         return {
             spacingSubnumeros: 0.5, //El spacing entre números internos es 50% del tamaño de los números internos.
             baseSize: 40,
-            baseGap: 20,
+            baseGap: 5,
             baseFontSize: 15,
             outOfSight: true,
 
@@ -182,7 +182,8 @@ ConjuntoNumericoZoomable = {
             let factorMagnificacion = Math.pow(10, Math.floor((this.orden - 1) / 2));
             return {
                 flexDirection: this.orden % 2 === 0 ? 'column' : 'row',
-                fontSize: `${this.baseFontSize * factorMagnificacion * this.factorZoom}px`
+                fontSize: `${this.baseFontSize * factorMagnificacion * this.factorZoom}px`,
+                width: (this.orientacion === 'row' ? (this.anchoChildren + 5) * this.subnumeros.length : this.anchoChildren) + 'px'
             }
         },
         estiloUnidadesPlaceholder() {
@@ -190,12 +191,13 @@ ConjuntoNumericoZoomable = {
                 backgroundColor: this.colorRepresentativoChildren,
                 width: this.anchoChildren + 'px',
                 height: this.altoChildren + 'px',
-                fontSize: this.orientacion==='row'? this.anchoChildren*0.22+'px':this.altoChildren*0.7+'px',
+                fontSize: this.orientacion === 'row' ? this.anchoChildren * 0.22 + 'px' : this.altoChildren * 0.7 + 'px',
             }
         },
         estiloContenedorSubconjuntos() {
             return {
                 flexDirection: this.orden % 2 === 0 ? 'column' : 'row',
+                width: (this.orientacion === 'row' ? (this.anchoChildren + 5) * this.subnumeros.length : this.anchoChildren) + 'px'
             }
         },
         factorMagnificacion() {
@@ -209,10 +211,11 @@ ConjuntoNumericoZoomable = {
             return ancho;
         },
         anchoChildren() {
-            return this.orientacion === 'column' ? this.ancho - 5 : (this.ancho / 10) - 5;
+            return this.orientacion === 'column' ? this.ancho - this.baseGap : (this.ancho / 10) - this.baseGap;
         },
         alto() {
-            return this.baseSize * this.factorMagnificacion * this.factorZoom;
+            let alto = this.orientacion === 'row' ? this.ancho / 10 : this.ancho;
+            return alto;
         },
         altoChildren() {
             return this.orientacion === 'row' ? this.alto - 5 : (this.alto / 10) - 5;
@@ -225,8 +228,8 @@ ConjuntoNumericoZoomable = {
             const estiloParaConjuntoBase = {
             }
             let estiloFinal = {
-                minWidth: this.ancho + 'px',
-                minHeight: this.alto + 'px',
+                width: (this.orientacion === 'row' ? this.ancho * this.subnumeros.length / 10 : this.ancho)-this.baseGap + 'px',
+                height: (this.orientacion === 'column' ? this.alto * this.subnumeros.length / 10 : this.alto)-this.baseGap + 'px',
                 borderRadius: this.orden === 0 ? '50%' : this.ofuscado ? `${1 * this.factorMagnificacion * this.factorZoom}px` : '0px',
                 fontSize: `${baseFontSize * this.factorMagnificacion * this.factorZoom}px`,
             }
@@ -259,7 +262,6 @@ ConjuntoNumericoZoomable = {
     watch: {
         refreshSight: {
             handler: function() {
-                console.log(`Alive`);
                 this.setOutOfSight();
             },
         }
@@ -273,7 +275,7 @@ ConjuntoNumericoZoomable = {
 const VentanaConjuntosZoomables = {
     template: `
         <div class="ventanaConjuntosZoomables" @wheel.ctrl.prevent="zoomView">
-<span style="z-index: 100; position: fixed; top: 2vh; left: 2vw">    {{Math.pow(1.2, zoom)}}</span>
+<span style="z-index: 100; position: fixed; top: 2vh; left: 2vw">    {{zoom}}</span>
             <conjunto-numerico-zoomable :numero="numero" :index="0" :orden="ordenNumero" :zoom="zoom" :base="true" :refreshSight="refreshSight">
             </conjunto-numerico-zoomable>
         </div>
@@ -316,7 +318,6 @@ const VentanaConjuntosZoomables = {
             }
         },
         increaseRefreshSight() {
-            console.log("Refreshing sight");
             this.refreshSight++;
             this.dateLastRefreshSight = Date.now();
         },
@@ -341,9 +342,9 @@ const VentanaConjuntosZoomables = {
     },
     mounted() {
         console.log("Setting up scroll handler");
-        window.addEventListener("wheel", this.debounceRefreshSight);
+     //   window.addEventListener("wheel", this.debounceRefreshSight);
     },
     beforeDestroy() {
-        window.removeEventListener("wheel", this.debounceRefreshSight);
+      //  window.removeEventListener("wheel", this.debounceRefreshSight);
     }
 }

@@ -61,13 +61,16 @@
 }
 
 .ventanaConjuntosZoomables {
-    width: 98vw;
+    width: 95%;
     overflow: scroll;
     margin: 10px auto;
     position: relative;
     display: grid;
     box-shadow: 1px 1px 1px 1px gray;
     padding: 20px 0px;
+    display: flex;
+    justify-content: center;
+    min-height:300px;
 }
 
 .conjuntoNumericoZoomable{
@@ -77,7 +80,6 @@
     transform-origin: top left;
     overflow: hidden;
     position: relative;
-    max-width: fit-content;
 }
 
 .conjuntoNumericoZoomable .contenedorSubconjuntos{

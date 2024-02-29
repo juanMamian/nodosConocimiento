@@ -3,18 +3,26 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloque.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlace.js"></script>
-    <script src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="componenteFlechaVector.js"></script>
+    <script src="componenteRegla.js"></script>
 
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="http://192.168.1.100:3000/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="estilosComponenteFlechaVector.css">
+    <link rel="stylesheet" href="componenteReglaEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -27,22 +35,85 @@
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Puedo nombrar las propiedades de los vectores.
+                Puedo nombrar y explicar las propiedades de los vectores.
             </template>
-        </bloque-component>   
+        </bloque-component>
 
-        <bloque-component tipo="evaluacion">
+        <bloque-component tipo="evaluacion" @desplegar="reiniciarReto1" ref="evaluacion3">
             <template #cabecera>
-                Dada cualquier descripción de las propiedades de un vector, puedo representarlo mediante un dibujo.
+                Dada cualquier descripción de un vector puede representarlo mediante un dibujo.
             </template>
-        </bloque-component>   
 
-        <bloque-component tipo="evaluacion">
+
+            <div class="flexVertical">
+                <button class="boton" @click="generarReto1">Generar reto</button>
+
+                <transition name="enterTop">
+                    <div id="reto1" class="reto" :key="versionReto1"
+                        v-if="simboloReto1 && magnitudReto1 && direccionReto1!=null">
+                        <div id="simboloReto1">
+                            <div class="flechita">
+                                {{simboloReto1}}
+                            </div>
+                        </div>
+                        <span>=</span>
+                        <span>
+                            ({{magnitudReto1}},
+                        </span>
+                        <span>
+                            {{direccionReto1}}°)
+                        </span>
+                    </div>
+                </transition>
+            </div>
+
+        </bloque-component>
+
+        <bloque-component tipo="evaluacion" @desplegado="reiniciarReto2" ref="evaluacion3"
+            @mouseleave="ungrabReglaReto2" @mousemove="moverReglaReto2">
             <template #cabecera>
-                Dada cualquier representación de un vector, puedo determinar sus propiedades.
+                Dada cualquier representación de un vector, puedo describirlo usando la notación adecuada.
             </template>
-        </bloque-component>   
-                
+
+            <div class="flexVertical">
+                <button class="boton" @click="generarReto2">
+                    Generar reto
+                </button>
+
+                <transition name="fadeIn">
+                    <div id="reto2" ref="reto2" v-if="simboloReto2 && magnitudReto2 && direccionReto2!=null"
+                        :key="versionReto2" @mouseup.left="ungrabReglaReto2">
+                        <componente-flecha-vector :simbolo="simboloReto2" :magnitud="magnitudReto2"
+                            style="pointer-events: none" :direccion="direccionReto2" :mostrando-notacion="true">
+                        </componente-flecha-vector>
+                        <componente-regla :longitud="longitudReglaReto2" ref="reglaReto2" :posicion="posicionReglaReto2"
+                            @grabbed="moverReglaReto2" />
+                    </div>
+                </transition>
+
+                <recuadro-component tipo="instruccionTeclado"
+                    v-if="simboloReto2 && magnitudReto2 && direccionReto2!=null">
+                    <div class="flexVertical">
+                        Escribe aquí la descripción del vector
+
+                        <input type="text" ref="inputRespuestaUsuarioReto2"
+                            @keypress.enter="evaluarRespuestaUsuarioReto2">
+                        <button class="boton" @click="evaluarRespuestaUsuarioReto2">
+                            Aceptar
+                        </button>
+
+                    </div>
+
+                </recuadro-component>
+                <transition name="fadeIn" @before-enter="scrollInfoRespuestaReto2">
+                    <recuadro-component tipo="infoResultado" v-if="respuestaUsuarioCorrectaReto2!=null"
+                        :modo="respuestaUsuarioCorrectaReto2?'correcto':'incorrecto'"
+                        :key="versionRespuestaUsuarioReto2">
+                    </recuadro-component>
+                </transition>
+            </div>
+        </bloque-component>
+
 
     </div>
 </body>
@@ -50,12 +121,212 @@
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
-            enlaceComponent
+            enlaceComponent,
+            componenteFlechaVector,
+            componenteRegla
         },
-    })
+        data() {
+            return {
+                simboloReto1: null,
+                magnitudReto1: 0,
+                direccionReto1: 0,
+                versionReto1: 0,
+
+                simboloReto2: null,
+                magnitudReto2: 0,
+                factorMagnitudReto2: 20,
+                direccionReto2: 0,
+                versionReto2: 0,
+                versionRespuestaUsuarioReto2: 0,
+                respuestaUsuarioCorrectaReto2: null,
+                longitudReglaReto2: 10,
+                posicionReglaReto2: {
+                    x: 0,
+                    y: 0,
+                }
+            }
+        },
+        computed: {
+        },
+        methods: {
+            reiniciarReto1() {
+                this.simboloReto1 = null;
+                this.magnitudReto1 = 0;
+                this.direccionReto1 = 0;
+            },
+            generarReto1() {
+                this.reiniciarReto1();
+                let letras = "abcdefghijklmnpqrstuvwxyz";
+
+                let rangoMagnitud = 10;
+                let minMagnitud = 5;
+                this.magnitudReto1 = Math.round(Math.random() * rangoMagnitud + minMagnitud);
+
+                let rangoDireccion = 360;
+                let minDireccion = 0;
+                this.direccionReto1 = Math.round(Math.random() * rangoDireccion + minDireccion);
+
+                let indexSimbolo = Math.floor(Math.random() * letras.length);
+                this.simboloReto1 = letras.charAt(indexSimbolo);
+                this.versionReto1++;
+            },
+
+            reiniciarReto2() {
+                this.simboloReto2 = null;
+                this.magnitudReto2 = 0;
+                this.direccionReto2 = 0;
+            },
+            generarReto2() {
+                this.reiniciarReto2();
+                let letras = "abcdefghijklmnpqrstuvwxyz";
+
+                let rangoMagnitud = 10;
+                let minMagnitud = 1;
+                let factorMagnitud = 20;
+                this.magnitudReto2 = Math.round(Math.random() * rangoMagnitud + minMagnitud) * factorMagnitud;
+
+                let rangoDireccion = 7;
+                let minDireccion = 0;
+                this.direccionReto2 = Math.round(Math.random() * rangoDireccion + minDireccion) * 45;
+
+                let indexSimbolo = Math.floor(Math.random() * letras.length);
+                this.simboloReto2 = letras.charAt(indexSimbolo);
+                console.log("Símbolo: " + this.simboloReto2);
+                console.log("Magnitud: " + this.magnitudReto2);
+                console.log("Dirección: " + this.direccionReto2);
+                this.versionReto2++;
+            },
+            evaluarRespuestaUsuarioReto2() {
+                this.versionRespuestaUsuarioReto2++;
+                let inputUsuario = this.$refs.inputRespuestaUsuarioReto2.value.trim();
+                let partesPrincipales = inputUsuario.split("=");
+                if (partesPrincipales.length != 2) {
+                    this.respuestaUsuarioCorrectaReto2 = false;
+                    return;
+                }
+                let parteSimbolo = partesPrincipales[0].trim();
+                if (parteSimbolo != this.simboloReto2) {
+                    this.respuestaUsuarioCorrectaReto2 = false;
+                    return;
+                }
+                let parteDescripcion = partesPrincipales[1].trim();
+                if (parteDescripcion.charAt(0) != '(' || parteDescripcion.charAt(parteDescripcion.length - 1) != ')') {
+                    this.respuestaUsuarioCorrectaReto2 = false;
+                    return;
+                }
+                //Ahora módulo y dirección
+                let partesDescripcion = parteDescripcion.slice(1, parteDescripcion.length - 1).split(",");
+                console.log("mod y direccion: ");
+                console.table(partesDescripcion);
+                if (partesDescripcion.length != 2) {
+                    this.respuestaUsuarioCorrectaReto2 = false;
+                    return;
+                }
+                let parteModulo = partesDescripcion[0].trim();
+                if (Number(parteModulo) != this.magnitudReto2 / this.factorMagnitudReto2) {
+                    this.respuestaUsuarioCorrectaReto2 = false;
+                    return;
+                }
+                let parteDireccion = partesDescripcion[1].trim();
+                if (parteDireccion.charAt(parteDireccion.length - 1) != '°') {
+                    console.log("Rads");
+                    parteDireccion = radsToDeg(Number(parteDireccion));
+                }
+                else {
+                    parteDireccion = parteDireccion.slice(0, parteDireccion.length - 1);
+                }
+                parteDireccion = Number(parteDireccion);
+                if (Math.abs(parteDireccion - this.direccionReto2) > 0.1) {
+                    this.respuestaUsuarioCorrectaReto2 = false;
+                    return;
+                }
+                this.respuestaUsuarioCorrectaReto2 = true;
+            },
+            scrollInfoRespuestaReto2() {
+                this.$nextTick(() => {
+                    let offset = this.$refs.evaluacion3.$el.getBoundingClientRect();
+                    if (this.$refs.evaluacion3?.$el) {
+                        if (offset.bottom > window.innerHeight || offset.bottom < window.innerHeight / 2) {
+                            this.$refs.evaluacion3.$el.scrollIntoView({behavior: "smooth", block: "end"});
+                        }
+                    }
+                    else {
+                        console.log(`No element`);
+                    }
+                })
+            },
+            ungrabReglaReto2() {
+                if (!this.$refs.reglaReto2) {
+                    console.log("No había regla");
+                    return;
+                }
+                this.$refs.reglaReto2.ungrab();
+            },
+            moverReglaReto2(evento) {
+                if (!this.$refs.reglaReto2) {
+                    return;
+                }
+                if (!this.$refs.reglaReto2.grabbed && !this.$refs.reglaReto2.grabbedRotacion) {
+                    return;
+                }
+                let offsetReto = this.$refs.reto2.getBoundingClientRect();
+                if (this.$refs.reglaReto2.grabbed) {
+                    let posX = event.clientX;
+                    let posY = event.clientY;
+                    let regla = this.$refs.reglaReto2;
+                    this.posicionReglaReto2.x = (posX - regla.grabPos.x) - offsetReto.left;
+                    this.posicionReglaReto2.y = (posY - regla.grabPos.y) - offsetReto.top;
+                }
+                if (this.$refs.reglaReto2.grabbedRotacion) {
+                    this.$refs.reglaReto2.moverRotacion(evento, offsetReto);
+                }
+
+            }
+
+
+        }
+    }).mount("#doc");
 </script>
+
+<style>
+    #reto1 {
+        display: flex;
+        gap: 3px;
+    }
+
+    #simboloReto1 {
+        position: relative;
+        margin: 0px 9px;
+    }
+
+    .flechita {
+        position: absolute;
+        bottom: calc(100% - 1px);
+        width: 10px;
+        height: 1px;
+        background-color: black;
+    }
+
+    .flechita::after {
+        content: "";
+        position: absolute;
+        top: -3px;
+        left: 100%;
+        border: 4px solid transparent;
+        border-left-color: black;
+    }
+
+    #reto2 {
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 100%;
+    }
+</style>

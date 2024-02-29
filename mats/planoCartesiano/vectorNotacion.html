@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta httpss-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="componenteFlechaVector.js"></script>
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="estilosComponenteFlechaVector.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Vector - notación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Los vectores suelen ser identificados mediante una letra. Esa letra puede estar:
+        </p>
+        <ul>
+            <li>
+                En negrita
+            </li>
+            <li>
+                Marcada con un pequeña flecha sobre la letra:
+            </li>
+        </ul>
+
+        <p>
+            Un vector es descrito completamente mediante una magnitud y una dirección.
+        </p>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se puede ver algunos vectores representados y descritos.
+            </template>
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo" v-for="(vector, index) of vectoresEjemplo" key="index">
+                    <componente-flecha-vector v-bind="vector" :mostrando-notacion="true">
+                    </componente-flecha-vector>
+
+                    <div class="bloqueDescripcionVector">
+                        <span class="simboloVector">
+                            <div class="flechita">
+
+                            </div>{{vector.simbolo}}
+                        </span>=({{vector.magnitud}}, {{vector.direccion}}°)
+                    </div>
+                </div>
+            </div>
+
+        </bloque-component>
+
+        <div>
+            El módulo de un vector se escribe entre barras verticales: <div class="simboloVector">
+                <div class="flechita" style="left: 13px"> </div>| <span style="margin: 0px 3px">v</span> |
+            </div>
+        </div>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se puede ver algunos vectores y se expresa su módulo con la notación adecuada.
+            </template>
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo" v-for="(vector, index) of vectoresEjemplo" key="index">
+                    <componente-flecha-vector v-bind="vector" :mostrando-notacion="true">
+                    </componente-flecha-vector>
+
+                    <div class="bloqueDescripcionVector">
+                        |<span class="simboloVector" style="margin: 0px 4px">
+                            <div class="flechita">
+
+                            </div>{{vector.simbolo}}
+                        </span>|={{vector.magnitud}}
+                    </div>
+                </div>
+            </div>
+
+        </bloque-component>
+
+        <recuadro-component tipo="datoPrevio">
+            El módulo de un vector es siempre un número positivo
+        </recuadro-component>
+
+    </div>
+</body>
+
+</html>
+
+
+<script>
+    const {createApp} = Vue;
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteFlechaVector
+        },
+        data() {
+            return {
+                vectoresEjemplo: [
+                    {
+                        magnitud: 95,
+                        direccion: 45,
+                        simbolo: "a"
+                    },
+                    {
+                        magnitud: 93,
+                        direccion: 245,
+                        simbolo: "b"
+                    },
+                    {
+                        magnitud: 68,
+                        direccion: 270,
+                        simbolo: "c"
+                    },
+                    {
+                        magnitud: 29,
+                        direccion: 190,
+                        simbolo: "d"
+                    },
+                ]
+            }
+        },
+        computed: {
+        },
+        methods: {
+        },
+        watch: {
+        }
+    }).mount("#doc")
+</script>
+
+
+<style>
+    .simboloVector {
+        position: relative;
+    }
+
+    .flechita {
+        position: absolute;
+        bottom: calc(100% - 1px);
+        width: 10px;
+        height: 1px;
+        background-color: black;
+    }
+
+    .flechita::after {
+        content: "";
+        position: absolute;
+        top: -3px;
+        left: 100%;
+        border: 4px solid transparent;
+        border-left-color: black;
+    }
+
+    .bloqueDescripcionVector {
+        margin-top: 150px;
+    }
+</style>

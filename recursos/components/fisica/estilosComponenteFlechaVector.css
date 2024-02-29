@@ -1,0 +1,19 @@
+.componenteFlechaVector {
+    width: 20px;
+    height: 2px;
+    background-color: black;
+    transform: translate(0rad);
+    position: relative;
+}
+
+.componenteFlechaVector::after {
+    content: "";
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-right: black;
+}

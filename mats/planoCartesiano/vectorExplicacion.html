@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta httpss-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="componenteFlechaVector.js"></script>
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="estilosComponenteFlechaVector.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Vector - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Un vector es un objeto representado como una flecha.
+        </p>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestran algunos ejemplos de vectores representados como una flecha.
+            </template>
+            <div class="listaEjemplos" id="listaEjemplos1">
+                <div class="itemEjemplo" v-for="(vector, index) of vectoresEjemplo" key="index">
+                    <componente-flecha-vector v-bind="vector">
+                    </componente-flecha-vector>
+
+                </div>
+            </div>
+        </bloque-component>
+
+        <p>
+            Un vector es descrito completamente con tres características:
+        </p>
+        <ul>
+            <li>
+                Módulo: tamaño del vector
+            </li>
+            <li>
+                Dirección: desviación del vector respecto de la línea horizontal.
+            </li>
+            <li>
+                Sentido: el frente del vector
+            </li>
+        </ul>
+
+        <bloque-component tipo="herramientaInteractiva" @desplegado="reiniciarEjemplo2">
+            <template #cabecera>
+                En este cuadro se puede ver la representación de las características de un vector
+            </template>
+
+            <div class="zonaInteraccion">
+                <componente-flecha-vector v-bind="vectorEjemplo2" id="flechaEjemplo2"
+                    :esconder-punta="esconderPuntaVector2">
+                </componente-flecha-vector>
+            </div>
+
+            <div class="flexVertical">
+                <div class="bloqueControl flexVertical" v-show="stepEjemplo2===1">
+                    <input v-model.number="vectorEjemplo2.magnitud" type="range" min="0" max="100">
+                    Módulo: {{vectorEjemplo2.magnitud}}
+                </div>
+                <div class="bloqueControl flexVertical" v-show="stepEjemplo2===2">
+                    <input v-model.number="vectorEjemplo2.direccion" type="range" min="0" max="360">
+                    Dirección: {{vectorEjemplo2.direccion}} grados
+                </div>
+                <div class="bloqueControl flexVertical" v-show="stepEjemplo2===3">
+                    <input v-model.number="invertirVector2" type="range" min="0" max="1">
+                    Sentido
+                </div>
+                <button class="boton" @click.stop="stepUpEjemplo2" :class="{deshabilitado: stepEjemplo2>2}">
+                    {{textoBotonStepEjemplo2}}
+                </button>
+            </div>
+        </bloque-component>
+
+        <p>
+            El punto de inicio de un vector es llamado <span class="resaltado">punto de aplicación</span> del vector.
+        </p>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestran algunos ejemplos de vectores y su punto de aplicación.
+            </template>
+            <div class="listaEjemplos" id="listaEjemplos3">
+                <div class="itemEjemplo" v-for="(vector, index) of vectoresEjemplo3" key="index">
+                    <componente-flecha-vector v-bind="vector">
+                    </componente-flecha-vector>
+                    <button @click="toggleMostrarPuntoAplicacionVectorEjemplo3(index)"
+                        class="boton botonMostrarPuntoAplicacion">{{vector.mostrarPuntoAplicacion?'Ocultar':'Mostrar'}} punto de aplicación</button>
+                </div>
+            </div>
+
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+
+<script>
+    const {createApp} = Vue;
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteFlechaVector
+        },
+        data() {
+            return {
+                vectoresEjemplo: [
+                    {
+                        magnitud: 25,
+                        direccion: 45,
+                    },
+                    {
+                        magnitud: 43,
+                        direccion: 245,
+                    },
+                    {
+                        magnitud: 38,
+                        direccion: 270,
+                    },
+                    {
+                        magnitud: 19,
+                        direccion: 190,
+                    },
+                ],
+                vectorEjemplo2: {
+                    magnitud: 0,
+                    direccion: 0,
+                    invertido: false,
+                },
+                invertirVector2: false,
+                esconderPuntaVector2: true,
+                stepEjemplo2: 0,
+
+                vectoresEjemplo3: [
+                    {
+                        magnitud: 25,
+                        direccion: 45,
+                        mostrarPuntoAplicacion: false,
+                    },
+                    {
+                        magnitud: 43,
+                        direccion: 245,
+                        mostrarPuntoAplicacion: false,
+                    },
+                    {
+                        magnitud: 38,
+                        direccion: 270,
+                        mostrarPuntoAplicacion: false,
+                    },
+                    {
+                        magnitud: 19,
+                        direccion: 190,
+                        mostrarPuntoAplicacion: false,
+                    },
+                ],
+            }
+        },
+        computed: {
+            textoBotonStepEjemplo2() {
+                switch (this.stepEjemplo2) {
+                    case 0:
+                        return "Representar módulo"
+                        break;
+                    case 1:
+                        return "Representar dirección"
+                        break;
+                    case 2:
+                        return "Representar sentido"
+                        break;
+                    default:
+                        return "Continuar"
+                }
+            }
+        },
+        methods: {
+            reiniciarEjemplo2() {
+                this.stepEjemplo2 = 0;
+                this.esconderPuntaVector2 = true;
+                this.vectorEjemplo2 = {
+                    magnitud: 0,
+                    direccion: 0,
+                    invertido: false,
+                }
+                this.invertirVector2 = 0;
+            },
+            stepUpEjemplo2() {
+                this.stepEjemplo2++;
+            },
+
+            toggleMostrarPuntoAplicacionVectorEjemplo3(indexVector) {
+                this.vectoresEjemplo3[indexVector].mostrarPuntoAplicacion = !this.vectoresEjemplo3[indexVector].mostrarPuntoAplicacion;
+            }
+        },
+        watch: {
+            stepEjemplo2(step) {
+                if (step === 1) {
+                    this.vectorEjemplo2.magnitud = 90;
+                }
+                if (step === 2) {
+                    this.vectorEjemplo2.direccion = 45;
+                }
+                if (step === 3) {
+                    this.esconderPuntaVector2 = false;
+                }
+            },
+            invertirVector2(invertir) {
+                if (invertir === 0) {
+                    this.vectorEjemplo2.invertido = false;
+                }
+                else {
+                    this.vectorEjemplo2.invertido = true;
+                }
+            }
+
+        }
+    }).mount("#doc")
+</script>
+
+
+<style>
+    #listaEjemplos1 .itemEjemplo {
+        min-width: 80px;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .zonaInteraccion {
+        min-height: 150px;
+    }
+
+    #flechaEjemplo2 {
+        margin: 50px auto;
+    }
+
+    .botonMostrarPuntoAplicacion {
+        margin-top: 50px;
+    }

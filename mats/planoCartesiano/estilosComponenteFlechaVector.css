@@ -1,0 +1,40 @@
+.componenteFlechaVector {
+    width: 20px;
+    height: 2px;
+    background-color: black;
+    transform: rotate(0);
+    position: relative;
+    transition: width 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.componenteFlechaVector:not(.esconderPunta)::after {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-left-color: black;
+}
+
+.componenteFlechaVector.invertido::after {
+    right: 100%;
+    border: 5px solid transparent;
+    border-right-color: black;
+
+}
+.componenteFlechaVector .simbolo{
+    position: absolute;
+}
+.componenteFlechaVector .puntoAplicacion{
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: red;
+    position: absolute;
+    left: -3px;
+    top: -2px;
+
+}

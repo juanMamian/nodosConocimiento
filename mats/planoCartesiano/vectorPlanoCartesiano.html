@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta httpss-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloque.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlace.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadro.js"></script>
+    <script src="componenteFlechaVector.js"></script>
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="estilosComponenteFlechaVector.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Vector en el plano cartesiano - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Si se representa un vector en el plano cartesiano con su punto de aplicación en el orígen del plano, entonces el vector puede ser descrito mediante coordenadas.
+        </p>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se muestran algunos ejemplos de vectores representados mediante coordenadas.
+            </template>
+            <div class="listaEjemplos" id="listaEjemplos1">
+                <div class="itemEjemplo" v-for="(vector, index) of vectoresEjemplo" key="index">
+                    <componente-flecha-vector v-bind="vector">
+                    </componente-flecha-vector>
+
+                </div>
+            </div>
+        </bloque-component>
+
+
+    </div>
+</body>
+
+</html>
+
+
+<script>
+    const {createApp} = Vue;
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteFlechaVector
+        },
+        data() {
+            return {
+                vectoresEjemplo: [
+                    {
+                        magnitud: 25,
+                        direccion: 45,
+                    },
+                    {
+                        magnitud: 43,
+                        direccion: 245,
+                    },
+                    {
+                        magnitud: 38,
+                        direccion: 270,
+                    },
+                    {
+                        magnitud: 19,
+                        direccion: 190,
+                    },
+                ],
+            }
+        },
+        computed:{} ,
+        methods: {},
+        watch: {
+        }
+    }).mount("#doc")
+</script>
+
+
+<style>
+
+</style>

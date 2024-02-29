@@ -1,0 +1,28 @@
+.componenteRegla{
+    height: 5px;
+    width: fit-content;
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: var(--paletaPrevio);
+    position: absolute;
+    z-index: 1;
+    user-select: none;
+    transform-origin: left center;
+}
+.componenteRegla .segmentoRegla{
+    border-right: 1px solid white;
+    height: 100%;
+    width: 20px;
+    background-color: var(--paletaActual)
+}
+.componenteRegla.grabbed{
+    transform: scale(1.01);
+}
+.componenteRegla .handlerRegla{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: var(--paletaMain);
+    margin-top: -6px;
+    border: 1px solid white;
+}

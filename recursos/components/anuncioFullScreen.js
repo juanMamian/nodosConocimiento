@@ -14,7 +14,7 @@ const anuncioFullScreen={
     },
     computed:{
         iconoSrc(){
-            return "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/triangleExclamation.svg"
+            return "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/iconos/triangleExclamation.svg"
             
         }
     },

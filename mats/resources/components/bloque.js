@@ -30,21 +30,21 @@ const bloqueComponent={
         },
         iconoSrc(){
             if(this.ejemplo){
-                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/iconoEjemplo.svg"
+                return "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/iconoEjemplo.svg"
             }
             else if(this.herramientaInteractiva){
-                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/iconoHerramientaInteractiva.svg"
+                return "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/iconoHerramientaInteractiva.svg"
             }
             else if(this.cuento){
-                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/iconoCuento.svg"
+                return "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/iconoCuento.svg"
             }
             else if(this.spoiler){
-                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/iconoSpoiler.svg"
+                return "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/iconoSpoiler.svg"
             }
             else if(this.evaluacion){
-                return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/iconoEvaluacion.svg"
+                return "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/iconoEvaluacion.svg"
             }
-            return "http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/puzzlePiece.svg"
+            return "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/puzzlePiece.svg"
         },
         textoCerrarBoton(){
             if(this.textoboton==='Iniciar' || this.textoboton==='Intentar'){

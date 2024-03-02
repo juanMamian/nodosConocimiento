@@ -50,7 +50,7 @@ const controlesAnimacion = {
         }
 
     },
-    template: '<div class="controlesAnimacion"> <button class="boton botonControl" @click="darPlay" :class="{deshabilitado: playing}"> <img src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/play.svg" /> </button> <button class="boton botonControl" @click="darPause" :class="{deshabilitado: paused || stopped}"> <img src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/pause.svg" /> </button> <button class="boton botonControl" @click="darStop" :class="{deshabilitado:stopped}"> <img src="http://192.168.1.100:3000/public/atlasConocimiento/recursos/iconos/stop.svg" /> </button> </div>',
+    template: '<div class="controlesAnimacion"> <button class="boton botonControl" @click="darPlay" :class="{deshabilitado: playing}"> <img src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/play.svg" /> </button> <button class="boton botonControl" @click="darPause" :class="{deshabilitado: paused || stopped}"> <img src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/pause.svg" /> </button> <button class="boton botonControl" @click="darStop" :class="{deshabilitado:stopped}"> <img src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/recursos/iconos/stop.svg" /> </button> </div>',
 
 }
 

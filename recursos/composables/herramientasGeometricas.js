@@ -1,4 +1,4 @@
-import { ref } from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/resources/libraries/vue.global.js"
+import { ref } from "https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"
 
 export function useDibujarRegla() {
     const zonaRegla = ref(null);

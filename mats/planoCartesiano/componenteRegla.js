@@ -1,8 +1,8 @@
 const componenteRegla = {
     template: `
-        <div class="componenteRegla" @mousedown.left.exact="iniciarGrab" @mouseup="ungrab" :class="{grabbed}" :style="[offset]">
+        <div class="componenteRegla" :class="{grabbed}" :style="[offset]">
             <div class="segmentoRegla" v-for="cuenta of longitud"></div>
-            <div class="handlerRegla" @mousedown.stop="iniciarGrabRotacion"></div>
+            <div class="handlerRegla" @click.stop="" @mousedown.left.stop="$emit('iniciarGrabRotacion')"></div>
         </div>
     `,
     props: {
@@ -16,17 +16,23 @@ const componenteRegla = {
                 x: 0,
                 y: 0,
             }
+        },
+        direccionFromOutside: {
+            type: Number,
+            default: 0,
+        },
+        grabbed:{
+            type: Boolean,
+            default: false,
         }
     },
     data() {
         return {
-            grabbed: false,
             grabPos: {
                 x: 0, y: 0
             },
             direccion: 0,
 
-            grabbedRotacion: false,
         }
     },
     computed: {
@@ -38,30 +44,10 @@ const componenteRegla = {
             }
         }
     },
-    methods: {
-        iniciarGrab(evento) {
-            let offsetEl = this.$el.getBoundingClientRect();
-            this.grabbed = true;
-            this.grabPos.x = evento.clientX - offsetEl.left;
-            this.grabPos.y = evento.clientY - offsetEl.top;
-            this.$emit("grabbed");
-        },
-        ungrab() {
-            console.log("Ungrabbing");
-            this.grabbed = false;
-            this.grabbedRotacion = false;
-        },
-
-        iniciarGrabRotacion() {
-            this.grabbedRotacion = true;
-        },
-        moverRotacion(evento, parentOffset) {
-            let posX = evento.clientX - parentOffset.left - this.posicion.x;
-            let posY = evento.clientY - parentOffset.top - this.posicion.y;
-            let direccion = Math.atan2(posY, posX);
-            this.direccion = radToDeg(direccion);
+    watch: {
+        direccionFromOutside(dir) {
+            this.direccion = radToDeg(dir);
         }
-
     }
 }
 

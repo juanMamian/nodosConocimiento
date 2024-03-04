@@ -194,6 +194,16 @@ li {
   background-color: brown;
   flex-shrink: 0;
 }
+
+.botonControl{
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
+.botonControl img{
+    height: 100%;
+}
+
 .fade-enter-active {
   animation: fade 0.8s;
   animation-iteration-count: 1;

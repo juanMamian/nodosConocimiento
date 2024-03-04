@@ -7,12 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
     <script src="componenteFlechaVector.js"></script>
     <script src="componenteRegla.js"></script>
-    <script type="module" src="../../recursos/composables/herramientasGeometricas.js"
+
 
     <link rel="stylesheet" href="estilosComponenteFlechaVector.css">
     <link rel="stylesheet" href="componenteReglaEstilo.css">
@@ -70,8 +73,8 @@
 
         </bloque-component>
 
-        <bloque-component tipo="evaluacion" @desplegado="reiniciarReto2" ref="evaluacion3"
-            @mouseleave="ungrabReglaReto2" @mousemove="moverReglaReto2">
+        <bloque-component tipo="evaluacion" @desplegado="reiniciarReto2" ref="evaluacion3" @mouseleave="ungrabRegla"
+            @mousemove="moverRegla">
             <template #cabecera>
                 Dada cualquier representación de un vector, puedo describirlo usando la notación adecuada.
             </template>
@@ -82,13 +85,15 @@
                 </button>
 
                 <transition name="fadeIn">
-                    <div id="reto2" ref="reto2" v-if="simboloReto2 && magnitudReto2 && direccionReto2!=null"
-                        :key="versionReto2" @mouseup.left="ungrabReglaReto2">
+                    <div id="reto2" ref="zonaRegla" v-if="simboloReto2 && magnitudReto2 && direccionReto2!=null"
+                        :key="versionReto2" @mouseup.left="cancelDrawingRegla" @mousedown.left.exact="iniciarDrawRegla"
+                        @mousemove.left="drawRegla" @mousemove="moverRegla" @mouseup.left.stop="ungrabRegla">
                         <componente-flecha-vector :simbolo="simboloReto2" :magnitud="magnitudReto2"
                             style="pointer-events: none" :direccion="direccionReto2" :mostrando-notacion="true">
                         </componente-flecha-vector>
-                        <componente-regla :longitud="longitudReglaReto2" ref="reglaReto2" :posicion="posicionReglaReto2"
-                            @grabbed="moverReglaReto2" />
+                        <componente-regla :longitud="sizeRegla" ref="reglaReto2" :posicion="puntoInicioRegla"
+                            v-show="mostrandoRegla" @mousedown.left.stop="iniciarGrabRegla" @click.stop=""
+                            :direccion-from-outside="direccionRegla" @iniciar-grab-rotacion="iniciarGrabRotacionRegla" />
                     </div>
                 </transition>
 
@@ -97,6 +102,11 @@
                     <div class="flexVertical">
                         Escribe aquí la descripción del vector
 
+                        <div class="barraControles">
+                            <div class="botonControl botonControlFormatoTexto">
+                                <img src="arrow.svg" alt="Arrow">
+                            </div>
+                        </div>
                         <input type="text" ref="inputRespuestaUsuarioReto2"
                             @keypress.enter="evaluarRespuestaUsuarioReto2">
                         <button class="boton" @click="evaluarRespuestaUsuarioReto2">
@@ -121,9 +131,15 @@
 
 </html>
 
-<script>
+<script type="module">
+    import {useDibujarRegla} from "../../recursos/composables/herramientasGeometricas.js";
+
     const {createApp} = Vue;
     createApp({
+        setup() {
+            const {regla: reglaReto2, zonaRegla, mostrandoRegla, puntoInicioRegla, sizeRegla, direccionRegla, iniciarDrawRegla, drawRegla, cancelDrawingRegla, ocultarRegla, iniciarGrabRegla, moverRegla, ungrabRegla, iniciarGrabRotacionRegla} = useDibujarRegla();
+            return {reglaReto2, zonaRegla, mostrandoRegla, puntoInicioRegla, sizeRegla, direccionRegla, iniciarDrawRegla, drawRegla, cancelDrawingRegla, ocultarRegla, iniciarGrabRegla, moverRegla, ungrabRegla, iniciarGrabRotacionRegla}
+        },
         components: {
             recuadroComponent,
             bloqueComponent,
@@ -181,6 +197,7 @@
                 this.simboloReto2 = null;
                 this.magnitudReto2 = 0;
                 this.direccionReto2 = 0;
+                this.mostrandoRegla = false;
             },
             generarReto2() {
                 this.reiniciarReto2();
@@ -197,9 +214,6 @@
 
                 let indexSimbolo = Math.floor(Math.random() * letras.length);
                 this.simboloReto2 = letras.charAt(indexSimbolo);
-                console.log("Símbolo: " + this.simboloReto2);
-                console.log("Magnitud: " + this.magnitudReto2);
-                console.log("Dirección: " + this.direccionReto2);
                 this.versionReto2++;
             },
             evaluarRespuestaUsuarioReto2() {
@@ -222,8 +236,6 @@
                 }
                 //Ahora módulo y dirección
                 let partesDescripcion = parteDescripcion.slice(1, parteDescripcion.length - 1).split(",");
-                console.log("mod y direccion: ");
-                console.table(partesDescripcion);
                 if (partesDescripcion.length != 2) {
                     this.respuestaUsuarioCorrectaReto2 = false;
                     return;
@@ -235,7 +247,6 @@
                 }
                 let parteDireccion = partesDescripcion[1].trim();
                 if (parteDireccion.charAt(parteDireccion.length - 1) != '°') {
-                    console.log("Rads");
                     parteDireccion = radsToDeg(Number(parteDireccion));
                 }
                 else {
@@ -261,33 +272,6 @@
                     }
                 })
             },
-            ungrabReglaReto2() {
-                if (!this.$refs.reglaReto2) {
-                    console.log("No había regla");
-                    return;
-                }
-                this.$refs.reglaReto2.ungrab();
-            },
-            moverReglaReto2(evento) {
-                if (!this.$refs.reglaReto2) {
-                    return;
-                }
-                if (!this.$refs.reglaReto2.grabbed && !this.$refs.reglaReto2.grabbedRotacion) {
-                    return;
-                }
-                let offsetReto = this.$refs.reto2.getBoundingClientRect();
-                if (this.$refs.reglaReto2.grabbed) {
-                    let posX = event.clientX;
-                    let posY = event.clientY;
-                    let regla = this.$refs.reglaReto2;
-                    this.posicionReglaReto2.x = (posX - regla.grabPos.x) - offsetReto.left;
-                    this.posicionReglaReto2.y = (posY - regla.grabPos.y) - offsetReto.top;
-                }
-                if (this.$refs.reglaReto2.grabbedRotacion) {
-                    this.$refs.reglaReto2.moverRotacion(evento, offsetReto);
-                }
-
-            }
 
 
         }

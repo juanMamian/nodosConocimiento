@@ -41,6 +41,10 @@ li {
   background-color: var(--paletaPrevio);
   box-shadow: 1px 1px 1px 1px gray;
 }
+.activador.activo{
+  background-color: var(--paletaPrevio);
+  box-shadow: 1px 1px 1px 1px gray;
+}
 .resaltado {
   background-color: var(--paletaActual);
   padding: 0px 5px;

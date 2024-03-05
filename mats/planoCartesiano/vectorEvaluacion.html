@@ -104,14 +104,15 @@
                         Escribe aquí la descripción del vector
 
                         <div class="barraControles">
-                            <div class="botonControl botonControlFormatoTexto" @click.stop.prevent="addFlechita"
+                            <div class="botonControl botonControlFormatoTexto" @click.stop="addingFlechita=!addingFlechita" :class="{activo: addingFlechita}"
                                 @mousedown.prevent="">
                                 <img src="arrow.svg" alt="Arrow">
                                 flechita
                             </div>
                         </div>
-                        <div type="text" ref="inputRespuestaUsuarioReto2" contenteditable class="inputDiv"
-                            @keypress.enter="evaluarRespuestaUsuarioReto2" v-html="respuestaUsuarioReto2">
+                        <div type="text" ref="inputRespuestaUsuarioReto2" contenteditable class="inputDiv" @input="addFlechita"
+                            v-html="respuestaUsuarioReto2" id="inputRespuestaUsuarioReto2"
+                            @keypress.enter.prevent="evaluarRespuestaUsuarioReto2">
                         </div>
                         <button class="boton" @click="evaluarRespuestaUsuarioReto2">
                             Aceptar
@@ -136,7 +137,7 @@
 </html>
 
 <script type="module">
-    import {useDibujarRegla} from "../../recursos/composables/herramientasGeometricas.js";
+    import {useDibujarRegla} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/herramientasGeometricas.js";
 
     const {createApp} = Vue;
     createApp({
@@ -170,19 +171,19 @@
                 posicionReglaReto2: {
                     x: 0,
                     y: 0,
-                }
+                },
+
+                addingFlechita: false,
             }
         },
         computed: {
         },
         methods: {
             addFlechita() {
-                this.$nextTick(() => {
-                    let inputRespuesta = this.$refs.inputRespuestaUsuarioReto2;
-                    let textoSeleccionado = inputRespuesta.innerHtml.slice(0, inputRespuesta.selectionStart) + inputRespuesta.innerHtml.slice(inputRespuesta.selectionEnd);
-                    inputRespuesta.innerHtml = inputRespuesta.innerHtml.slice(0, inputRespuesta.selectionEnd) + '&#8407;' + inputRespuesta.innerHtml.slice(inputRespuesta.selectionEnd);
-                    console.log(`Adding flechita a ${textoSeleccionado.slice(this.$refs.inputRespuestaUsuarioReto2.selectionStart, this.$refs.inputRespuestaUsuarioReto2.selectionEnd)}`);
-                })
+                if (addingFlechita) {
+                    console.log("Adding flechita");
+                }
+                this.addingFlechita=false;
             },
             reiniciarReto1() {
                 this.simboloReto1 = null;
@@ -211,6 +212,7 @@
                 this.magnitudReto2 = 0;
                 this.direccionReto2 = 0;
                 this.mostrandoRegla = false;
+                this.respuestaUsuarioReto2 = '';
             },
             generarReto2() {
                 this.reiniciarReto2();
@@ -231,7 +233,8 @@
             },
             evaluarRespuestaUsuarioReto2() {
                 this.versionRespuestaUsuarioReto2++;
-                let inputUsuario = this.$refs.inputRespuestaUsuarioReto2.value.trim();
+                let inputUsuario = this.$refs.inputRespuestaUsuarioReto2.innerText.trim();
+                console.log("Input usuario: " + inputUsuario);
                 let partesPrincipales = inputUsuario.split("=");
                 if (partesPrincipales.length != 2) {
                     this.respuestaUsuarioCorrectaReto2 = false;

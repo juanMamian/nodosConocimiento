@@ -111,7 +111,7 @@
                             </div>
                         </div>
                         <div type="text" ref="inputRespuestaUsuarioReto2" contenteditable class="inputDiv"
-                            @keypress.enter="evaluarRespuestaUsuarioReto2">
+                            @keypress.enter="evaluarRespuestaUsuarioReto2" v-html="respuestaUsuarioReto2">
                         </div>
                         <button class="boton" @click="evaluarRespuestaUsuarioReto2">
                             Aceptar
@@ -163,6 +163,7 @@
                 factorMagnitudReto2: 20,
                 direccionReto2: 0,
                 versionReto2: 0,
+                respuestaUsuarioReto2: '',
                 versionRespuestaUsuarioReto2: 0,
                 respuestaUsuarioCorrectaReto2: null,
                 longitudReglaReto2: 10,
@@ -178,8 +179,8 @@
             addFlechita() {
                 this.$nextTick(() => {
                     let inputRespuesta = this.$refs.inputRespuestaUsuarioReto2;
-                    let textoSeleccionado = inputRespuesta.value.slice(0, inputRespuesta.selectionEnd) + inputRespuesta.value.slice(inputRespuesta.selectionStart);
-                    inputRespuesta.value = inputRespuesta.value.slice(0, inputRespuesta.selectionEnd) + '&#8407;' + inputRespuesta.value.slice(inputRespuesta.selectionEnd);
+                    let textoSeleccionado = inputRespuesta.innerHtml.slice(0, inputRespuesta.selectionStart) + inputRespuesta.innerHtml.slice(inputRespuesta.selectionEnd);
+                    inputRespuesta.innerHtml = inputRespuesta.innerHtml.slice(0, inputRespuesta.selectionEnd) + '&#8407;' + inputRespuesta.innerHtml.slice(inputRespuesta.selectionEnd);
                     console.log(`Adding flechita a ${textoSeleccionado.slice(this.$refs.inputRespuestaUsuarioReto2.selectionStart, this.$refs.inputRespuestaUsuarioReto2.selectionEnd)}`);
                 })
             },

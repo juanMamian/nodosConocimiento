@@ -196,10 +196,12 @@ li {
 }
 
 .inputDiv{
-    padding: 3px 3px;
+    padding: 5px 10px;
     border: 1px solid gray;
     background-color: whitesmoke;
-    font-size: 19px;
+    font-size: 20px;
+    color: black;
+    min-width: 140px;
 }
 
 .botonControl{

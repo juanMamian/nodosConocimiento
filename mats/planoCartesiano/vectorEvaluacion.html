@@ -93,7 +93,8 @@
                         </componente-flecha-vector>
                         <componente-regla :longitud="sizeRegla" ref="reglaReto2" :posicion="puntoInicioRegla"
                             v-show="mostrandoRegla" @mousedown.left.stop="iniciarGrabRegla" @click.stop=""
-                            :direccion-from-outside="direccionRegla" @iniciar-grab-rotacion="iniciarGrabRotacionRegla" />
+                            :direccion-from-outside="direccionRegla"
+                            @iniciar-grab-rotacion="iniciarGrabRotacionRegla" />
                     </div>
                 </transition>
 
@@ -103,12 +104,15 @@
                         Escribe aquí la descripción del vector
 
                         <div class="barraControles">
-                            <div class="botonControl botonControlFormatoTexto">
+                            <div class="botonControl botonControlFormatoTexto" @click.stop.prevent="addFlechita"
+                                @mousedown.prevent="">
                                 <img src="arrow.svg" alt="Arrow">
+                                flechita
                             </div>
                         </div>
-                        <input type="text" ref="inputRespuestaUsuarioReto2"
+                        <div type="text" ref="inputRespuestaUsuarioReto2" contenteditable class="inputDiv"
                             @keypress.enter="evaluarRespuestaUsuarioReto2">
+                        </div>
                         <button class="boton" @click="evaluarRespuestaUsuarioReto2">
                             Aceptar
                         </button>
@@ -171,6 +175,14 @@
         computed: {
         },
         methods: {
+            addFlechita() {
+                this.$nextTick(() => {
+                    let inputRespuesta = this.$refs.inputRespuestaUsuarioReto2;
+                    let textoSeleccionado = inputRespuesta.value.slice(0, inputRespuesta.selectionEnd) + inputRespuesta.value.slice(inputRespuesta.selectionStart);
+                    inputRespuesta.value = inputRespuesta.value.slice(0, inputRespuesta.selectionEnd) + '&#8407;' + inputRespuesta.value.slice(inputRespuesta.selectionEnd);
+                    console.log(`Adding flechita a ${textoSeleccionado.slice(this.$refs.inputRespuestaUsuarioReto2.selectionStart, this.$refs.inputRespuestaUsuarioReto2.selectionEnd)}`);
+                })
+            },
             reiniciarReto1() {
                 this.simboloReto1 = null;
                 this.magnitudReto1 = 0;

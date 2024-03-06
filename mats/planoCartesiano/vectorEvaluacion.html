@@ -104,14 +104,15 @@
                         Escribe aquí la descripción del vector
 
                         <div class="barraControles">
-                            <div class="botonControl botonControlFormatoTexto" @click.stop="addingFlechita=!addingFlechita" :class="{activo: addingFlechita}"
+                            <div class="botonControl botonControlFormatoTexto"
+                                @click.stop="addingFlechita=!addingFlechita" :class="{activo: addingFlechita}"
                                 @mousedown.prevent="">
                                 <img src="arrow.svg" alt="Arrow">
-                                flechita
+                                {{addingFlechita?'F':''}}
                             </div>
                         </div>
-                        <div type="text" ref="inputRespuestaUsuarioReto2" contenteditable class="inputDiv" @input="addFlechita"
-                            v-html="respuestaUsuarioReto2" id="inputRespuestaUsuarioReto2"
+                        <div type="text" ref="inputRespuestaUsuarioReto2" contenteditable class="inputDiv"
+                            @input="addFlechita" v-html="respuestaUsuarioReto2" id="inputRespuestaUsuarioReto2"
                             @keypress.enter.prevent="evaluarRespuestaUsuarioReto2">
                         </div>
                         <button class="boton" @click="evaluarRespuestaUsuarioReto2">
@@ -180,10 +181,57 @@
         },
         methods: {
             addFlechita() {
-                if (addingFlechita) {
-                    console.log("Adding flechita");
+                if (this.addingFlechita) {
+                    let seleccion = window.getSelection();
+                    if (seleccion.toString().toLength > 0) {
+                        return;
+                    }
+                    let anchorNode = seleccion.anchorNode;
+                    let focusNode = seleccion.focusNode;
+                    if (anchorNode.parentNode.id != 'inputRespuestaUsuarioReto2' || focusNode.parentNode.id != 'inputRespuestaUsuarioReto2') {
+                        return;
+                    }
+                    let posicion = seleccion.focusOffset;
+                    let posicionCompuesta = posicion;
+                    let nodoTemp = focusNode;
+                    let inputRespuesta = this.$refs.inputRespuestaUsuarioReto2;
+                    let siblings = inputRespuesta.childNodes;
+                    let prevSiblings = 0;
+                    while (nodoTemp.previousSibling) {
+                        prevSiblings++;
+                        let prev = nodoTemp.previousSibling;
+                        posicionCompuesta += prev.textContent.length;
+                        nodoTemp = prev;
+                    }
+
+
+                    let textoRespuesta = inputRespuesta.innerText;
+                    this.respuestaUsuarioReto2 = textoRespuesta.slice(0, posicionCompuesta) + "<span class='flechitaNotacionVector'>&#8407;</span> " + textoRespuesta.slice(posicionCompuesta);
+
+                    this.$nextTick(() => {
+                        let childs = inputRespuesta.childNodes;
+                        let indexTarget = prevSiblings + 2;
+                        let target = childs[indexTarget]; //Child en el que debe quedar el cursor. Tiene que ser un nodo de texto.
+                        if (!target) {
+                            let nuevoNodo = document.createTextNode("");
+                            inputRespuesta.appendChild(nuevoNodo);
+                            target = nuevoNodo;
+                        }
+
+                        if (target.nodeType === 1) {// es un span con flechita
+                            let nuevoNodo = document.createTextNode("");
+                            childs[indexTarget].after(nuevoNodo);
+                            target = nuevoNodo;
+                        }
+                        let rango = document.createRange();
+                        rango.setStart(target, 0);
+                        seleccion.removeAllRanges();
+                        seleccion.addRange(rango);
+
+                    });
+
                 }
-                this.addingFlechita=false;
+                this.addingFlechita = false;
             },
             reiniciarReto1() {
                 this.simboloReto1 = null;
@@ -234,14 +282,17 @@
             evaluarRespuestaUsuarioReto2() {
                 this.versionRespuestaUsuarioReto2++;
                 let inputUsuario = this.$refs.inputRespuestaUsuarioReto2.innerText.trim();
-                console.log("Input usuario: " + inputUsuario);
                 let partesPrincipales = inputUsuario.split("=");
                 if (partesPrincipales.length != 2) {
                     this.respuestaUsuarioCorrectaReto2 = false;
                     return;
                 }
                 let parteSimbolo = partesPrincipales[0].trim();
-                if (parteSimbolo != this.simboloReto2) {
+                if (parteSimbolo.slice(0, parteSimbolo.length - 1) != this.simboloReto2) {
+                    this.respuestaUsuarioCorrectaReto2 = false;
+                    return;
+                }
+                if (parteSimbolo.charCodeAt(parteSimbolo.length - 1) != 8407) {
                     this.respuestaUsuarioCorrectaReto2 = false;
                     return;
                 }

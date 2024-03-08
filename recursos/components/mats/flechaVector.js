@@ -1,4 +1,4 @@
-const componenteFlechaVector = {
+export const componenteFlechaVector = {
     template: `
         <div class="componenteFlechaVector" :class="{esconderPunta, invertido}" :style="[offset]">
             <div class="puntoAplicacion" v-if="mostrarPuntoAplicacion"></div>

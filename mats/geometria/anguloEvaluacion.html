@@ -126,6 +126,7 @@
                 e2RotacionLinea2.value = 0;
                 e2MostrandoReto.value = false;
                 e2MostrandoTransportador.value = false;
+                if(e2InputRespuestaUsuario.value)e2InputRespuestaUsuario.value.value='';
                 e2RespuestaUsuarioCorrecta.value = null;
             }
             async function e2GenerarReto() {
@@ -240,7 +241,7 @@
 
 <style>
     #e2ZonaInteraccion {
-        min-height: 570px;
+        min-height: 590px;
         width: 100%;
     }
 
@@ -258,7 +259,7 @@
         top: 50%;
         left: 50%;
         height: 2px;
-        width: 200px;
+        width: min(200px, 40vw);
         background-color: black;
         transform-origin: left center;
     }

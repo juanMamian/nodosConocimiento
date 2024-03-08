@@ -71,7 +71,7 @@
 
             <div class="flexVertical">
                 <div class="bloqueControl flexVertical" v-show="stepEjemplo2===1">
-                    <input v-model.number="vectorEjemplo2.magnitud" type="range" min="0" max="100">
+                    <input v-model.number="vectorEjemplo2.magnitud" type="range" min="1" max="6">
                     Módulo: {{vectorEjemplo2.magnitud}}
                 </div>
                 <div class="bloqueControl flexVertical" v-show="stepEjemplo2===2">
@@ -126,19 +126,19 @@
             return {
                 vectoresEjemplo: [
                     {
-                        magnitud: 25,
+                        magnitud: 1,
                         direccion: 45,
                     },
                     {
-                        magnitud: 43,
+                        magnitud: 2,
                         direccion: 245,
                     },
                     {
-                        magnitud: 38,
+                        magnitud: 2,
                         direccion: 270,
                     },
                     {
-                        magnitud: 19,
+                        magnitud: 3,
                         direccion: 190,
                     },
                 ],
@@ -153,22 +153,22 @@
 
                 vectoresEjemplo3: [
                     {
-                        magnitud: 25,
+                        magnitud: 1,
                         direccion: 45,
                         mostrarPuntoAplicacion: false,
                     },
                     {
-                        magnitud: 43,
+                        magnitud: 2,
                         direccion: 245,
                         mostrarPuntoAplicacion: false,
                     },
                     {
-                        magnitud: 38,
+                        magnitud: 2,
                         direccion: 270,
                         mostrarPuntoAplicacion: false,
                     },
                     {
-                        magnitud: 19,
+                        magnitud: 1,
                         direccion: 190,
                         mostrarPuntoAplicacion: false,
                     },
@@ -214,7 +214,7 @@
         watch: {
             stepEjemplo2(step) {
                 if (step === 1) {
-                    this.vectorEjemplo2.magnitud = 90;
+                    this.vectorEjemplo2.magnitud = 4;
                 }
                 if (step === 2) {
                     this.vectorEjemplo2.direccion = 45;

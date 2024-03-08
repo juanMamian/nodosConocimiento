@@ -45,9 +45,9 @@
 
             <div class="flexVertical">
                 <div class="zonaInteraccion" id="zonaInteraccion1">
-                    <div class="linea" id="linea1">
+                    <div class="linea h1Linea" id="linea1">
                     </div>
-                    <div class="linea" id="linea2" :style="[estiloLinea2]">
+                    <div class="linea h1Linea" id="linea2" :style="[estiloLinea2]">
                     </div>
                     <canvas id="herramienta1Canvas" ref="herramienta1Canvas" width=200 height=200>
 
@@ -91,10 +91,10 @@
                         </div>
                         <div class="divisionSexagesimal" v-for="num of 360"
                             :class="{tocada:herramienta2LabelMostrada===num}"
-                            :style="[{transform: 'rotate('+(1-num)+'deg)'}]"
-                            @mouseenter="herramienta2LabelMostrada=num" @touchmove="herramienta2LabelMostrada=num">
+                            :style="[{transform: 'rotate('+(1-num)+'deg)'}]" @mouseenter="herramienta2LabelMostrada=num"
+                            @touchmove="herramienta2LabelMostrada=num">
                             <div class="parteVisible" style="width: 100%">
-                                
+
                             </div>
                             <div class="labelDivision" :style="[{transform: 'rotate('+(num-1)+'deg)'}]"
                                 v-show="herramienta2LabelMostrada===num">
@@ -133,11 +133,13 @@
                     </div>
                     <div class="linea lineaAgarrable" id="lineaAgarrable1"
                         :style="[{transform: 'rotate('+herramienta3DireccionLinea1+'rad)'}]">
-                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea1=true" @touchstart.stop.prevent="herramienta3GrabbedLinea1=true"> </div>
+                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea1=true"
+                            @touchstart.stop.prevent="herramienta3GrabbedLinea1=true"> </div>
                     </div>
                     <div class="linea lineaAgarrable" id="lineaAgarrable2"
                         :style="[{transform: 'rotate('+herramienta3DireccionLinea2+'rad)'}]">
-                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea2=true" @touchstart.stop.prevent="herramienta3GrabbedLinea2=true"> </div>
+                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea2=true"
+                            @touchstart.stop.prevent="herramienta3GrabbedLinea2=true"> </div>
                     </div>
                 </div>
             </div>
@@ -230,12 +232,17 @@
                 herramienta3GrabbedLinea1.value = false;
                 herramienta3GrabbedLinea2.value = false;
             }
+            const h3UltimoMovimientoLinea = ref(Date.now());
+            const umbralMovimientoLinea = 50;
             function herramienta3MoverLinea(evento) {
                 if (!herramienta3GrabbedLinea1.value && !herramienta3GrabbedLinea2.value) {
                     return
                 }
                 if (!herramienta3Circulo.value) {
                     console.log(`No hay círculo`);
+                    return;
+                }
+                if (Date.now() - h3UltimoMovimientoLinea.value < umbralMovimientoLinea) {
                     return;
                 }
                 console.log("Moviendo línea");
@@ -255,11 +262,13 @@
                 if (herramienta3GrabbedLinea2.value) {
                     herramienta3DireccionLinea2.value = direccion;
                 }
+                h3UltimoMovimientoLinea.value=Date.now();
             }
 
             return {
                 estiloLinea2, rotacionLinea2, herramienta1Canvas, herramienta1TrazarArco, elementoCanvas, iniciarHerramienta2, herramienta2LabelMostrada,
-                herramienta3ZonaInteraccion, herramienta3Circulo, herramienta3GrabbedLinea1, herramienta3GrabbedLinea2, herramienta3DireccionLinea1, h3DireccionLinea1, h3GradosApertura, herramienta3DireccionLinea2, h3DireccionLinea2, ungrabHerramienta3, herramienta3MoverLinea
+                herramienta3ZonaInteraccion, herramienta3Circulo, herramienta3GrabbedLinea1, herramienta3GrabbedLinea2, herramienta3DireccionLinea1, h3DireccionLinea1, h3GradosApertura, herramienta3DireccionLinea2, h3DireccionLinea2, ungrabHerramienta3, herramienta3MoverLinea,
+                h3UltimoMovimientoLinea,
             }
 
         },
@@ -286,6 +295,10 @@
         position: absolute;
         top: 50%;
         left: 50%;
+    }
+
+    .h1Linea {
+        width: min(200px, 30vw);
     }
 
     #zonaInteraccion1 {
@@ -386,7 +399,7 @@
         margin-top: 100px;
     }
 
-    #herramienta3Circulo .divisionSexagesimal .parteVisible{
+    #herramienta3Circulo .divisionSexagesimal .parteVisible {
         width: 6%;
     }
 

@@ -55,7 +55,7 @@
                     <transition name="fade">
                         <recuadro-component tipo="datoNuevo" v-show="rotacionLinea2>=360"
                             id="herramienta1CartelMaximaApertura">
-                            Esta es la máxima apertura entre las dos líneas.
+                            Ángulo máximo
                         </recuadro-component>
                     </transition>
                 </div>
@@ -64,7 +64,7 @@
                         <div>
                             Mueve el control para aumentar el ángulo
                         </div>
-                        <input type="range" min="0" max="360" v-model="rotacionLinea2">
+                        <input type="range" min="0" max="360" v-model="rotacionLinea2" style="width: min(80%, 280px)">
 
                     </div>
                 </recuadro-component>
@@ -92,7 +92,10 @@
                         <div class="divisionSexagesimal" v-for="num of 360"
                             :class="{tocada:herramienta2LabelMostrada===num}"
                             :style="[{transform: 'rotate('+(1-num)+'deg)'}]"
-                            @mouseenter="herramienta2LabelMostrada=num">
+                            @mouseenter="herramienta2LabelMostrada=num" @touchmove="herramienta2LabelMostrada=num">
+                            <div class="parteVisible" style="width: 100%">
+                                
+                            </div>
                             <div class="labelDivision" :style="[{transform: 'rotate('+(num-1)+'deg)'}]"
                                 v-show="herramienta2LabelMostrada===num">
                                 {{num-1}}
@@ -116,11 +119,13 @@
 
             <div class="zonaInteraccion" ref="herramienta3ZonaInteraccion" id="herramienta3ZonaInteraccion"
                 @mouseup.left="ungrabHerramienta3" @pointerleave="ungrabHerramienta3"
-                @pointermove="herramienta3MoverLinea">
+                @pointermove="herramienta3MoverLinea" @touchend="ungrabHerramienta3">
                 <div class="circulo" ref="herramienta3Circulo" id="herramienta3Circulo">
                     <div class="divisionSexagesimal" v-for="num of 360"
                         :class="{tocada: (num>h3DireccionLinea1 && num<=h3DireccionLinea2) || (h3DireccionLinea2>360 && num>=0 && num<=h3DireccionLinea2-360)}"
-                        :style="[{transform: 'rotate('+(1-num)+'deg) translateX(145px)'}]">
+                        :style="[{transform: 'rotate('+(1-num)+'deg)'}]">
+                        <div class="parteVisible">
+                        </div>
                         <div class="labelDivision" :style="[{transform: 'rotate('+(num-1)+'deg) translateY(-50%)'}]"
                             v-show="Math.round((h3DireccionLinea1 + h3GradosApertura/2)%360)===num">
                             {{h3GradosApertura}}
@@ -128,11 +133,11 @@
                     </div>
                     <div class="linea lineaAgarrable" id="lineaAgarrable1"
                         :style="[{transform: 'rotate('+herramienta3DireccionLinea1+'rad)'}]">
-                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea1=true"> </div>
+                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea1=true" @touchstart.stop.prevent="herramienta3GrabbedLinea1=true"> </div>
                     </div>
                     <div class="linea lineaAgarrable" id="lineaAgarrable2"
                         :style="[{transform: 'rotate('+herramienta3DireccionLinea2+'rad)'}]">
-                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea2=true"> </div>
+                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea2=true" @touchstart.stop.prevent="herramienta3GrabbedLinea2=true"> </div>
                     </div>
                 </div>
             </div>
@@ -318,8 +323,8 @@
 
 
     .circulo {
-        width: 300px;
-        height: 300px;
+        width: min(300px, 50vw);
+        height: min(300px, 50vw);
         border-radius: 50%;
         border: 4px solid var(--paletaPrevio);
         position: relative;
@@ -328,9 +333,8 @@
     }
 
     .circulo .divisionSexagesimal {
-        width: 162px;
+        width: 53%;
         height: 1px;
-        background-color: #DEDEDE;
         transform-origin: 0px center;
         position: absolute;
         top: 50%;
@@ -338,8 +342,20 @@
     }
 
     .circulo .divisionSexagesimal.tocada {
-        background-color: var(--paletaActual);
         z-index: 1;
+    }
+
+    .circulo .divisionSexagesimal.tocada .parteVisible {
+        background-color: var(--paletaActual);
+    }
+
+    .circulo .divisionSexagesimal .parteVisible {
+        height: 100%;
+        width: 50%;
+        position: absolute;
+        top: 0px;
+        background-color: #DEDEDE;
+        right: 0px;
     }
 
     .circulo .divisionSexagesimal .labelDivision {
@@ -370,8 +386,8 @@
         margin-top: 100px;
     }
 
-    #herramienta3Circulo .divisionSexagesimal {
-        width: 10px;
+    #herramienta3Circulo .divisionSexagesimal .parteVisible{
+        width: 6%;
     }
 
     #herramienta3Circulo .divisionSexagesimal .labelDivision {
@@ -384,6 +400,7 @@
         top: 50%;
         left: 50%;
         user-select: none;
+        width: 65%;
     }
 
     .lineaAgarrable .handler {

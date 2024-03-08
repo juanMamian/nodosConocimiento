@@ -6,54 +6,314 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
-    
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
-     
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
 
     <title>Evaluación - ángulo</title>
 </head>
 
 <body>
-    <div id="doc">      
+    <div id="doc">
         <p>
             Comprendo el concepto de ángulo si:
-        </p>  
-        <bloque-component tipo="evaluacion" textoCabecera="Puedo explicar qué es un ángulo.">            
+        </p>
+        <bloque-component tipo="evaluacion" textoCabecera="Puedo explicar qué es un ángulo.">
         </bloque-component>
 
-        <bloque-component tipo="evaluacion" textoCabecera="Dados dos ángulos puedo determinar cuál es mayor.">            
+        <bloque-component tipo="evaluacion" id="evaluacion2" ref="evaluacion2">
+            <template #cabecera>
+                Dada una representación de un ángulo, puedo estimar su magnitud en grados sexagesimales.
+            </template>
+
+            <div class="flexVertical">
+                <button class="boton" @click="e2GenerarReto">Generar representación de un ángulo</button>
+
+                <div class="zonaInteraccion" id="e2ZonaInteraccion" v-show="e2MostrandoReto" ref="e2ZonaInteraccion">
+                    <recuadro-component tipo="instruccionPointer" style="width: 350px;">
+                        <div>
+                            <input type="checkbox" id="e2InputMostrarTransportador"
+                                v-model="e2MostrandoTransportador"><label for="e2InputMostrarTransportador">Mostrar
+                                referencia</label>
+                        </div>
+                        <div class="flexVertical" style="gap: 10px;" v-show="e2MostrandoTransportador">
+                            <input type="range" min="5" v-model.number="e2StepMarcas" step="5" max="45"
+                                name="e2InputStepMarcas">
+                            <div>
+                                Marcas cada {{e2StepMarcas}} grados
+                            </div>
+                        </div>
+                    </recuadro-component>
+                    <div class="circulo" ref="e2Circulo" id="e2Circulo"
+                        :class="{bordeTransparente: !e2MostrandoTransportador}">
+                        <canvas id="e2Canvas" ref="e2Canvas" width=200 height=200></canvas>
+                        <div class="linea" id="linea1" :style="[{transform: 'rotate('+-e2RotacionLinea1+'deg)'}]">
+                        </div>
+                        <div class="linea" id="linea2" :style="[{transform: 'rotate('+-e2RotacionLinea2+'deg)'}]">
+                        </div>
+                        <div class="divisionSexagesimal" v-for="num of 360" @click="toggleDivisionTocada(num)"
+                            v-show="e2MostrandoTransportador"
+                            :class="{tocada: e2DivisionesTocadas.includes(num), quinta: (num-1)%e2StepMarcas===0}"
+                            :style="[{transform: 'rotate('+(1-num)+'deg) translateX(142px)'}]">
+                        </div>
+                    </div>
+                </div>
+
+                <recuadro-component tipo="instruccionTeclado" v-show="e2MostrandoReto">
+                    <div class="flexVertical">
+                        Introduce tu respuesta
+                        <input type="text" id="e2InputRespuestaUsuario" ref="e2InputRespuestaUsuario"
+                            @keypress.enter="e2EvaluarRespuestaUsuario" />
+                        <button class="boton" @click.stop="e2EvaluarRespuestaUsuario">Aceptar</button>
+                    </div>
+                </recuadro-component>
+
+                <transition name="fadeIn" @before-enter="e2ScrollInfoResultado">
+                    <recuadro-component tipo="infoResultado" :modo="e2RespuestaUsuarioCorrecta?'correcto':'incorrecto'"
+                        :key="e2VersionRespuestaUsuario" v-show="e2RespuestaUsuarioCorrecta!=null">
+                    </recuadro-component>
+                </transition>
+
+            </div>
         </bloque-component>
-    
+
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada una magnitud de un ángulo en grados sexagesimales, puedo imaginarlo y representarlo.
+            </template>
+        </bloque-component>
+
     </div>
 </body>
 
 </html>
 
-<script>
-    const doc = new Vue({
-        el: "#doc",
-        components: {
-            recuadroComponent,
-            bloqueComponent,
-            enlaceComponent
-        },
-        data() {
+<script type="module">
+    const {ref, computed, nextTick, watch, createApp} = Vue;
+    function degToRad(deg) {
+        return deg * Math.PI / 180
+
+    }
+    createApp({
+        setup() {
+            const evaluacion2 = ref(null);
+            const e2ZonaInteraccion = ref(null);
+            const e2Canvas = ref(null);
+            const e2RotacionLinea1 = ref(0);
+            const e2RotacionLinea2 = ref(0);
+            const e2Angulo = ref(0);
+            const e2MostrandoReto = ref(false);
+            const e2VersionReto = ref(0);
+            function e2ReiniciarReto() {
+                e2RotacionLinea1.value = 0;
+                e2RotacionLinea2.value = 0;
+                e2MostrandoReto.value = false;
+                e2MostrandoTransportador.value = false;
+                e2RespuestaUsuarioCorrecta.value = null;
+            }
+            async function e2GenerarReto() {
+                e2ReiniciarReto();
+                e2RotacionLinea1.value = Math.round((Math.random() * 360 - 180) / 15) * 15;
+                e2RotacionLinea2.value = Math.round((Math.random() * 360 - 180) / 15) * 15;
+                if (e2RotacionLinea2.value === e2RotacionLinea1.value) {
+                    e2RotacionLinea2.value += step;
+                    if (e2RotacionLinea2.value > 180) {
+                        e2RotacionLinea2.value -= 360;
+                    }
+                    else if (e2RotacionLinea2.value < -180) {
+                        e2RotacionLinea2.value += 360;
+                    }
+
+                }
+
+                let angulo = e2RotacionLinea2.value - e2RotacionLinea1.value;
+                if (angulo < 0) {
+                    angulo = 360 + angulo;
+                }
+                e2Angulo.value = angulo;
+
+
+                if (!e2Canvas.value) {
+                    console.log(`No hay canvas`);
+                    return;
+                }
+                const lapiz = e2Canvas.value.getContext("2d");
+
+                lapiz.lineWidth = 3;
+                lapiz.strokeStyle = "#26547c";
+                lapiz.clearRect(0, 0, 200, 200);
+                lapiz.beginPath();
+                lapiz.arc(100, 100, 55, -degToRad(e2RotacionLinea1.value), -degToRad(e2RotacionLinea2.value), true);
+                lapiz.stroke();
+
+
+                e2MostrandoReto.value = true;
+                await nextTick();
+                if (e2ZonaInteraccion.value) {
+                    let offset = e2ZonaInteraccion.value.getBoundingClientRect();
+                    if (offset.bottom > window.innerHeight || offset.bottom < window.innerHeight / 2) {
+                        e2ZonaInteraccion.value.scrollIntoView({behavior: "smooth", block: "end"});
+                    }
+                }
+            }
+            const e2RespuestaUsuarioCorrecta = ref(null);
+            const e2VersionRespuestaUsuario = ref(0);
+            const e2InputRespuestaUsuario = ref(null);
+            function e2EvaluarRespuestaUsuario() {
+                e2RespuestaUsuarioCorrecta.value = false;
+                if (!e2InputRespuestaUsuario.value) {
+                    console.log(`No había inputRespuestaUsuario`);
+                    return
+
+                }
+                let respuestaUsuario = e2InputRespuestaUsuario.value.value.trim();
+                const formaEsperada = /^([0-9]+)°$/;
+                const elMatch = respuestaUsuario.match(formaEsperada);
+                if (elMatch && elMatch.length > 1) {
+                    let parteNumero = Number(elMatch[1]);
+                    if (parteNumero === e2Angulo.value) {
+                        e2RespuestaUsuarioCorrecta.value = true;
+                    }
+                }
+                e2VersionRespuestaUsuario.value++;
+            }
+            async function e2ScrollInfoResultado() {
+                await nextTick();
+                let offset = evaluacion2.value.$el.getBoundingClientRect();
+                if (evaluacion2.value?.$el) {
+                    if (offset.bottom > window.innerHeight || offset.bottom < window.innerHeight / 2) {
+                        evaluacion2.value.$el.scrollIntoView({behavior: "smooth", block: "end"});
+                    }
+                }
+                else {
+                    console.log(`No element`);
+                }
+            }
+
+            const e2DivisionesTocadas = ref([]);
+            function toggleDivisionTocada(num) {
+                const indexNum = e2DivisionesTocadas.value.indexOf(num);
+                if (indexNum > -1) {
+                    e2DivisionesTocadas.splice(indexNum, 1);
+                }
+                else {
+                    e2DivisionesTocadas.push(num);
+                }
+            }
+
+            const e2MostrandoTransportador = ref(false);
+            const e2StepMarcas = ref(5);
+
             return {
+                evaluacion2, e2ZonaInteraccion,
+                e2RotacionLinea1, e2RotacionLinea2, e2Angulo, e2MostrandoReto, e2VersionReto, e2ReiniciarReto, e2GenerarReto,
+                e2InputRespuestaUsuario, e2RespuestaUsuarioCorrecta, e2VersionRespuestaUsuario, e2EvaluarRespuestaUsuario, e2ScrollInfoResultado,
+                e2Canvas,
+                e2DivisionesTocadas, toggleDivisionTocada,
+                e2MostrandoTransportador, e2StepMarcas
             }
         },
-        
-    })
+        components: {
+            bloqueComponent,
+            recuadroComponent
+        }
+    }).mount("#doc");
+
 </script>
 
 <style>
-   
+    #e2ZonaInteraccion {
+        min-height: 570px;
+        width: 100%;
+    }
+
+    #e2Canvas {
+        width: 200px;
+        height: 200px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .linea {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: 2px;
+        width: 200px;
+        background-color: black;
+        transform-origin: left center;
+    }
+
+    #linea1 {
+        background-color: red;
+    }
+
+    #e2Circulo {
+        position: absolute;
+        top: calc(50% + 100px);
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #e2Circulo.bordeTransparente {
+        border-color: transparent;
+    }
+
+    .circulo {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        border: 4px solid var(--paletaPrevio);
+        position: relative;
+        box-sizing: border-box;
+        margin: 10px auto;
+    }
+
+    .circulo::after {
+        content: "";
+        width: 5px;
+        height: 5px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .circulo .divisionSexagesimal {
+        width: 12px;
+        height: 1px;
+        background-color: #DEDEDE;
+        transform-origin: 0px center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    }
+
+    .circulo .divisionSexagesimal.tocada {
+        background-color: var(--paletaActual);
+        z-index: 2;
+    }
+
+    .circulo .divisionSexagesimal.quinta {
+        background-color: var(--paletaActual);
+    }
 </style>

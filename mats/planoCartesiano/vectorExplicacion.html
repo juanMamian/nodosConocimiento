@@ -6,13 +6,17 @@
     <meta httpss-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="estilosComponenteFlechaVector.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/flechaVectorEstilo.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
@@ -100,7 +104,8 @@
                     <componente-flecha-vector v-bind="vector">
                     </componente-flecha-vector>
                     <button @click="toggleMostrarPuntoAplicacionVectorEjemplo3(index)"
-                        class="boton botonMostrarPuntoAplicacion">{{vector.mostrarPuntoAplicacion?'Ocultar':'Mostrar'}} punto de aplicación</button>
+                        class="boton botonMostrarPuntoAplicacion">{{vector.mostrarPuntoAplicacion?'Ocultar':'Mostrar'}}
+                        punto de aplicación</button>
                 </div>
             </div>
 
@@ -113,7 +118,7 @@
 
 
 <script type="module">
-    import {componenteFlechaVector} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/flechaVector.js"
+    import {componenteFlechaVector} from "../../recursos/components/mats/flechaVector.js"
     const {createApp} = Vue;
     createApp({
         components: {
@@ -257,6 +262,7 @@
     .botonMostrarPuntoAplicacion {
         margin-top: 50px;
     }
-    .itemEjemplo .componenteFlechaVector{
+
+    .itemEjemplo .componenteFlechaVector {
         margin: 10px auto;
     }

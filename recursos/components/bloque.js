@@ -47,7 +47,7 @@ const bloqueComponent = {
             return "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/iconos/puzzlePiece.svg"
         },
         textoCerrarBoton() {
-            if (this.textoboton === 'Iniciar' || this.textoboton === 'Intentar') {
+            if (this.textoBoton === 'Iniciar' || this.textoBoton === 'Intentar') {
                 return "Cerrar"
             }
             return "Ocultar"

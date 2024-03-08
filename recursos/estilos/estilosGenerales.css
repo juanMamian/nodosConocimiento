@@ -233,6 +233,7 @@ li {
 input {
   font-size: 22px;
   padding: 5px 5px;
+  max-width: 80%;
 }
 .inputRespuestaEvaluacion {
   font-size: 19px;

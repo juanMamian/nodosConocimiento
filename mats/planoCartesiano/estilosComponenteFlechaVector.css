@@ -28,6 +28,10 @@
 .componenteFlechaVector .simbolo{
     position: absolute;
 }
+.componenteFlechaVector .flechitaNotacionVector{
+    font-size:30px;
+    position: relative;
+}
 .componenteFlechaVector .puntoAplicacion{
     width: 6px;
     height: 6px;

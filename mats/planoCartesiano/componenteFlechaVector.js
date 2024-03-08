@@ -3,14 +3,18 @@ const componenteFlechaVector = {
         <div class="componenteFlechaVector" :class="{esconderPunta, invertido}" :style="[offset]">
             <div class="puntoAplicacion" v-if="mostrarPuntoAplicacion"></div>
             <div class="simbolo" v-if="simbolo" v-show="mostrandoNotacion" :style="[offsetSimbolo]">
-                <div class="flechita"></div>
-                {{simbolo}}
+                <span>{{simbolo}}</span>
+                <span class="flechitaNotacionVector">&#8407;</span>
             </div>
         </div>
     `,
 
     props: {
         magnitud: {
+            type: Number,
+            default: 20,
+        },
+        factorMagnitud:{
             type: Number,
             default: 20,
         },
@@ -45,7 +49,7 @@ const componenteFlechaVector = {
     computed: {
         offset() {
             return {
-                width: this.magnitud + 'px',
+                width: this.magnitud * this.factorMagnitud + 'px',
                 transform: `rotate(-${this.direccion}deg)`,
             }
 

@@ -1,0 +1,77 @@
+.componenteTransportador{
+    width: fit-content;
+    height: fit-content;
+    overflow: visible;
+}
+.componenteTransportador .circulo {
+    width: min(300px, 50vw);
+    height: min(300px, 50vw);
+    border-radius: 50%;
+    border: 4px solid var(--paletaPrevio);
+    position: relative;
+    box-sizing: border-box;
+    margin: 10px auto;
+}
+.componenteTransportador .circulo .centroTransportador {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1px dashed gray;
+    transform: translate(-50%, -50%);
+}
+
+.componenteTransportador .circulo .contenedorDivisiones {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.componenteTransportador .circulo .divisionSexagesimal {
+    width: 53%;
+    height: 1px;
+    transform-origin: 0px center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.componenteTransportador .circulo .divisionSexagesimal.tocada {
+    z-index: 1;
+}
+
+.componenteTransportador .circulo .divisionSexagesimal.marcada .parteVisible {
+    background-color: var(--paletaActual);
+}
+.componenteTransportador .circulo .divisionSexagesimal.hovered .parteVisible {
+    background-color: var(--paletaActual);
+}
+
+.componenteTransportador .circulo .divisionSexagesimal .parteVisible {
+    height: 100%;
+    width: 10%;
+    position: absolute;
+    top: 0px;
+    background-color: #DEDEDE;
+    right: 0px;
+}
+
+.componenteTransportador .circulo .divisionSexagesimal .labelDivision {
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    background-color: var(--paletaPrevio);
+    padding: 3px 3px;
+    transform-origin: center;
+}
+.componenteTransportador .labelRango{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    padding: 5px 3px;
+    background-color: var(--paletaActual);
+    color: white;
+    z-index:1;
+}

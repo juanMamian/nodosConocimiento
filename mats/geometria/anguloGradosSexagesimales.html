@@ -15,6 +15,8 @@
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
 
+    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/transportadorEstilo.css">
+
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
@@ -78,81 +80,77 @@
             <template #cabecera>
                 En este cuadro se pueden ver los grados sexagesimales.
             </template>
-            <recuadro-component tipo="instruccionTeclado">
-                Mueve el puntero por la figura para cambiar el ángulo.
-            </recuadro-component>
             <div class="zonaInteraccion" id="zonaInteraccion2">
-                <div id="representacionVueltaCompleta">
-                    <div class="circulo">
-                        <div class="linea" id="herramienta2LineaBase">
-
-                        </div>
-                        <div class="divisionSexagesimal" v-for="num of 360"
-                            :class="{tocada:herramienta2LabelMostrada===num}"
-                            :style="[{transform: 'rotate('+(1-num)+'deg)'}]" @mouseenter="herramienta2LabelMostrada=num"
-                            @touchmove="herramienta2LabelMostrada=num">
-                            <div class="parteVisible" style="width: 100%">
-
-                            </div>
-                            <div class="labelDivision" :style="[{transform: 'rotate('+(num-1)+'deg)'}]"
-                                v-show="herramienta2LabelMostrada===num">
-                                {{num-1}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <canvas id="h2Canvas" width="200" height="200" ref="h2Canvas"></canvas>
+                <div class="linea" id="h2Linea1"> </div>
+                <div class="linea" id="h2Linea2" :style="[{transform: `rotate(${-h2RotacionLinea2}deg)`}]"> </div>
+                <componente-transportador :labels-hoverables="true" ref="h2Transportador" id="h2ComponenteTransportador"
+                    :style="[{opacity: h2RotacionLinea2===360?1:0}]" :step-marcas="0"
+                    :mostrando-divisiones="h2TransportadorMostrandoDivisiones">
+                </componente-transportador>
+            </div>
+            <div class="flexVertical">
+                <transition name="fadeIn">
+                    <button class="boton" @click.stop="h2Step=1;h2AnimarAperturaMaxima()" v-show="h2Step===0">Ampliar al
+                        ángulo al
+                        máximo</button>
+                </transition>
+                <transition name="fadeIn">
+                    <button class="boton" @click="h2TransportadorMostrandoDivisiones=true"
+                        v-show="h2Step===1 && h2RotacionLinea2===360 && !h2TransportadorMostrandoDivisiones">Subdividir
+                        en 360
+                        fracciones</button>
+                </transition>
+                <transition name="fadeIn">
+                    <recuadro-component tipo="instruccionTeclado"
+                        v-show="h2RotacionLinea2===360 && h2TransportadorMostrandoDivisiones">
+                        Mueve el puntero por la figura para contar las divisiones.
+                    </recuadro-component>
+                </transition>
             </div>
         </bloque-component>
 
 
-        <recuadro-component tipo="datoPrevio">
-            Cualquier ángulo puede ser medido según cuantos grados sexagesimales caben en él.
-        </recuadro-component>
-
-        <bloque-component tipo="herramientaInteractiva">
-            <template #cabecera>
-                En este cuadro se puede medir ángulos en grados sexagesimales.
-            </template>
-
-
-            <div class="zonaInteraccion" ref="herramienta3ZonaInteraccion" id="herramienta3ZonaInteraccion"
-                @mouseup.left="ungrabHerramienta3" @pointerleave="ungrabHerramienta3"
-                @pointermove="herramienta3MoverLinea" @touchend="ungrabHerramienta3">
-                <div class="circulo" ref="herramienta3Circulo" id="herramienta3Circulo">
-                    <div class="divisionSexagesimal" v-for="num of 360"
-                        :class="{tocada: (num>h3DireccionLinea1 && num<=h3DireccionLinea2) || (h3DireccionLinea2>360 && num>=0 && num<=h3DireccionLinea2-360)}"
-                        :style="[{transform: 'rotate('+(1-num)+'deg)'}]">
-                        <div class="parteVisible">
-                        </div>
-                        <div class="labelDivision" :style="[{transform: 'rotate('+(num-1)+'deg) translateY(-50%)'}]"
-                            v-show="Math.round((h3DireccionLinea1 + h3GradosApertura/2)%360)===num">
-                            {{h3GradosApertura}}
-                        </div>
-                    </div>
-                    <div class="linea lineaAgarrable" id="lineaAgarrable1"
-                        :style="[{transform: 'rotate('+herramienta3DireccionLinea1+'rad)'}]">
-                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea1=true"
-                            @touchstart.stop.prevent="herramienta3GrabbedLinea1=true"> </div>
-                    </div>
-                    <div class="linea lineaAgarrable" id="lineaAgarrable2"
-                        :style="[{transform: 'rotate('+herramienta3DireccionLinea2+'rad)'}]">
-                        <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea2=true"
-                            @touchstart.stop.prevent="herramienta3GrabbedLinea2=true"> </div>
-                    </div>
-                </div>
-            </div>
-        </bloque-component>
-
+        <p>
+            Cualquier ángulo puede ser medido contando cuantos grados sexagesimales caben en él.
+        </p>
         <recuadro-component tipo="datoPrevio">
             Los grados sexagesimales son marcados con el símbolo <span class="resaltado">°</span>; 90 grados
             sexagesimales se escribe: <span class="resaltado">90°</span>
         </recuadro-component>
+
+        <bloque-component tipo="herramientaInteractiva">
+            <template #cabecera>
+                En este cuadro se puede medir ángulos contando grados sexagesimales.
+            </template>
+
+
+            <div class="zonaInteraccion" ref="h3ZonaInteraccion" id="h3ZonaInteraccion"
+                @mouseup.left="ungrabHerramienta3" @pointerleave="ungrabHerramienta3"
+                @pointermove="herramienta3MoverLinea" @touchend="ungrabHerramienta3">
+                <div class="linea lineaAgarrable" id="lineaAgarrable1"
+                    :style="[{transform: 'rotate('+ -h3DireccionLinea1+'rad)'}]">
+                    <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea1=true"
+                        @touchstart.stop.prevent="herramienta3GrabbedLinea1=true"> </div>
+                </div>
+                <div class="linea lineaAgarrable" id="lineaAgarrable2"
+                    :style="[{transform: 'rotate('+ -h3DireccionLinea2+'rad)'}]">
+                    <div class="handler" @mousedown.left.stop="herramienta3GrabbedLinea2=true"
+                        @touchstart.stop.prevent="herramienta3GrabbedLinea2=true"> </div>
+                </div>
+                <componente-transportador :rangos-marcados="[h3TransportadorRango]">
+                </componente-transportador>
+            </div>
+        </bloque-component>
+
     </div>
 </body>
 
 </html>
 
 <script type="module">
+    import {componenteTransportador} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/transportador.js";
+    import {radToDeg} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/funciones/utilsMats.js"
     function degToRad(deg) {
         return deg * Math.PI / 180
 
@@ -189,48 +187,75 @@
 
             const elementoCanvas = ref(null);
             async function iniciarHerramienta2() {
+                h2Step.value = 0;
+                h2TransportadorMostrandoDivisiones.value = false;
+                h2RotacionLinea2.value = 15;
                 await nextTick();
                 console.log("Pintando canvas 2");
-                if (!elementoCanvas.value) {
+                if (!h2Canvas.value) {
                     console.log(`No hay canvas`);
                     return;
                 }
-                const canvas = elementoCanvas.value;
+                const canvas = h2Canvas.value;
                 const lapiz = canvas.getContext('2d');
 
+                const offsetTransportador = h2Transportador.value.$el.getBoundingClientRect();
+                h2Canvas.value.width = offsetTransportador.width;
+                h2Canvas.value.height = offsetTransportador.width;
+                h2Canvas.value.style.width = offsetTransportador.width + 'px';
+                h2Canvas.value.style.height = offsetTransportador.width + 'px';
+
+                lapiz.lineWidth = 2;
+                lapiz.strokeStyle = "#121212";
+                lapiz.clearRect(0, 0, offsetTransportador.width, offsetTransportador.height);
                 lapiz.beginPath();
-                lapiz.arc(100, 100, 50, 0, 45);
+                lapiz.arc(offsetTransportador.width / 2, offsetTransportador.width / 2, offsetTransportador.width / 2 - 2, 0, degToRad(-h2RotacionLinea2.value), true);
                 lapiz.stroke();
             }
-            const herramienta2LabelMostrada = ref(null);
+            const h2Transportador = ref(null);
+            const h2RotacionLinea2 = ref(15);
+            const h2TransportadorMostrandoDivisiones = ref(false);
+            const h2Step = ref(0);
+            const h2TimerAnimarAperturaMaxima = ref(null);
+            const h2Canvas = ref(null);
+            function h2AnimarAperturaMaxima() {
+                if (!h2Canvas.value) {
+                    console.log(`No canvas h2`);
+                    return;
+                }
+                if (!h2Transportador.value) {
+                    console.log(`No hay transportador`);
+                    return;
+                }
+                if (h2RotacionLinea2.value >= 360) {
+                    return;
+                }
+                h2RotacionLinea2.value++;
 
-            const herramienta3ZonaInteraccion = ref(null);
-            const herramienta3Circulo = ref(null);
+                //Trazar arco del ángulo
+                const offsetTransportador = h2Transportador.value.$el.getBoundingClientRect();
+                h2Canvas.value.width = offsetTransportador.width;
+                h2Canvas.value.height = offsetTransportador.width;
+                h2Canvas.value.style.width = offsetTransportador.width + 'px';
+                h2Canvas.value.style.height = offsetTransportador.width + 'px';
+                const lapiz = h2Canvas.value.getContext("2d");
+                lapiz.lineWidth = 2;
+                lapiz.strokeStyle = "#121212";
+                lapiz.clearRect(0, 0, offsetTransportador.width, offsetTransportador.height);
+                lapiz.beginPath();
+                lapiz.arc(offsetTransportador.width / 2, offsetTransportador.width / 2, offsetTransportador.width / 2 - 2, 0, degToRad(-h2RotacionLinea2.value), true);
+                lapiz.stroke();
+                h2TimerAnimarAperturaMaxima.value = setTimeout(() => {
+                    h2AnimarAperturaMaxima();
+                }, 10);
+
+            }
+
+            const h3ZonaInteraccion = ref(null);
             const herramienta3GrabbedLinea1 = ref(false);
             const herramienta3GrabbedLinea2 = ref(false);
-            const herramienta3DireccionLinea1 = ref(0);
-            const herramienta3DireccionLinea2 = ref(-Math.PI / 2);
-            const h3DireccionLinea1 = computed(() => {
-                let deg = (herramienta3DireccionLinea1.value * 180 / Math.PI) % 360;
-                if (deg <= 0) {
-                    deg += 360;
-                }
-                return parseInt(360 - deg);
-            });
-            const h3DireccionLinea2 = computed(() => {
-                let deg = (herramienta3DireccionLinea2.value * 180 / Math.PI) % 360;
-                if (deg <= 0) {
-                    deg += 360;
-                }
-                deg = (360 - deg);
-                if (h3DireccionLinea1.value > deg) {
-                    deg += 360;
-                }
-                return parseInt(deg);
-            });
-            const h3GradosApertura = computed(() => {
-                return h3DireccionLinea2.value - h3DireccionLinea1.value;
-            })
+            const h3DireccionLinea1 = ref(0);
+            const h3DireccionLinea2 = ref(Math.PI / 2);
             function ungrabHerramienta3() {
                 herramienta3GrabbedLinea1.value = false;
                 herramienta3GrabbedLinea2.value = false;
@@ -241,37 +266,37 @@
                 if (!herramienta3GrabbedLinea1.value && !herramienta3GrabbedLinea2.value) {
                     return
                 }
-                if (!herramienta3Circulo.value) {
-                    console.log(`No hay círculo`);
-                    return;
-                }
                 if (Date.now() - h3UltimoMovimientoLinea.value < umbralMovimientoLinea) {
                     return;
                 }
                 console.log("Moviendo línea");
-                const offsetCirculo = herramienta3Circulo.value.getBoundingClientRect();
-                const centroCirculo = {
-                    x: offsetCirculo.left + offsetCirculo.width / 2,
-                    y: offsetCirculo.top + offsetCirculo.height / 2,
+                const offsetZona = h3ZonaInteraccion.value.getBoundingClientRect();
+                const centroZona = {
+                    x: offsetZona.left + offsetZona.width / 2,
+                    y: offsetZona.top + offsetZona.height / 2,
                 }
                 let vector = {
-                    x: evento.clientX - centroCirculo.x,
-                    y: evento.clientY - centroCirculo.y,
+                    x: evento.clientX - centroZona.x,
+                    y: evento.clientY - centroZona.y,
                 }
                 let direccion = Math.atan2(vector.y, vector.x);
                 if (herramienta3GrabbedLinea1.value) {
-                    herramienta3DireccionLinea1.value = direccion;
+                    h3DireccionLinea1.value = -direccion;
                 }
                 if (herramienta3GrabbedLinea2.value) {
-                    herramienta3DireccionLinea2.value = direccion;
+                    h3DireccionLinea2.value = -direccion;
                 }
                 h3UltimoMovimientoLinea.value = Date.now();
             }
+            const h3TransportadorRango = computed(() => {
+                return [radToDeg(h3DireccionLinea1.value), radToDeg(h3DireccionLinea2.value)]
+            });
 
             return {
-                estiloLinea2, rotacionLinea2, herramienta1Canvas, herramienta1TrazarArco, elementoCanvas, iniciarHerramienta2, herramienta2LabelMostrada,
-                herramienta3ZonaInteraccion, herramienta3Circulo, herramienta3GrabbedLinea1, herramienta3GrabbedLinea2, herramienta3DireccionLinea1, h3DireccionLinea1, h3GradosApertura, herramienta3DireccionLinea2, h3DireccionLinea2, ungrabHerramienta3, herramienta3MoverLinea,
-                h3UltimoMovimientoLinea,
+                estiloLinea2, rotacionLinea2, herramienta1Canvas, herramienta1TrazarArco, elementoCanvas, iniciarHerramienta2,
+                h2Transportador, h2Canvas, h2Step, h2TimerAnimarAperturaMaxima, h2AnimarAperturaMaxima, h2RotacionLinea2, h2TransportadorMostrandoDivisiones,
+                h3ZonaInteraccion, herramienta3GrabbedLinea1, herramienta3GrabbedLinea2, h3DireccionLinea1, h3DireccionLinea2, ungrabHerramienta3, herramienta3MoverLinea,
+                h3TransportadorRango,
             }
 
         },
@@ -279,6 +304,7 @@
             recuadroComponent,
             bloqueComponent,
             enlaceComponent,
+            componenteTransportador
         },
         data() {
             return {
@@ -328,87 +354,40 @@
 
     #zonaInteraccion2 {
         position: relative;
-    }
-
-    #canvasGradosSezagesimales {
-        width: 200px;
-        height: 200px;
-        margin: 0px auto;
-        border: 1px solid black;
-    }
-
-
-    .circulo {
-        width: min(300px, 50vw);
-        height: min(300px, 50vw);
-        border-radius: 50%;
-        border: 4px solid var(--paletaPrevio);
-        position: relative;
-        box-sizing: border-box;
-        margin: 10px auto;
-    }
-
-    .circulo .divisionSexagesimal {
-        width: 53%;
-        height: 1px;
-        transform-origin: 0px center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-    }
-
-    .circulo .divisionSexagesimal.tocada {
-        z-index: 1;
-    }
-
-    .circulo .divisionSexagesimal.tocada .parteVisible {
-        background-color: var(--paletaActual);
-    }
-
-    .circulo .divisionSexagesimal .parteVisible {
-        height: 100%;
-        width: 50%;
-        position: absolute;
-        top: 0px;
-        background-color: #DEDEDE;
-        right: 0px;
-    }
-
-    .circulo .divisionSexagesimal .labelDivision {
-        position: absolute;
-        left: calc(100% + 10px);
-        top: 50%;
-        background-color: var(--paletaPrevio);
-        padding: 3px 3px;
-        transform-origin: center;
-    }
-
-    #herramienta2LineaBase {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(0px, -1px);
-        height: 2px;
-        width: calc(50% + 20px);
-        z-index: 2;
-        pointer-events: none;
-    }
-
-    #herramienta3ZonaInteraccion {
         min-height: 500px;
     }
 
-    #herramienta3Circulo {
-        margin-top: 100px;
+    #h2ComponenteTransportador {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
-    #herramienta3Circulo .divisionSexagesimal .parteVisible {
-        width: 6%;
+    #h2Canvas {
+        width: 200px;
+        height: 200px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
-    #herramienta3Circulo .divisionSexagesimal .labelDivision {
-        background-color: var(--paletaActual);
-        color: whitesmoke;
+    #zonaInteraccion2 .linea {
+        z-index: 1;
+        pointer-events: none;
+    }
+
+
+    #h3ZonaInteraccion {
+        min-height: 500px;
+    }
+
+    #h3ZonaInteraccion .componenteTransportador {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
     .lineaAgarrable {
@@ -416,7 +395,8 @@
         top: 50%;
         left: 50%;
         user-select: none;
-        width: 65%;
+        width: min(250px, 35vw);
+        z-index: 1;
     }
 
     .lineaAgarrable .handler {

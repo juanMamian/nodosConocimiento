@@ -11,7 +11,7 @@
     --paletaCheck: #209c49;
     --paletaFail: #cc2f2f;
     --paletaActivo: #f06449;
-    --paletaFondoGris: "rgba(0, 0, 0, 0.233)";
+    --paletaFondoGris: rgba(0, 0, 0, 0.233);
 }
 
 body {

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+
+
+    <title>Círculo - explicación.</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            El círculo es una figura geométrica fundamental.
+        </p>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se puede ver una representación del círculo.
+            </template>
+            <div class="representacionCirculo">
+            </div>
+
+        </bloque-component>
+        <p>
+            Él círculo es una línea curva llamada <span class="resaltado">circunferencia</span> trazada alrededor de un
+            punto llamado <span class="resaltado">centro</span>.
+        </p>
+        <recuadro-component tipo="datoPrevio">
+            Todos los puntos de la circunferencia están a la misma distancia del centro.
+        </recuadro-component>
+
+        <p>
+            La línea que va desde el centro hasta cualquiera de los puntos de la circunferencia se llama <span
+                class="resaltado">radio</span>.
+            Se nota con la letra <span class="resaltado">r</span>
+        </p>
+
+        <bloque-component tipo="herramientaInteractiva">
+            <template #cabecera>
+                En este cuadro se puede ver el radio del círculo.
+            </template>
+
+            <div class="representacionCirculo conCentro" ref="h2RepresentacionCirculo"
+                @pointermove="h2UpdateRotacionRadio">
+                <div class="representacionRadio" :style="[h2OffsetRadio]" style="background-color: var(--paletaActual)">
+                    <div class="label"
+                        :style="[{transform: 'translate(-50%, -50%) rotate('+ -h2RotacionRadio +'rad)'}]">
+                        r
+                    </div>
+                </div>
+            </div>
+        </bloque-component>
+
+        <p>
+            La línea que atraviesa el círculo pasando por el centro se llama <span class="resaltado">diámetro</span>.
+        </p>
+
+        <bloque-component tipo="herramientaInteractiva">
+            <template #cabecera>
+                En este cuadro se puede ver el diámetro del círculo.
+            </template>
+
+            <div class="representacionCirculo conCentro" ref="h3RepresentacionCirculo"
+                @pointermove="h3UpdateRotacionRadio">
+                <div class="representacionDiametro" :style="[h3OffsetRadio]"
+                    style="background-color: var(--paletaActual)">
+                    <div class="label"
+                        :style="[{transform: 'translate(-50%, -50%) rotate('+ -h3RotacionRadio +'rad)'}]">
+                        D
+                    </div>
+                </div>
+            </div>
+        </bloque-component>
+
+
+        <recuadro-component tipo="datoPrevio">
+            El diámetro corta el círculo por la mitad.
+        </recuadro-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    import {componenteTransportador} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/transportador.js";
+    import {radToDeg} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/funciones/utilsMats.js"
+
+    const useDibujarLineaRotante = function () {
+        const rotacion = ref(0);
+        const offsetLinea = computed(() => {
+            return {
+                transform: `rotate(${rotacion.value}rad)`,
+            }
+        });
+        const representacionContenedor = ref(null);
+        let lastUpdateRotacion = Date.now();
+        const umbralUpdateRotacion = 50;
+        function updateRotacion(evento) {
+            if (!representacionContenedor.value) {
+                console.log(`No hay círculo`);
+                return;
+            }
+            if (Date.now() - lastUpdateRotacion < umbralUpdateRotacion) {
+                return;
+            }
+            const offsetCirculo = representacionContenedor.value.getBoundingClientRect();
+            const posMouse = {
+                x: evento.clientX - offsetCirculo.left,
+                y: evento.clientY - offsetCirculo.top,
+            }
+            const vector = {
+                x: posMouse.x - offsetCirculo.width / 2,
+                y: posMouse.y - offsetCirculo.height / 2,
+            }
+            rotacion.value = Math.atan2(vector.y, vector.x);
+
+            lastUpdateRotacion = Date.now();
+        }
+        return {rotacion, offsetLinea, representacionContenedor, updateRotacion}
+    }
+
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+    createApp({
+        setup() {
+            const {rotacion: h2RotacionRadio, offsetLinea: h2OffsetRadio, representacionContenedor: h2RepresentacionCirculo, updateRotacion: h2UpdateRotacionRadio} = useDibujarLineaRotante();
+            const {rotacion: h3RotacionRadio, offsetLinea: h3OffsetRadio, representacionContenedor: h3RepresentacionCirculo, updateRotacion: h3UpdateRotacionRadio} = useDibujarLineaRotante();
+
+            return {
+                h2RotacionRadio, h2OffsetRadio, h2RepresentacionCirculo, h2UpdateRotacionRadio,
+                h3RotacionRadio, h3OffsetRadio, h3RepresentacionCirculo, h3UpdateRotacionRadio
+            }
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    }).mount("#doc");
+</script>
+
+<style>
+    .representacionCirculo {
+        width: min(200px, 80vw);
+        height: min(200px, 80vw);
+        border-radius: 50%;
+        border: 1px solid var(--paletaPrevio);
+        margin: 10px auto;
+        position: relative;
+    }
+
+    .representacionCirculo.conCentro::after {
+        content: "";
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: black;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .representacionRadio {
+        width: 50%;
+        height: 2px;
+        background-color: var(--paletaPrevio);
+        transform-origin: center left;
+        position: absolute;
+        top: calc(50% - 1px);
+        left: 50%;
+    }
+
+    .representacionRadio .label {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        font-size: 15px;
+    }
+
+    .representacionDiametro {
+        width: 100%;
+        height: 2px;
+        background-color: var(--paletaPrevio);
+        transform-origin: center center;
+        position: absolute;
+        top: calc(50% - 1px);
+        left: 0%;
+    }
+
+    .representacionDiametro .label {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        font-size: 15px;
+    }
+</style>

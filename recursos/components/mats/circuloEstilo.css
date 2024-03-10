@@ -1,0 +1,69 @@
+    .componenteCirculo {
+        width: min(200px, 80vw);
+        height: min(200px, 80vw);
+        border-radius: 50%;
+        border: 1px solid black;
+        margin: 10px auto;
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    .componenteCirculo.conCentro::after {
+        content: "";
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: black;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .representacionRadio {
+        width: 50%;
+        height: 2px;
+        background-color: black;
+        transform-origin: center left;
+        position: absolute;
+        top: calc(50% - 1px);
+        left: 50%;
+    }
+
+    .componenteCirculo .label {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        font-size: 15px;
+        display: flex;
+        gap: 5px;
+    }
+    .componenteCirculo .labelCircunferencia{
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .componenteCirculo .label .visibleHovered{
+        display: none;
+    }
+    .componenteCirculo .label:hover .visibleHovered{
+        display: block;
+    }
+
+    .representacionDiametro {
+        width: 100%;
+        height: 2px;
+        background-color: black;
+        transform-origin: center center;
+        position: absolute;
+        top: calc(50% - 1px);
+        left: 0%;
+    }
+
+    .representacionDiametro .label {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        font-size: 15px;
+    }

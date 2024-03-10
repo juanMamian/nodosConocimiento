@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+
+    <link rel="stylesheet" href="../../recursos/components/mats/circuloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+
+
+    <title>Numero PI - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Conozco el número Pi si:
+        </p>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo explicar qué es el número Pi.
+            </template>
+        </bloque-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Conozco un valor aproximado del número Pi.
+            </template>
+        </bloque-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Conozco el símbolo que representa al número Pi.
+            </template>
+        </bloque-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dado un círculo del cual se conoce la medida de su diámetro, radio o circunferencia, puedo calcular el
+                valor de todas sus propiedades.
+            </template>
+
+            <div class="flexVertical">
+                <button class="boton" @click="e1GenerarReto">Generar reto</button>
+            </div>
+
+            <transition name="fadeIn">
+                <div class="reto" v-if="e1Determinante!=null">
+                    <componente-circulo :determinante="e1Determinante" :key="e1VersionReto" ref="e1Circulo">
+                    </componente-circulo>
+                </div>
+
+            </transition>
+            <transition name="fadeIn">
+                <recuadro-component tipo="instruccionTeclado" v-show="e1Determinante!=null">
+                    <div class="flexVertical">
+                        <span>Introduce tu respuesta</span>
+                        <div class="contenedorBloquesInput">
+                            <div class="bloqueInput">
+                                <label for="e1InputRadio">Radio: </label><input ref="e1InputRadio"
+                                    :class="{deshabilitado: e1ComponentePreguntado==='radio'}" type="number"
+                                    id="e1InputRadio"><br>
+                            </div>
+                            <div class="bloqueInput">
+                                <label for="e1InputDiametro">Diámetro: </label><input ref="e1InputDiametro"
+                                    :class="{deshabilitado: e1ComponentePreguntado==='diametro'}" type=""
+                                    id="e1InputDiametro"><br>
+                            </div>
+                            <div class="bloqueInput">
+                                <label for="e1InputCircunferencia">Circunferencia: </label><input type=""
+                                    ref="e1InputCircunferencia"
+                                    :class="{deshabilitado: e1ComponentePreguntado==='circunferencia'}"
+                                    id="e1InputCircunferencia">
+                            </div>
+                        </div>
+                        <button class="boton" @click="e1EvaluarRespuestaUsuario"> Aceptar</button>
+
+                    </div>
+                </recuadro-component>
+            </transition>
+
+            <transition name="fadeIn">
+                <recuadro-component v-show="e1RespuestaUsuarioCorrecta!=null" tipo="infoResultado"
+                    :modo="e1RespuestaUsuarioCorrecta?'correcto':'incorrecto'">
+                </recuadro-component>
+            </transition>
+
+        </bloque-component>
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    import {componenteCirculo} from "../../recursos/components/mats/circulo.js";
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+    createApp({
+        setup() {
+            const e1VersionReto = ref(0);
+            const e1Determinante = ref(null);
+            function e1ReiniciarReto() {
+                e1Determinante.value = null;
+                e1ComponentePreguntado.value = null;
+                e1InputRadio.value.value = '';
+                e1InputDiametro.value.value = '';
+                e1InputCircunferencia.value.value = '';
+            }
+            const e1ComponentePreguntado = ref(null);
+            function e1GenerarReto() {
+                e1ReiniciarReto();
+                let dado = Math.random() * 3;
+                let componente = null;
+                const minMagnitud = 3;
+                const rangoMagnitud = 8
+                let magnitud = Math.round(Math.random() * rangoMagnitud + minMagnitud);
+                if (dado < 1) {
+                    componente = 'radio';
+                    if (!e1InputRadio.value) {
+                        console.log("No hay inputRadio");
+                    }
+                    e1InputRadio.value.value = magnitud;
+                    e1ComponentePreguntado.value = 'radio';
+                }
+                else if (dado < 2) {
+                    componente = 'diametro';
+                    if (!e1InputDiametro.value) {
+                        console.log("No hay inputDiametro");
+                    }
+                    e1InputDiametro.value.value = magnitud;
+                    e1ComponentePreguntado.value = 'diametro';
+                }
+                else {
+                    if (!e1InputCircunferencia.value) {
+                        console.log("No hay inputCircunferencia");
+                    }
+                    e1InputCircunferencia.value.value = magnitud * 3;
+                    componente = 'circunferencia';
+                    e1ComponentePreguntado.value = 'circunferencia';
+                }
+                if (componente === 'circunferencia') {
+                    magnitud *= 3;
+                }
+                e1Determinante.value = {};
+                console.log(`Generado ${componente} con magnitud ${magnitud}`);
+                e1Determinante.value[componente] = magnitud;
+                e1VersionReto.value++;
+            }
+
+            const e1Circulo = ref(null);
+            const e1InputRadio = ref(null);
+            const e1InputDiametro = ref(null);
+            const e1InputCircunferencia = ref(null);
+            const e1RespuestaUsuarioCorrecta = ref(null);
+            const e1VersionRespuestaUsuario = ref(0);
+            function e1EvaluarRespuestaUsuario() {
+                console.log("Evaluando respuesta usuario");
+                let uRadio = e1InputRadio.value.value.trim();
+                let uDiametro = e1InputDiametro.value.value.trim();
+                let uCircunferencia = e1InputCircunferencia.value.value.trim();
+
+                e1RespuestaUsuarioCorrecta.value = false;
+                console.log(`Comparando ${uRadio} con ${e1Circulo.value.radio}, ${uDiametro} con ${e1Circulo.value.diametro} y ${uCircunferencia} con ${e1Circulo.value.circunferencia}`);
+                if (Math.abs(uRadio - e1Circulo.value.radio) < 0.01 && Math.abs(uDiametro - e1Circulo.value.diametro) < 0.01 && Math.abs(uCircunferencia - e1Circulo.value.circunferencia) < 0.01) {
+                    e1RespuestaUsuarioCorrecta.value = true;
+                    console.log(`Correcta`);
+                }
+                e1VersionRespuestaUsuario.value++;
+            }
+
+            return {
+                e1VersionReto, e1Determinante, e1ReiniciarReto, e1ComponentePreguntado, e1GenerarReto, e1Circulo,
+                e1EvaluarRespuestaUsuario, e1RespuestaUsuarioCorrecta, e1InputRadio, e1InputDiametro, e1InputCircunferencia, e1VersionRespuestaUsuario
+            }
+
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteCirculo
+        },
+    }).mount("#doc");
+</script>
+
+<style>
+    .contenedorBloquesInput {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .bloqueInput {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .bloqueInput input {
+        margin-left: auto;
+    }
+</style>

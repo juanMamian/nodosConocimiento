@@ -26,24 +26,23 @@
 
 
 
-    <title>Numero PI - explicación.</title>
+    <title>Numero PI - explicación</title>
 </head>
 
 <body>
     <div id="doc">
         <p>
-            Desde la antiguedad los matemáticos se preguntaron por la razón matemática entre el
+            Desde la antiguedad los matemáticos se preguntaron por la razón matemática entre
             la circunferencia de un círculo y su diámetro.
         </p>
 
-        <bloque-component tipo="ejemplo" @plegado="h1Iniciar">
+        <bloque-component tipo="ejemplo" @desplegado="h1Iniciar">
             <template #cabecera>
                 En este cuadro se puede ver un análisis básico de la razón entre la circunferencia de un
                 círculo y su diámetro.
             </template>
 
             <div class="zonaInteraccion" ref="h1ZonaInteraccion">
-                {{h1CircunferenciaVisible}}
                 <div class="representacionCirculo" ref="h1Circulo"
                     :class="{circunferenciaVisible: h1CircunferenciaVisible}">
                     <canvas id="h1Canvas" ref="h1Canvas" width=500 height=200></canvas>
@@ -53,23 +52,50 @@
                         </div>
                     </div>
                 </div>
-                <div id="contenedorDiametros">
-                    <transition-group name="viajeDiametros" @before-enter="h1IniciarViajeDiametro">
-                        <div class="diametroComparacion" v-for="diam of h1DiametrosComparando" :key="diam"
-                            :style="[{width: h1Diametro+'px'}]">
+                <div id="contenedorDiametros" :style="[{marginLeft: h1Diametro/2+'px'}]" ref="h1ContenedorDiametros">
+                    <transition-group name="viajeDiametros" @before-enter="h1IniciarViajeDiametro"
+                        @enter="h1EnterViajeDiametro" @before-leave="desaparecerElemento">
+                        <div class="diametroComparacion" v-for="diam of h1DiametrosComparando" :data-num="diam"
+                            :key="diam" :style="[{width: h1Diametro-1+'px'}]">
                         </div>
                     </transition-group>
                 </div>
 
             </div>
             <div class="flexVertical">
-                <button class="boton" @click="h1DesenvolverCirculo">Desenvolver círculo</button>
+                <button class="boton" @click="h1DesenvolverCirculo" v-show="h1RotacionDesenvolvimiento===0">Desenvolver
+                    círculo</button>
                 <button v-show="h1RotacionDesenvolvimiento===Math.PI*2" class="boton" style="margin: 10px auto"
                     @click="h1DiametrosComparando++" :class="{deshabilitado: h1DiametrosComparando >=4}">Comparar con
                     {{h1DiametrosComparando+1}}
                     {{h1DiametrosComparando===0?'diámetro':'diámetros'}}</button>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo="datoNuevo" v-show="h1DiametrosComparando>=3">
+                        La razón entre la circunferencia y el diámetro es un poco más que 3.
+                    </recuadro-component>
+                </transition>
             </div>
         </bloque-component>
+
+        <p>
+            Al investigar el valor de esta razón, se pudo establecer que es un número cercano al <span
+                class="resaltado">3.14</span>.
+        </p>
+
+        <p>
+            También se observó que es muy difícil establecer su valor exacto.
+        </p>
+
+        <recuadro-component tipo="datoPrevio">
+            La razón entre la circunferencia y el diámetro demostró ser tan misteriosa que recibió un nombre especial: <span class="resaltado">número Pi</span>.
+        </recuadro-component>
+
+        <recuadro-component tipo="datoPrevio">
+            El símbolo usado para representar al número Pi es <span class="resaltado" style="font-family: Serif"> &#928;</span>.
+        </recuadro-component>
+
+
 
     </div>
 </body>
@@ -89,9 +115,15 @@
             const h1CircunferenciaVisible = computed(() => {
                 return h1RotacionDesenvolvimiento.value === 0;
             });
-            function h1Iniciar() {
+            async function h1Iniciar() {
                 h1RotacionDesenvolvimiento.value = 0;
-                h1DiametrosComparando = 0;
+                h1DiametrosComparando.value = 0;
+                await nextTick();
+                if (!h1Circulo) {
+                    console.log(`No había círculo`);
+                    return;
+                }
+                h1Diametro.value = h1Circulo.value.getBoundingClientRect().width;
             }
             function h1DesenvolverCirculo() {
                 if (h1RotacionDesenvolvimiento.value >= Math.PI * 2) {
@@ -115,31 +147,32 @@
                 }
                 const lapiz = h1Canvas.value.getContext("2d");
                 const offsetCirculo = h1Circulo.value.getBoundingClientRect();
-                const diametro = offsetCirculo.width;
-                const desplazamiento = h1RotacionDesenvolvimiento.value * diametro / 2;
+                const desplazamiento = h1RotacionDesenvolvimiento.value * h1Diametro.value / 2;
                 const offsetCanvas = h1Canvas.value.getBoundingClientRect();
                 h1Canvas.value.width = offsetCanvas.width;
                 h1Canvas.value.height = offsetCanvas.height;
 
                 lapiz.clearRect(0, 0, h1Canvas.value.width, h1Canvas.value.height);
-                lapiz.lineWidth = 2;
+                lapiz.lineWidth = 1;
                 lapiz.strokeStyle = "#f06449";
 
                 lapiz.beginPath();
                 //lapiz.lineTo(desplazamiento+h1Canvas.value.height/2, h1Canvas.value.height)
-                lapiz.arc(desplazamiento + h1Canvas.value.height / 2, h1Canvas.value.height / 2, -2 + h1Canvas.value.height / 2, Math.PI / 2 + h1RotacionDesenvolvimiento.value, Math.PI / 2);
-                lapiz.lineTo(h1Canvas.value.height / 2, h1Canvas.value.height);
+                lapiz.arc(desplazamiento + h1Diametro.value / 2, h1Diametro.value / 2, -0 + h1Diametro.value / 2, Math.PI / 2 + h1RotacionDesenvolvimiento.value, Math.PI / 2);
+                lapiz.moveTo(desplazamiento + h1Diametro.value / 2, h1Diametro.value);
+                lapiz.lineTo(h1Diametro.value / 2, h1Diametro.value);
                 lapiz.stroke();
-                console.log(desplazamiento + h1Canvas.value.height / 2, h1Canvas.value.height / 2, -2 + h1Canvas.value.height / 2, Math.PI / 2 + h1RotacionDesenvolvimiento.value, Math.PI / 2);
+                console.log(desplazamiento);
             })
 
             const h1DiametrosComparando = ref(0);
             const h1ZonaInteraccion = ref(null);
             const h1RepresentacionDiametro = ref(null);
+            const h1ContenedorDiametros = ref(null);
 
             function h1IniciarViajeDiametro(elemento) {
-                if (!h1ZonaInteraccion.value) {
-                    console.log(`No hay zona de interacción`);
+                if (!h1ContenedorDiametros.value) {
+                    console.log(`No hay h1ContenedorDiametros`);
                     return;
                 }
                 if (!h1RepresentacionDiametro.value) {
@@ -147,14 +180,27 @@
                     return;
                 }
                 const offsetDiametro = h1RepresentacionDiametro.value.getBoundingClientRect();
-                const offsetZona = h1ZonaInteraccion.value.getBoundingClientRect();
-                elemento.style.left = offsetDiametro.left - offsetZona.left + 'px';
-                elemento.style.top = offsetDiametro.top - offsetZona.top + 'px';
+                const offsetContenedor = h1ContenedorDiametros.value.getBoundingClientRect();
+                const vector = {
+                    x: offsetContenedor.left + h1Diametro.value * (Number(elemento.dataset.num) - 1) - offsetDiametro.left,
+                    y: offsetContenedor.top - offsetDiametro.top,
+                }
+                elemento.style.transform = `translate(${-vector.x}px, ${-vector.y}px)`;
+            }
+            function h1EnterViajeDiametro(elemento, done) {
+                setTimeout(() => {
+                    elemento.style.transform = '';
+                    done();
+                }, 200);
+            }
+            function desaparecerElemento(elemento) {
+                elemento.style.display = 'none';
             }
 
             return {
                 h1ZonaInteraccion, h1Iniciar, h1DesenvolverCirculo, h1RotacionDesenvolvimiento, h1Canvas, h1Circulo, h1RepresentacionDiametro, h1Diametro, h1CircunferenciaVisible,
-                h1DiametrosComparando, h1IniciarViajeDiametro
+                h1ContenedorDiametros, h1DiametrosComparando, h1IniciarViajeDiametro, h1EnterViajeDiametro,
+                desaparecerElemento,
 
             }
         },
@@ -172,8 +218,8 @@
         height: min(200px, 80vw);
         border-radius: 50%;
         border: 1px solid var(--paletaPrevio);
-        margin: 10px 10px;
         position: relative;
+        box-sizing: border-box;
     }
 
     .representacionCirculo:not(.circunferenciaVisible) {
@@ -228,8 +274,8 @@
     }
 
     #h1Canvas {
-        width: calc(100% * 3.5);
-        height: 100%;
+        width: calc(100% * 4.5);
+        height: calc(100% + 2px);
         position: absolute;
         top: 0px;
         left: 0px;
@@ -238,14 +284,17 @@
 
     #contenedorDiametros {
         display: flex;
+        width: fit-content;
+        margin: 5px 0px;
     }
 
     .diametroComparacion {
         height: 4px;
         background-color: var(--paletaActual);
-        border: 1px solid var(--paletaFondoGris);
         box-sizing: border-box;
         flex-grow: 0;
         flex-shrink: 0;
+        margin-right: 1px;
+        transition: transform 1s;
     }
 </style>

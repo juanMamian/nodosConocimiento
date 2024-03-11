@@ -63,8 +63,9 @@
 
             </div>
             <div class="flexVertical">
-                <button class="boton" @click="h1DesenvolverCirculo" v-show="h1RotacionDesenvolvimiento===0">Desenvolver
-                    círculo</button>
+                <button class="boton" @click="h1DesenvolverCirculo" v-show="!h1CirculoDesenvuelto">Desenvolver
+                    circunferencia</button>
+                <button class="boton" @click="h1EnvolverCirculo" v-show="h1CirculoDesenvuelto">Envolver circunferencia</button>
                 <button v-show="h1RotacionDesenvolvimiento===Math.PI*2" class="boton" style="margin: 10px auto"
                     @click="h1DiametrosComparando++" :class="{deshabilitado: h1DiametrosComparando >=4}">Comparar con
                     {{h1DiametrosComparando+1}}
@@ -88,11 +89,13 @@
         </p>
 
         <recuadro-component tipo="datoPrevio">
-            La razón entre la circunferencia y el diámetro demostró ser tan misteriosa que recibió un nombre especial: <span class="resaltado">número Pi</span>.
+            La razón entre la circunferencia y el diámetro demostró ser tan misteriosa que recibió un nombre especial:
+            <span class="resaltado">número Pi</span>.
         </recuadro-component>
 
         <recuadro-component tipo="datoPrevio">
-            El símbolo usado para representar al número Pi es <span class="resaltado" style="font-family: Serif"> &#928;</span>.
+            El símbolo usado para representar al número Pi es <span class="resaltado" style="font-family: Serif">
+                &#928;</span>.
         </recuadro-component>
 
 
@@ -112,29 +115,46 @@
             const h1Canvas = ref(null);
             const h1Circulo = ref(null);
             const h1Diametro = ref(100);
+            const h1CirculoDesenvuelto = ref(false);
             const h1CircunferenciaVisible = computed(() => {
                 return h1RotacionDesenvolvimiento.value === 0;
             });
             async function h1Iniciar() {
                 h1RotacionDesenvolvimiento.value = 0;
                 h1DiametrosComparando.value = 0;
+                h1CirculoDesenvuelto.value = false;
+                h1RotacionDesenvolvimiento.value = 0.01;
                 await nextTick();
                 if (!h1Circulo) {
                     console.log(`No había círculo`);
                     return;
                 }
+                h1RotacionDesenvolvimiento.value = 0;
                 h1Diametro.value = h1Circulo.value.getBoundingClientRect().width;
             }
+            let h1TimerDesenvolverCirculo = null;
             function h1DesenvolverCirculo() {
+                clearTimeout(h1TimerEnvolverCirculo);
                 if (h1RotacionDesenvolvimiento.value >= Math.PI * 2) {
-                    console.log(`Desenvolvimiento terminado`);
                     return;
                 }
                 h1RotacionDesenvolvimiento.value += stepDesenvolvimiento;
                 if (h1RotacionDesenvolvimiento.value > Math.PI * 2) {
                     h1RotacionDesenvolvimiento.value = Math.PI * 2;
                 }
-                setTimeout(h1DesenvolverCirculo, 100);
+                h1TimerDesenvolverCirculo = setTimeout(h1DesenvolverCirculo, 80);
+            }
+            let h1TimerEnvolverCirculo = null;
+            function h1EnvolverCirculo() {
+                clearTimeout(h1TimerDesenvolverCirculo);
+                if (h1RotacionDesenvolvimiento.value <= 0) {
+                    return;
+                }
+                h1RotacionDesenvolvimiento.value -= stepDesenvolvimiento;
+                if (h1RotacionDesenvolvimiento.value < 0) {
+                    h1RotacionDesenvolvimiento.value = 0;
+                }
+                h1TimerEnvolverCirculo = setTimeout(h1EnvolverCirculo, 80);
             }
             watch(h1RotacionDesenvolvimiento, (rotacion) => {
                 if (!h1Canvas.value) {
@@ -158,11 +178,23 @@
 
                 lapiz.beginPath();
                 //lapiz.lineTo(desplazamiento+h1Canvas.value.height/2, h1Canvas.value.height)
-                lapiz.arc(desplazamiento + h1Diametro.value / 2, h1Diametro.value / 2, -0 + h1Diametro.value / 2, Math.PI / 2 + h1RotacionDesenvolvimiento.value, Math.PI / 2);
-                lapiz.moveTo(desplazamiento + h1Diametro.value / 2, h1Diametro.value);
-                lapiz.lineTo(h1Diametro.value / 2, h1Diametro.value);
+                let anguloInicio = Math.PI / 2 + h1RotacionDesenvolvimiento.value;
+                lapiz.arc(desplazamiento + h1Diametro.value / 2, h1Diametro.value / 2, -1 + h1Diametro.value / 2, anguloInicio, 5 * Math.PI / 2);
+                if (desplazamiento > 0) {
+                    lapiz.moveTo(desplazamiento + h1Diametro.value / 2, h1Diametro.value - 1);
+                    lapiz.lineTo(h1Diametro.value / 2, h1Diametro.value - 1);
+                }
                 lapiz.stroke();
-                console.log(desplazamiento);
+                if (rotacion >= 2 * Math.PI) {
+                    h1CirculoDesenvuelto.value = true;
+                }
+                else if (rotacion <= 0) {
+                    h1CirculoDesenvuelto.value = false;
+                }
+
+                if (rotacion != Math.PI * 2) {
+                    h1DiametrosComparando.value = 0;
+                }
             })
 
             const h1DiametrosComparando = ref(0);
@@ -198,7 +230,7 @@
             }
 
             return {
-                h1ZonaInteraccion, h1Iniciar, h1DesenvolverCirculo, h1RotacionDesenvolvimiento, h1Canvas, h1Circulo, h1RepresentacionDiametro, h1Diametro, h1CircunferenciaVisible,
+                h1ZonaInteraccion, h1Iniciar, h1EnvolverCirculo, h1DesenvolverCirculo, h1CirculoDesenvuelto, h1RotacionDesenvolvimiento, h1Canvas, h1Circulo, h1RepresentacionDiametro, h1Diametro, h1CircunferenciaVisible,
                 h1ContenedorDiametros, h1DiametrosComparando, h1IniciarViajeDiametro, h1EnterViajeDiametro,
                 desaparecerElemento,
 
@@ -217,7 +249,7 @@
         width: min(200px, 80vw);
         height: min(200px, 80vw);
         border-radius: 50%;
-        border: 1px solid var(--paletaPrevio);
+        border: 1px solid transparent;
         position: relative;
         box-sizing: border-box;
     }

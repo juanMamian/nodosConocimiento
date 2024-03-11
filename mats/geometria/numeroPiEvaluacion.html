@@ -13,9 +13,7 @@
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
     <script
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
-
-
-    <link rel="stylesheet" href="../../recursos/components/mats/circuloEstilo.css">
+    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/circuloEstilo.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
@@ -58,74 +56,78 @@
             </template>
 
             <div class="flexVertical">
-                <button class="boton" @click="e1GenerarReto">Generar reto</button>
+                <button class="boton" @click="e4GenerarReto">Generar reto</button>
             </div>
 
             <transition name="fadeIn">
-                <div class="reto" v-if="e1Determinante!=null">
-                    <componente-circulo :determinante="e1Determinante" :key="e1VersionReto" ref="e1Circulo">
+                <div class="reto" v-if="e4Determinante!=null">
+                    <componente-circulo :determinante="e4Determinante" :key="e4VersionReto" ref="e4Circulo" :propiedades-explicitables="[Object.keys(e4Determinante)[0]]" :propiedades-explicitadas="[Object.keys(e4Determinante)[0]]">
                     </componente-circulo>
                 </div>
 
             </transition>
             <transition name="fadeIn">
-                <recuadro-component tipo="instruccionTeclado" v-show="e1Determinante!=null">
+                <recuadro-component tipo="instruccionTeclado" v-show="e4Determinante!=null">
                     <div class="flexVertical">
                         <span>Introduce tu respuesta</span>
                         <div class="contenedorBloquesInput">
                             <div class="bloqueInput">
-                                <label for="e1InputRadio">Radio: </label><input ref="e1InputRadio"
-                                    :class="{deshabilitado: e1ComponentePreguntado==='radio'}" type="number"
-                                    id="e1InputRadio"><br>
+                                <label for="e4InputRadio">Radio: </label><input class="inputRespuestaUsuario" @keypress.enter="e4EvaluarRespuestaUsuario" :disabled="e4ComponentePreguntado==='radio'"
+                                    ref="e4InputRadio" :class="{deshabilitado: e4ComponentePreguntado==='radio'}"
+                                    type="number" id="e4InputRadio"><br>
                             </div>
                             <div class="bloqueInput">
-                                <label for="e1InputDiametro">Diámetro: </label><input ref="e1InputDiametro"
-                                    :class="{deshabilitado: e1ComponentePreguntado==='diametro'}" type=""
-                                    id="e1InputDiametro"><br>
+                                <label for="e4InputDiametro">Diámetro: </label><input class="inputRespuestaUsuario" @keypress.enter="e4EvaluarRespuestaUsuario" :disabled="e4ComponentePreguntado==='diametro'"
+                                    ref="e4InputDiametro" :class="{deshabilitado: e4ComponentePreguntado==='diametro'}"
+                                    type="number" id="e4InputDiametro"><br>
                             </div>
                             <div class="bloqueInput">
-                                <label for="e1InputCircunferencia">Circunferencia: </label><input type=""
-                                    ref="e1InputCircunferencia"
-                                    :class="{deshabilitado: e1ComponentePreguntado==='circunferencia'}"
-                                    id="e1InputCircunferencia">
+                                <label for="e4InputCircunferencia">Circunferencia: </label><input type="number" @keypress.enter="e4EvaluarRespuestaUsuario" :disabled="e4ComponentePreguntado==='circunferencia'"
+                                    class="inputRespuestaUsuario" ref="e4InputCircunferencia"
+                                    :class="{deshabilitado: e4ComponentePreguntado==='circunferencia'}"
+                                    id="e4InputCircunferencia">
                             </div>
                         </div>
-                        <button class="boton" @click="e1EvaluarRespuestaUsuario"> Aceptar</button>
+                        <button class="boton" @click="e4EvaluarRespuestaUsuario"> Aceptar</button>
 
                     </div>
                 </recuadro-component>
             </transition>
 
-            <transition name="fadeIn">
-                <recuadro-component v-show="e1RespuestaUsuarioCorrecta!=null" tipo="infoResultado"
-                    :modo="e1RespuestaUsuarioCorrecta?'correcto':'incorrecto'">
+            <transition name="fadeIn" @enter="scrollToElemento">
+                <recuadro-component v-show="e4RespuestaUsuarioCorrecta!=null" tipo="infoResultado" :key="e4VersionRespuestaUsuario"
+                    :modo="e4RespuestaUsuarioCorrecta?'correcto':'incorrecto'">
                 </recuadro-component>
             </transition>
 
         </bloque-component>
+        <div style="height: 100vh">
+            
+        </div>
     </div>
 </body>
 
 </html>
 
 <script type="module">
-    import {componenteCirculo} from "../../recursos/components/mats/circulo.js";
+    import {componenteCirculo} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/circulo.js";
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
     const {ref, computed, nextTick, watch} = Vue;
     const {createApp} = Vue;
     createApp({
         setup() {
-            const e1VersionReto = ref(0);
-            const e1Determinante = ref(null);
-            function e1ReiniciarReto() {
-                e1Determinante.value = null;
-                e1ComponentePreguntado.value = null;
-                e1InputRadio.value.value = '';
-                e1InputDiametro.value.value = '';
-                e1InputCircunferencia.value.value = '';
+            const e4VersionReto = ref(0);
+            const e4Determinante = ref(null);
+            function e4ReiniciarReto() {
+                e4Determinante.value = null;
+                e4ComponentePreguntado.value = null;
+                e4InputRadio.value.value = '';
+                e4InputDiametro.value.value = '';
+                e4InputCircunferencia.value.value = '';
             }
-            const e1ComponentePreguntado = ref(null);
-            function e1GenerarReto() {
-                e1ReiniciarReto();
+            const e4ComponentePreguntado = ref(null);
+            function e4GenerarReto() {
+                e4ReiniciarReto();
                 let dado = Math.random() * 3;
                 let componente = null;
                 const minMagnitud = 3;
@@ -133,62 +135,61 @@
                 let magnitud = Math.round(Math.random() * rangoMagnitud + minMagnitud);
                 if (dado < 1) {
                     componente = 'radio';
-                    if (!e1InputRadio.value) {
+                    if (!e4InputRadio.value) {
                         console.log("No hay inputRadio");
                     }
-                    e1InputRadio.value.value = magnitud;
-                    e1ComponentePreguntado.value = 'radio';
+                    e4InputRadio.value.value = magnitud;
+                    e4ComponentePreguntado.value = 'radio';
                 }
                 else if (dado < 2) {
                     componente = 'diametro';
-                    if (!e1InputDiametro.value) {
+                    if (!e4InputDiametro.value) {
                         console.log("No hay inputDiametro");
                     }
-                    e1InputDiametro.value.value = magnitud;
-                    e1ComponentePreguntado.value = 'diametro';
+                    e4InputDiametro.value.value = magnitud;
+                    e4ComponentePreguntado.value = 'diametro';
                 }
                 else {
-                    if (!e1InputCircunferencia.value) {
+                    if (!e4InputCircunferencia.value) {
                         console.log("No hay inputCircunferencia");
                     }
-                    e1InputCircunferencia.value.value = magnitud * 3;
+                    e4InputCircunferencia.value.value = magnitud * 3;
                     componente = 'circunferencia';
-                    e1ComponentePreguntado.value = 'circunferencia';
+                    e4ComponentePreguntado.value = 'circunferencia';
                 }
                 if (componente === 'circunferencia') {
                     magnitud *= 3;
                 }
-                e1Determinante.value = {};
-                console.log(`Generado ${componente} con magnitud ${magnitud}`);
-                e1Determinante.value[componente] = magnitud;
-                e1VersionReto.value++;
+                e4Determinante.value = {};
+                e4Determinante.value[componente] = magnitud;
+                e4VersionReto.value++;
             }
 
-            const e1Circulo = ref(null);
-            const e1InputRadio = ref(null);
-            const e1InputDiametro = ref(null);
-            const e1InputCircunferencia = ref(null);
-            const e1RespuestaUsuarioCorrecta = ref(null);
-            const e1VersionRespuestaUsuario = ref(0);
-            function e1EvaluarRespuestaUsuario() {
-                console.log("Evaluando respuesta usuario");
-                let uRadio = e1InputRadio.value.value.trim();
-                let uDiametro = e1InputDiametro.value.value.trim();
-                let uCircunferencia = e1InputCircunferencia.value.value.trim();
+            const e4Circulo = ref(null);
+            const e4InputRadio = ref(null);
+            const e4InputDiametro = ref(null);
+            const e4InputCircunferencia = ref(null);
+            const e4RespuestaUsuarioCorrecta = ref(null);
+            const e4VersionRespuestaUsuario = ref(0);
+            function e4EvaluarRespuestaUsuario() {
+                let uRadio = e4InputRadio.value.value.trim();
+                let uDiametro = e4InputDiametro.value.value.trim();
+                let uCircunferencia = e4InputCircunferencia.value.value.trim();
 
-                e1RespuestaUsuarioCorrecta.value = false;
-                console.log(`Comparando ${uRadio} con ${e1Circulo.value.radio}, ${uDiametro} con ${e1Circulo.value.diametro} y ${uCircunferencia} con ${e1Circulo.value.circunferencia}`);
-                if (Math.abs(uRadio - e1Circulo.value.radio) < 0.01 && Math.abs(uDiametro - e1Circulo.value.diametro) < 0.01 && Math.abs(uCircunferencia - e1Circulo.value.circunferencia) < 0.01) {
-                    e1RespuestaUsuarioCorrecta.value = true;
-                    console.log(`Correcta`);
+                e4RespuestaUsuarioCorrecta.value = false;
+                if (Math.abs(uRadio - e4Circulo.value.radio) < 0.01 && Math.abs(uDiametro - e4Circulo.value.diametro) < 0.01 && Math.abs(uCircunferencia - e4Circulo.value.circunferencia) < 0.01) {
+                    e4RespuestaUsuarioCorrecta.value = true;
                 }
-                e1VersionRespuestaUsuario.value++;
+                e4VersionRespuestaUsuario.value++;
             }
+            const {scrollToElemento} = useUtils();
 
             return {
-                e1VersionReto, e1Determinante, e1ReiniciarReto, e1ComponentePreguntado, e1GenerarReto, e1Circulo,
-                e1EvaluarRespuestaUsuario, e1RespuestaUsuarioCorrecta, e1InputRadio, e1InputDiametro, e1InputCircunferencia, e1VersionRespuestaUsuario
+                e4VersionReto, e4Determinante, e4ReiniciarReto, e4ComponentePreguntado, e4GenerarReto, e4Circulo,
+                e4EvaluarRespuestaUsuario, e4RespuestaUsuarioCorrecta, e4InputRadio, e4InputDiametro, e4InputCircunferencia, e4VersionRespuestaUsuario,
+                scrollToElemento
             }
+
 
         },
         components: {
@@ -215,5 +216,9 @@
 
     .bloqueInput input {
         margin-left: auto;
+    }
+
+    .inputRespuestaUsuario {
+        width: 150px;
     }
 </style>

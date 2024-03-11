@@ -1,20 +1,20 @@
 export const componenteCirculo = {
     template: `
-        <div class="componenteCirculo" :class="{conCentro}" ref="componenteCirculo" :style="[estiloCirculo]">
-            <div class="representacionDiametro" :style="[{transform: 'rotate(' + -rotacionDiametro + 'rad)'}]">
-                <div class="label"
+        <div class="componenteCirculo" :class="{conCentro, representado: propiedadesRepresentadas.includes('circunferencia')}" ref="componenteCirculo" :style="[estiloCirculo]">
+            <div class="representacionDiametro" :style="[{transform: 'rotate(' + -rotacionDiametro + 'rad)'}]" :class="{representado: propiedadesRepresentadas.includes('diametro')}">
+                <div class="label" :class="{simbolizado: propiedadesSimbolizadas.includes('radio'), explicitable: propiedadesExplicitables.includes('diametro'), explicitado: propiedadesExplicitadas.includes('diametro')}"
                     :style="[{transform: 'translate(-50%, -50%) rotate('+ rotacionDiametro +'rad)'}]">
                     <span class="visibleNormalmente">D</span><span class="visibleHovered">={{truncar(diametro)}}</span>
                 </div>
             </div>
-            <div class="representacionRadio" :style="[{transform: 'rotate(' + -rotacionRadio + 'rad)'}]">
-                <div class="label"
+            <div class="representacionRadio" :style="[{transform: 'rotate(' + -rotacionRadio + 'rad)'}]" :class="{representado: propiedadesRepresentadas.includes('radio')}">
+                <div class="label" :class="{simbolizado: propiedadesSimbolizadas.includes('radio'), explicitable: propiedadesExplicitables.includes('radio'), explicitado: propiedadesExplicitadas.includes('radio')}"
                     :style="[{transform: 'translate(-50%, -50%) rotate('+ rotacionRadio +'rad)'}]">
-                    <span class="visibleNormalmente">r</span><span class="visibleHovered">={{truncar(radio)}}</span>
+                    <span class="visibleNormalmente">r</span><span class="visibleHovered">={{' ' + truncar(radio)}}</span>
                 </div>
             </div>
-            <div class="labelCircunferencia label">
-                <span class="visibleNormalmente">C</span> <span class="visibleHovered">={{truncar(circunferencia)}}</span>
+            <div class="labelCircunferencia label" :class="{simbolizado: propiedadesSimbolizadas.includes('radio'), explicitable: propiedadesExplicitables.includes('circunferencia'), explicitado: propiedadesExplicitadas.includes('circunferencia')}">
+                <span class="visibleNormalmente">C</span> <span class="visibleHovered">={{' ' + truncar(circunferencia)}}</span>
             </div>
         </div>
     `,
@@ -42,14 +42,30 @@ export const componenteCirculo = {
         conCentro: {
             type: Boolean,
             default: false,
-        }
+        },
+        propiedadesRepresentadas: {
+            type: Array,
+            default: ["circunferencia", "radio", "diametro"],
+        },
+        propiedadesSimbolizadas: { //Propiedades cuyo símbolo aparece junto a su representación.
+            type: Array,
+            default: ["radio", "diametro", "circunferencia"]
+        },
+        propiedadesExplicitables: { //Propiedades cuyo valor se puede conocer mediante hover.
+            type: Array,
+            default: ["radio", "diametro", "circunferencia"]
+        },
+        propiedadesExplicitadas: { //Propiedades cuyo valor está siempre explícito sin necesidad de hover.
+            type: Array,
+            default: [],
+        },
+
     },
     data() {
         return {
             radio: 0,
             diametro: 0,
             circunferencia: 0,
-
             unidad: 20,
         }
     },

@@ -8,6 +8,8 @@ export const componenteRectangulo = {
             <div class="label labelAncho" :class="{simbolizado: propiedadesSimbolizadas.includes('ancho'), explicitable: propiedadesExplicitables.includes('ancho'), explicitado: propiedadesExplicitadas.includes('ancho')}">
                 <span class="visibleNormalmente">a</span><span class="visibleHovered">={{' ' + truncar(ancho)}}</span>
             </div>
+            <slot>
+            </slot>
         </div>
     `,
     props: {

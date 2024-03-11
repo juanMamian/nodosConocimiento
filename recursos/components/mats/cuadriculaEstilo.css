@@ -1,0 +1,88 @@
+.componenteCuadriculaArea {
+    position: relative;
+}
+
+.componenteCuadriculaArea .lado {
+    height: 2px;
+    position: absolute;
+    display: flex;
+    gap: 1px;
+    align-items: stretch;
+    justify-content: stretch;
+}
+
+.componenteCuadriculaArea .ladoTop {
+    bottom: 100%;
+    left: 0px;
+    width: 100%;
+    height: 2px;
+    flex-direction: row;
+}
+
+.componenteCuadriculaArea .ladoRight {
+    top: 0px;
+    left: 100%;
+    width: 2px;
+    height: 100%;
+    flex-direction: column;
+}
+
+.componenteCuadriculaArea .ladoBottom {
+    top: 100%;
+    left: 0px;
+    height: 2px;
+    width: 100%;
+    flex-direction: row;
+}
+
+.componenteCuadriculaArea .ladoLeft {
+    top: 0px;
+    left: 0px;
+    width: 2px;
+    height: 100%;
+    flex-direction: column;
+}
+
+.componenteCuadriculaArea .lineaUnitaria {
+    background-color: black;
+    flex-grow: 1;
+}
+
+.componenteCuadriculaArea .cuadricula {
+    gap: 1px;
+    display: grid;
+    width: 100%;
+    height: 100%;
+}
+
+.componenteCuadriculaArea .cuadricula .cuadroUnitario {
+    background-color: var(--paletaPrevio);
+}
+
+.componenteCuadriculaArea .cuadricula .cuadroUnitario.oculto {
+    background-color: transparent;
+}
+
+.scaleInTop-enter-from {
+    transform: scale(1.2) translateY(-10px);
+}
+
+.scaleInTop-enter-to {
+    transform: scale(1) translateY(0px);
+}
+
+.scaleInTop-enter-active {
+    transition: transform 0.4s;
+}
+
+.scaleInLeft-enter-from {
+    transform: scale(1.2) translateX(-10px);
+}
+
+.scaleInLeft-enter-to {
+    transform: scale(1) translateX(0px);
+}
+
+.scaleInLeft-enter-active {
+    transition: transform 0.4s;
+}

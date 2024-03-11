@@ -376,12 +376,12 @@ input {
 
 @keyframes travelbottom {
     0% {
-        transform: translatey(100%);
+        transform: translateY(100%);
         opacity: 0;
     }
 
     100% {
-        transform: translatey(0%);
+        transform: translateY(0%);
         opacity: 1;
     }
 }

@@ -7,11 +7,15 @@ export const componenteTriangulo = {
             </div>
             <div class="lado lado2" :style="[estiloLado2]">
             </div>
-            <div  class="label labelLargo" :class="{simbolizado: propiedadesSimbolizadas.includes('largo'), explicitable: propiedadesExplicitables.includes('largo'), explicitado: propiedadesExplicitadas.includes('largo')}">
+            <div class="representacionLargo" :style="[estiloRepresentacionLargo]" v-show="propiedadesSimbolizadas.includes('largo')">
+            </div>
+            <div  class="label labelLargo" v-show="propiedadesSimbolizadas.includes('largo')" :class="{explicitable: propiedadesExplicitables.includes('largo'), explicitado: propiedadesExplicitadas.includes('largo')}">
                 <span class="visibleNormalmente">l</span><span class="visibleHovered">={{truncar(largo)}}</span>
             </div>
-            <div class="label labelAncho" :class="{simbolizado: propiedadesSimbolizadas.includes('ancho'), explicitable: propiedadesExplicitables.includes('ancho'), explicitado: propiedadesExplicitadas.includes('ancho')}">
+            <div class="label labelAncho" v-show="propiedadesSimbolizadas.includes('ancho')" :class="{explicitable: propiedadesExplicitables.includes('ancho'), explicitado: propiedadesExplicitadas.includes('ancho')}">
                 <span class="visibleNormalmente">a</span><span class="visibleHovered">={{' ' + truncar(ancho)}}</span>
+            </div>
+            <div class="relleno" :style="[estiloRelleno]">
             </div>
             <slot>
             </slot>
@@ -60,6 +64,10 @@ export const componenteTriangulo = {
         unidad: {
             type: Number,
             default: 20,
+        },
+        colorRelleno:{
+            type: String,
+            default: 'gray'
         }
 
     },
@@ -92,7 +100,21 @@ export const componenteTriangulo = {
                 width: this.unidad * (this.ancho - this.xPunta) / Math.cos(this.rotacionLado2) + 'px',
                 transform: `rotate(${Math.PI + this.rotacionLado2}rad)`,
             }
-        }
+        },
+        estiloRepresentacionLargo() {
+            return {
+                left: this.unidad * this.xPunta + 'px',
+            }
+        },
+        estiloRelleno(){
+            let xPuntaPorcentaje=this.xPunta * 100 / this.ancho;
+            return {
+                width: this.unidad * this.ancho + 'px',
+                height: this.unidad * this.largo + 'px',
+                clipPath: `polygon(0% 100%, ${xPuntaPorcentaje}% 0%, 100% 100%, 0% 100%)`,
+                backgroundColor: this.colorRelleno,
+            }
+        },
     },
     methods: {
         truncar(num) {

@@ -1,6 +1,7 @@
 .componenteRectangulo {
     border: 1px solid black;
     position: relative;
+    box-sizing: border-box;
 }
 
 .componenteRectangulo.conCentro::after {

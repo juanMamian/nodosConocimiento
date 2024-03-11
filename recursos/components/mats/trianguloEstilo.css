@@ -70,3 +70,17 @@
 .componenteTriangulo .lado2 {
     left: 100%;
 }
+.componenteTriangulo .representacionLargo {
+    border-right: 1px dashed black;
+    width: 0px;
+    height: 100%;
+    position: absolute; 
+    top: 0px;
+}
+.componenteTriangulo .relleno{
+    background-color: gray;
+    opacity: 0.4;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}

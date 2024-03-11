@@ -13,6 +13,7 @@
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
     <script
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <link rel="stylesheet" href="../../recursos/components/mats/rectanguloEstilo.css">
     <link rel="stylesheet" href="../../recursos/components/mats/trianguloEstilo.css">
     <link rel="stylesheet" href="../../recursos/components/mats/cuadriculaEstilo.css">
     <link rel="stylesheet"
@@ -42,9 +43,15 @@
 
             <div class="zonaInteraccion">
                 <componente-triangulo id="h1Triangulo" :propiedades-explicitadas="['largo', 'ancho']" :unidad="40"
-                    :ancho="h1AnchoTriangulo" :largo="h1AltoTriangulo">
-                    <componente-cuadricula-area :unidad="40" :ancho="h1AnchoTriangulo" :largo="h1AltoTriangulo" v-if="false">
+                    :color-relleno="h1Step>=3?'var(--paletaActual)':'transparent'" :ancho="h1AnchoTriangulo"
+                    :largo="h1LargoTriangulo">
+                    <componente-cuadricula-area :unidad="40" :ancho="h1AnchoTriangulo" :largo="h1LargoTriangulo"
+                        style="opacity: 0.3" v-show="h1Step>1">
                     </componente-cuadricula-area>
+                    <componente-rectangulo :ancho="h1AnchoTriangulo" :largo="h1LargoTriangulo" :unidad="40"
+                        style="position: absolute; top: 0px;" v-show="h1Step>0" :propiedades-representadas="[]"
+                        :propiedades-simbolizadas="[]">
+                    </componente-rectangulo>
                 </componente-triangulo>
             </div>
             <div class="flexVertical">
@@ -57,7 +64,7 @@
         </bloque-component>
 
         <recuadro-component tipo="datoPrevio">
-            El área de un rectángulo es igual a la multiplicación de su ancho por su alto.
+            El área de un triángulo es la mitad del área del rectángulo circunscrito
         </recuadro-component>
     </div>
 </body>
@@ -66,6 +73,7 @@
 
 <script type="module">
     import {componenteTriangulo} from "../../recursos/components/mats/triangulo.js";
+    import {componenteRectangulo} from "../../recursos/components/mats/rectangulo.js";
     import {componenteCuadriculaArea} from "../../recursos/components/mats/cuadriculaArea.js";
     import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
     const {ref, computed, nextTick, watch} = Vue;
@@ -76,7 +84,7 @@
                 h1Step.value = 0;
             }
             const h1AnchoTriangulo = ref(5);
-            const h1AltoTriangulo = ref(3);
+            const h1LargoTriangulo = ref(3);
 
             const h1TextoBoton = ref('');
             const h1Descripcion = ref('');
@@ -86,13 +94,13 @@
                 console.log("stepping up")
                 switch (step) {
                     case 0:
-                        h1TextoBoton.value = 'Analizar el ancho';
+                        h1TextoBoton.value = 'Dibujar un rectángulo circunscrito';
                         break;
                     case 1:
-                        h1TextoBoton.value = 'Analizar el alto';
+                        h1TextoBoton.value = 'Analizar el área del rectángulo';
                         break;
                     case 2:
-                        h1TextoBoton.value = 'Analizar el área';
+                        h1TextoBoton.value = 'Analizar el área del triángulo';
                         break;
                     case 3:
                         break;
@@ -100,7 +108,7 @@
             }, {immediate: true});
             return {
                 h1Reiniciar, h1TextoBoton, h1Descripcion,
-                h1AnchoTriangulo, h1AltoTriangulo, h1Step
+                h1AnchoTriangulo, h1LargoTriangulo, h1Step
             }
 
         },
@@ -109,6 +117,7 @@
             bloqueComponent,
             enlaceComponent,
             componenteTriangulo,
+            componenteRectangulo,
             componenteCuadriculaArea,
         },
     }).mount("#doc");

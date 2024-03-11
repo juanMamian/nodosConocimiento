@@ -8,7 +8,7 @@ export const componenteCuadriculaArea = {
             </transition>
             <transition name=scaleInLeft>
                 <div class="lado ladoLeft" v-show="mostrandoUnidadesLeft">
-                    <div class="lineaUnitaria" v-for="num of alto" :style="[estiloLineaUnitaria]"></div>
+                    <div class="lineaUnitaria" v-for="num of largo" :style="[estiloLineaUnitaria]"></div>
                 </div>
             </transition>
             <div class="cuadricula" :style="[estiloCuadricula]">
@@ -43,7 +43,7 @@ export const componenteCuadriculaArea = {
             type: Number,
             default: 4,
         },
-        alto: {
+        largo: {
             type: Number,
             default: 4
         },
@@ -67,7 +67,7 @@ export const componenteCuadriculaArea = {
     computed: {
         filasMostradasRealmente() {
             if (this.filasMostradas < 0) {
-                return this.alto
+                return this.largo
             }
             return this.filasMostradas;
         },
@@ -82,15 +82,15 @@ export const componenteCuadriculaArea = {
         estiloCuadricula() {
             return {
                 width: this.ancho * this.unidad + 'px',
-                height: this.alto * this.unidad + 'px',
-                gridTemplateRows: `repeat(${this.alto}, 1fr)`,
+                height: this.largo * this.unidad + 'px',
+                gridTemplateRows: `repeat(${this.largo}, 1fr)`,
                 gridTemplateColumns: `repeat(${this.ancho}, 1fr)`,
             }
         },
         estiloComponente() {
             return {
                 width: this.ancho * this.unidad + 'px',
-                height: this.alto * this.unidad + 'px',
+                height: this.largo * this.unidad + 'px',
             }
         }
     }

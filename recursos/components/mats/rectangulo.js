@@ -2,10 +2,10 @@
 export const componenteRectangulo = {
     template: `
         <div class="componenteRectangulo" :class="{conCentro}" ref="componenteRectangulo" :style="[estiloRectangulo]">
-            <div  class="label labelLargo" :class="{simbolizado: propiedadesSimbolizadas.includes('largo'), explicitable: propiedadesExplicitables.includes('largo'), explicitado: propiedadesExplicitadas.includes('largo')}">
+            <div  class="label labelLargo" v-show="propiedadesSimbolizadas.includes('largo')" :class="{explicitable: propiedadesExplicitables.includes('largo'), explicitado: propiedadesExplicitadas.includes('largo')}">
                 <span class="visibleNormalmente">l</span><span class="visibleHovered">={{truncar(largo)}}</span>
             </div>
-            <div class="label labelAncho" :class="{simbolizado: propiedadesSimbolizadas.includes('ancho'), explicitable: propiedadesExplicitables.includes('ancho'), explicitado: propiedadesExplicitadas.includes('ancho')}">
+            <div class="label labelAncho" v-show="propiedadesSimbolizadas.includes('ancho')" :class="{ explicitable: propiedadesExplicitables.includes('ancho'), explicitado: propiedadesExplicitadas.includes('ancho')}">
                 <span class="visibleNormalmente">a</span><span class="visibleHovered">={{' ' + truncar(ancho)}}</span>
             </div>
             <slot>

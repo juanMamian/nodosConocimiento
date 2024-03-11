@@ -349,6 +349,13 @@ input {
     pointer-events: none;
     opacity: 0;
 }
+.enterBottom-enter-active{
+    animation: travelBottom;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    pointer-events: none;
+    opacity: 0;
+}
 
 .travelBottom-enter-active {
     animation: travelBottom;

@@ -1,0 +1,72 @@
+.componenteTriangulo {
+    position: relative;
+}
+
+.componenteTriangulo.conCentro::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    border: 1px dashed gray;
+}
+
+.componenteTriangulo .label {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    font-size: 15px;
+    display: flex;
+    gap: 5px;
+    padding: 3px 5px;
+}
+
+.componenteTriangulo .label.explicitable:hover,
+.componenteTriangulo .label.explicitado:hover {
+    background-color: var(--paletaActual);
+    color: white;
+    border-radius: 2px;
+    z-index: 2;
+}
+
+.componenteTriangulo .label .visibleHovered {
+    display: none;
+}
+
+.componenteTriangulo .label.explicitado .visibleHovered {
+    display: block;
+}
+
+.componenteTriangulo .label.explicitable:hover .visibleHovered {
+    display: block;
+}
+
+.componenteTriangulo .labelLargo {
+    top: 50%;
+    left: calc(50% + 10px);
+    transform: translate(-50%, -50%);
+}
+
+.componenteTriangulo .labelAncho {
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.componenteTriangulo .lado {
+    height: 1px;
+    background-color: black;
+    transform-origin: center left;
+    top: 100%;
+    position: absolute;
+}
+
+.componenteTriangulo .ladoBase {
+    width: 100%
+}
+.componenteTriangulo .lado2 {
+    left: 100%;
+}

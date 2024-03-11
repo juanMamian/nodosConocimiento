@@ -12,8 +12,10 @@ export const componenteCuadriculaArea = {
                 </div>
             </transition>
             <div class="cuadricula" :style="[estiloCuadricula]">
-                <div class="cuadroUnitario" v-for="num of (alto*ancho)" :class="{oculto: num>ancho*filasMostradasRealmente}" :key="num">
-                </div>
+                <transition-group name='unfoldIn'>
+                    <div class="cuadroUnitario" v-for="num of (filasMostradasRealmente*ancho)" :key="num" :style="[{gridColumnStart: num%ancho, gridRowStart: Math.ceil(num/ancho)}]">
+                    </div>
+                </transition-group>
             </div>
             <slot>
             </slot>
@@ -80,7 +82,7 @@ export const componenteCuadriculaArea = {
         estiloCuadricula() {
             return {
                 width: this.ancho * this.unidad + 'px',
-                height: this.alto *this.unidad + 'px',
+                height: this.alto * this.unidad + 'px',
                 gridTemplateRows: `repeat(${this.alto}, 1fr)`,
                 gridTemplateColumns: `repeat(${this.ancho}, 1fr)`,
             }
@@ -88,7 +90,7 @@ export const componenteCuadriculaArea = {
         estiloComponente() {
             return {
                 width: this.ancho * this.unidad + 'px',
-                height: this.alto *this.unidad + 'px',
+                height: this.alto * this.unidad + 'px',
             }
         }
     }

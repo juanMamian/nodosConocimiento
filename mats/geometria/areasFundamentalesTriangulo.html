@@ -13,7 +13,7 @@
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
     <script
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
-    <link rel="stylesheet" href="../../recursos/components/mats/rectanguloEstilo.css">
+    <link rel="stylesheet" href="../../recursos/components/mats/trianguloEstilo.css">
     <link rel="stylesheet" href="../../recursos/components/mats/cuadriculaEstilo.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
@@ -24,35 +24,33 @@
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
 
-
-
-    <title>Áreas fundamentales - rectángulo</title>
+    <title>Áreas fundamentales - triángulo</title>
 </head>
 
 <body>
     <div id="doc">
         <p>
-            Si se analiza el ancho y el largo de un rectángulo, es posible visualizar su área.
+            Si se analiza el área del rectángulo que circunscribe al triángulo, se puede obtener conclusiones acerca del
+            área del triángulo.
         </p>
 
         <bloque-component tipo="herramientaInteractiva" @plegado="h1Reiniciar">
             <template #cabecera>
-                En este cuadro se puede visualizar el área de un rectángulo analizando su largo y su ancho.
+                En este cuadro se puede visualizar el área del rectángulo que circunscribe al tríangulo y su relación
+                con el área del triángulo.
             </template>
 
             <div class="zonaInteraccion">
-                <componente-rectangulo id="h1Rectangulo" :propiedades-explicitadas="['largo', 'ancho']" :unidad="40"
-                    :style="[{borderTopColor:h1AnchoMostrado?'transparent':'black', borderLeftColor:h1AltoMostrado?'transparent':'black'}]"
-                    :ancho="h1AnchoRectangulo" :alto="h1AltoRectangulo">
-                    <componente-cuadricula-area :filas-mostradas="h1FilasCuadriculaMostradas" :unidad="40"
-                        :mostrando-unidades-left="h1AltoMostrado" :mostrando-unidades-top="h1AnchoMostrado"
-                        :ancho="h1AnchoRectangulo" :alto="h1AltoRectangulo">
+                <componente-triangulo id="h1Triangulo" :propiedades-explicitadas="['largo', 'ancho']" :unidad="40"
+                    :ancho="h1AnchoTriangulo" :largo="h1AltoTriangulo">
+                    <componente-cuadricula-area :unidad="40" :ancho="h1AnchoTriangulo" :largo="h1AltoTriangulo" v-if="false">
                     </componente-cuadricula-area>
-                </componente-rectangulo>
+                </componente-triangulo>
             </div>
             <div class="flexVertical">
-                <transition name="enterBottom" >
-                    <button class="boton" @click="h1Step++" :key="h1Step" :class="{disabled: h1Step>=3}">{{h1TextoBoton}}</button>
+                <transition name="enterBottom">
+                    <button class="boton" @click="h1Step++" :key="h1Step"
+                        :class="{disabled: h1Step>=3}">{{h1TextoBoton}}</button>
                 </transition>
             </div>
 
@@ -67,21 +65,18 @@
 </html>
 
 <script type="module">
-    import {componenteRectangulo} from "../../recursos/components/mats/rectangulo.js";
+    import {componenteTriangulo} from "../../recursos/components/mats/triangulo.js";
     import {componenteCuadriculaArea} from "../../recursos/components/mats/cuadriculaArea.js";
     import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
     const {ref, computed, nextTick, watch} = Vue;
     const {createApp} = Vue;
-    createApp({
+    Vue.createApp({
         setup() {
             function h1Reiniciar() {
                 h1Step.value = 0;
             }
-            const h1AnchoRectangulo = ref(5);
-            const h1AltoRectangulo = ref(3);
-            const h1FilasCuadriculaMostradas = ref(0);
-            const h1AltoMostrado = ref(false);
-            const h1AnchoMostrado = ref(false);
+            const h1AnchoTriangulo = ref(5);
+            const h1AltoTriangulo = ref(3);
 
             const h1TextoBoton = ref('');
             const h1Descripcion = ref('');
@@ -91,33 +86,21 @@
                 console.log("stepping up")
                 switch (step) {
                     case 0:
-                        h1AnchoMostrado.value = false;
-                        h1AltoMostrado.value = false;
-                        h1FilasCuadriculaMostradas.value = 0;
-
                         h1TextoBoton.value = 'Analizar el ancho';
                         break;
                     case 1:
-                        h1AnchoMostrado.value = true;
                         h1TextoBoton.value = 'Analizar el alto';
                         break;
                     case 2:
-                        h1AltoMostrado.value = true;
                         h1TextoBoton.value = 'Analizar el área';
                         break;
                     case 3:
-                        console.log("Mostrando cuadritos");
-                        for (let i = 1; i <= h1AltoRectangulo.value; i++) {
-                            setTimeout(() => {
-                                h1FilasCuadriculaMostradas.value = i;
-                            }, (i - 1) * 1000);
-                        }
                         break;
                 }
             }, {immediate: true});
             return {
                 h1Reiniciar, h1TextoBoton, h1Descripcion,
-                h1AnchoRectangulo, h1AltoRectangulo, h1FilasCuadriculaMostradas, h1AltoMostrado, h1AnchoMostrado, h1Step
+                h1AnchoTriangulo, h1AltoTriangulo, h1Step
             }
 
         },
@@ -125,14 +108,14 @@
             recuadroComponent,
             bloqueComponent,
             enlaceComponent,
-            componenteRectangulo,
+            componenteTriangulo,
             componenteCuadriculaArea,
         },
     }).mount("#doc");
 </script>
 
 <style>
-    #h1Rectangulo {
+    #h1Triangulo {
         margin: 40px auto;
     }
 </style>

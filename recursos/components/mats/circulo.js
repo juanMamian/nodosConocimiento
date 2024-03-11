@@ -1,13 +1,13 @@
 export const componenteCirculo = {
     template: `
         <div class="componenteCirculo" :class="{conCentro, representado: propiedadesRepresentadas.includes('circunferencia')}" ref="componenteCirculo" :style="[estiloCirculo]">
-            <div class="representacionDiametro" :style="[{transform: 'rotate(' + -rotacionDiametro + 'rad)'}]" :class="{representado: propiedadesRepresentadas.includes('diametro')}">
+            <div class="representacionDiametro representacion" :style="[{transform: 'rotate(' + -rotacionDiametro + 'rad)'}]" :class="{representado: propiedadesRepresentadas.includes('diametro')}">
                 <div class="label" :class="{simbolizado: propiedadesSimbolizadas.includes('radio'), explicitable: propiedadesExplicitables.includes('diametro'), explicitado: propiedadesExplicitadas.includes('diametro')}"
                     :style="[{transform: 'translate(-50%, -50%) rotate('+ rotacionDiametro +'rad)'}]">
                     <span class="visibleNormalmente">D</span><span class="visibleHovered">={{truncar(diametro)}}</span>
                 </div>
             </div>
-            <div class="representacionRadio" :style="[{transform: 'rotate(' + -rotacionRadio + 'rad)'}]" :class="{representado: propiedadesRepresentadas.includes('radio')}">
+            <div class="representacionRadio representacion" :style="[{transform: 'rotate(' + -rotacionRadio + 'rad)'}]" :class="{representado: propiedadesRepresentadas.includes('radio')}">
                 <div class="label" :class="{simbolizado: propiedadesSimbolizadas.includes('radio'), explicitable: propiedadesExplicitables.includes('radio'), explicitado: propiedadesExplicitadas.includes('radio')}"
                     :style="[{transform: 'translate(-50%, -50%) rotate('+ rotacionRadio +'rad)'}]">
                     <span class="visibleNormalmente">r</span><span class="visibleHovered">={{' ' + truncar(radio)}}</span>

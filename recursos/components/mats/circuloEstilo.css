@@ -37,11 +37,11 @@
         font-size: 15px;
         display: flex;
         gap: 5px;
+        padding: 3px 5px;
     }
     .componenteCirculo .label.explicitable:hover, .componenteCirculo .label.explicitado:hover {
         background-color: var(--paletaActual);
         color: white;
-        padding: 3px 5px;
         border-radius: 2px;
         z-index: 2;
     }

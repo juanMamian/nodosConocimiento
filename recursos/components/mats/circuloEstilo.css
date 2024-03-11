@@ -41,7 +41,7 @@
     .componenteCirculo .label.explicitable:hover, .componenteCirculo .label.explicitado:hover {
         background-color: var(--paletaActual);
         color: white;
-        padding: 5px 3px;
+        padding: 3px 5px;
         border-radius: 2px;
         z-index: 2;
     }

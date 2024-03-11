@@ -1,0 +1,58 @@
+.componenteRectangulo {
+    border: 1px solid black;
+    position: relative;
+}
+
+.componenteRectangulo.conCentro::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    border: 1px dashed gray;
+}
+
+.componenteRectangulo .label {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    font-size: 15px;
+    display: flex;
+    gap: 5px;
+    padding: 3px 5px;
+}
+
+.componenteRectangulo .label.explicitable:hover,
+.componenteRectangulo .label.explicitado:hover {
+    background-color: var(--paletaActual);
+    color: white;
+    border-radius: 2px;
+    z-index: 2;
+}
+
+.componenteRectangulo .label .visibleHovered {
+    display: none;
+}
+
+.componenteRectangulo .label.explicitado .visibleHovered {
+    display: block;
+}
+
+.componenteRectangulo .label.explicitable:hover .visibleHovered {
+    display: block;
+}
+
+.componenteRectangulo .labelLargo{
+    top: 50%;
+    left: calc(100% + 10px);
+    transform: translateY(-50%);
+}
+.componenteRectangulo .labelAncho{
+    top: unset;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%);
+}

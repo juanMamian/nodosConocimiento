@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <link rel="stylesheet" href="../../recursos/components/mats/rectanguloEstilo.css">
+    <link rel="stylesheet" href="../../recursos/components/mats/circuloEstilo.css">
+    <link rel="stylesheet" href="../../recursos/components/mats/cuadriculaEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Áreas fundamentales - círculo</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Si se recorta el círculo de forma que se pueda formar un rectángulo, es posible calcular su área.
+        </p>
+
+        <bloque-component tipo="herramientaInteractiva" @plegado="h1Reiniciar">
+            <template #cabecera>
+                En este cuadro se puede reorganizar un círculo en forma de rectángulo y llegar a una conclusión respecto
+                de su área.
+            </template>
+
+            <div class="zonaInteraccion">
+                <componente-circulo :unidad="40" :determinante="{radio: h1RadioCirculo}"
+                    :propiedades-simbolizadas="h1Step===0?['radio']:[]"
+                    :propiedades-representadas="h1Step===0?['radio']:[]">
+                    <template v-if="h1Step>=1">
+                        <div class="divisionCirculo" v-for="seccion of h1DivisionesCirculo"
+                            :style="[h1EstiloDivisionesCirculo, {transform: 'rotate(' + seccion * h1AperturaDivisionesCirculo + 'rad)'}]">
+                            <div class="bordeDivisionCirculo" :style="[h1EstiloBorde1DivisionCirculo]">
+                            </div>
+                            <div class="bordeDivisionCirculo" :style="[h1EstiloBorde2DivisionCirculo]">
+                            </div>
+                        </div>
+                    </template>
+                </componente-circulo>
+                <componente-cuadricula-area :unidad="40" :ancho="h1RadioCirculo" :largo="h1RadioCirculo"
+                    style="opacity: 0.3" v-show="h1Step>1">
+                </componente-cuadricula-area>
+                <componente-rectangulo :ancho="h1RadioCirculo" :largo="h1RadioCirculo" :unidad="40"
+                    style="position: absolute; top: 0px;" v-show="h1Step>0" :propiedades-representadas="[]"
+                    :propiedades-simbolizadas="[]">
+                </componente-rectangulo>
+            </div>
+            <div class="flexVertical">
+                <transition name="enterBottom">
+                    <button class="boton" @click="h1Step++" :key="h1Step"
+                        :class="{disabled: h1Step>=3}">{{h1TextoBoton}}</button>
+                </transition>
+            </div>
+
+        </bloque-component>
+
+        <recuadro-component tipo="datoPrevio">
+            El área de un círculo es la mitad del área del rectángulo circunscrito
+        </recuadro-component>
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    import {componenteCirculo} from "../../recursos/components/mats/circulo.js";
+    import {componenteRectangulo} from "../../recursos/components/mats/rectangulo.js";
+    import {componenteCuadriculaArea} from "../../recursos/components/mats/cuadriculaArea.js";
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+    Vue.createApp({
+        setup() {
+            function h1Reiniciar() {
+                h1Step.value = 0;
+            }
+            const h1RadioCirculo = ref(5)
+            const h1DivisionesCirculo = ref(6);
+            const h1AperturaDivisionesCirculo = computed(() => {
+                return 2 * Math.PI / h1DivisionesCirculo.value
+            })
+
+            const h1TextoBoton = ref('');
+            const h1Descripcion = ref('');
+
+            const h1Step = ref(0);
+            watch(h1Step, (step) => {
+                console.log("stepping up")
+                switch (step) {
+                    case 0:
+                        h1TextoBoton.value = 'Dibujar un rectángulo circunscrito';
+                        break;
+                    case 1:
+                        h1TextoBoton.value = 'Analizar el área del rectángulo';
+                        break;
+                    case 2:
+                        h1TextoBoton.value = 'Analizar el área del círculo';
+                        break;
+                    case 3:
+                        break;
+                }
+            }, {immediate: true});
+
+            const h1EstiloDivisionesCirculo = computed(() => {
+                let alturaExtremo = 100 * Math.tan(h1AperturaDivisionesCirculo.value / 2);
+                return {
+                    clipPath: `polygon(50% 50%, 100% ${alturaExtremo}%, 100% -${alturaExtremo}%, 50% 50%)`,
+                }
+            });
+            const h1EstiloBorde1DivisionCirculo = computed(() => {
+                return {
+                    transform: `rotate(${h1AperturaDivisionesCirculo / 2}rad)`,
+                }
+            })
+            const h1EstiloBorde2DivisionCirculo = computed(() => {
+                return {
+                    transform: `rotate(-${h1AperturaDivisionesCirculo / 2}rad)`,
+                }
+            })
+            return {
+                h1Reiniciar, h1TextoBoton, h1Descripcion,
+                h1RadioCirculo, h1Step, h1EstiloDivisionesCirculo, h1DivisionesCirculo, h1AperturaDivisionesCirculo, h1EstiloBorde1DivisionCirculo, h1EstiloBorde2DivisionCirculo
+            }
+
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteCirculo,
+            componenteRectangulo,
+            componenteCuadriculaArea,
+        },
+    }).mount("#doc");
+
+    const componenteDivisionCirculo = {
+        template: ``
+    }
+</script>
+
+<style>
+    #h1Circulo {
+        margin: 40px auto;
+        position: relative;
+    }
+
+    .divisionCirculo {
+        border: 1px solid black;
+        border-radius: 50%;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        transform-origin: center center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .bordeDivisionCirculo {
+        height: 1px;
+        background-color: black;
+        width: 50%;
+        transform-origin: center left;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    }
+</style>

@@ -58,16 +58,20 @@
             </div>
             <div class="flexVertical" style="gap: 0px;">
                 <transition name="fadeIn">
-                    <recuadro-component tipo="instruccionPointer" class="flexVertical" v-show="h1Step===0">
-                        Dividir el círculo en secciones
-                        <input type="range" min=0 max=128 step=2 v-model.number="h1DivisionesCirculo">
+                    <recuadro-component tipo="instruccionPointer" v-show="h1Step===0">
+                        <div class="flexVertical">
+                            Dividir el círculo en secciones
+                            <input type="range" min=0 max=128 step=2 v-model.number="h1DivisionesCirculo">
+                        </div>
                     </recuadro-component>
                 </transition>
                 <transition name="fadeIn">
-                    <recuadro-component tipo="instruccionPointer" v-show="h1Step === 1" class="flexVertical">
-                        Reorganizar las secciones
-                        <input type="range" id="inputReorganizacionDivisiones" min="0" max="100" step="10"
-                            v-model.number="h1ProgresoReorganizacionDivisiones">
+                    <recuadro-component tipo="instruccionPointer" v-show="h1Step === 1">
+                        <div class="flexVertical">
+                            Reorganizar las secciones
+                            <input type="range" id="inputReorganizacionDivisiones" min="0" max="100" step="10"
+                                v-model.number="h1ProgresoReorganizacionDivisiones">
+                        </div>
                     </recuadro-component>
                 </transition>
                 <div class="flexHorizontal" style="margin-top: -10px">
@@ -111,8 +115,8 @@
 
         <recuadro-component tipo="datoPrevio">
             El área de un círculo es la mitad de su circunferencia multiplicada por su radio:
-            <div style="font-size: 50px; margin: 10px auto; text-align: center;">
-                \( A= {{C \over 2 } * r } \)
+            <div style="font-size: 40px; margin: 10px auto; text-align: center;">
+                \( A= {{C \over 2 } \times r } \)
             </div>
         </recuadro-component>
 

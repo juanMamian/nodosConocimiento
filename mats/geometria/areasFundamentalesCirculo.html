@@ -3,27 +3,29 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://192.168.1.100:3000/public/resources/libraries/vue.global.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
     <script
-        src="http://192.168.1.100:3000/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
     <script
-        src="http://192.168.1.100:3000/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
     <script
-        src="http://192.168.1.100:3000/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script id="MathJax-script" async
+        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
     <link rel="stylesheet" href="../../recursos/components/mats/rectanguloEstilo.css">
     <link rel="stylesheet" href="../../recursos/components/mats/circuloEstilo.css">
     <link rel="stylesheet" href="../../recursos/components/mats/cuadriculaEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet"
-        href="http://192.168.1.100:3000/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
 
     <title>Áreas fundamentales - círculo</title>
 </head>
@@ -41,34 +43,80 @@
             </template>
 
             <div class="zonaInteraccion">
-                <componente-circulo :unidad="40" :determinante="{radio: h1RadioCirculo}"
-                    :style="[{borderColor: h1Step>0?'transparent':undefined}]"
-                    :propiedades-simbolizadas="h1Step===0?['radio']:[]"
-                    :propiedades-representadas="h1Step===0?['radio']:[]">
-                    <template v-if="h1Step>=1">
-                        <componente-division-circulo class="divisionCirculo" :secciones-enfrentadas="h1Step>=2"
-                            :mostrando-fondo="h1Step>=3" :mostrando-lineas="h1Step<3"
-                            v-for="(seccion, index) of h1DivisionesCirculo" :apertura="h1AperturaDivisionesCirculo"
-                            :index="index">
+                <componente-circulo :unidad="40" :determinante="{radio: h1RadioCirculo}" :style="[h1EstiloCirculo]"
+                    id="h1Circulo" :propiedades-simbolizadas="[]" :propiedades-representadas="[]">
+                    <template v-if="h1Step>=0">
+                        <componente-division-circulo class="divisionCirculo" :mostrando-fondo="h1Step>=2"
+                            :mostrando-lineas="h1Step<2" v-for="(seccion, index) of h1DivisionesCirculo"
+                            :apertura="h1AperturaDivisionesCirculo" :index="index"
+                            :progreso-reorganizacion="h1ProgresoReorganizacionDivisiones">
                         </componente-division-circulo>
                     </template>
-                        <div class="relleno" :style="[estiloRelleno]" v-show="h1Step>=0">
-                        </div>
+                    <div class="relleno" :style="[estiloRelleno]" v-show="h1Step>=0">
+                    </div>
                 </componente-circulo>
             </div>
-            <div class="flexVertical">
-                <input type="range" min=0 max=128 step=2 v-model.number="h1DivisionesCirculo" v-show="h1Step===0">
-                <transition name="enterBottom">
+            <div class="flexVertical" style="gap: 0px;">
+                <transition name="fadeIn">
+                    <recuadro-component tipo="instruccionPointer" class="flexVertical" v-show="h1Step===0">
+                        Dividir el círculo en secciones
+                        <input type="range" min=0 max=128 step=2 v-model.number="h1DivisionesCirculo">
+                    </recuadro-component>
+                </transition>
+                <transition name="fadeIn">
+                    <recuadro-component tipo="instruccionPointer" v-show="h1Step === 1" class="flexVertical">
+                        Reorganizar las secciones
+                        <input type="range" id="inputReorganizacionDivisiones" min="0" max="100" step="10"
+                            v-model.number="h1ProgresoReorganizacionDivisiones">
+                    </recuadro-component>
+                </transition>
+                <div class="flexHorizontal" style="margin-top: -10px">
+                    <button class="boton" @click="h1Step--" :class="{deshabilitado: h1Step<=0}">Atrás</button>
                     <button class="boton" @click="h1Step++" :key="h1Step"
-                        :class="{disabled: h1Step>=3}">{{h1TextoBoton}}({{h1DivisionesCirculo}})</button>
+                        :class="{deshabilitado: h1Step>=2 || (h1Step===0 && h1DivisionesCirculo<2) || (h1Step===1 && h1ProgresoReorganizacionDivisiones<100)}"
+                        :disabled="h1Step>=2 || (h1Step<0 && h1DivisionesCirculo < 2) || (h1Step===1 && h1ProgresoReorganizacionDivisiones<100)">Continuar</button>
+                </div>
+                <transition name="fadeIn">
+                    <recuadro-component tipo="datoNuevo" v-show="h1Step>=2">
+                        {{h1ComentarioFiguraFinal}}
+                    </recuadro-component>
                 </transition>
             </div>
 
         </bloque-component>
 
         <recuadro-component tipo="datoPrevio">
-            El área de un círculo es la mitad del área del rectángulo circunscrito
+            El área de un círculo es igual al área de un rectángulo que sea tan ancho como la mitad de su circunferencia
+            y tan largo
+            como su radio.
+
+            <div class="zonaFiguras flexHorizontal" style="gap: 50px">
+
+                <componente-circulo :determinante="{radio: 3.2}"
+                    style="background-color: var(--paletaActual); flex-wrap: wrap"
+                    :propiedades-representadas="['radio', 'circunferencia']"
+                    :propiedades-simbolizadas="['radio', 'circunferencia']">
+
+                </componente-circulo>
+                <div class="rectanguloDelCirculo">
+                    <div class="label labelCircunferencia">
+                        \( C \over 2\)
+                    </div>
+                    <div class="label labelRadio">
+                        r
+                    </div>
+                </div>
+            </div>
         </recuadro-component>
+
+        <recuadro-component tipo="datoPrevio">
+            El área de un círculo es la mitad de su circunferencia multiplicada por su radio:
+            <div style="font-size: 50px; margin: 10px auto; text-align: center;">
+                \( A= {{C \over 2 } * r } \)
+            </div>
+        </recuadro-component>
+
+
     </div>
 </body>
 
@@ -111,6 +159,10 @@
                 type: Boolean,
                 default: false,
             },
+            progresoReorganizacion: {
+                type: Number,
+                default: 0,
+            }
         },
         data() {
             return {}
@@ -121,32 +173,42 @@
             },
             estiloDivision() {
                 let alturaExtremo = 100 * Math.tan(this.apertura / 2);
-                let desplazamiento = 0;
-                let desplazamientoVertical = 0;
-                let ajusteDesplazamientoVertical = 0;
-                let rotacion = this.index * this.apertura;
-                if (this.seccionesEnfrentadas) {
-                    let stepDesplazamiento = 200 * Math.sin(this.apertura / 2);
-                    desplazamientoVertical = -25 * Math.cos(this.apertura / 2);
-                    ajusteDesplazamientoVertical = -0;
-                    let sizeFila = this.cantidadTotal / 2;
-                    if (this.index + 1 <= this.cantidadTotal / 2) {
-                        desplazamiento = sizeFila / 2 - 0.5 - (this.index) + 0.25
-                        rotacion = Math.PI / 2;
-                    }
-                    else {
-                        desplazamiento = -(-0.5 + (3 * sizeFila / 2)) + (this.index) - 0.25;
-                        desplazamientoVertical = -desplazamientoVertical;
-                        rotacion = 3 * Math.PI / 2;
-                        ajusteDesplazamientoVertical = -ajusteDesplazamientoVertical;
-                    }
-                    desplazamiento = desplazamiento * 100 * Math.sin(this.apertura / 2);
-                    console.log(`${this.index} con desplazamiento vertical ${desplazamientoVertical} y ajuste ${ajusteDesplazamientoVertical}`);
+                let desplazamientoInicial = 0;
+                let desplazamientoVerticalInicial = 0;
+                let rotacionInicial = this.index * this.apertura;
+
+                //Si hay reorganización
+                let desplazamientoFinal = desplazamientoInicial;
+                let rotacionFinal = rotacionInicial;
+                let stepDesplazamiento = 100 * Math.sin(this.apertura / 2);
+                let desplazamientoVerticalFinal = desplazamientoVerticalInicial;
+                let sizeFila = this.cantidadTotal / 2;
+                if (this.index + 1 <= this.cantidadTotal / 2) {
+                    desplazamientoFinal = sizeFila / 2 - 0.5 - (this.index) + 0.25
+                    rotacionFinal = Math.PI / 2;
+                    desplazamientoVerticalFinal = -25 * Math.cos(this.apertura / 2);
                 }
+                else {
+                    desplazamientoFinal = -(-0.5 + (3 * sizeFila / 2)) + (this.index) - 0.25;
+                    desplazamientoVerticalFinal = 25 * Math.cos(this.apertura / 2);
+                    rotacionFinal = 3 * Math.PI / 2;
+                }
+                desplazamientoFinal = desplazamientoFinal * stepDesplazamiento;
+
+                let porcentajeDesplazamiento = (desplazamientoFinal - desplazamientoInicial) / 100;
+                let porcentajeDesplazamientoVertical = (desplazamientoVerticalFinal - desplazamientoVerticalInicial) / 100;
+                let porcentajeRotacion = (rotacionFinal - rotacionInicial) / 100;
+
+                let desplazamiento = desplazamientoInicial + porcentajeDesplazamiento * this.progresoReorganizacion;
+                let desplazamientoVertical = desplazamientoVerticalInicial + porcentajeDesplazamientoVertical * this.progresoReorganizacion;
+                let rotacion = rotacionInicial + porcentajeRotacion * this.progresoReorganizacion;
+
+                console.log(`${this.index} con desplazamiento vertical ${desplazamientoVertical}`);
+
                 return {
                     transform: `rotate(${rotacion}rad)`,
                     left: desplazamiento + "%",
-                    top: `calc(${desplazamientoVertical}% + ${ajusteDesplazamientoVertical}px)`,
+                    top: `calc(${desplazamientoVertical}%)`,
                     clipPath: `polygon(50% 50%, 100% ${50 - alturaExtremo / 2}%, 100% ${50 + alturaExtremo / 2}%, 50% 50%)`,
                     borderColor: this.mostrandoLineas ? undefined : 'transparent',
                     backgroundColor: this.mostrandoFondo ? 'var(--paletaActual)' : undefined
@@ -167,7 +229,7 @@
     import {componenteCirculo} from "../../recursos/components/mats/circulo.js";
     import {componenteRectangulo} from "../../recursos/components/mats/rectangulo.js";
     import {componenteCuadriculaArea} from "../../recursos/components/mats/cuadriculaArea.js";
-    import {useUtils} from "http://192.168.1.100:3000/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
     const {ref, computed, nextTick, watch} = Vue;
     const {createApp} = Vue;
     Vue.createApp({
@@ -176,7 +238,7 @@
                 h1Step.value = 0;
             }
             const h1RadioCirculo = ref(5)
-            const h1DivisionesCirculo = ref(8);
+            const h1DivisionesCirculo = ref(0);
             const h1AperturaDivisionesCirculo = computed(() => {
                 return 2 * Math.PI / h1DivisionesCirculo.value
             })
@@ -185,11 +247,13 @@
             const h1Descripcion = ref('');
 
             const h1Step = ref(0);
+            const h1ProgresoReorganizacionDivisiones = ref(0);
             watch(h1Step, (step) => {
                 console.log("stepping up")
                 switch (step) {
                     case 0:
                         h1TextoBoton.value = 'Dividir el círculo en secciones';
+                        h1ProgresoReorganizacionDivisiones.value = 0;
                         break;
                     case 1:
                         h1TextoBoton.value = 'Reorganizar las secciones';
@@ -202,21 +266,45 @@
                 }
             }, {immediate: true});
 
+            const h1ComentarioFiguraFinal = computed(() => {
+                if (h1DivisionesCirculo.value > 120) {
+                    return 'Esta figura es casi un rectángulo'
+                }
+                else if (h1DivisionesCirculo.value > 80) {
+                    return 'Esta figura es muy semejante a un rectángulo'
+                }
+                else if (h1DivisionesCirculo.value > 20) {
+                    return 'Esta figura tiene algo de parecido con un rectángulo'
+                }
+                else if (h1DivisionesCirculo.value >= 12) {
+                    return 'Esta figura tiene cierta uniformidad'
+                }
+                return 'Esta figura no tiene una forma conocida'
+            })
+
+
             const estiloRelleno = computed(() => {
                 return {
-                    backgroundColor: h1Step.value > 2 ? `var(--paletaActual)` : 'transparent',
+                    backgroundColor: h1Step.value >= 2 ? `var(--paletaActual)` : 'transparent',
                     height: `${50 * Math.cos(h1AperturaDivisionesCirculo.value / 2)}%`,
                     width: `${50 * Math.sin(h1AperturaDivisionesCirculo.value / 2) * 2 * (h1DivisionesCirculo.value / 2 - 0.5)}%`,
                     left: `${50 - (50 * Math.sin(h1AperturaDivisionesCirculo.value / 2) * 2 * (h1DivisionesCirculo.value / 4 - 0.25))}%`,
                     top: `${50 - 25 * Math.cos(h1AperturaDivisionesCirculo.value / 2)}%`,
+                    transition: h1Step.value === 2 ? `background-color 0.5s` : '',
+                    transitionDelay: h1Step.value === 2 ? `0.5s` : '',
                 }
             });
+            const h1EstiloCirculo = computed(() => {
+                return {
+                    transitionDelay: h1Step.value === 0 ? '0.5s' : '',
+                    borderColor: h1Step.value > 0 ? 'transparent' : undefined
+                }
+            })
             return {
-                h1Reiniciar, h1TextoBoton, h1Descripcion,
-                h1RadioCirculo, h1Step, h1DivisionesCirculo, h1AperturaDivisionesCirculo,
-                estiloRelleno,
+                h1Reiniciar, h1TextoBoton, h1Descripcion, h1ComentarioFiguraFinal,
+                h1RadioCirculo, h1Step, h1ProgresoReorganizacionDivisiones, h1DivisionesCirculo, h1AperturaDivisionesCirculo,
+                estiloRelleno, h1EstiloCirculo
             }
-
         },
         components: {
             recuadroComponent,
@@ -246,7 +334,7 @@
         transform-origin: center center;
         width: 100%;
         height: 100%;
-        transition: all 4.3s, background-color 1s;
+        transition: transform 0.3s, top 0.3s, left 0.3s, background-color 1s;
     }
 
     .bordeDivisionCirculo {
@@ -259,10 +347,35 @@
         left: 50%;
     }
 
+    .rectanguloDelCirculo {
+        width: 200px;
+        height: 68px;
+        background-color: var(--paletaActual);
+        position: relative;
+    }
+
+    .rectanguloDelCirculo .label {
+        position: absolute;
+        font-size: 15px;
+        transform: translate(-50%, -50%);
+    }
+
+    .rectanguloDelCirculo .labelCircunferencia {
+        bottom: calc(100% - 8px);
+        left: 50%;
+    }
+
+    .rectanguloDelCirculo .labelRadio {
+        left: calc(100% + 5px);
+        top: 50%;
+    }
+
+    .zonaFiguras {
+        padding: 100px 0px;
+    }
+
     .componenteCirculo .relleno {
         position: absolute;
-        transition: all 0.5s;
-        transition-delay: 0.5s;
     }
 
     .faderelleno-enter-from,

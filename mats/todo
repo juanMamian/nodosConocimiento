@@ -1,4 +1,5 @@
 -En el nodo de evaluación de rapidez media, el campo de introducir respuesta se sale por un lado en móviles.
+-En el nodo de simplificacion de expresiones numéricas por cancelación, en la evaluación 3, el nodo dice "incorrecto cuando la respuesta es correcta. Observado en una raiz de grado distinto a la potencia que fue marcado como "no hay cancelación".
 -En el generador de expresiones el Math.pow no logra ejecutar una potencia a una fracción negativa y por lo tanto no puede generar una subexpresión para radicación de números negativos.
 -Terminar de hacer el generador de retos para manipulados basico de expresiones. Por el momento genera una expresión reexpresionada una sola vez y deja el trabajo de generar un reto para que algún experto se lo invente.
 -Hacer los ejemplos de expresionesSimplificadas en el nodo simplificacionCancelacionExplicacion.html

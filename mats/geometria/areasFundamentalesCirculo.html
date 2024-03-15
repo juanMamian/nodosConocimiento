@@ -45,13 +45,40 @@
             <div class="zonaInteraccion">
                 <componente-circulo :unidad="40" :determinante="{radio: h1RadioCirculo}" :style="[h1EstiloCirculo]"
                     id="h1Circulo" :propiedades-simbolizadas="[]" :propiedades-representadas="[]">
+                    <div class="circunferenciaHovered" v-show="h1MostrandoCircunferencia && h1DivisionesCirculo===0">
+
+                    </div>
+                    <transition name="fade">
+                        <div class="labelEspecialCircunferencia labelCompleta"
+                            @pointerenter="h1MostrandoCircunferencia=true"
+                            @pointerleave="h1MostrandoCircunferencia=false"
+                            v-show="h1ProgresoReorganizacionDivisiones===0">
+                            C
+                        </div>
+                    </transition>
+                    <transition name="fade">
+                        <div class="labelEspecialCircunferencia labelMedia"
+                            v-show="h1ProgresoReorganizacionDivisiones===100"
+                            :style="[{bottom: 100 -  25*Math.cos(h1AperturaDivisionesCirculo/2) + '%'}]"
+                            @pointerenter="h1MostrandoMediaCircunferencia=-1"
+                            @pointerleave="h1MostrandoMediaCircunferencia=0">
+                            \(C \over 2 \)
+                        </div>
+                    </transition>
                     <template v-if="h1Step>=0">
                         <componente-division-circulo class="divisionCirculo" :mostrando-fondo="h1Step>=2"
-                            :mostrando-lineas="h1Step<2" v-for="(seccion, index) of h1DivisionesCirculo"
-                            :apertura="h1AperturaDivisionesCirculo" :index="index"
-                            :progreso-reorganizacion="h1ProgresoReorganizacionDivisiones">
+                            :resaltando-borde="h1MostrandoCircunferencia"
+                            :mostrando-mitad-borde="h1MostrandoMediaCircunferencia" :mostrando-lineas="h1Step<2"
+                            v-for="(seccion, index) of h1DivisionesCirculo" :apertura="h1AperturaDivisionesCirculo"
+                            :index="index" :progreso-reorganizacion="h1ProgresoReorganizacionDivisiones">
                         </componente-division-circulo>
                     </template>
+                    <transition name="fade">
+                        <div class="labelEspecialRadio" v-show="h1ProgresoReorganizacionDivisiones==100"
+                            :style="[{rotation: h1ProgresoReorganizacionDivisiones * Math.PI/200, left: 54 + (h1DivisionesCirculo/4)*100*Math.sin(h1AperturaDivisionesCirculo/2) + '%'}]">
+                            r
+                        </div>
+                    </transition>
                     <div class="relleno" :style="[estiloRelleno]" v-show="h1Step>=0">
                     </div>
                 </componente-circulo>
@@ -131,14 +158,16 @@
     const componenteDivisionCirculo = {
         template: `
             <div class="componenteDivisionCirculo" :style="[estiloDivision]">
-            <transition name="fade" appear>
-                <div class="bordeDivisionCirculo" :style="[estiloBorde1]" v-show="mostrandoLineas">
-                </div>
-            </transition>
-            <transition name="fade" appear>
-                <div class="bordeDivisionCirculo" :style="[estiloBorde2]" v-show="mostrandoLineas">
-                </div>
-            </transition>
+                <transition name="fade" appear>
+                    <div class="bordeDivisionCirculo" :style="[estiloBorde1]" v-show="mostrandoLineas || mostrandoMitadBorde===1">
+                    </div>
+                </transition>
+                <transition name="fade" appear>
+                    <div class="bordeDivisionCirculo" :style="[estiloBorde2]" v-show="mostrandoLineas || mostrandoMitadBorde===-1">
+                    </div>
+                </transition>
+                <slot>
+                </slot>
             </div>
         `,
         props: {
@@ -164,6 +193,14 @@
                 default: false,
             },
             progresoReorganizacion: {
+                type: Number,
+                default: 0,
+            },
+            resaltandoBorde: {
+                type: Boolean,
+                default: false
+            },
+            mostrandoMitadBorde: {
                 type: Number,
                 default: 0,
             }
@@ -214,7 +251,8 @@
                     left: desplazamiento + "%",
                     top: `calc(${desplazamientoVertical}%)`,
                     clipPath: `polygon(50% 50%, 100% ${50 - alturaExtremo / 2}%, 100% ${50 + alturaExtremo / 2}%, 50% 50%)`,
-                    borderColor: this.mostrandoLineas ? undefined : 'transparent',
+                    borderColor: !this.mostrandoLineas ? 'transparent' : this.resaltandoBorde ? 'var(--paletaActual)' : undefined,
+                    borderWidth: this.resaltandoBorde ? '3px' : '1px',
                     backgroundColor: this.mostrandoFondo ? 'var(--paletaActual)' : undefined
                 }
             },
@@ -236,7 +274,8 @@
     import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
     const {ref, computed, nextTick, watch} = Vue;
     const {createApp} = Vue;
-    Vue.createApp({
+
+    const app = Vue.createApp({
         setup() {
             function h1Reiniciar() {
                 h1Step.value = 0;
@@ -298,16 +337,21 @@
                     transitionDelay: h1Step.value === 2 ? `0.5s` : '',
                 }
             });
+            const h1MostrandoCircunferencia = ref(false);
+            const h1MostrandoMediaCircunferencia = ref(0);
             const h1EstiloCirculo = computed(() => {
                 return {
                     transitionDelay: h1Step.value === 0 ? '0.5s' : '',
-                    borderColor: h1Step.value > 0 ? 'transparent' : undefined
+                    transitionProperty: 'border-color',
+                    borderColor: h1Step.value > 0 ? 'transparent' : undefined,
+                    borderWidth: h1DivisionesCirculo.value > 0 ? '0px' : '1px'
                 }
             })
             return {
                 h1Reiniciar, h1TextoBoton, h1Descripcion, h1ComentarioFiguraFinal,
                 h1RadioCirculo, h1Step, h1ProgresoReorganizacionDivisiones, h1DivisionesCirculo, h1AperturaDivisionesCirculo,
-                estiloRelleno, h1EstiloCirculo
+                estiloRelleno, h1EstiloCirculo, h1MostrandoCircunferencia, h1MostrandoMediaCircunferencia,
+
             }
         },
         components: {
@@ -319,7 +363,9 @@
             componenteCuadriculaArea,
             componenteDivisionCirculo,
         },
-    }).mount("#doc");
+    })
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('mjx');
+    app.mount("#doc");
 
 </script>
 
@@ -327,6 +373,18 @@
     #h1Circulo {
         margin: 40px auto;
         position: relative;
+    }
+
+    .circunferenciaHovered {
+        border: 2px solid var(--paletaActual);
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        z-index: 3;
+        box-sizing: border-box;
     }
 
     .componenteDivisionCirculo {
@@ -339,6 +397,29 @@
         width: 100%;
         height: 100%;
         transition: transform 0.3s, top 0.3s, left 0.3s, background-color 1s;
+    }
+
+    .labelEspecialCircunferencia {
+        font-size: 19px;
+        position: absolute;
+        transform: translate(-50%, -50%);
+    }
+
+    .labelEspecialCircunferencia.labelCompleta {
+        top: 50%;
+        left: -10%;
+    }
+
+    .labelEspecialCircunferencia.labelMedia {
+        left: 50%;
+        top: 10%;
+    }
+
+    .labelEspecialRadio {
+        transform: translate(-0%, -50%);
+        position: absolute;
+        top: 50%;
+        left: 120%;
     }
 
     .bordeDivisionCirculo {

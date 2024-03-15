@@ -1,0 +1,3 @@
+[submodule "programacion/nodosScratch"]
+	path = programacion/nodosScratch
+	url = ssh://vidap@192.168.1.151/home/vidap/gitBares/nodosScratch

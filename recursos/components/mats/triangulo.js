@@ -65,7 +65,7 @@ export const componenteTriangulo = {
             type: Number,
             default: 20,
         },
-        colorRelleno:{
+        colorRelleno: {
             type: String,
             default: 'gray'
         }
@@ -106,8 +106,8 @@ export const componenteTriangulo = {
                 left: this.unidad * this.xPunta + 'px',
             }
         },
-        estiloRelleno(){
-            let xPuntaPorcentaje=this.xPunta * 100 / this.ancho;
+        estiloRelleno() {
+            let xPuntaPorcentaje = this.xPunta * 100 / this.ancho;
             return {
                 width: this.unidad * this.ancho + 'px',
                 height: this.unidad * this.largo + 'px',

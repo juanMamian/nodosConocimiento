@@ -20,8 +20,14 @@
     left: 50%;
     font-size: 15px;
     display: flex;
+    flex-direction: row;
     gap: 5px;
     padding: 3px 5px;
+    z-index: 1;
+}
+
+.componenteCirculo .label span {
+    display: flex;
 }
 
 .componenteTriangulo .label.explicitable:hover,
@@ -46,7 +52,7 @@
 
 .componenteTriangulo .labelLargo {
     top: 50%;
-    left: calc(50% + 10px);
+    left: calc(50% + 20px);
     transform: translate(-50%, -50%);
 }
 
@@ -67,20 +73,24 @@
 .componenteTriangulo .ladoBase {
     width: 100%
 }
+
 .componenteTriangulo .lado2 {
     left: 100%;
 }
+
 .componenteTriangulo .representacionLargo {
     border-right: 1px dashed black;
     width: 0px;
     height: 100%;
-    position: absolute; 
+    position: absolute;
     top: 0px;
 }
-.componenteTriangulo .relleno{
+
+.componenteTriangulo .relleno {
     background-color: gray;
     opacity: 0.4;
     position: absolute;
     top: 0px;
     left: 0px;
+    z-index: 0;
 }

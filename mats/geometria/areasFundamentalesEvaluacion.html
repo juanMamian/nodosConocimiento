@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script id="MathJax-script" async
+        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+    <link rel="stylesheet" href="../../recursos/components/mats/rectanguloEstilo.css">
+    <link rel="stylesheet" href="../../recursos/components/mats/circuloEstilo.css">
+    <link rel="stylesheet" href="../../recursos/components/mats/trianguloEstilo.css">
+    <link rel="stylesheet" href="../../recursos/components/mats/cuadriculaEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Áreas fundamentales - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Conozco las áreas fundamentales si:
+        </p>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada cualquier figura fundamental puedo calcular su área.
+            </template>
+
+            <div class="flexVertical">
+                <button class="boton" @click="e1GenerarReto">
+                    Generar reto
+                </button>
+
+                <transition name="fadeIn">
+                    <div class="zonaFigura" :key="e1VersionReto">
+                        <componente-rectangulo v-if="e1RetoRectangulo" v-bind="e1RetoRectangulo"
+                            :propiedades-representadas="['ancho', 'largo']"
+                            :propiedades-simbolizadas="['ancho', 'largo']"
+                            :propiedades-explicitables="['ancho', 'largo']">
+                        </componente-rectangulo>
+
+                        <componente-triangulo v-if="e1RetoTriangulo" v-bind="e1RetoTriangulo"
+                            :color-relleno="'transparent'" :propiedades-representadas="['ancho', 'largo']"
+                            :propiedades-simbolizadas="['ancho', 'largo']"
+                            :propiedades-explicitables="['ancho', 'largo']">
+                        </componente-triangulo>
+
+                        <componente-circulo v-if="e1RetoCirculo" v-bind="e1RetoCirculo">
+                        </componente-circulo>
+                    </div>
+                </transition>
+
+                <recuadro-component tipo="instruccionTeclado"
+                    v-show="e1RetoRectangulo || e1RetoTriangulo || e1RetoCirculo">
+                    <div class="flexVertical">
+                        Escribe aquí tu respuesta
+                        <input type="number" @keypress.enter="e1EvaluarRespuestaUsuario" id="e1InputRespuestaUsuario"
+                            ref="e1InputRespuestaUsuario" />
+                        <button class="boton" @click="e1EvaluarRespuestaUsuario">Aceptar</button>
+                    </div>
+                </recuadro-component>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" :modo="e1RespuestaUsuarioCorrecta?'correcto':'incorrecto'"
+                        v-if="e1RespuestaUsuarioCorrecta!=null" :key="e1VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+            </div>
+        </bloque-component>
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+
+    import {componenteCirculo} from "../../recursos/components/mats/circulo.js";
+    import {componenteTriangulo} from "../../recursos/components/mats/triangulo.js";
+    import {componenteRectangulo} from "../../recursos/components/mats/rectangulo.js";
+    import {componenteCuadriculaArea} from "../../recursos/components/mats/cuadriculaArea.js";
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+
+    Vue.createApp({
+        setup() {
+            const {scrollToElemento} = useUtils();
+            const e1RetoRectangulo = ref(null);
+            const e1RetoTriangulo = ref(null);
+            const e1RetoCirculo = ref(null);
+            const e1Respuesta = ref(null);
+            const e1RespuestaUsuarioCorrecta = ref(null);
+
+            function e1Reiniciar() {
+                e1RetoRectangulo.value = null;
+                e1RetoTriangulo.value = null;
+                e1RetoCirculo.value = null;
+                e1Respuesta.value = null;
+                if (e1InputRespuestaUsuario.value) {
+                    e1InputRespuestaUsuario.value.value = null;
+                }
+                e1RespuestaUsuarioCorrecta.value = null;
+            }
+
+            const e1VersionReto = ref(0);
+            function e1GenerarReto() {
+                e1Reiniciar();
+                let dado = Math.ceil(Math.random() * 3);
+                if (dado === 1) {
+                    let minAncho = 3;
+                    let rangoAncho = 10;
+                    let minLargo = 2;
+                    let rangoLargo = 5;
+                    e1RetoRectangulo.value = {
+                        ancho: Math.round(Math.random() * rangoAncho) + minAncho,
+                        largo: Math.round(Math.random() * rangoLargo) + minLargo,
+                    }
+                    e1Respuesta.value = e1RetoRectangulo.value.ancho * e1RetoRectangulo.value.largo;
+                }
+                else if (dado === 2) {
+                    let minAncho = 3;
+                    let rangoAncho = 10;
+                    let minLargo = 2;
+                    let rangoLargo = 5;
+                    let ancho = Math.round(Math.random() * rangoAncho) + minAncho;
+                    e1RetoTriangulo.value = {
+                        ancho,
+                        largo: Math.round(Math.random() * rangoLargo) + minLargo,
+                        xPunta: Math.round(Math.random() * ancho),
+                    }
+                    e1Respuesta.value = e1RetoTriangulo.value.ancho * e1RetoTriangulo.value.largo / 2;
+                }
+                else if (dado === 3) {
+                    let dado = Math.ceil(Math.random() * 3);
+                    let determinante = {};
+                    console.log("circulo" + dado);
+                    if (dado === 1) {
+                        let minRadio = 3;
+                        let rangoRadio = 15;
+                        let radio = Math.round(Math.random() * rangoRadio) + minRadio;
+                        determinante.radio = radio;
+                        e1Respuesta.value = radio * radio * Math.PI;
+                    }
+                    else if (dado === 2) {
+                        let minDiametro = 6;
+                        let rangoDiametro = 15;
+                        let diametro = Math.round(Math.random() * rangoDiametro) + minDiametro;
+                        determinante.diametro = diametro;
+                        e1Respuesta.value = diametro * Math.PI * diametro / 4
+                    }
+                    else if (dado === 3) {
+                        let minCircunferencia = 16;
+                        let rangoCircunferencia = 20;
+                        let circunferencia = Math.round(Math.random() * rangoCircunferencia) + minCircunferencia;
+                        determinante.circunferencia = circunferencia;
+                        e1Respuesta.value = circunferencia / (2 * Math.PI) * circunferencia / 2;
+                    }
+                    e1RetoCirculo.value = {
+                        determinante
+                    }
+                }
+                console.log(`Respuesta ${e1Respuesta.value}`);
+                e1VersionReto.value++;
+            }
+
+            const e1InputRespuestaUsuario = ref(null);
+            const e1VersionRespuestaUsuario = ref(0);
+            function e1EvaluarRespuestaUsuario() {
+                if (!e1InputRespuestaUsuario.value) {
+                    console.log(`No había input de respuesta de usuario`);
+                    return;
+                }
+                let respuestaUsuario = Number(e1InputRespuestaUsuario.value.value.trim());
+                if (Math.abs(respuestaUsuario - e1Respuesta.value) < 0.1) {
+                    e1RespuestaUsuarioCorrecta.value = true;
+                }
+                else {
+                    e1RespuestaUsuarioCorrecta.value = false;
+                }
+                e1VersionRespuestaUsuario.value++;
+            }
+
+            return {
+                e1RespuestaUsuarioCorrecta, e1Respuesta, e1VersionRespuestaUsuario, e1InputRespuestaUsuario, e1Reiniciar, e1GenerarReto, e1EvaluarRespuestaUsuario, e1VersionReto, scrollToElemento,
+                e1RetoCirculo, e1RetoTriangulo, e1RetoRectangulo
+            }
+
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteCirculo,
+            componenteRectangulo,
+            componenteTriangulo,
+            componenteCuadriculaArea,
+        },
+    }).mount("#doc");
+
+</script>
+
+<style>
+    .zonaFigura {
+        padding: 50px 50px;
+        margin: 10px auto;
+    }
+</style>

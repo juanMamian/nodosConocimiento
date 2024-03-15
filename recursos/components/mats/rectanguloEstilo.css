@@ -26,6 +26,10 @@
     padding: 3px 5px;
 }
 
+.componenteCirculo .label span {
+    display: flex;
+}
+
 .componenteRectangulo .label.explicitable:hover,
 .componenteRectangulo .label.explicitado:hover {
     background-color: var(--paletaActual);
@@ -46,12 +50,13 @@
     display: block;
 }
 
-.componenteRectangulo .labelLargo{
+.componenteRectangulo .labelLargo {
     top: 50%;
     left: calc(100% + 10px);
     transform: translateY(-50%);
 }
-.componenteRectangulo .labelAncho{
+
+.componenteRectangulo .labelAncho {
     top: unset;
     left: 50%;
     bottom: calc(100% + 10px);

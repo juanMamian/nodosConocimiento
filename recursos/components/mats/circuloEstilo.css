@@ -39,30 +39,39 @@
         gap: 5px;
         padding: 3px 5px;
     }
-    .componenteCirculo .label.explicitable:hover, .componenteCirculo .label.explicitado:hover {
+
+    .componenteCirculo .label span {
+        display: flex;
+    }
+
+    .componenteCirculo .label.explicitable:hover,
+    .componenteCirculo .label.explicitado:hover {
         background-color: var(--paletaActual);
         color: white;
         border-radius: 2px;
         z-index: 2;
     }
 
-    .componenteCirculo .labelCircunferencia{
+    .componenteCirculo .labelCircunferencia {
         position: absolute;
         top: calc(100% + 10px);
         left: 50%;
         transform: translate(-50%, -50%);
     }
-    .componenteCirculo .label .visibleHovered{
+
+    .componenteCirculo .label .visibleHovered {
         display: none;
     }
-    .componenteCirculo .label.explicitado .visibleHovered{
-        display: block;
-    }
-    .componenteCirculo .label.explicitable:hover .visibleHovered{
+
+    .componenteCirculo .label.explicitado .visibleHovered {
         display: block;
     }
 
-    .componenteCirculo .representacion:hover{
+    .componenteCirculo .label.explicitable:hover .visibleHovered {
+        display: block;
+    }
+
+    .componenteCirculo .representacion:hover {
         z-index: 1;
     }
 

@@ -9450,7 +9450,7 @@ var Vue = (function (exports) {
    */
   const compatUtils = (null);
 
-  const svgNS = 'http://www.w3.org/2000/svg';
+  const svgNS = 'https://www.w3.org/2000/svg';
   const doc = (typeof document !== 'undefined' ? document : null);
   const templateContainer = doc && /*#__PURE__*/ doc.createElement('template');
   const nodeOps = {
@@ -9632,7 +9632,7 @@ var Vue = (function (exports) {
       return rawName;
   }
 
-  const xlinkNS = 'http://www.w3.org/1999/xlink';
+  const xlinkNS = 'https://www.w3.org/1999/xlink';
   function patchAttr(el, key, value, isSVG, instance) {
       if (isSVG && key.startsWith('xlink:')) {
           if (value == null) {

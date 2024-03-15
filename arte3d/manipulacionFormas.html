@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
@@ -176,7 +176,7 @@
 					parent.appendChild(elem);
 				}
 			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var protocol = window.location.protocol === 'https:' ? 'ws://' : 'wss://';
 			var address = protocol + window.location.host + window.location.pathname + '/ws';
 			var socket = new WebSocket(address);
 			socket.onmessage = function (msg) {

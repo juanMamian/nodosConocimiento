@@ -1,0 +1,44 @@
+.componenteAngulo {
+    position: relative;
+}
+
+.componenteAngulo .linea {
+    height: 2px;
+    background-color: black;
+    width: 50%;
+    transform-origin: center left;
+    position: absolute;
+    top: calc(50% - 2px);
+    left: 50%;
+}
+
+.componenteAngulo .canvasAngulo {
+    width: 100%;
+    height: 100%;
+}
+
+.componenteAngulo .label {
+    position: absolute;
+    display: flex;
+    
+}
+
+.componenteAngulo .label.explicitable:hover,
+.componenteAngulo .label.explicitado:hover {
+    background-color: var(--paletaActual);
+    color: white;
+    border-radius: 2px;
+    z-index: 2;
+}
+
+.componenteAngulo .label .visibleHovered {
+    display: none;
+}
+
+.componenteAngulo .label.explicitado .visibleHovered {
+    display: block;
+}
+
+.componenteAngulo .label.explicitable:hover .visibleHovered {
+    display: block;
+}

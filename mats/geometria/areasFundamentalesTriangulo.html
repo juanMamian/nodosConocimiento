@@ -13,9 +13,12 @@
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
     <script
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/rectanguloEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/trianguloEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/cuadriculaEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/rectanguloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/trianguloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/cuadriculaEstilo.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
@@ -54,10 +57,14 @@
                     </componente-rectangulo>
                 </componente-triangulo>
             </div>
-            <div class="flexVertical">
-                <transition name="enterBottom">
-                    <button class="boton" @click="h1Step++" :key="h1Step"
-                        :class="{disabled: h1Step>=3}">{{h1TextoBoton}}</button>
+            <div class="flexHorizontal" style="width: fit-content; margin: 10px auto">
+                <transition name="fadeIn">
+                    <button class="boton" @click="h1Step--" 
+                        :class="{deshabilitado: h1Step<=0}">Atras</button>
+                </transition>
+                <transition name="fadeIn">
+                    <button class="boton" @click="h1Step++"
+                        :class="{deshabilitado: h1Step>=3}">{{h1TextoBoton}}</button>
                 </transition>
             </div>
 

@@ -374,7 +374,7 @@ input {
 
 
 
-@keyframes travelbottom {
+@keyframes travelBottom {
     0% {
         transform: translateY(100%);
         opacity: 0;

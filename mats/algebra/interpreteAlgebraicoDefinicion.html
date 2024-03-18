@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script id="MathJax-script" async
+        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+
+
+    <title>Intérprete algebráico - explicación.</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Muchos fenómenos o situaciones de la realidad pueden ser expresadas mediante ecuaciones o inecuaciones.
+        </p>
+        <p>
+            Para lograrlo, es útil:
+        </p>
+        <ul>
+            <li>
+                Identificar incógnitas y asignarles un símbolo
+            </li>
+            <li>
+                Construir ecuaciones y/o inecuaciones
+            </li>
+        </ul>
+
+        <bloque-component tipo='ejemplo' @plegado="e1Reiniciar">
+            <template #cabecera>
+                En este cuadro se puede ver ejemplos en los que un fenomeno o situación es expresada mediante ecuaciones
+                o inecuaciones.
+            </template>
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="descripcionRealidad">
+                        Simón es tres años mayor que Gloria.
+                    </div>
+                    <button class="boton" @click="e1EstadoEjemplos[0]=1" :disabled="e1EstadoEjemplos[0]>=1"
+                        :class="{deshabilitado: e1EstadoEjemplos[0]>=1}">Identificar
+                        incógnitas</button>
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' style="text-align: left" v-show="e1EstadoEjemplos[0]>=1">
+                            <div class="listaIncognitas">
+                                <ul>
+                                    <li>
+                                        <span class="incognitaTexto" :class="{opacada: e1EstadoEjemplos[0]>=2}">Edad de
+                                            Simón</span>
+                                        <transition name="fadeIn"><span v-show="e1EstadoEjemplos[0]>=2"><span
+                                                    class="opacada">:</span><span class="incognitaSimbolo">
+                                                    s</span><span class="opacada">.</span></span></transition>
+                                    </li>
+                                    <li>
+                                        <span class="incognitaTexto" :class="{opacada: e1EstadoEjemplos[0]>=2}">Edad de
+                                            Gloria</span>
+                                        <transition name="fadeIn"> <span v-show="e1EstadoEjemplos[0]>=2"><span
+                                                    class="opacada">:</span> <span class="incognitaSimbolo">
+                                                    g</span><span class="opacada">.</span></span></transition>
+                                    </li>
+                                </ul>
+                            </div>
+                        </recuadro-component>
+                    </transition>
+                    <button class="boton" @click="e1EstadoEjemplos[0]=2" :disabled="e1EstadoEjemplos[0]!=1"
+                        v-show="e1EstadoEjemplos[0]>=1" :class="{deshabilitado: e1EstadoEjemplos[0]!=1}">Asignar
+                        símbolos</button>
+                    <button class="boton" @click="e1EstadoEjemplos[0]=3" :disabled="e1EstadoEjemplos[0]!=2"
+                        v-show="e1EstadoEjemplos[0]>=2" :class="{deshabilitado: e1EstadoEjemplos[0]!=2}">Construir
+                        una ecuación</button>
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' style="text-align: left" v-show="e1EstadoEjemplos[0]>=3">
+                            <div class="descripcionAlgebraica">
+                                \( s = g + 3 \)
+                            </div>
+                        </recuadro-component>
+                    </transition>
+
+                </div>
+                <div class="itemEjemplo">
+                    <div class="descripcionRealidad">
+                        Tenía algo de dinero y gasté 2000.
+                    </div>
+                    <button class="boton" @click="e1EstadoEjemplos[1]=1" :disabled="e1EstadoEjemplos[1]>=1"
+                        :class="{deshabilitado: e1EstadoEjemplos[1]>=1}">Identificar
+                        incógnitas</button>
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' style="text-align: left" v-show="e1EstadoEjemplos[1]>=1">
+                            <div class="listaIncognitas">
+                                <ul>
+                                    <li>
+                                        <span class="incognitaTexto" :class="{opacada: e1EstadoEjemplos[1]>=2}">Dinero
+                                            antes
+                                        </span>
+                                        <transition name="fadeIn"><span v-show="e1EstadoEjemplos[1]>=2"><span
+                                                    class="opacada">:</span><span class="incognitaSimbolo">
+                                                    a</span><span class="opacada">.</span></span></transition>
+                                    </li>
+                                    <li>
+                                        <span class="incognitaTexto" :class="{opacada: e1EstadoEjemplos[1]>=2}">Dinero
+                                            al final
+                                        </span>
+                                        <transition name="fadeIn"> <span v-show="e1EstadoEjemplos[1]>=2"><span
+                                                    class="opacada">:</span> <span class="incognitaSimbolo">
+                                                    f</span><span class="opacada">.</span></span></transition>
+                                    </li>
+                                </ul>
+                            </div>
+                        </recuadro-component>
+                    </transition>
+                    <button class="boton" @click="e1EstadoEjemplos[1]=2" :disabled="e1EstadoEjemplos[1]!=1"
+                        v-show="e1EstadoEjemplos[1]>=1" :class="{deshabilitado: e1EstadoEjemplos[1]!=1}">Asignar
+                        símbolos</button>
+                    <button class="boton" @click="e1EstadoEjemplos[1]=3" :disabled="e1EstadoEjemplos[1]!=2"
+                        v-show="e1EstadoEjemplos[1]>=2" :class="{deshabilitado: e1EstadoEjemplos[1]!=2}">Construir
+                        una ecuación</button>
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' style="text-align: left" v-show="e1EstadoEjemplos[1]>=3">
+                            <div class="descripcionAlgebraica">
+                                \( f = a - 2000 \)
+                            </div>
+                        </recuadro-component>
+                    </transition>
+
+                </div>
+                <div class="itemEjemplo">
+                    <div class="descripcionRealidad">
+                        Se vendieron muchos almuerzos, cada uno a 12000. En total se recibieron 516000.
+                    </div>
+                    <button class="boton" @click="e1EstadoEjemplos[2]=1" :disabled="e1EstadoEjemplos[2]>=1"
+                        :class="{deshabilitado: e1EstadoEjemplos[2]>=1}">Identificar
+                        incógnitas</button>
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' style="text-align: left" v-show="e1EstadoEjemplos[2]>=1">
+                            <div class="listaIncognitas">
+                                <ul>
+                                    <li>
+                                        <span class="incognitaTexto" :class="{opacada: e1EstadoEjemplos[2]>=2}">Cantidad
+                                            de almuerzos vendidos
+                                        </span>
+                                        <transition name="fadeIn"><span v-show="e1EstadoEjemplos[2]>=2"><span
+                                                    class="opacada">:</span><span class="incognitaSimbolo">
+                                                    a</span><span class="opacada">.</span></span></transition>
+                                    </li>
+                                </ul>
+                            </div>
+                        </recuadro-component>
+                    </transition>
+                    <button class="boton" @click="e1EstadoEjemplos[2]=2" :disabled="e1EstadoEjemplos[2]!=1"
+                        v-show="e1EstadoEjemplos[2]>=1" :class="{deshabilitado: e1EstadoEjemplos[2]!=1}">Asignar
+                        símbolos</button>
+                    <button class="boton" @click="e1EstadoEjemplos[2]=3" :disabled="e1EstadoEjemplos[2]!=2"
+                        v-show="e1EstadoEjemplos[2]>=2" :class="{deshabilitado: e1EstadoEjemplos[2]!=2}">Construir
+                        una ecuación</button>
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' style="text-align: left" v-show="e1EstadoEjemplos[2]>=3">
+                            <div class="descripcionAlgebraica">
+                                \( 12000 \times a = 516000 \)
+                            </div>
+                        </recuadro-component>
+                    </transition>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="descripcionRealidad">
+                        120 personas, entre hombres y mujeres, asistieron a un espectáculo artístico.
+                    </div>
+                    <button class="boton" @click="e1EstadoEjemplos[3]=1" :disabled="e1EstadoEjemplos[3]>=1"
+                        :class="{deshabilitado: e1EstadoEjemplos[3]>=1}">Identificar
+                        incógnitas</button>
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' style="text-align: left" v-show="e1EstadoEjemplos[3]>=1">
+                            <div class="listaIncognitas">
+                                <ul>
+                                    <li>
+                                        <span class="incognitaTexto" :class="{opacada: e1EstadoEjemplos[3]>=2}">Cantidad de hombres
+                                        </span>
+                                        <transition name="fadeIn"><span v-show="e1EstadoEjemplos[3]>=2"><span
+                                                    class="opacada">:</span><span class="incognitaSimbolo">
+                                                    h</span><span class="opacada">.</span></span></transition>
+                                    </li>
+                                    <li>
+                                        <span class="incognitaTexto" :class="{opacada: e1EstadoEjemplos[3]>=2}">Cantidad de mujeres
+                                        </span>
+                                        <transition name="fadeIn"><span v-show="e1EstadoEjemplos[3]>=2"><span
+                                                    class="opacada">:</span><span class="incognitaSimbolo">
+                                                    m</span><span class="opacada">.</span></span></transition>
+                                    </li>
+                                </ul>
+                            </div>
+                        </recuadro-component>
+                    </transition>
+                    <button class="boton" @click="e1EstadoEjemplos[3]=2" :disabled="e1EstadoEjemplos[3]!=1"
+                        v-show="e1EstadoEjemplos[3]>=1" :class="{deshabilitado: e1EstadoEjemplos[3]!=1}">Asignar
+                        símbolos</button>
+                    <button class="boton" @click="e1EstadoEjemplos[3]=3" :disabled="e1EstadoEjemplos[3]!=2"
+                        v-show="e1EstadoEjemplos[3]>=2" :class="{deshabilitado: e1EstadoEjemplos[3]!=2}">Construir
+                        una ecuación</button>
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' style="text-align: left" v-show="e1EstadoEjemplos[3]>=3">
+                            <div class="descripcionAlgebraica">
+                                \( h + m = 120 \)
+                            </div>
+                        </recuadro-component>
+                    </transition>
+                </div>
+            </div>
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+    const app = createApp({
+        setup() {
+            const e1EstadoEjemplos = ref([0, 0, 0, 0, 0, 0, 0, 0]);
+            function e1Reiniciar() {
+                e1EstadoEjemplos.value = [0, 0, 0, 0, 0, 0];
+            }
+
+            return {e1EstadoEjemplos, e1Reiniciar}
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    });
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('mjx');
+    app.mount("#doc");
+</script>
+
+<style>
+    .descripcionAlgebraica {
+        font-size: 30px;
+    }
+
+    .itemEjemplo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .opacada {
+        opacity: 0.4;
+    }
+</style>

@@ -532,7 +532,7 @@ class ExpresionNumerica {
         if (enCasoEspecial) {
             lado1NecesitaParentesis = true;
         }
-        if (lado1NecesitaParentesis) {
+        if (lado1NecesitaParentesis || (opciones.fullParentesis && !this.numero1.explicita)) {
             textoLado1 = "{(" + textoLado1 + ")}";
         }
         textoLado2 = "{" + textoLado2 + "}";
@@ -548,7 +548,7 @@ class ExpresionNumerica {
         if (enCasoEspecial) {
             lado2NecesitaParentesis = true;
         }
-        if (lado2NecesitaParentesis) {
+        if (lado2NecesitaParentesis || (opciones.fullParentesis && !this.numero2.explicita)) {
             textoLado2 = "{(" + textoLado2 + ")}";
         }
         //Listos los dos textos de la expresión. Ahora se deben unir mediante el texto de la operación

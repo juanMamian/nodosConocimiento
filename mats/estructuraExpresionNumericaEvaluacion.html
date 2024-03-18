@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+
+    <script id="MathJax-script" async
+        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+
+
+    <title>Expresión numérica - evaluación</title>
+</head>
+
+
+
+<body>
+    <p>
+        Comprendo las expresiones numéricas si:
+    </p>
+
+    <div id="doc">
+
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada cualquier expresión numérica puedo identificar cada operación y sus operandos.
+            </template>
+
+            <recuadro-component tipo="instruccionPointer">
+
+                <div class="bloqueSeleccionDificultad">
+
+                    Selecciona el nivel de dificultad
+
+                    <input type="range" step="1" min="1" max="4" v-model="dificultadExpresionOperador"
+                        id="inputDificultadOperador">
+
+                    <div class="valorDificultad">
+                        {{dificultadExpresionOperador}}
+                    </div>
+                </div>
+                <div class="boton" @click="generarExpresionOperador">Generar expresión numérica</div>
+            </recuadro-component>
+
+            <transition name="fadeIn">
+                <recuadro-component id="expresionRetoOperador" tipo="reto" v-if="expresionRetoOperador"
+                    :key="'expresion'+versionExpresionOperador">
+
+                    <span style="font-size: 48px;">
+                        \({{expresionStringOperador}}\)
+                    </span>
+
+                </recuadro-component>
+            </transition>
+        </bloque-component>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada cualquier expresión numérica puedo describirla en términos de realización de operaciones
+                aritméticas.
+            </template>
+
+            <recuadro-component tipo="instruccionPointer">
+
+                <div class="bloqueSeleccionDificultad">
+
+                    Selecciona el nivel de dificultad
+
+                    <input type="range" step="1" min="1" max="4" v-model="dificultadExpresion2"
+                        id="inputDificultadExpresion2">
+
+                    <div class="valorDificultad">
+                        {{dificultadExpresion2}}
+                    </div>
+                </div>
+                <div class="boton" @click="generarExpresion2">Generar expresión numérica</div>
+            </recuadro-component>
+
+            <transition name="fadeIn">
+                <recuadro-component id="expresionReto2" tipo="reto" v-if="expresionReto2"
+                    :key="'expresion'+versionExpresion2">
+
+                    <span style="font-size: 48px;">
+                        \({{expresionString2}}\)
+                    </span>
+
+                </recuadro-component>
+            </transition>
+        </bloque-component>
+
+
+
+    </div>
+</body>
+
+</html>
+
+<script>
+
+
+    const doc = new Vue({
+        el: "#doc",
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        data() {
+            return {
+
+                expresionRetoOperador: null,
+                expresionStringOperador: null,
+                versionExpresionOperador: 0,
+                dificultadExpresionOperador: 1,
+
+                expresionReto2: null,
+                estadoRespuesta2: null,
+                expresionString2: null,
+                versionExpresion2: 0,
+                dificultadExpresion2: 1,
+
+
+                numero1: null,
+            }
+        },
+        methods: {
+
+            generarExpresionOperador() {
+                console.log("creando con dificultad " + this.dificultadExpresionOperador);
+                let laExpresion = null;
+                if (this.dificultadExpresionOperador < 4) {
+                    laExpresion = ExpresionNumericaBuilder.generarExpresionNumericaRecursiva({}, this.dificultadExpresionOperador - 1, {keepInteger: true});
+                }
+                else if (this.dificultadExpresionOperador == 4) {
+                    //Se hará una serie de términos sumados o restados los cuales son multiplicaciones o divisiones.
+                    let expresiones = []
+                    for (let i = 0; i < 4; i++) {
+                        //Todas serán positivos.
+                        let termino = new ExpresionNumerica();
+                        termino.fillExpresion({}, {keepInteger: true, operaciones: ["multiplicacion", "division", "potenciacion"]});
+                        expresiones.push(termino);
+                    }
+
+                    let expresionFinal = expresiones[0];
+                    for (let i = 1; i < expresiones.length; i++) {
+                        expresionFinal = new ExpresionNumerica({
+                            numero1: expresionFinal,
+                            operacion: Math.random() < 0.5 ? "suma" : "resta",
+                            numero2: expresiones[i],
+                        });
+                    }
+                    laExpresion = expresionFinal;
+
+                }
+                else {
+                    throw "Dificultad " + this.dificultadExpresionOperador + " no desarrollada"
+                }
+
+                this.expresionRetoOperador = laExpresion;
+                this.expresionStringOperador = this.expresionRetoOperador.toMathJax();
+                this.versionExpresionOperador++;
+                this.$nextTick(() => {
+                    MathJax.typeset();
+                })
+            },
+
+            generarExpresion2() {
+                this.estadoRespuesta2 = null;
+
+                console.log("creando con dificultad " + this.dificultadExpresion2);
+                let laExpresion = null;
+                if (this.dificultadExpresion2 < 4) {
+                    laExpresion = ExpresionNumericaBuilder.generarExpresionNumericaRecursiva({}, this.dificultadExpresion2 - 1, {keepInteger: true});
+                }
+                else if (this.dificultadExpresion2 == 4) {
+                    //Se hará una serie de términos sumados o restados los cuales son multiplicaciones o divisiones.
+                    let expresiones = []
+                    for (let i = 0; i < 4; i++) {
+                        let termino = new ExpresionNumerica();
+                        termino.fillExpresion({}, {keepInteger: true, operaciones: ["multiplicacion", "division", "potenciacion"]});
+                        expresiones.push(termino);
+                    }
+
+                    let expresionFinal = expresiones[0];
+                    for (let i = 1; i < expresiones.length; i++) {
+                        expresionFinal = new ExpresionNumerica({
+                            numero1: expresionFinal,
+                            operacion: Math.random() < 0.5 ? "suma" : "resta",
+                            numero2: expresiones[i],
+                        });
+                    }
+                    laExpresion = expresionFinal;
+
+                }
+                else {
+                    throw "Dificultad " + this.dificultadExpresion2 + " no desarrollada"
+                }
+
+                this.expresionReto2 = laExpresion;
+                this.expresionString2 = laExpresion.toMathJax();
+                this.versionExpresion2++;
+                this.$nextTick(() => {
+                    MathJax.typeset();
+                })
+            },
+
+
+        }
+    })
+</script>
+
+<style>
+</style>

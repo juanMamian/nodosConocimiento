@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+
+
+    <title>Estructura de las expresiones numéricas - explicación.</title>
+</head>
+
+<body>
+    <div id="doc">
+
+        <recuadro-component tipo="datoPrevio">
+            Una expresión numérica es una operación entre <span class="resaltado">dos</span> números. Esos números se
+            conocen
+            como <span class="resaltado">operandos</span>.
+        </recuadro-component>
+
+        <recuadro-component tipo="datoPrevio">
+            En una expresión numérica hay un símbolo que indica la operación. Ese símbolo se conoce como <span
+                class="resaltado">el operador</span>
+        </recuadro-component>
+
+        <bloque-component tipo="ejemplo">
+
+            <template #cabecera>
+                En este cuadro se puede ver ejemplos de expresiones numéricas y se señala el operador y los operandos.
+            </template>
+
+            <div class="listaEjemplos">
+
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( 4 \times 2 \)
+                    </div>
+
+                    <recuadro-component tipo="datoNuevo">
+                        <ul>
+                            <li>
+                                El primer operando es <span class="resaltado">\( 4 \)</span>
+                            </li>
+                            <li>
+                                El operador es <span class="resaltado">\( \times \)</span>
+                            </li>
+                            <li>
+                                El segundo operando es <span class="resaltado">\( 2 \)</span>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                </div>
+
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( \sqrt[3]{125} \)
+                    </div>
+
+                    <recuadro-component tipo="datoNuevo">
+                        <ul>
+                            <li>
+                                El primer operando es <span class="resaltado">\( 125 \)</span>
+                            </li>
+                            <li>
+                                El operador es <span class="resaltado">\( \sqrt[]{} \)</span>
+                            </li>
+                            <li>
+                                El segundo operando es <span class="resaltado">\( 3 \)</span>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                </div>
+
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( 3 + 16 \)
+                    </div>
+
+                    <recuadro-component tipo="datoNuevo">
+                        <ul>
+                            <li>
+                                El primer operando es <span class="resaltado">\( 3 \)</span>
+                            </li>
+                            <li>
+                                El operador es <span class="resaltado">\( + \)</span>
+                            </li>
+                            <li>
+                                El segundo operando es <span class="resaltado">\( 16 \)</span>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                </div>
+
+                <div class="itemEjemplo">
+                    <div class="matsExpresion">
+                        \( 15 ^ 3 \)
+                    </div>
+
+                    <recuadro-component tipo="datoNuevo">
+                        <ul>
+                            <li>
+                                El primer operando es <span class="resaltado">\( 15 \)</span>
+                            </li>
+                            <li>
+                                El operador no se ve (Pero es una operación potencia).
+                            </li>
+                            <li>
+                                El segundo operando es <span class="resaltado">\( 3 \)</span>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                </div>
+
+            </div>
+
+        </bloque-component>
+
+        <recuadro-component tipo="datoPrevio">
+            En una expresión numérica, una operación es aplicada sobre un número
+
+            <ul>
+                <li>
+                    El primer operando indica el número sobre el que se aplica la operación.
+                </li>
+                <li>
+                    El operador indica la operación que se aplica.
+                </li>
+                <li>
+                    El segundo operando indica la magnitud de la operación
+                </li>
+            </ul>
+        </recuadro-component>
+
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se puede ver algunas expresiones numéricas y se describe la aplicación de una operación.
+            </template>
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        \( 5 +2 \)
+                    </div>
+                    <recuadro-component tipo="datoNuevo" class="descripcionOperacionExpresionNumerica">
+                        Se aplicó una suma de magnitud 2 sobre el número 5.
+                    </recuadro-component>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        \( 9 \times 4 \)
+                    </div>
+                    <recuadro-component tipo="datoNuevo" class="descripcionOperacionExpresionNumerica">
+                        Se aplicó una multiplicación de magnitud 4 sobre el número 9.
+                    </recuadro-component>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        \( 4 - 2 \)
+                    </div>
+                    <recuadro-component tipo="datoNuevo" class="descripcionOperacionExpresionNumerica">
+                        Se aplicó una resta de magnitud 2 sobre el número 4.
+                    </recuadro-component>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        \( 15 \over 3 \)
+                    </div>
+                    <recuadro-component tipo="datoNuevo" class="descripcionOperacionExpresionNumerica">
+                        Se aplicó una división de magnitud 3 sobre el número 15.
+                    </recuadro-component>
+                </div>
+
+            </div>
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+    createApp({
+        setup() {
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    }).mount("#doc");
+</script>
+
+<style></style>

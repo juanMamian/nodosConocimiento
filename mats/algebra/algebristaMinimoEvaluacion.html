@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+
+
+
+    <script src="../../mats/resources/expresionNumericaClass.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script id="MathJax-script" async
+        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/rectanguloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/circuloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/cuadriculaEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Algebrista mínimo - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Soy un algebrista mínimo si:
+        </p>
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Puedo encontrar el valor de una incógnita a partir de una ecuación simple
+            </template>
+            <div class="flexVertical">
+                <recuadro-component tipo='instruccionPointer'>
+                    <div class="flexVertical">
+                        Selecciona la dificultad
+                        <input type="range" min="1" max="4" v-model.number="e1Dificultad" name="" value="">
+                        {{e1Dificultad}}
+                    </div>
+                </recuadro-component>
+
+                <button class="boton" @click="e1GenerarExpresion">
+                    Generar ecuación
+                </button>
+
+                <transition name="fadeIn" :key="e1VersionReto">
+                    <div class="reto" v-if="e1ExpresionString" style="font-size: 40px">
+                        {{e1ExpresionString}}
+                    </div>
+                </transition>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionTeclado' v-if="e1Respuesta">
+                        <div class="flexVertical">
+                            Escribe el valor de la incógnita
+                            <input type="number" ref="e1InputRespuestaUsuario"
+                                @keypress.enter="e1EvaluarRespuestaUsuario">
+                            <button class="boton" @click="e1EvaluarRespuestaUsuario">Aceptar</button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo='infoResultado' :modo="e1RespuestaUsuarioCorrecta?'correcto':'incorrecto'"
+                        :key="e1VersionRespuestaUsuario" v-if="e1RespuestaUsuarioCorrecta!=null">
+                    </recuadro-component>
+                </transition>
+            </div>
+
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+
+    const app = Vue.createApp({
+        setup() {
+            const {scrollToElemento} = useUtils();
+            const e1Expresion = ref(null);
+            const e1ExpresionString = ref(null);
+            function e1Reiniciar() {
+                e1Expresion.value = null;
+                e1ExpresionString.value = null;
+                e1Respuesta.value = null;
+                e1RespuestaUsuarioCorrecta.value = null;
+            }
+            const e1Dificultad = ref(1);
+            const e1VersionReto = ref(0);
+            const e1Respuesta = ref(null);
+            async function e1GenerarExpresion() {
+                let laExpresion = null;
+                e1Reiniciar();
+                const operacionesUsadas = ['suma', 'resta', 'multiplicacion'];
+                if (e1Dificultad.value > 2) {
+                    operacionesUsadas.push('division', 'potenciacion');
+                }
+                if (e1Dificultad.value > 3) {
+                    operacionesUsadas.push('radicacion');
+                }
+                console.log(`Solicitando con operaciones: ${JSON.stringify(operacionesUsadas)}`);
+                laExpresion = ExpresionNumericaBuilder.generarExpresionNumericaRecursiva({}, e1Dificultad.value > 2 ? 2 : e1Dificultad.value, {keepInteger: true, operaciones: operacionesUsadas});
+                e1Expresion.value = laExpresion;
+                e1Respuesta.value = laExpresion.incognitarPrimerNumero().valor;
+                e1ExpresionString.value = "\\({" + laExpresion.toMathJax() + '}={' + laExpresion.valor + "}\\)";
+                e1VersionReto.value++;
+                await nextTick();
+                MathJax.typeset();
+
+            }
+            const e1InputRespuestaUsuario = ref(null);
+            const e1VersionRespuestaUsuario = ref(0);
+            const e1RespuestaUsuarioCorrecta = ref(null);
+            function e1EvaluarRespuestaUsuario() {
+                if (!e1InputRespuestaUsuario.value) {
+                    console.log(`No hay input respuesta usuario`);
+                    return;
+                }
+                let respuestaUsuario = Number(e1InputRespuestaUsuario.value.value.trim())
+                e1RespuestaUsuarioCorrecta.value = false;
+                if (respuestaUsuario === e1Respuesta.value) {
+                    e1RespuestaUsuarioCorrecta.value = true;
+                }
+                e1VersionRespuestaUsuario.value++;
+
+            }
+
+            return {
+                scrollToElemento,
+                e1Expresion, e1ExpresionString, e1Reiniciar, e1GenerarExpresion, e1VersionReto, e1Dificultad,
+                e1InputRespuestaUsuario, e1Respuesta, e1VersionRespuestaUsuario, e1RespuestaUsuarioCorrecta, e1EvaluarRespuestaUsuario
+            }
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    });
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('mjx');
+    app.mount("#doc");
+
+</script>
+
+<style>
+</style>

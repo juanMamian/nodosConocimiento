@@ -42,6 +42,7 @@
 
     .componenteCirculo .label span {
         display: flex;
+        flex-shrink: 0;
     }
 
     .componenteCirculo .label.explicitable:hover,

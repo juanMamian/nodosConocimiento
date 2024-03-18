@@ -1,4 +1,4 @@
-import { radToDeg, truncar } from "../../funciones/utilsMats.js"
+import { radToDeg, truncar } from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/funciones/utilsMats.js"
 export const componenteAngulo = {
     template: `
         <div class="componenteAngulo" :style="[estiloComponente]">

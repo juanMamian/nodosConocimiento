@@ -12,11 +12,14 @@
 
 
     <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
+        src="../mats/resources/expresionNumericaClass.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
@@ -38,7 +41,7 @@
     <p>
         Comprendo las expresiones numéricas si:
     </p>
-    
+
     <div id="doc">
         <bloque-component tipo="evaluacion"
             textoCabecera="Puedo expresar cualquier número en forma de expresión numérica usando cualquier operación aritmética.">
@@ -72,7 +75,7 @@
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dada cualquier expresión numérica puedo señalar los operandos de cada operación.
+                Dada cualquier expresión numérica puedo identificar cada operación y sus operandos.
             </template>
 
             <recuadro-component tipo="instruccionPointer">
@@ -157,7 +160,7 @@
                 <div class="boton" @click="generarExpresion">Generar expresión numérica</div>
             </recuadro-component>
 
-            <transition name="travelTop">
+            <transition name="fadeIn">
                 <recuadro-component id="expresionReto" tipo="reto" v-if="expresionReto"
                     :key="'ecuacion'+versionExpresion">
 
@@ -272,7 +275,7 @@
                 }
                 console.log("Generada");
 
-                this.expresionReto=laExpresion;
+                this.expresionReto = laExpresion;
                 this.expresionString = laExpresion.toMathJax();
                 this.versionExpresion++;
                 this.$nextTick(() => {
@@ -307,7 +310,7 @@
             generarExpresionOperador() {
                 this.estadoRespuestaOperador = null;
                 console.log("creando con dificultad " + this.dificultadExpresionOperador);
-                let laExpresion=null;
+                let laExpresion = null;
                 if (this.dificultadExpresionOperador < 4) {
                     laExpresion = ExpresionNumericaBuilder.generarExpresionNumericaRecursiva({}, this.dificultadExpresionOperador - 1, {keepInteger: true});
                 }
@@ -315,6 +318,7 @@
                     //Se hará una serie de términos sumados o restados los cuales son multiplicaciones o divisiones.
                     let expresiones = []
                     for (let i = 0; i < 4; i++) {
+                        //Todas serán positivos.
                         let termino = new ExpresionNumerica();
                         termino.fillExpresion({}, {keepInteger: true, operaciones: ["multiplicacion", "division", "potenciacion"]});
                         expresiones.push(termino);
@@ -328,7 +332,7 @@
                             numero2: expresiones[i],
                         });
                     }
-                    laExpresion=expresionFinal;
+                    laExpresion = expresionFinal;
 
                 }
                 else {
@@ -336,7 +340,7 @@
                 }
 
                 this.expresionRetoOperador = laExpresion;
-                this.expresionStringOperador =this.expresionRetoOperador.toMathJax(); 
+                this.expresionStringOperador = this.expresionRetoOperador.toMathJax();
                 this.versionExpresionOperador++;
                 this.$nextTick(() => {
                     MathJax.typeset();
@@ -347,7 +351,7 @@
                 this.estadoRespuesta2 = null;
 
                 console.log("creando con dificultad " + this.dificultadExpresion2);
-                let laExpresion=null;
+                let laExpresion = null;
                 if (this.dificultadExpresion2 < 4) {
                     laExpresion = ExpresionNumericaBuilder.generarExpresionNumericaRecursiva({}, this.dificultadExpresion2 - 1, {keepInteger: true});
                 }
@@ -368,7 +372,7 @@
                             numero2: expresiones[i],
                         });
                     }
-                    laExpresion=expresionFinal;
+                    laExpresion = expresionFinal;
 
                 }
                 else {

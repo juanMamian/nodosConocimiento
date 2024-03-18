@@ -55,7 +55,7 @@ class ExpresionNumerica {
         return this.operaciones[indexOp - 1];
     }
     static maxNumero = 250;
-    static minNumero = -250;
+    static minNumero = 0;
     numero1;
     numero2;
     operacion;
@@ -100,7 +100,7 @@ class ExpresionNumerica {
         });
     }
     maxNumero = 250;
-    minNumero = -250;
+    minNumero = 0;
     rangoNumero = this.maxNumero - this.minNumero;
     minResultadoRadicacion = 2;
     maxResultadoRadicacion = 50;
@@ -354,6 +354,7 @@ class ExpresionNumerica {
         }
     }
     static generarNumero(opciones = {}) {
+        console.log(`Se generará un número`);
         let maxNumero = this.maxNumero;
         let minNumero = this.minNumero;
         if (opciones?.maxNumero) {
@@ -362,6 +363,7 @@ class ExpresionNumerica {
         if (opciones?.minNumero) {
             minNumero = opciones.minNumero;
         }
+        console.log(`Min número es ${minNumero}`);
         let rangoNumero = maxNumero - minNumero;
         return Math.round(Math.random() * rangoNumero) + minNumero;
     }

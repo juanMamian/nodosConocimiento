@@ -5,19 +5,16 @@
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
     <script id="MathJax-script" async
         src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
     <script
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
 
-    <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
@@ -137,13 +134,13 @@
                     <recuadro-component tipo="datoNuevo">
                         <ul>
                             <li>
-                                El primer operando es <span class="resaltado">\( 125 \)</span>
+                                El primer operando es <span class="resaltado">\( 3 \)</span>
                             </li>
                             <li>
                                 El operador es <span class="resaltado">\( \sqrt[]{} \)</span>
                             </li>
                             <li>
-                                El segundo operando es <span class="resaltado">\( 3 \)</span>
+                                El segundo operando es <span class="resaltado">\( 125 \)</span>
                             </li>
                         </ul>
                     </recuadro-component>
@@ -182,7 +179,7 @@
                                 El primer operando es <span class="resaltado">\( 15 \)</span>
                             </li>
                             <li>
-                                El operador no se ve (Pero es una operación potencia).
+                                El operador no se ve.
                             </li>
                             <li>
                                 El segundo operando es <span class="resaltado">\( 3 \)</span>
@@ -197,11 +194,11 @@
         </bloque-component>
 
         <recuadro-component tipo="datoPrevio">
-            En una expresión numérica, una operación es aplicada sobre un número
+            En una expresión numérica, hay una operación aplicada sobre un número inicial.
 
             <ul>
                 <li>
-                    El primer operando indica el número sobre el que se aplica la operación.
+                    El primer operando indica el número inicial.
                 </li>
                 <li>
                     El operador indica la operación que se aplica.
@@ -212,49 +209,6 @@
             </ul>
         </recuadro-component>
 
-        <bloque-component tipo='ejemplo'>
-            <template #cabecera>
-                En este cuadro se puede ver algunas expresiones numéricas y se describe la aplicación de una operación.
-            </template>
-
-            <div class="listaEjemplos">
-                <div class="itemEjemplo">
-                    <div class="expresionNumerica">
-                        \( 5 +2 \)
-                    </div>
-                    <recuadro-component tipo="datoNuevo" class="descripcionOperacionExpresionNumerica">
-                        Se aplicó una suma de 2 sobre el número 5.
-                    </recuadro-component>
-                </div>
-                <div class="itemEjemplo">
-                    <div class="expresionNumerica">
-                        \( 9 \times 4 \)
-                    </div>
-                    <recuadro-component tipo="datoNuevo" class="descripcionOperacionExpresionNumerica">
-                        Se aplicó una multiplicación de magnitud 4 sobre el número 9.
-                    </recuadro-component>
-                </div>
-                <div class="itemEjemplo">
-                    <div class="expresionNumerica">
-                        \( 4 - 2 \)
-                    </div>
-                    <recuadro-component tipo="datoNuevo" class="descripcionOperacionExpresionNumerica">
-                        Se aplicó una resta de magnitud 2 sobre el número 4.
-                    </recuadro-component>
-                </div>
-                <div class="itemEjemplo">
-                    <div class="expresionNumerica">
-                        \( 15 \over 3 \)
-                    </div>
-                    <recuadro-component tipo="datoNuevo" class="descripcionOperacionExpresionNumerica">
-                        Se aplicó una división de magnitud 3 sobre el número 15.
-                    </recuadro-component>
-                </div>
-
-            </div>
-        </bloque-component>
-
-
     </div>
 </body>
 
@@ -262,9 +216,9 @@
 
 <script>
 
+    const {createApp, ref, computed} = Vue;
 
-    const doc = new Vue({
-        el: "#doc",
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
@@ -320,7 +274,7 @@
         computed: {
             expresiones() {
                 return this.numerosEjemplo1.map(num => {
-                    let laExpresion = new ExpresionNumerica({valor: num.valor, operacion: num.operacion, numero1: new ExpresionNumerica({valor: num.numero1})});
+                    let laExpresion=new ExpresionNumerica({valor: num.valor, operacion: num.operacion });
                     laExpresion.fillExpresion();
                     return laExpresion;
                 });
@@ -336,15 +290,11 @@
             },
 
         }
-    })
+    }).mount("#doc");
 </script>
 
 <style>
     body {
         padding: 2% 5%;
-    }
-
-    .expresionNumerica {
-        font-size: 22px;
     }
 </style>

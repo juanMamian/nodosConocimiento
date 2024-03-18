@@ -106,41 +106,6 @@
             </transition>
         </bloque-component>
 
-        <bloque-component tipo="evaluacion">
-            <template #cabecera>
-                Dada cualquier expresión numérica puedo describirla en términos de realización de operaciones
-                aritméticas.
-            </template>
-
-            <recuadro-component tipo="instruccionPointer">
-
-                <div class="bloqueSeleccionDificultad">
-
-                    Selecciona el nivel de dificultad
-
-                    <input type="range" step="1" min="1" max="4" v-model="dificultadExpresion2"
-                        id="inputDificultadExpresion2">
-
-                    <div class="valorDificultad">
-                        {{dificultadExpresion2}}
-                    </div>
-                </div>
-                <div class="boton" @click="generarExpresion2">Generar expresión numérica</div>
-            </recuadro-component>
-
-            <transition name="fadeIn">
-                <recuadro-component id="expresionReto2" tipo="reto" v-if="expresionReto2"
-                    :key="'expresion'+versionExpresion2">
-
-                    <span style="font-size: 48px;">
-                        \({{expresionString2}}\)
-                    </span>
-
-                </recuadro-component>
-            </transition>
-        </bloque-component>
-
-
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
@@ -211,7 +176,6 @@
                 expresionString: null,
                 versionExpresion: 0,
                 dificultadExpresion: 1,
-                versionRespuesta: 0,
 
                 expresionRetoOperador: null,
                 estadoRespuestaOperador: null,
@@ -224,14 +188,12 @@
                 expresionString2: null,
                 versionExpresion2: 0,
                 dificultadExpresion2: 1,
-                versionRespuesta2: 0,
 
                 expresionReto3: null,
                 estadoRespuesta3: null,
                 expresionString3: null,
                 versionExpresion3: 0,
                 dificultadExpresion3: 1,
-                versionRespuesta3: 0,
 
                 numero1: null,
                 operacion1: "suma",

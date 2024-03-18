@@ -5,18 +5,26 @@
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
-    <script id="MathJax-script" async src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script id="MathJax-script" async
+        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -28,7 +36,7 @@
     <div id="doc">
 
         <recuadro-component tipo="datoPrevio">
-            Los operandos de una expresión numérica son números y, por lo tanto, 
+            Los operandos de una expresión numérica son números y, por lo tanto,
             también pueden ser representados como expresiones numéricas.
         </recuadro-component>
 
@@ -36,25 +44,61 @@
         <bloque-component tipo="ejemplo" @desplegado="ejemploDesplegado" @plegado="ejemploPlegado"
             textoCabecera="En este cuadro se puede ver una expresion numérica y se pueden expresar sus operandos en forma de nuevas expresiones numéricas">
 
-            <div id="expresionNumerica">
-                <div class="parentesisExtremo">
-                    \((\)
-                </div>
-                <div class="contenedorNumeroTransformable" style="width: 100px;"
-                    @click="$set(numerosTransformablesTransformados, 0, !numerosTransformablesTransformados[0])">
-                    <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[0]">\( 3 \)</div>
-                    <div class="opcion opcion2" v-show="numerosTransformablesTransformados[0]">\( ({6 \over 2}) \)</div>
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        <div class="parentesisExtremo">
+                            \((\)
+                        </div>
+                        <div class="contenedorNumeroTransformable" style="width: 100px;"
+                            @click="numerosTransformablesTransformados[0]=!numerosTransformablesTransformados[0]">
+                            <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[0]">\( 3 \)</div>
+                            <div class="opcion opcion2" v-show="numerosTransformablesTransformados[0]">\( ( {6 \over 2})
+                                \)
+                            </div>
+                        </div>
+
+                        \(+\)
+
+                        <div class="contenedorNumeroTransformable" style="width: 80px;"
+                            @click="numerosTransformablesTransformados[1]=!numerosTransformablesTransformados[1]">
+                            <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[1]">\( 15 \)</div>
+                            <div class="opcion opcion2" v-show="numerosTransformablesTransformados[1]">\( (5 \times 3)
+                                \)
+                            </div>
+                        </div>
+                        <div class="parentesisExtremo">
+                            \()\)
+                        </div>
+                    </div>
                 </div>
 
-                \(+\)
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        <div class="parentesisExtremo">
+                            \((\)
+                        </div>
+                        <div class="contenedorNumeroTransformable" style="width: 100px;"
+                            @click="numerosTransformablesTransformados[2]=!numerosTransformablesTransformados[2]">
+                            <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[2]">\( 6 \)</div>
+                            <div class="opcion opcion2" v-show="numerosTransformablesTransformados[2]">\( ({ 3 + 3 })
+                                \)
+                            </div>
+                        </div>
 
-                <div class="contenedorNumeroTransformable" style="width: 80px;"
-                    @click="$set(numerosTransformablesTransformados, 1, !numerosTransformablesTransformados[1])">
-                    <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[1]">\( 15 \)</div>
-                    <div class="opcion opcion2" v-show="numerosTransformablesTransformados[1]">\( (5 \times 3) \)</div>
-                </div>
-                <div class="parentesisExtremo">
-                    \()\)
+                        \( \times \)
+
+                        <div class="contenedorNumeroTransformable" style="width: 80px;"
+                            @click="numerosTransformablesTransformados[3]=!numerosTransformablesTransformados[3]">
+                            <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[3]">\( 4 \)</div>
+                            <div class="opcion opcion2" v-show="numerosTransformablesTransformados[3]">\( (1 + 3)
+                                \)
+                            </div>
+                        </div>
+                        <div class="parentesisExtremo">
+                            \()\)
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -65,8 +109,170 @@
         </bloque-component>
 
         <recuadro-component tipo="descubrimiento">
-            Las operandos de cualquier expresión numérica pueden ser, a su vez, expresiones numéricas. 
+            Las operandos de cualquier expresión numérica pueden ser, a su vez, expresiones numéricas.
         </recuadro-component>
+
+        <p>
+            En una expresión numérica recursiva, es importante entender cuáles son los operandos en cada operación.
+        </p>
+
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se ven expresiones numéricas recursivas y se señalan los operandos de cada operación.
+            </template>
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        \( (4+5) \times 3 \)
+                    </div>
+                    <recuadro-component tipo='datoNuevo' style="text-align: left">
+                        <ul>
+                            <li>
+                                Suma:
+                                <ul>
+                                    <li>
+                                        Primer operando: \(4\)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \(5\)
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Multiplicación:
+                                <ul>
+                                    <li>
+                                        Primer operando: \((4 + 5)\)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \(3\)
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+
+                </div>
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        \( 1 + {({ {(7 - 2)} \over 2})} \)
+                    </div>
+                    <recuadro-component tipo='datoNuevo' style="text-align: left">
+                        <ul>
+                            <li>
+                                Suma:
+                                <ul>
+                                    <li>
+                                        Primer operando: \(4\)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \( ({ {(7-2)} \over 2}) \)
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Resta:
+                                <ul>
+                                    <li>
+                                        Primer operando: \( 7 \)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \(2\)
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                División:
+                                <ul>
+                                    <li>
+                                        Primer operando: \( ( 7 - 2 ) \)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \(2\)
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        \( (3 - 1) ^ 3 \)
+                    </div>
+                    <recuadro-component tipo='datoNuevo' style="text-align: left">
+                        <ul>
+                            <li>
+                                Resta:
+                                <ul>
+                                    <li>
+                                        Primer operando: \( 3 \)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \(1\)
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Potencia:
+                                <ul>
+                                    <li>
+                                        Primer operando: \( ( 3 - 1 ) \)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \(3\)
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="expresionNumerica">
+                        \( (4+5) \times (\sqrt[2]{3}) \)
+                    </div>
+                    <recuadro-component tipo='datoNuevo' style="text-align: left">
+                        <ul>
+                            <li>
+                                Suma:
+                                <ul>
+                                    <li>
+                                        Primer operando: \( 4 \)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \(5\)
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Radicación:
+                                <ul>
+                                    <li>
+                                        Primer operando: \( 3 \)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \( 2 \)
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Multiplicación:
+                                <ul>
+                                    <li>
+                                        Primer operando: \( ( 4 + 5 ) \)
+                                    </li>
+                                    <li>
+                                        Segundo operando: \((\sqrt[2]{3})\)
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </recuadro-component>
+                </div>
+            </div>
+
+        </bloque-component>
+
 
     </div>
 </body>
@@ -74,8 +280,8 @@
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
@@ -101,14 +307,14 @@
                     MathJax.typeset();
                 })
             },
-            ejemploPlegado(){
-                for (var i=0;i<this.numerosTransformablesTransformados.length;i++){
+            ejemploPlegado() {
+                for (var i = 0; i < this.numerosTransformablesTransformados.length; i++) {
                     this.$set(this.numerosTransformablesTransformados, i, false);
                 }
             }
 
         }
-    })
+    }).mount("#doc");
 </script>
 
 <style>
@@ -116,18 +322,20 @@
         padding: 2% 5%;
     }
 
+    .itemEjemplo {}
+
     .itemEjemplo .boton {
         width: 160px;
     }
 
-    #expresionNumerica {
+    .expresionNumerica {
         display: flex;
         align-items: center;
-        text-align: center;
         justify-content: center;
     }
 
-    .parentesisExtremo{
+
+    .parentesisExtremo {
         font-size: 35px;
     }
 

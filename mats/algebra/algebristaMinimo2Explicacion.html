@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+
+
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script id="MathJax-script" async
+        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/rectanguloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/circuloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/cuadriculaEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Algebrista mínimo - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Para poder despejar una incógnita en una ecuación, frecuentemente es necesario intercambiar algunas
+            expresiones por
+            otras <span class="resaltado">idénticas</span>
+        </p>
+
+
+        <bloque-component tipo='ejemplo' @plegado="e1Reiniciar">
+            <template #cabecera>
+                En este cuadro se ven ecuaciones o inecuaciones y se muestra el proceso de intercambiar expresiones y
+                despejar la incógnita.
+            </template>
+
+            <div class="listaEjemplos" id="e1ListaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="ecuacion">
+                        \( 9 \times h - 2 = 35\)
+                    </div>
+
+                    <button class="boton" @click="e1StepEjemplos[0]=1" :disabled="e1StepEjemplos[0]>=1"
+                        :class="{deshabilitado: e1StepEjemplos[0]>=1}">Trasladar la resta del miembro izquierdo al
+                        miembro derecho</button>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[0]>=1">
+                            \( 9 \times h = 35 + 2\)
+                        </div>
+                    </transition>
+
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[0]=2" :disabled="e1StepEjemplos[0]>=2"
+                            v-show="e1StepEjemplos[0]>=1" :class="{deshabilitado: e1StepEjemplos[0]>=2}">Intercambiar la
+                            expresion \(9 \times h\) por
+                            \(h \times 9\)
+                        </button>
+                    </transition>
+
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[0]>=2">
+                            \( h \times 9 = 35 + 2\)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[0]=3" :disabled="e1StepEjemplos[0]>=3"
+                            v-show="e1StepEjemplos[0]>=2" :class="{deshabilitado: e1StepEjemplos[0]>=3}"> Trasladar la
+                            multiplicación del miembro izquierdo hacia el miembro derecho
+                        </button>
+                    </transition>
+
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[0]>=3">
+                            \( h = (35 + 2) \times 9 \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' v-show="e1StepEjemplos[0]>=3">
+                            La incógnita está despejada
+                        </recuadro-component>
+                    </transition>
+                </div>
+
+                <div class="itemEjemplo">
+                    <div class="ecuacion">
+                        \( {{1 + (t + 3) ^ 2 } \over 3 } = 6 \)
+                    </div>
+
+                    <button class="boton" @click="e1StepEjemplos[1]=1" :disabled="e1StepEjemplos[1]>=1"
+                        :class="{deshabilitado: e1StepEjemplos[1]>=1}">Trasladar la multiplicación del miembro izquierdo al
+                        miembro derecho</button>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[1]>=1">
+                            \( {1 + (t + 3) ^ 2 }  = 6 \times 3 \)
+                        </div>
+                    </transition>
+
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[1]=2" :disabled="e1StepEjemplos[1]>=2"
+                            v-show="e1StepEjemplos[1]>=1" :class="{deshabilitado: e1StepEjemplos[1]>=2}">Sustituir la suma del miembro izquierdo por su versión conmutada
+                            </button>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[1]>=2">
+                            \( {{ (t + 3) ^ 2 } + 1}  = 6 \times 3 \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[1]=3" :disabled="e1StepEjemplos[1]>=3"
+                            v-show="e1StepEjemplos[1]>=2" :class="{deshabilitado: e1StepEjemplos[1]>=3}">Trasladar la
+                            suma del miembro izquierda hacia el 
+                            miembro derecho</button>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[1]>=3">
+                            \( { (t + 3) ^ 2 }   = 6 \times 3 + 1 \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[1]=4" :disabled="e1StepEjemplos[1]>=4"
+                            v-show="e1StepEjemplos[1]>=3" :class="{deshabilitado: e1StepEjemplos[1]>=4}">Trasladar la
+                            potencia del miembro izquierdo al
+                            miembro derecho</button>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[1]>=4">
+                            \( { t + 3  }   = \sqrt{6 \times 3 + 1} \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[1]=5" :disabled="e1StepEjemplos[1]>=5"
+                            v-show="e1StepEjemplos[1]>=4" :class="{deshabilitado: e1StepEjemplos[1]>=5}">Trasladar la
+                            suma del miembro izquierdo al
+                            miembro derecho</button>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[1]>=5">
+                            \(  t    = \sqrt{6 \times 3 + 1 } - 3 \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' v-show="e1StepEjemplos[1]>=5">
+                            La incógnita está despejada
+                        </recuadro-component>
+                    </transition>
+                </div>
+
+                <div class="itemEjemplo">
+                    <div class="ecuacion">
+                        \( {(3 - 2) \times (3 - p)} = 8\)
+                    </div>
+
+                    <button class="boton" @click="e1StepEjemplos[2]=1" :disabled="e1StepEjemplos[2]>=1"
+                        :class="{deshabilitado: e1StepEjemplos[2]>=1}">Intercambiar la multiplicación por su alternativa
+                        conmutada.
+                    </button>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[2]>=1">
+                            \( {(3 - p) \times (3 - 2) } = 8\)
+                        </div>
+                    </transition>
+
+                    <button class="boton" @click="e1StepEjemplos[2]=2" :disabled="e1StepEjemplos[2]>=2"
+                        v-show="e1StepEjemplos[2]>=1" :class="{deshabilitado: e1StepEjemplos[2]>=2}">Trasladar la
+                        multiplicación del miembro izquierdo al miembro derecho.
+                    </button>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[2]>=2">
+                            \( {3 - p } = {8 \over {(3 - 2)}} \)
+                        </div>
+                    </transition>
+
+                    <button class="boton" @click="e1StepEjemplos[2]=3" :disabled="e1StepEjemplos[2]>=3"
+                        v-show="e1StepEjemplos[2]>=2" :class="{deshabilitado: e1StepEjemplos[2]>=3}">Intercambiar la
+                        resta del miembro izquierdo por su alternativa conmutada</button>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[2]>=3">
+                            \( {p - 3 } = {8 \over {(3 - 2)}} \)
+                        </div>
+                    </transition>
+
+                    <button class="boton" @click="e1StepEjemplos[2]=4" :disabled="e1StepEjemplos[2]>=4"
+                        v-show="e1StepEjemplos[2]>=3" :class="{deshabilitado: e1StepEjemplos[2]>=4}">Trasladar la resta
+                        del miembro izquierdo al miembro derecho</button>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[2]>=4">
+                            \( p = {{8 \over {(3 - 2)}} - 3} \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' v-show="e1StepEjemplos[2]>=4">
+                            La incógnita está despejada
+                        </recuadro-component>
+                    </transition>
+                </div>
+
+            </div>
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+
+    const app = Vue.createApp({
+        setup() {
+            const e1StepEjemplos = ref([0, 0, 0, 0, 0, 0]);
+            function e1Reiniciar() {
+                e1StepEjemplos.value = [0, 0, 0, 0, 0, 0];
+            }
+
+            return {e1StepEjemplos, e1Reiniciar}
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    });
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('mjx');
+    app.mount("#doc");
+
+</script>
+
+<style>
+    #e1ListaEjemplos .itemEjemplo {
+        width: min(400px, 95%);
+        gap: 20px;
+    }
+
+    #e1ListaEjemplos .itemEjemplo .ecuacion {
+        font-size: 30px;
+    }
+</style>

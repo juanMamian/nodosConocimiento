@@ -561,7 +561,7 @@ class ExpresionNumerica {
         }
         return textoLado1 + textoOperacion + textoLado2;
     }
-    getNumsAndAdress() {
+    getNumsAndAdress(opciones = {}) {
         //Retorna un array con infoNumero.
         //Info numero es un objeto con num y direccion.
         //direccion es un array que indica como encontrarlo recorriendo el árbol de la expresión.
@@ -575,14 +575,17 @@ class ExpresionNumerica {
         if (!this.numero1 || !this.numero2) {
             throw "Expresion rota";
         }
-        let arr1 = this.numero1.getNumsAndAdress();
-        let arr2 = this.numero2.getNumsAndAdress();
+        let arr1 = this.numero1.getNumsAndAdress(opciones);
+        let arr2 = this.numero2.getNumsAndAdress(opciones);
         arr1.forEach(infoNum => {
             infoNum.direccion.unshift(0);
         });
         arr2.forEach(infoNum => {
             infoNum.direccion.unshift(1);
         });
+        if(opciones.operacionesCaminoIgnorado && opciones.operacionesCaminoIgnorado.includes(this.operacion)){
+            return arr1;
+        }
         return [...arr1, ...arr2];
     }
     incognitarPrimerNumero() {
@@ -603,14 +606,13 @@ class ExpresionNumerica {
         return numeroActual;
 
     }
-    incognitarRandomNumero() {
+    incognitarRandomNumero(opciones={}) {
         if (!this.numero1 || !this.numero2 || !this.operacion) {
             throw "La expresión no está terminada";
         }
-        let nums = this.getNumsAndAdress();
+        let nums = this.getNumsAndAdress({operacionesCaminoIgnorado:opciones.operacionesCaminoIgnorado});
         //Cada num es un objeto infoNumero.
         let numEscogido = nums[Math.floor(Math.random() * nums.length)];
-        console.log(`numEscogido: ${JSON.stringify(numEscogido)}`);
         let numeroActual = this;
         for (let dir of numEscogido.direccion) {
             if (dir === 0) {

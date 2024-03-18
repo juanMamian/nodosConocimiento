@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+
+
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script id="MathJax-script" async
+        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/rectanguloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/circuloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/cuadriculaEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+    <title>Algebrista mínimo - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            A partir de una ecuación o una inecuación es posible deducir otras que revelen información de interés.
+        </p>
+        <p>
+            En particular es útil deducir una ecuación o inecuación en donde la incógnita está despejada pues revela
+            información acerca del valor de dicha incógnita.
+        </p>
+
+        <recuadro-component tipo='datoPrevio'>
+            Deducir una ecuación o inecuación donde la incógnita está despejada se llama <span
+                class="resaltado">despejar</span>.
+        </recuadro-component>
+
+        <recuadro-component tipo='datoPrevio'>
+            La herramienta fundamental para despejar una incógnita es el <span class="resaltado">traslado de
+                operaciones</span>
+        </recuadro-component>
+
+
+        <bloque-component tipo='ejemplo' @plegado="e1Reiniciar">
+            <template #cabecera>
+                En este cuadro se ven ecuaciones o inecuaciones y se muestra el proceso de despejar la incógnita.
+            </template>
+
+            <div class="listaEjemplos" id="e1ListaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="ecuacion">
+                        \( a \times 3 - 2 = 25\)
+                    </div>
+
+                    <button class="boton" @click="e1StepEjemplos[0]=1" :disabled="e1StepEjemplos[0]>=1"
+                        :class="{deshabilitado: e1StepEjemplos[0]>=1}">Trasladar la resta del miembro izquierdo al
+                        miembro derecho</button>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[0]>=1">
+                            \( a \times 3 = 25 + 2\)
+                        </div>
+                    </transition>
+
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[0]=2" :disabled="e1StepEjemplos[0]>=2"
+                            v-show="e1StepEjemplos[0]>=1" :class="{deshabilitado: e1StepEjemplos[0]>=2}">Trasladar la
+                            multiplicación del miembro
+                            izquierdo
+                            al miembro derecho</button>
+                    </transition>
+
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[0]>=2">
+                            \( a = {{25 + 2} \over 3}\)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' v-show="e1StepEjemplos[0]>=2">
+                            La incógnita está despejada
+                        </recuadro-component>
+                    </transition>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="ecuacion">
+                        \( m ^ {(3 - 2)} = 8\)
+                    </div>
+
+                    <button class="boton" @click="e1StepEjemplos[1]=1" :disabled="e1StepEjemplos[1]>=1"
+                        :class="{deshabilitado: e1StepEjemplos[1]>=1}">Trasladar la potencia del miembro izquierdo al
+                        miembro derecho</button>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[1]>=1">
+                            \( m = \sqrt[(3 - 2)]{ 8}\)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' v-show="e1StepEjemplos[1]>=1">
+                            La incógnita está despejada
+                        </recuadro-component>
+                    </transition>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="ecuacion">
+                        \( {{(t + 3) ^ 2 - 1 } \over 2} = 6\)
+                    </div>
+
+                    <button class="boton" @click="e1StepEjemplos[2]=1" :disabled="e1StepEjemplos[2]>=1"
+                        :class="{deshabilitado: e1StepEjemplos[2]>=1}">Trasladar la potencia del miembro izquierdo al
+                        miembro derecho</button>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[2]>=1">
+                            \( {{(t + 3) ^ 2 - 1 } } = 6 \times 2 \)
+                        </div>
+                    </transition>
+
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[2]=2" :disabled="e1StepEjemplos[2]>=2"
+                            v-show="e1StepEjemplos[2]>=1" :class="{deshabilitado: e1StepEjemplos[2]>=2}">Trasladar la
+                            potencia del miembro izquierdo al
+                            miembro derecho</button>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[2]>=2">
+                            \( {(t + 3) ^ 2 }  = {6 \times 2 + 1} \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[2]=3" :disabled="e1StepEjemplos[2]>=3"
+                            v-show="e1StepEjemplos[2]>=2" :class="{deshabilitado: e1StepEjemplos[2]>=3}">Trasladar la
+                            potencia del miembro izquierdo al
+                            miembro derecho</button>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[2]>=3">
+                            \( {t + 3 }  = \sqrt[2]{6 \times 2 + 1} \)
+                        </div>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <button class="boton" @click="e1StepEjemplos[2]=4" :disabled="e1StepEjemplos[2]>=4"
+                            v-show="e1StepEjemplos[2]>=3" :class="{deshabilitado: e1StepEjemplos[2]>=4}">Trasladar la
+                            potencia del miembro izquierdo al
+                            miembro derecho</button>
+                    </transition>
+
+                    <transition name="fadeIn">
+                        <div class="ecuacion" v-show="e1StepEjemplos[2]>=4">
+                            \( t   = \sqrt[2]{6 \times 2 + 1} - 3 \)
+                        </div>
+                    </transition>
+
+
+                    <transition name="fadeIn">
+                        <recuadro-component tipo='datoNuevo' v-show="e1StepEjemplos[2]>=4">
+                            La incógnita está despejada
+                        </recuadro-component>
+                    </transition>
+                </div>
+            </div>
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+
+    const app = Vue.createApp({
+        setup() {
+            const e1StepEjemplos = ref([0, 0, 0, 0, 0, 0]);
+            function e1Reiniciar() {
+                e1StepEjemplos.value = [0, 0, 0, 0, 0, 0];
+            }
+
+            return {e1StepEjemplos, e1Reiniciar}
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    });
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('mjx');
+    app.mount("#doc");
+
+</script>
+
+<style>
+#e1ListaEjemplos .itemEjemplo{
+    width: min(400px, 95%);
+}
+
+#e1ListaEjemplos .itemEjemplo .ecuacion{
+ font-size: 30px;
+}
+</style>

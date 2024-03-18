@@ -62,7 +62,7 @@
             </recuadro-component>
 
 
-            <transition name="travelTop">
+            <transition name="fadeIn">
                 <recuadro-component tipo="reto" v-show="numero1 && operacion1">
 
                     ¡Escribe una expresión numérica que represente el {{numero1}} usando una {{operacion1}} entre
@@ -94,7 +94,7 @@
                 <div class="boton" @click="generarExpresionOperador">Generar expresión numérica</div>
             </recuadro-component>
 
-            <transition name="travelTop">
+            <transition name="fadeIn">
                 <recuadro-component id="expresionRetoOperador" tipo="reto" v-if="expresionRetoOperador"
                     :key="'expresion'+versionExpresionOperador">
 
@@ -128,7 +128,7 @@
                 <div class="boton" @click="generarExpresion2">Generar expresión numérica</div>
             </recuadro-component>
 
-            <transition name="travelTop">
+            <transition name="fadeIn">
                 <recuadro-component id="expresionReto2" tipo="reto" v-if="expresionReto2"
                     :key="'expresion'+versionExpresion2">
 

@@ -162,7 +162,6 @@ class ExpresionNumerica {
         //            letra: string,
         //        }
         if (opciones.keepInteger) {
-            console.log("keeping integer");
         }
         //    opciones={
         //        keepInteger: "Que el valor de la expresión sea entero",
@@ -318,6 +317,14 @@ class ExpresionNumerica {
                 else {
                     this.numero1.valor = ExpresionNumerica.generarNumero();
                 }
+
+                if (this.operacion === 'suma' && this.numero1.valor > this.valor) { //Obligaría a una suma de un negativo.
+                    this.numero1.valor = Math.round(Math.random() * this.valor);
+                }
+                if (this.operacion === 'resta' && this.numero1.valor < this.valor) { //Obligaría a una resta de un negativo.
+                    this.numero1.valor += this.valor;
+                }
+
             }
             if (!this.numero1.valor || !this.numero2.valor) {
                 this.setNumeroFaltante({});
@@ -354,7 +361,6 @@ class ExpresionNumerica {
         }
     }
     static generarNumero(opciones = {}) {
-        console.log(`Se generará un número`);
         let maxNumero = this.maxNumero;
         let minNumero = this.minNumero;
         if (opciones?.maxNumero) {
@@ -363,7 +369,6 @@ class ExpresionNumerica {
         if (opciones?.minNumero) {
             minNumero = opciones.minNumero;
         }
-        console.log(`Min número es ${minNumero}`);
         let rangoNumero = maxNumero - minNumero;
         return Math.round(Math.random() * rangoNumero) + minNumero;
     }
@@ -477,7 +482,6 @@ class ExpresionNumerica {
     reexpresionar(reexpresiones, opcionesGenerarExpresion) {
         //Esta función recorre la expresión numérica buscando un número escrito de manera explícita para convertirlo en expresión numérica. Repite esa acción 
         //{{reexpresiones}} veces.
-        console.log("iniciando reexpresion");
         if (reexpresiones == null || (typeof reexpresiones) != "number") {
             throw "No se especificó el número de reexpresiones";
         }
@@ -577,9 +581,27 @@ class ExpresionNumerica {
             infoNum.direccion.unshift(0);
         });
         arr2.forEach(infoNum => {
-            infoNum.direccion.unshift(0);
+            infoNum.direccion.unshift(1);
         });
         return [...arr1, ...arr2];
+    }
+    incognitarPrimerNumero() {
+        if (!this.numero1 || !this.numero2 || !this.operacion) {
+            throw "La expresión no está terminada";
+        }
+        let nums = this.getNumsAndAdress();
+        let numeroActual = this;
+        let guarda = 0;
+        while (true && guarda < 20) {
+            guarda++;
+            if (numeroActual.explicita) {
+                break;
+            }
+            numeroActual = numeroActual.numero1;
+        }
+        numeroActual.letra = ExpresionNumerica.generarRandomLetra();
+        return numeroActual;
+
     }
     incognitarRandomNumero() {
         if (!this.numero1 || !this.numero2 || !this.operacion) {
@@ -588,13 +610,14 @@ class ExpresionNumerica {
         let nums = this.getNumsAndAdress();
         //Cada num es un objeto infoNumero.
         let numEscogido = nums[Math.floor(Math.random() * nums.length)];
+        console.log(`numEscogido: ${JSON.stringify(numEscogido)}`);
         let numeroActual = this;
         for (let dir of numEscogido.direccion) {
             if (dir === 0) {
-                numeroActual = this.numero1;
+                numeroActual = numeroActual.numero1;
                 continue;
             }
-            numeroActual = this.numero2;
+            numeroActual = numeroActual.numero2;
         }
         numeroActual.letra = ExpresionNumerica.generarRandomLetra();
         return numeroActual;
@@ -640,7 +663,7 @@ function getBaseLogNum(base, num) {
 class ExpresionNumericaBuilder {
     static generarExpresionNumericaRecursiva(datosExpresion, recursiones, opciones) {
         let laExpresion = new ExpresionNumerica(datosExpresion);
-        laExpresion.fillExpresion();
+        laExpresion.fillExpresion(opciones);
         if (recursiones && recursiones > 0) {
             laExpresion.reexpresionar(recursiones, opciones);
         }

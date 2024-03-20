@@ -16,7 +16,8 @@
 
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/trianguloEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
@@ -35,6 +36,21 @@
         Conozco el triángulo rectángulo si:
         <bloque-component tipo="evaluacion"
             textoCabecera="Dado un dibujo de un triángulo puedo decidir si se trata de un triángulo rectángulo o no">
+
+            <div class="flexVertical">
+                <button class="boton">
+                    Generar triángulo
+                </button>
+
+                <div class="zonaReto">
+                    <componente-triangulo v-if="e1Reto" :ancho="e2reto.anchoTriangulo" :largo="e2Reto.largoTriangulo"
+                        :x-punta="e2Reto.xPuntaTriangulo" :propiedades-representadas="[]"
+                        :propiedades-simbolizadas="[]">
+
+                    </componente-triangulo>
+                </div>
+
+            </div>
 
         </bloque-component>
         <bloque-component tipo="evaluacion"
@@ -115,6 +131,24 @@
         },
         setup() {
             const {scrollToElemento, focusSelectElemento} = useUtils();
+            //e1
+            const {versionReto: e1VersionReto, reto: e1Reto, reiniciarReto: e1ReiniciarReto, generarReto: e1GenerarReto, respuesta: e1Respuesta, respuestaUsuarioCorrecta: e1RespuestaUsuarioCorrecta, versionRespuestaUsuario: e1VersionRespuestaUsuario, inputRespuestaUsuario: e1InputRespuestaUsuario, evaluarRespuestaUsuario: e1EvaluarRespuestaUsuario} = useEvaluacionNodo();
+            function e1AddToGenerarReto() {
+                const minAncho = 3;
+                const maxAncho = 12;
+                const minLargo = 2;
+                const maxLargo = 10;
+                const rangoAncho = maxAncho - minAncho;
+                const rangoLargo = maxLargo - minLargo;
+
+                e3Reto.value = {};
+
+                e3Reto.value.anchoTriangulo = Math.round(Math.random() * rangoAncho + minAncho);
+                e3Reto.value.largoTriangulo = Math.round(Math.random() * rangoLargo + minLargo);
+                e3Reto.value.xPuntaTriangulo = Math.round(Math.random() * e3Reto.value.anchoTriangulo);
+                e3Reto.value.rotacionTriangulo = Math.round(Math.random() * Math.PI * 2);
+            }
+
 
             //e3
             const e3LadosPreguntados = ref([]);
@@ -137,7 +171,7 @@
                 let ladosPreguntables = ['ladoBase', 'lado1', 'lado2'];
                 let respuestasOrdenadas = [];
                 if (e3Reto.value.xPuntaTriangulo === 0) {
-                    respuestasOrdenadas=['cateto', 'cateto', 'hipotenusa'];
+                    respuestasOrdenadas = ['cateto', 'cateto', 'hipotenusa'];
                 }
                 else {
                     respuestasOrdenadas = ['cateto', 'hipotenusa', 'cateto'];
@@ -218,10 +252,13 @@
 
 
             return {
+                e1VersionReto, e1Reto, e1ReiniciarReto, e1GenerarReto, e1Respuesta, e1RespuestaUsuarioCorrecta, e1VersionRespuestaUsuario, e1InputRespuestaUsuario, e1EvaluarRespuestaUsuario,
+
                 scrollToElemento, focusSelectElemento,
                 e3VersionReto, e3Reto, e3ReiniciarReto, e3GenerarReto, e3Respuesta, e3RespuestaUsuarioCorrecta, e3VersionRespuestaUsuario, e3InputRespuestaUsuario, e3EvaluarRespuestaUsuario,
                 e3LadoIntroduciendose, e3IndexIntroduciendoLado, e3RespuestasUsuario, e3RespuestaUsuarioCompleta,
                 e3TransicionInputs,
+
             }
 
 

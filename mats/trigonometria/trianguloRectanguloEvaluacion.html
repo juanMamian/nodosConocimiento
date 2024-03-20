@@ -7,12 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/trianguloEstilo.css">
+    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
@@ -39,134 +43,200 @@
         </bloque-component>
         <bloque-component tipo="evaluacion"
             textoCabecera="Dado un dibujo de un triángulo rectángulo puedo indicar el nombre que se le da a sus lados">
-            <button class='boton' @click="generarReto3">
-                Dibujar triángulo
-            </button>
+            <div class="flexVertical">
+                <button class='boton' @click="e3GenerarReto">
+                    Dibujar triángulo
+                </button>
 
-            <div class='zonaInteraccion' id="zonaInteraccionReto3">
-                <div class='ladoTriangulo' v-for="numero of 3" :key="'ladoTriangulo' + numero"
-                    :style="[offsetTrianguloReto3.lados[numero-1]]">
+                <div class='zonaReto' id="e3ZonaReto" v-if="e3Reto">
+                    <componente-triangulo v-if="e3Reto" :ancho="e3Reto.anchoTriangulo" :largo="e3Reto.largoTriangulo"
+                        :style="[{transform: 'rotate(' + e3Reto.rotacionTriangulo + 'rad)'}]" id="e3Triangulo"
+                        style="margin: 10px auto" :propiedades-representadas="[]" :propiedades-simbolizadas="[]"
+                        :x-punta="e3Reto.xPuntaTriangulo" color-relleno='transparent'>
+                    </componente-triangulo>
                 </div>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionTeclado' v-if="e3Reto" :key="e3VersionReto">
+                        <div class="flexVertical">
+                            Introduce el nombre del lado resaltado
+                            <transition :name="e3TransicionInputs" mode="out-in" @after-enter="focusSelectElemento">
+                                <input type="text" ref="inputRespuestaUsuarioLado1" v-if="e3IndexIntroduciendoLado===0"
+                                    v-model="e3RespuestasUsuario[0]">
+                                <input type="text" ref="inputRespuestaUsuarioLado2"
+                                    v-else-if="e3IndexIntroduciendoLado===1" v-model="e3RespuestasUsuario[1]">
+                                <input type="text" ref="inputRespuestaUsuarioLado3"
+                                    v-else="e3IndexIntroduciendoLado===2" v-model="e3RespuestasUsuario[2]">
+                            </transition>
+                            <div class="flexHorizontal">
+                                <button class="boton" :disabled="e3IndexIntroduciendoLado < 1"
+                                    @click="e3IndexIntroduciendoLado=e3IndexIntroduciendoLado<=0?0:e3IndexIntroduciendoLado-1"
+                                    :class="{deshabilitado: e3IndexIntroduciendoLado<1}">
+                                    Anterior
+                                </button>
+                                <button class="boton" :disabled="e3IndexIntroduciendoLado > 1"
+                                    @click="e3IndexIntroduciendoLado=e3IndexIntroduciendoLado>=2?2:e3IndexIntroduciendoLado+1"
+                                    :class="{deshabilitado: e3IndexIntroduciendoLado>1}">
+                                    Siguiente
+                                </button>
+                            </div>
+                            <button class="boton" v-show="e3RespuestaUsuarioCompleta"
+                                @click="e3EvaluarRespuestaUsuario">
+                                Aceptar
+                            </button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e3RespuestaUsuarioCorrecta!=null"
+                        :modo="e3RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e3VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+
             </div>
         </bloque-component>
+
     </div>
 </body>
 
 </html>
 
-<script>
-    const {createApp} = Vue;
+<script type="module">
+    import {useUtils} from 'https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js'
+    import {useEvaluacionNodo} from 'https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/evaluacionNodo.js'
+    import {componenteTriangulo} from 'https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/triangulo.js'
+    const {createApp, ref, computed, watch, nextTick} = Vue;
     createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
-            enlaceComponent
+            enlaceComponent,
+            componenteTriangulo
+        },
+        setup() {
+            const {scrollToElemento, focusSelectElemento} = useUtils();
+
+            //e3
+            const e3LadosPreguntados = ref([]);
+            const e3Respuestas = ref([]);
+            const e1AddToGenerarReto = function () {
+                const minAncho = 3;
+                const maxAncho = 12;
+                const minLargo = 2;
+                const maxLargo = 10;
+                const rangoAncho = maxAncho - minAncho;
+                const rangoLargo = maxLargo - minLargo;
+
+                e3Reto.value = {};
+
+                e3Reto.value.anchoTriangulo = Math.round(Math.random() * rangoAncho + minAncho);
+                e3Reto.value.largoTriangulo = Math.round(Math.random() * rangoLargo + minLargo);
+                e3Reto.value.xPuntaTriangulo = Math.random() > 0.5 ? 0 : e3Reto.value.anchoTriangulo;
+                e3Reto.value.rotacionTriangulo = Math.round(Math.random() * Math.PI * 2);
+
+                let ladosPreguntables = ['ladoBase', 'lado1', 'lado2'];
+                let respuestasOrdenadas = [];
+                if (e3Reto.value.xPuntaTriangulo === 0) {
+                    respuestasOrdenadas=['cateto', 'cateto', 'hipotenusa'];
+                }
+                else {
+                    respuestasOrdenadas = ['cateto', 'hipotenusa', 'cateto'];
+                }
+                const primerLado = Math.round(Math.random() * 2);
+                e3LadosPreguntados.value.push(ladosPreguntables.splice(primerLado, 1)[0]);
+                e3Respuestas.value.push(respuestasOrdenadas.splice(primerLado, 1)[0]);
+
+                const segundoLado = Math.round(Math.random());
+                e3LadosPreguntados.value.push(ladosPreguntables.splice(segundoLado, 1)[0]);
+                e3Respuestas.value.push(respuestasOrdenadas.splice(segundoLado, 1)[0]);
+
+                e3LadosPreguntados.value.push(ladosPreguntables[0]);
+                e3Respuestas.value.push(respuestasOrdenadas[0]);
+
+                console.log(`Lados preguntados: ${e3LadosPreguntados.value}`);
+                console.log(`Respuestas ${e3Respuestas.value}`);
+            }
+            const e3AddToReiniciarReto = function () {
+                e3RespuestasUsuario.value = Array(3).fill('');
+                e3LadosPreguntados.value = new Array();
+                e3Respuestas.value = new Array();
+                e3IndexIntroduciendoLado.value = 0;
+            }
+            const {versionReto: e3VersionReto, reto: e3Reto, reiniciarReto: e3ReiniciarReto, generarReto: e3GenerarReto, respuesta: e3Respuesta, respuestaUsuarioCorrecta: e3RespuestaUsuarioCorrecta, versionRespuestaUsuario: e3VersionRespuestaUsuario, inputRespuestaUsuario: e3InputRespuestaUsuario} = useEvaluacionNodo(e1AddToGenerarReto, e3AddToReiniciarReto);
+
+            const e3IndexIntroduciendoLado = ref(0);
+            const e3LadoIntroduciendose = computed(() => {
+                return e3LadosPreguntados.value[e3IndexIntroduciendoLado.value];
+            });
+            const e3RespuestasUsuario = ref(Array(3).fill(''));
+            const e3RespuestaUsuarioCompleta = computed(() => {
+                return !e3RespuestasUsuario.value.some(campo => !campo || campo.length < 2);
+
+            });
+
+            function e3EvaluarRespuestaUsuario() {
+                console.log(`Evaluando respuesta de usuario`);
+                console.log(`Comparando ${e3RespuestasUsuario.value} con ${e3Respuestas.value}`);
+                e3RespuestaUsuarioCorrecta.value = true;
+                e3RespuestasUsuario.value.forEach((respuestaUsuario, index) => {
+                    if (respuestaUsuario.trim().toLowerCase() != e3Respuestas.value[index]) {
+                        e3RespuestaUsuarioCorrecta.value = false;
+                    }
+                })
+                e3VersionRespuestaUsuario.value++;
+            }
+
+            watch(e3LadoIntroduciendose, async (nombreLado) => {
+                document.querySelectorAll("#e3Triangulo .lado").forEach(lado => {
+                    lado.style.backgroundColor = 'black';
+                    lado.style.height = '1px';
+                })
+
+                await nextTick();
+                const selector = "#e3Triangulo " + "." + nombreLado;
+                console.log(`Selector: ${selector}`);
+                const elLado = document.querySelector(selector);
+                if (!elLado) {
+                    console.log(`Lado ${selector} no encontrado`);
+                    return
+                }
+                elLado.style.backgroundColor = 'var(--paletaMain)';
+                elLado.style.height = '2px';
+            })
+
+            //Direccion de la transición de los inputs
+            const e3TransicionInputs = ref('travelAcrossRightLeft');
+            watch(e3IndexIntroduciendoLado, (indexActual, indexViejo) => {
+                if (indexActual > indexViejo) {
+                    e3TransicionInputs.value = 'travelAcrossRightLeft';
+                }
+                else {
+                    e3TransicionInputs.value = 'travelAcrossLeftRight';
+                }
+
+            })
+
+
+            return {
+                scrollToElemento, focusSelectElemento,
+                e3VersionReto, e3Reto, e3ReiniciarReto, e3GenerarReto, e3Respuesta, e3RespuestaUsuarioCorrecta, e3VersionRespuestaUsuario, e3InputRespuestaUsuario, e3EvaluarRespuestaUsuario,
+                e3LadoIntroduciendose, e3IndexIntroduciendoLado, e3RespuestasUsuario, e3RespuestaUsuarioCompleta,
+                e3TransicionInputs,
+            }
+
+
         },
         data() {
             return {
-                trianguloReto3: {
-                    lados: [
-                        {
-                            longitud: 0,
-                            x: 0,
-                            y: 0,
-                            rotacion: 0,
-                        },
-                        {
-                            longitud: 0,
-                            x: 0,
-                            y: 0,
-                            rotacion: 0,
-                        },
-                        {
-                            longitud: 0,
-                            x: 0,
-                            y: 0,
-                            rotacion: 0,
-                        }
-
-                    ],
-                }
             }
         },
-        computed: {
-            offsetTrianguloReto3() {
-                return {
-                    lados: this.trianguloReto3.lados.map(lado => {
-                        return {
-                            width: lado.longitud + 'px',
-                            transform: 'rotate(' + lado.rotacion + 'rad)',
-                            top: lado.y + 'px',
-                            left: lado.x + 'px',
-                        }
-                    })
-                }
-            }
-        },
-        methods: {
-            reiniciarReto3() {
-                for (var i = 0; i < this.trianguloReto3.lados.length; i++) {
-                    this.trianguloReto3.lado[i].longitud = 0;
-                    this.trianguloReto3.lado[i].rotacion = 0;
-                    this.trianguloReto3.lado[i].x = 0;
-                    this.trianguloReto3.lado[i].y = 0;
-                }
-            },
-            generarReto3() {
-                console.log("Generando reto3");
-                let anguloRectoGenerado = false;
-                let sentidoHorario = Math.random() > 0.5;
-
-                //Lado 1.
-                this.trianguloReto3.lados[0].longitud = Math.random() * 20 + 10;
-                this.trianguloReto3.lados[0].rotacion = Math.random() * Math.PI * 2;
-                console.log("Lado 1: " + this.trianguloReto3.lados[0].longitud + ", " + this.trianguloReto3.lados[0].rotacion);
-
-                //lado 2.
-                this.trianguloReto3.lados[1].longitud = Math.random() * 20 + 10;
-                this.trianguloReto3.lados[1].rotacion = sentidoHorario ? this.trianguloReto3.lados[0].rotacion + (Math.PI / 2) : this.trianguloReto3.lados[0].rotacion - (Math.PI / 2);
-
-                this.trianguloReto3.lados[1].x = Math.round(this.trianguloReto3.lados[0].longitud * Math.cos(this.trianguloReto3.lados[0].rotacion));
-                this.trianguloReto3.lados[1].y = Math.round(this.trianguloReto3.lados[0].longitud * Math.sin(this.trianguloReto3.lados[0].rotacion));
-
-                console.log("Lado 2: " + this.trianguloReto3.lados[1].longitud + ", " + this.trianguloReto3.lados[1].rotacion);
-
-
-                //lado 3.
-
-                let deltaX = this.trianguloReto3.lados[0].longitud * Math.cos(this.trianguloReto3.lados[0].rotacion) + this.trianguloReto3.lados[1].longitud * Math.cos(this.trianguloReto3.lados[1].rotacion);
-                let deltaY = this.trianguloReto3.lados[0].longitud * Math.sin(this.trianguloReto3.lados[0].rotacion) + this.trianguloReto3.lados[1].longitud * Math.sin(this.trianguloReto3.lados[1].rotacion);
-
-                let longitud = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-                let rotacion3 = Math.atan(deltaY / deltaX);
-                if ((deltaY < 0 && deltaX < 0) || (deltaY > 0 && deltaX < 0)) {
-                    rotacion3 = rotacion3 + Math.PI;
-                }
-
-                this.trianguloReto3.lados[2].longitud = longitud;
-                this.trianguloReto3.lados[2].rotacion = rotacion3;
-
-                this.trianguloReto3.lados[2].x = Math.round(this.trianguloReto3.lados[1].x + this.trianguloReto3.lados[1].longitud * Math.cos(this.trianguloReto3.lados[1].rotacion));
-                this.trianguloReto3.lados[2].y = Math.round(this.trianguloReto3.lados[1].y + this.trianguloReto3.lados[1].longitud * Math.sin(this.trianguloReto3.lados[1].rotacion));
-
-                console.log("Lado 3: " + this.trianguloReto3.lados[2].longitud + ", " + this.trianguloReto3.lados[2].rotacion);
-
-            }
-        }
     }).mount("#doc");
 </script>
 
 <style>
-    #zonaInteraccionReto3 {
-        min-height: 400px;
+    .zonaReto {
+        width: 100%;
+        padding: 30px 0px;
         position: relative;
-    }
-
-    .ladoTriangulo {
-        height: 2px;
-        background-color: black;
-        min-width: 10px;
-        transform-origin: 1px center;
-        position: absolute;
     }
 </style>

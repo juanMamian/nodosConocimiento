@@ -326,6 +326,36 @@ input {
     }
 }
 
+.travelAcrossLeftRight-enter-from {
+    transform: translateX(-50%);
+    opacity: 0
+}
+
+.travelAcrossLeftRight-leave-to {
+    transform: translateX(+50%);
+    opacity: 0;
+}
+
+.travelAcrossLeftRight-enter-active,
+.travelAcrossLeftRight-leave-active {
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.travelAcrossRightLeft-enter-from {
+    transform: translateX(+50%);
+    opacity: 0
+}
+
+.travelAcrossRightLeft-leave-to {
+    transform: translateX(-50%);
+    opacity: 0;
+}
+
+.travelAcrossRightLeft-enter-active,
+.travelAcrossRightLeft-leave-active {
+    transition: transform 0.2s, opacity 0.2s;
+}
+
 .travelTop-enter-active {
     animation: traveltop;
     animation-duration: 1s;
@@ -349,7 +379,8 @@ input {
     pointer-events: none;
     opacity: 0;
 }
-.enterBottom-enter-active{
+
+.enterBottom-enter-active {
     animation: travelBottom;
     animation-duration: 1s;
     animation-iteration-count: 1;

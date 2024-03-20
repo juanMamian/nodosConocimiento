@@ -8,6 +8,13 @@ export const useUtils = function() {
             elemento.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     }
-    return { scrollToElemento };
+    function focusElemento(elemento) {
+        elemento.focus();
+    }
+    function focusSelectElemento(elemento) {
+        elemento.focus();
+        elemento.select();
+    }
+    return { scrollToElemento, focusElemento, focusSelectElemento };
 
 }

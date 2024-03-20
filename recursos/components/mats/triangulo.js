@@ -7,7 +7,7 @@ export const componenteTriangulo = {
             </div>
             <div class="lado lado2" :style="[estiloLado2]">
             </div>
-            <div class="representacionLargo" :style="[estiloRepresentacionLargo]" v-show="propiedadesSimbolizadas.includes('largo')">
+            <div class="representacionLargo" :style="[estiloRepresentacionLargo]" v-show="propiedadesRepresentadas.includes('largo')">
             </div>
             <div  class="label labelLargo" v-show="propiedadesSimbolizadas.includes('largo')" :class="{explicitable: propiedadesExplicitables.includes('largo'), explicitado: propiedadesExplicitadas.includes('largo')}">
                 <span class="visibleNormalmente">l</span><span class="visibleHovered">={{truncar(largo)}}</span>
@@ -90,14 +90,28 @@ export const componenteTriangulo = {
             return Math.atan2(this.largo, this.ancho - this.xPunta);
         },
         estiloLado1() {
+            let longitud=this.ancho;
+            if(Math.cos(this.rotacionLado1)<0.01){
+                longitud=this.largo;
+            }
+            else{
+                longitud=this.xPunta/Math.cos(this.rotacionLado1);
+            }
             return {
-                width: this.unidad * this.xPunta / Math.cos(this.rotacionLado1) + 'px',
+                width: this.unidad * longitud + 'px',
                 transform: `rotate(-${this.rotacionLado1}rad)`
             }
         },
         estiloLado2() {
+            let longitud=this.ancho;
+            if(Math.cos(this.rotacionLado2)<0.01){
+                longitud=this.largo;
+            }
+            else{
+                longitud=(this.ancho - this.xPunta)/Math.cos(this.rotacionLado2);
+            }
             return {
-                width: this.unidad * (this.ancho - this.xPunta) / Math.cos(this.rotacionLado2) + 'px',
+                width: this.unidad * longitud + 'px',
                 transform: `rotate(${Math.PI + this.rotacionLado2}rad)`,
             }
         },
@@ -107,6 +121,7 @@ export const componenteTriangulo = {
             }
         },
         estiloRelleno() {
+            console.log(`Calculando con xPunta ${this.xPunta}`);
             let xPuntaPorcentaje = this.xPunta * 100 / this.ancho;
             return {
                 width: this.unidad * this.ancho + 'px',

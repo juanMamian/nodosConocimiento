@@ -27,7 +27,7 @@ export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, 
     const inputRespuestaUsuario = ref(null);
 
     function evaluarRespuestaUsuario(respuestaUsuario, numerica = false) {
-        if (!respuestaUsuario) {
+        if (respuestaUsuario == null) {
             if (recolectarRespuestaUsuario) {
                 respuestaUsuario = recolectarRespuestaUsuario();
             }
@@ -36,6 +36,11 @@ export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, 
                     console.log(`No había input de respuesta usuario`);
                     return;
                 }
+                if(!inputRespuestaUsuario.value.value){
+                    console.log(`No había respuesta en el input`);
+                    return;
+                }
+
                 respuestaUsuario = inputRespuestaUsuario.value.value.trim();
             }
         }

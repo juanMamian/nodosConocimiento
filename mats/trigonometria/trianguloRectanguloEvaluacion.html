@@ -38,15 +38,14 @@
             textoCabecera="Dado un dibujo de un triángulo puedo decidir si se trata de un triángulo rectángulo o no">
 
             <div class="flexVertical">
-                <button class="boton">
+                <button class="boton" @click="e1GenerarReto">
                     Generar triángulo
                 </button>
 
                 <div class="zonaReto">
-                    <componente-triangulo v-if="e1Reto" :ancho="e2reto.anchoTriangulo" :largo="e2Reto.largoTriangulo"
-                        :x-punta="e2Reto.xPuntaTriangulo" :propiedades-representadas="[]"
+                    <componente-triangulo v-if="e1Reto" :ancho="e1Reto.anchoTriangulo" :largo="e1Reto.largoTriangulo"
+                        :x-punta="e1Reto.xPuntaTriangulo" :propiedades-representadas="[]"
                         :propiedades-simbolizadas="[]">
-
                     </componente-triangulo>
                 </div>
 
@@ -119,7 +118,7 @@
 
 <script type="module">
     import {useUtils} from 'https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js'
-    import {useEvaluacionNodo} from 'https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/evaluacionNodo.js'
+    import {useEvaluacionNodo} from '../../recursos/composables/evaluacionNodo.js'
     import {componenteTriangulo} from 'https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/triangulo.js'
     const {createApp, ref, computed, watch, nextTick} = Vue;
     createApp({
@@ -132,7 +131,7 @@
         setup() {
             const {scrollToElemento, focusSelectElemento} = useUtils();
             //e1
-            const {versionReto: e1VersionReto, reto: e1Reto, reiniciarReto: e1ReiniciarReto, generarReto: e1GenerarReto, respuesta: e1Respuesta, respuestaUsuarioCorrecta: e1RespuestaUsuarioCorrecta, versionRespuestaUsuario: e1VersionRespuestaUsuario, inputRespuestaUsuario: e1InputRespuestaUsuario, evaluarRespuestaUsuario: e1EvaluarRespuestaUsuario} = useEvaluacionNodo();
+            const {versionReto: e1VersionReto, reto: e1Reto, reiniciarReto: e1ReiniciarReto, generarReto: e1GenerarReto, respuesta: e1Respuesta, respuestaUsuarioCorrecta: e1RespuestaUsuarioCorrecta, versionRespuestaUsuario: e1VersionRespuestaUsuario, inputRespuestaUsuario: e1InputRespuestaUsuario, evaluarRespuestaUsuario: e1EvaluarRespuestaUsuario} = useEvaluacionNodo(e1AddToGenerarReto);
             function e1AddToGenerarReto() {
                 const minAncho = 3;
                 const maxAncho = 12;
@@ -141,19 +140,78 @@
                 const rangoAncho = maxAncho - minAncho;
                 const rangoLargo = maxLargo - minLargo;
 
-                e3Reto.value = {};
+                e1Reto.value = {};
 
-                e3Reto.value.anchoTriangulo = Math.round(Math.random() * rangoAncho + minAncho);
-                e3Reto.value.largoTriangulo = Math.round(Math.random() * rangoLargo + minLargo);
-                e3Reto.value.xPuntaTriangulo = Math.round(Math.random() * e3Reto.value.anchoTriangulo);
-                e3Reto.value.rotacionTriangulo = Math.round(Math.random() * Math.PI * 2);
+                e1Reto.value.anchoTriangulo = Math.round(Math.random() * rangoAncho + minAncho);
+                console.log(`Ancho triángulo: ${e1Reto.value.anchoTriangulo}`);
+                e1Reto.value.largoTriangulo = Math.round(Math.random() * rangoLargo + minLargo);
+                console.log(`Largo triángulo: ${e1Reto.value.largoTriangulo}`);
+
+                //Se rodará un dado para decidir si es triángulo rectángulo. Hay 3 xPunta para triangulo rectángulo: 0, ancho, y un punto intermedio que hace que la punta sea un ángulo recto.
+                let dado = Math.random();
+                if (dado > 0.5) {//Se hará un triángulo rectángulo.
+                    if (dado > 0.75) {
+                        e1Reto.value.xPuntaTriangulo = 0;
+                    }
+                    else {
+                        e1Reto.value.xPuntaTriangulo = e1Reto.value.anchoTriangulo;
+                    }
+                    e1Respuesta.value = true;
+                }
+                else {
+                    e1Reto.value.xPuntaTriangulo = Math.random() * e1Reto.value.anchoTriangulo;
+
+                    let rangosDespejados = []; //Rangos del ancho en los cuales no puede ubicarse xPunta pues se asemejaría a un ángulo recto.
+                    if (e1Reto.value.anchoTriangulo > 2 * e1Reto.value.largoTriangulo) { //Encontrar puntos intermedios en los cuales xPunta genera un ángulo recto.
+                        const porcentajePadding = 20; //Porcentaje de ancho que se despeja alrededor de los xPunta de ángulo recto para no generar confusiones.
+                        const padding = e1Reto.value.anchoTriangulo * porcentajePadding / 100;
+                        console.log(`padding: ${padding}`);
+                        //Los dos puntos intermedios son las raices de una ecuación cuadrática.
+                        let sumadorRestador = Math.sqrt(Math.pow(e1Reto.value.anchoTriangulo, 2) - 4 * Math.pow(e1Reto.value.largoTriangulo, 2)) / 2;
+                        console.log(`1: ${Math.pow(e1Reto.value.anchoTriangulo, 2)}`);
+                        console.log(`2: ${4 * Math.pow(e1Reto.value.largoTriangulo, 2)}`);
+                        console.log(`SumadorRestador: ${sumadorRestador}`);
+                        let primerTermino = e1Reto.value.anchoTriangulo / 2
+                        console.log(`Primer término: ${primerTermino}`);
+                        const puntoAnguloRecto1 = primerTermino - sumadorRestador;
+                        const puntoAnguloRecto2 = primerTermino + sumadorRestador;
+                        console.log(`Punto anguloRecto1: ${puntoAnguloRecto1}`);
+                        console.log(`Punto anguloRecto2: ${puntoAnguloRecto2}`);
+                        if (puntoAnguloRecto1 + padding / 2 >= puntoAnguloRecto2 - padding / 2) { // Overlapping
+                            //Se crea un solo rango despejado:
+                            rangosDespejados.push([puntoAnguloRecto1 - padding / 2, puntoAnguloRecto2 + padding / 2]);
+                        }
+                        else {//Dos rangos despejados.
+                            rangosDespejados.push([puntoAnguloRecto1 - padding / 2, puntoAnguloRecto1 + padding / 2]);
+                            rangosDespejados.push([puntoAnguloRecto2 - padding / 2, puntoAnguloRecto2 + padding / 2]);
+                        }
+                    }
+                    rangosDespejados.forEach(rango => {
+                        let distanciaInicio = e1Reto.value.xPuntaTriangulo - rango[0];
+                        let distanciaFinal = rango[0] - e1Reto.value.xPuntaTriangulo;
+                        if (distanciaInicio > 0 && distanciaFinal > 0) {
+                            if (distanciaFinal < distanciaInicio) {
+                                console.log(`Corrigiendo xPunta al inicio del rango: ${rango[0]}`);
+                                e1Reto.value.xPuntaTriangulo = rango[0];
+                            }
+                            else {
+                                console.log(`Corrigiendo xPunta al final del rango: ${rango[1]}`);
+                                e1Reto.value.xPuntaTriangulo = rango[1];
+                            }
+                        }
+                    });
+
+                    e1Respuesta.value = false;
+                }
+                console.log(`xPunta: ${e1Reto.value.xPuntaTriangulo}`);
+                e1Reto.value.rotacionTriangulo = Math.round(Math.random() * Math.PI * 2);
             }
 
 
             //e3
             const e3LadosPreguntados = ref([]);
             const e3Respuestas = ref([]);
-            const e1AddToGenerarReto = function () {
+            const e3AddToGenerarReto = function () {
                 const minAncho = 3;
                 const maxAncho = 12;
                 const minLargo = 2;
@@ -196,7 +254,7 @@
                 e3Respuestas.value = new Array();
                 e3IndexIntroduciendoLado.value = 0;
             }
-            const {versionReto: e3VersionReto, reto: e3Reto, reiniciarReto: e3ReiniciarReto, generarReto: e3GenerarReto, respuesta: e3Respuesta, respuestaUsuarioCorrecta: e3RespuestaUsuarioCorrecta, versionRespuestaUsuario: e3VersionRespuestaUsuario, inputRespuestaUsuario: e3InputRespuestaUsuario} = useEvaluacionNodo(e1AddToGenerarReto, e3AddToReiniciarReto);
+            const {versionReto: e3VersionReto, reto: e3Reto, reiniciarReto: e3ReiniciarReto, generarReto: e3GenerarReto, respuesta: e3Respuesta, respuestaUsuarioCorrecta: e3RespuestaUsuarioCorrecta, versionRespuestaUsuario: e3VersionRespuestaUsuario, inputRespuestaUsuario: e3InputRespuestaUsuario} = useEvaluacionNodo(e3AddToGenerarReto, e3AddToReiniciarReto);
 
             const e3IndexIntroduciendoLado = ref(0);
             const e3LadoIntroduciendose = computed(() => {

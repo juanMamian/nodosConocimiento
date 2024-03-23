@@ -482,6 +482,12 @@ input {
         transform: scale(1);
     }
 }
+.foldUnfoldHorizontal-enter-active{
+        animation: unfoldHorizontal 0.5s;
+}
+.foldUnfoldHorizontal-leave-active{
+        animation: unfoldHorizontal 0.5s reverse;
+}
 
     .unfoldHorizontal-enter-active {
         animation: unfoldHorizontal 0.5s;

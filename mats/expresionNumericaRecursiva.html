@@ -17,8 +17,7 @@
     <script
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
@@ -35,83 +34,119 @@
 
     <div id="doc">
 
-        <recuadro-component tipo="datoPrevio">
+        <p tipo="datoPrevio">
             Los operandos de una expresión numérica son números y, por lo tanto,
             también pueden ser representados como expresiones numéricas.
+        </p>
+
+        <recuadro-component tipo='datoPrevio'>
+            Cuando un operando es una expresión numérica, se escribe con paréntesis.
         </recuadro-component>
 
 
         <bloque-component tipo="ejemplo" @desplegado="ejemploDesplegado" @plegado="ejemploPlegado"
             textoCabecera="En este cuadro se puede ver una expresion numérica y se pueden expresar sus operandos en forma de nuevas expresiones numéricas">
 
+            <recuadro-component tipo="instruccionPointer">
+                Toca los operandos de estas expresiónes numéricas para cambiar el modo en que están expresados
+            </recuadro-component>
+
             <div class="listaEjemplos">
                 <div class="itemEjemplo">
                     <div class="expresionNumerica">
-                        <div class="numeroTransformable" v-show="!e1DireccionesTransformadas.includes('0')"
-                            @click="e1DireccionesTransformadasToggle('0')">
-                            \(18\)
-                        </div>
-                        <div v-show="e1DireccionesTransformadas.includes('0')">
-                            <div class="numeroTransformable" @click="e1DireccionesTransformadasToggle('00')"
-                                v-show="!e1DireccionesTransformadas.includes('00')">\( 3 \)</div>
-                            <div class="numeroTransformable" @click="e1DireccionesTransformadasToggle('00')"
-                                v-show="e1DireccionesTransformadas.includes('00')">\( ( {6 \over 2})
-                                \)
+                        <div class="numeroTransformable" @click.stop="e1DireccionesTransformadasToggle(0,'0')">
+                            <div class="explicito" :class="{reemplazado: e1DireccionesTransformadas[0].includes('0')}">
+                                \(18\)
                             </div>
+                            <transition name="foldUnfoldHorizontal">
+                                <div v-show="e1DireccionesTransformadas[0].includes('0')">
+                                    <div class="numeroTransformable"
+                                        @click.stop="e1DireccionesTransformadasToggle(0,'00')">
+                                        <div class="explicito"
+                                            :class="{reemplazado: e1DireccionesTransformadas[0].includes('00')}">
+                                            \( 10 \)
+                                        </div>
+                                        <transition name="foldUnfoldHorizontal">
+                                            <div class="numeroTransformable"
+                                                @click.stop="e1DireccionesTransformadasToggle(0,'00')"
+                                                v-show="e1DireccionesTransformadas[0].includes('00')">\( ({30 \over 3}) \)
+                                            </div>
+                                        </transition>
+                                    </div>
 
-                            <div @click="e1DireccionesTransformadasToggle('0')">
-                                \(+\)
-                            </div>
+                                    <div @click.stop="e1DireccionesTransformadasToggle(0,'0')">
+                                        \(+\)
+                                    </div>
 
-                            <div class="numeroTransformable" @click="e1DireccionesTransformadasToggle('01')"
-                                v-show="!e1DireccionesTransformadas.includes('01')">\( 15 \)</div>
-                            <div class="numeroTransformable" @click="e1DireccionesTransformadasToggle('01')"
-                                v-show="e1DireccionesTransformadas.includes('01')">\( ( 5 \times 3) \)
-                            </div>
+                                    <div class="numeroTransformable"
+                                        @click.stop="e1DireccionesTransformadasToggle(0,'01')">
+                                        <div class="explicito"
+                                            :class="{reemplazado: e1DireccionesTransformadas[0].includes('01')}">
+                                            \( 8 \)
+                                        </div>
+
+                                        <transition name="foldUnfoldHorizontal">
+                                            <div class="numeroTransformable"
+                                                @click.stop="e1DireccionesTransformadasToggle(0,'01')"
+                                                v-show="e1DireccionesTransformadas[0].includes('01')">\( ( 10 - 2) \)
+                                            </div>
+                                        </transition>
+                                    </div>
+                                </div>
+                            </transition>
                         </div>
                     </div>
                 </div>
 
                 <div class="itemEjemplo">
                     <div class="expresionNumerica">
-                        <div class="parentesisExtremo">
-                            \((\)
-                        </div>
-                        <div class="contenedorNumeroTransformable" style="width: 100px;"
-                            @click="numerosTransformablesTransformados[2]=!numerosTransformablesTransformados[2]">
-                            <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[2]">\( 6 \)</div>
-                            <div class="opcion opcion2" v-show="numerosTransformablesTransformados[2]">\( ({ 3 + 3 })
-                                \)
+                        <div class="numeroTransformable" @click.stop="e1DireccionesTransformadasToggle(1,'0')">
+                            <div class="explicito" :class="{reemplazado: e1DireccionesTransformadas[1].includes('0')}">
+                                \(6\)
                             </div>
-                        </div>
+                            <transition name="foldUnfoldHorizontal">
+                                <div v-show="e1DireccionesTransformadas[1].includes('0')">
+                                    <div class="numeroTransformable"
+                                        @click.stop="e1DireccionesTransformadasToggle(1,'00')">
+                                        <div class="explicito"
+                                            :class="{reemplazado: e1DireccionesTransformadas[1].includes('00')}">
+                                            \( 15 \)
+                                        </div>
+                                        <transition name="foldUnfoldHorizontal">
+                                            <div class="numeroTransformable"
+                                                @click.stop="e1DireccionesTransformadasToggle(1,'00')"
+                                                v-show="e1DireccionesTransformadas[1].includes('00')">\( ( {5 \times 3})
+                                                \)
+                                            </div>
+                                        </transition>
+                                    </div>
 
-                        <div>
-                            \( \times \)
-                        </div>
+                                    <div @click.stop="e1DireccionesTransformadasToggle(1,'0')">
+                                        \(-\)
+                                    </div>
 
-                        <div class="contenedorNumeroTransformable" style="width: 80px;"
-                            @click="numerosTransformablesTransformados[3]=!numerosTransformablesTransformados[3]">
-                            <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[3]">\( 4 \)</div>
-                            <div class="opcion opcion2" v-show="numerosTransformablesTransformados[3]">\( (1 + 3)
-                                \)
-                            </div>
-                        </div>
-                        <div class="parentesisExtremo">
-                            \()\)
+                                    <div class="numeroTransformable"
+                                        @click.stop="e1DireccionesTransformadasToggle(1,'01')">
+                                        <div class="explicito"
+                                            :class="{reemplazado: e1DireccionesTransformadas[1].includes('01')}">
+                                            \( 9 \)
+                                        </div>
+
+                                        <transition name="foldUnfoldHorizontal">
+                                            <div class="numeroTransformable"
+                                                @click.stop="e1DireccionesTransformadasToggle(1,'01')"
+                                                v-show="e1DireccionesTransformadas[1].includes('01')">\( ( 3 + 6) \)
+                                            </div>
+                                        </transition>
+                                    </div>
+                                </div>
+                            </transition>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <recuadro-component tipo="instruccionPointer">
-                Toca los operandos de esta expresión numérica para cambiar el modo en que están expresados
-            </recuadro-component>
-
         </bloque-component>
 
-        <recuadro-component tipo="descubrimiento">
-            Las operandos de cualquier expresión numérica pueden ser, a su vez, expresiones numéricas.
-        </recuadro-component>
 
         <p>
             En una expresión numérica recursiva, es importante entender cuáles son los operandos en cada operación.
@@ -290,19 +325,24 @@
         },
         data() {
             return {
-                e1DireccionesTransformadas: [],
+                e1DireccionesTransformadas: [[], []],
                 numerosTransformablesTransformados: [false, false, false, false, false, false, false]
             }
         },
         methods: {
-            e1DireccionesTransformadasToggle(direccion) {
-                console.log(`Toggling ${direccion}`);
-                let indexD = this.e1DireccionesTransformadas.indexOf(direccion);
+            e1DireccionesTransformadasToggle(indexNumero, direccion) {
+                console.log(`Toggling ${direccion} en el número ${indexNumero}`);
+                if (indexNumero >= this.e1DireccionesTransformadas.length) {
+                    console.log(`No había lista para este index`);
+                    return;
+                }
+                let lista = this.e1DireccionesTransformadas[indexNumero];
+                let indexD = lista.indexOf(direccion);
                 if (indexD > -1) {
-                    this.e1DireccionesTransformadas = this.e1DireccionesTransformadas.filter(dir => dir.slice(0, direccion.length) != direccion);
+                    this.e1DireccionesTransformadas[indexNumero] = lista.filter(dir => dir.slice(0, direccion.length) != direccion);
                 }
                 else {
-                    this.e1DireccionesTransformadas.push(direccion)
+                    this.e1DireccionesTransformadas[indexNumero].push(direccion)
                 }
             },
             toggleExpresionNumerica(index) {
@@ -342,12 +382,19 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+        z-index: 0;
+        background-color: var(--paletaFondo)
     }
 
     .expresionNumerica div {
         display: flex;
         gap: 10px;
         align-items: center;
+    }
+
+    .numeroTransformable {
+        position: relative;
     }
 
     .parentesisExtremo {
@@ -417,6 +464,35 @@
         100% {
             transform: translateY(0%);
             opacity: 1;
+        }
+    }
+
+    .reemplazado {
+        position: absolute;
+        z-index: -1;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+
+    .foldUnfoldHorizontal-leave-active {
+        animation: foldEspecial 1s;
+        position: absolute;
+        left: 50%;
+        transform-origin: center;
+    }
+
+    .explicito:not(.reemplazado) {
+        transition: opacity 1.3s ease-in;
+    }
+
+    @keyframes foldEspecial {
+        0% {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        100% {
+            transform: translateX(-50%) scaleX(0);
         }
     }
 </style>

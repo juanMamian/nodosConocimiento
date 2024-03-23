@@ -13,7 +13,8 @@
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
     <script
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/circuloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/circuloEstilo.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
@@ -61,7 +62,9 @@
 
             <transition name="fadeIn">
                 <div class="reto" v-if="e4Determinante!=null">
-                    <componente-circulo :determinante="e4Determinante" :key="e4VersionReto" ref="e4Circulo" :propiedades-explicitables="[Object.keys(e4Determinante)[0]]" :propiedades-explicitadas="[Object.keys(e4Determinante)[0]]">
+                    <componente-circulo :determinante="e4Determinante" :key="e4VersionReto" ref="e4Circulo"
+                        :propiedades-explicitables="[Object.keys(e4Determinante)[0]]"
+                        :propiedades-explicitadas="[Object.keys(e4Determinante)[0]]">
                     </componente-circulo>
                 </div>
 
@@ -72,18 +75,24 @@
                         <span>Introduce tu respuesta</span>
                         <div class="contenedorBloquesInput">
                             <div class="bloqueInput">
-                                <label for="e4InputRadio">Radio: </label><input class="inputRespuestaUsuario" @keypress.enter="e4EvaluarRespuestaUsuario" :disabled="e4ComponentePreguntado==='radio'"
-                                    ref="e4InputRadio" :class="{deshabilitado: e4ComponentePreguntado==='radio'}"
-                                    type="number" id="e4InputRadio"><br>
+                                <label for="e4InputRadio">Radio: </label><input class="inputRespuestaUsuario"
+                                    @keypress.enter="e4EvaluarRespuestaUsuario"
+                                    :disabled="e4ComponentePreguntado==='radio'" ref="e4InputRadio"
+                                    :class="{deshabilitado: e4ComponentePreguntado==='radio'}" type="number"
+                                    id="e4InputRadio"><br>
                             </div>
                             <div class="bloqueInput">
-                                <label for="e4InputDiametro">Diámetro: </label><input class="inputRespuestaUsuario" @keypress.enter="e4EvaluarRespuestaUsuario" :disabled="e4ComponentePreguntado==='diametro'"
-                                    ref="e4InputDiametro" :class="{deshabilitado: e4ComponentePreguntado==='diametro'}"
-                                    type="number" id="e4InputDiametro"><br>
+                                <label for="e4InputDiametro">Diámetro: </label><input class="inputRespuestaUsuario"
+                                    @keypress.enter="e4EvaluarRespuestaUsuario"
+                                    :disabled="e4ComponentePreguntado==='diametro'" ref="e4InputDiametro"
+                                    :class="{deshabilitado: e4ComponentePreguntado==='diametro'}" type="number"
+                                    id="e4InputDiametro"><br>
                             </div>
                             <div class="bloqueInput">
-                                <label for="e4InputCircunferencia">Circunferencia: </label><input type="number" @keypress.enter="e4EvaluarRespuestaUsuario" :disabled="e4ComponentePreguntado==='circunferencia'"
-                                    class="inputRespuestaUsuario" ref="e4InputCircunferencia"
+                                <label for="e4InputCircunferencia">Circunferencia: </label><input type="number"
+                                    @keypress.enter="e4EvaluarRespuestaUsuario"
+                                    :disabled="e4ComponentePreguntado==='circunferencia'" class="inputRespuestaUsuario"
+                                    ref="e4InputCircunferencia"
                                     :class="{deshabilitado: e4ComponentePreguntado==='circunferencia'}"
                                     id="e4InputCircunferencia">
                             </div>
@@ -95,15 +104,12 @@
             </transition>
 
             <transition name="fadeIn" @enter="scrollToElemento">
-                <recuadro-component v-show="e4RespuestaUsuarioCorrecta!=null" tipo="infoResultado" :key="e4VersionRespuestaUsuario"
-                    :modo="e4RespuestaUsuarioCorrecta?'correcto':'incorrecto'">
+                <recuadro-component v-show="e4RespuestaUsuarioCorrecta!=null" tipo="infoResultado"
+                    :key="e4VersionRespuestaUsuario" :modo="e4RespuestaUsuarioCorrecta?'correcto':'incorrecto'">
                 </recuadro-component>
             </transition>
 
         </bloque-component>
-        <div style="height: 100vh">
-            
-        </div>
     </div>
 </body>
 
@@ -177,7 +183,7 @@
                 let uCircunferencia = e4InputCircunferencia.value.value.trim();
 
                 e4RespuestaUsuarioCorrecta.value = false;
-                if (Math.abs(uRadio - e4Circulo.value.radio) < 0.01 && Math.abs(uDiametro - e4Circulo.value.diametro) < 0.01 && Math.abs(uCircunferencia - e4Circulo.value.circunferencia) < 0.01) {
+                if (Math.abs(uRadio - e4Circulo.value.radio) < 0.005 * e4Circulo.value.radio && Math.abs(uDiametro - e4Circulo.value.diametro) < 0.005 * e4Circulo.value.diametro && Math.abs(uCircunferencia - e4Circulo.value.circunferencia) < 0.005 * e4Circulo.value.circunferencia) {
                     e4RespuestaUsuarioCorrecta.value = true;
                 }
                 e4VersionRespuestaUsuario.value++;

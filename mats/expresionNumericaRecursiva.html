@@ -47,28 +47,27 @@
             <div class="listaEjemplos">
                 <div class="itemEjemplo">
                     <div class="expresionNumerica">
-                        <div class="parentesisExtremo">
-                            \((\)
+                        <div class="numeroTransformable" v-show="!e1DireccionesTransformadas.includes('0')"
+                            @click="e1DireccionesTransformadasToggle('0')">
+                            \(18\)
                         </div>
-                        <div class="contenedorNumeroTransformable" style="width: 100px;"
-                            @click="numerosTransformablesTransformados[0]=!numerosTransformablesTransformados[0]">
-                            <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[0]">\( 3 \)</div>
-                            <div class="opcion opcion2" v-show="numerosTransformablesTransformados[0]">\( ( {6 \over 2})
+                        <div v-show="e1DireccionesTransformadas.includes('0')">
+                            <div class="numeroTransformable" @click="e1DireccionesTransformadasToggle('00')"
+                                v-show="!e1DireccionesTransformadas.includes('00')">\( 3 \)</div>
+                            <div class="numeroTransformable" @click="e1DireccionesTransformadasToggle('00')"
+                                v-show="e1DireccionesTransformadas.includes('00')">\( ( {6 \over 2})
                                 \)
                             </div>
-                        </div>
 
-                        \(+\)
-
-                        <div class="contenedorNumeroTransformable" style="width: 80px;"
-                            @click="numerosTransformablesTransformados[1]=!numerosTransformablesTransformados[1]">
-                            <div class="opcion opcion1" v-show="!numerosTransformablesTransformados[1]">\( 15 \)</div>
-                            <div class="opcion opcion2" v-show="numerosTransformablesTransformados[1]">\( (5 \times 3)
-                                \)
+                            <div @click="e1DireccionesTransformadasToggle('0')">
+                                \(+\)
                             </div>
-                        </div>
-                        <div class="parentesisExtremo">
-                            \()\)
+
+                            <div class="numeroTransformable" @click="e1DireccionesTransformadasToggle('01')"
+                                v-show="!e1DireccionesTransformadas.includes('01')">\( 15 \)</div>
+                            <div class="numeroTransformable" @click="e1DireccionesTransformadasToggle('01')"
+                                v-show="e1DireccionesTransformadas.includes('01')">\( ( 5 \times 3) \)
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -86,7 +85,9 @@
                             </div>
                         </div>
 
-                        \( \times \)
+                        <div>
+                            \( \times \)
+                        </div>
 
                         <div class="contenedorNumeroTransformable" style="width: 80px;"
                             @click="numerosTransformablesTransformados[3]=!numerosTransformablesTransformados[3]">
@@ -289,14 +290,23 @@
         },
         data() {
             return {
-
+                e1DireccionesTransformadas: [],
                 numerosTransformablesTransformados: [false, false, false, false, false, false, false]
             }
         },
         methods: {
+            e1DireccionesTransformadasToggle(direccion) {
+                console.log(`Toggling ${direccion}`);
+                let indexD = this.e1DireccionesTransformadas.indexOf(direccion);
+                if (indexD > -1) {
+                    this.e1DireccionesTransformadas = this.e1DireccionesTransformadas.filter(dir => dir.slice(0, direccion.length) != direccion);
+                }
+                else {
+                    this.e1DireccionesTransformadas.push(direccion)
+                }
+            },
             toggleExpresionNumerica(index) {
-                // this.mostrandoExpresionNumerica[index]=!this.mostrandoExpresionNumerica[index];
-                this.$set(this.mostrandoExpresionNumerica, index, !this.mostrandoExpresionNumerica[index]);
+                this.mostrandoExpresionNumerica[index] = !this.mostrandoExpresionNumerica[index];
                 this.$nextTick(() => {
                     MathJax.typeset();
                 });
@@ -309,7 +319,7 @@
             },
             ejemploPlegado() {
                 for (var i = 0; i < this.numerosTransformablesTransformados.length; i++) {
-                    this.$set(this.numerosTransformablesTransformados, i, false);
+                    this.numerosTransformablesTransformados[i] = false;
                 }
             }
 
@@ -334,6 +344,11 @@
         justify-content: center;
     }
 
+    .expresionNumerica div {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
 
     .parentesisExtremo {
         font-size: 35px;

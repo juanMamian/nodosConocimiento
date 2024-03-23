@@ -19,8 +19,7 @@
     <script
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
@@ -67,14 +66,13 @@
 
             <div class="listaEjemplos" style="display: flex;">
                 <div class="itemEjemplo" v-for="(expresion, index) of expresiones" :key="'expresion'+index">
-                    <div id="contenedorNumero1">
-                        <transition name="fade">
+                    <div class="contenedorNumero">
+                        <transition name="unfoldInPlace">
                             <div class="numero numeroExplicito" v-show="!mostrandoExpresionNumerica[index]">
                                 {{expresion.valor}}
                             </div>
                         </transition>
-                        <transition name="fade">
-
+                        <transition name="unfoldInPlace">
                             <div class="numero numeroExpresionNumerica" v-show="mostrandoExpresionNumerica[index]">
                                 \({{ expresion.toMathJax() }}\)
                             </div>
@@ -82,7 +80,7 @@
                     </div>
 
                     <div class="boton" @click="toggleExpresionNumerica(index)" style="max-width: 150px;">
-                        {{mostrandoExpresionNumerica[index]?'Expresar con su símbolo':'Expresar mediante una operación aritmética'}}
+                        {{mostrandoExpresionNumerica[index]?"Expresar con su símbolo":"Expresar mediante una operación aritmética"}}
                     </div>
                 </div>
             </div>
@@ -288,5 +286,54 @@
 
     .expresionNumerica {
         font-size: 22px;
+    }
+
+    .unfoldInPlace-enter-active {
+        animation: unfoldInPlace 0.5s;
+    }
+
+    .unfoldInPlace-leave-active {
+        animation: unfoldInPlace 0.5s reverse;
+    }
+
+    @keyframes unfoldInPlace {
+        0%{
+            opacity: 0;
+        }
+        49%{
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scaleX(0);
+        }
+
+        100% {
+            transform: translate(-50%, -50%) scaleX(1);
+        }
+    }
+
+    @keyframes delayedUnfoldInPlace {
+        0% {
+            transform: translate(-50%, -50%) scaleX(0);
+        }
+
+        100% {
+            transform: translate(-50%, -50%) scaleX(1);
+        }
+    }
+
+    .contenedorNumero {
+        position: relative;
+        width: 100px;
+        height: 30px;
+        margin: 0px auto;
+    }
+
+    .contenedorNumero .numero {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 </style>

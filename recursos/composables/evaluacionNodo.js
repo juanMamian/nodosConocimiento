@@ -2,6 +2,7 @@ import "https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"
 const { ref } = Vue;
 
 export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, recolectarRespuestaUsuario) {
+    const dificultad=ref(1);
     const versionReto = ref(0);
     const reto = ref(null);
     function reiniciarReto() {
@@ -60,7 +61,7 @@ export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, 
     }
 
     return {
-        versionReto, reto, reiniciarReto, generarReto,
+        dificultad, versionReto, reto, reiniciarReto, generarReto,
         respuesta, respuestaUsuarioCorrecta, versionRespuestaUsuario, inputRespuestaUsuario, evaluarRespuestaUsuario
 
     }

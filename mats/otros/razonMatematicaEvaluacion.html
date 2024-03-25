@@ -38,29 +38,47 @@
                 <recuadro-component tipo='instruccionPointer'>
                     <div class="flexVertical">
                         Selecciona la dificultad
-                        <input type="range" v-model.number="e1Dificultad" min="1" max="3">
-                        {{e1Dificultad}}
+                        <input type="range" v-model.number="e2Dificultad" min="1" max="3">
+                        {{e2Dificultad}}
                     </div>
                 </recuadro-component>
 
-                <button class="boton" @click="e1GenerarReto">
+                <button class="boton" @click="e2GenerarReto">
                     Generar dos números
                 </button>
 
-                <div class="zonaReto" v-if="e1Reto">
+                <div class="zonaReto" v-if="e2Reto" :key="e2VersionReto">
                     <div class="contenedorNumeros">
-                        <transition name="popIn">
-                            <div class="numero1">
-                                {{e1Reto.numero1}}
+                        <transition name="popIn" appear>
+                            <div class="numero numero1">
+                                {{e2Reto.numero1}}
                             </div>
                         </transition>
-                        <transition name="popIn">
-                            <div class="numero2">
-                                {{e1Reto.numero2}}
+                        <transition name="popIn" appear>
+                            <div class="numero numero2">
+                                {{e2Reto.numero2}}
                             </div>
                         </transition>
                     </div>
                 </div>
+
+                <recuadro-component tipo='instruccionTeclado' v-if="e2Reto">
+                    <div class="flexVertical">
+                        Escribe la razón entre los números
+                        <input type="number" ref="e2InputRespuestaUsuario"
+                            @keypress.enter="e2EvaluarRespuestaUsuario(undefined, true)">
+                        <button class="boton" @click="e2EvaluarRespuestaUsuario(undefined, true)">
+                            Aceptar
+                        </button>
+                    </div>
+                </recuadro-component>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e2RespuestaUsuarioCorrecta!=null"
+                        :modo="e2RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e2VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+
 
             </div>
         </bloque-component>
@@ -70,6 +88,7 @@
 </html>
 
 <script type="module">
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js"
     import {useEvaluacionNodo} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/evaluacionNodo.js"
     const {createApp, ref, computed, nextTick} = Vue;
     createApp({
@@ -79,50 +98,68 @@
             enlaceComponent
         },
         setup() {
-            function e1AddToGenerarReto() {
-                e1Reto.value = {};
+            const {scrollToElemento} = useUtils();
+            function e2AddToGenerarReto() {
+                e2Reto.value = {};
                 const minNumero = 2;
                 const maxNumero = 50;
                 const rangoNumero = maxNumero - minNumero;
-                e1Reto.value.numero2 = Math.random() * rangoNumero + minNumero;
+                e2Reto.value.numero2 = Math.round(Math.random() * rangoNumero) + minNumero;
 
                 let minFactor = 2;
-                const resolucion = 1;
+                let resolucion = 1;
                 let maxFactor = 20;
 
-                if (e1Dificultad.value > 1) {
-                    resolucion = 0.1;
+                if (e2Dificultad.value >2) {
+                    resolucion = 0.25;
                     minFactor = 5;
                     maxFactor = 200;
                 }
 
                 const rangoFactor = maxFactor - minFactor;
-                const factor = (Math.random() * rangoFactor + minFactor) * resolucion;
-                e1Reto.value.numero1 = e1Reto.value.numero2 * factor;
-                e1Respuesta.value = factor;
+                const factor = Number((Math.round((Math.random() * rangoFactor + minFactor)) * resolucion).toFixed(2));
+                e2Reto.value.numero1 = Number((e2Reto.value.numero2 * factor).toFixed(2));
+                console.log(`Número pequeño: ${e2Reto.value.numero2}`);
+                console.log(`Factor: ${factor}`);
+                e2Respuesta.value = factor;
 
 
-                if (this.dificultad > 2) {
+                if (e2Dificultad.value > 1) {
                     const dado = Math.random();// para decidir si el número grande sale primero o segundo.
                     if (dado > 0.5) {//Intercambiar los números
-                        let temp = e1Reto.value.numero1;
-                        e1Reto.value.numero1 = e1Reto.value.numero2;
-                        e1Reto.value.numero2 = temp;
-                        e1Respuesta.value = 1 / e1Respuesta.value;
+                        let temp = e2Reto.value.numero1;
+                        e2Reto.value.numero1 = e2Reto.value.numero2;
+                        e2Reto.value.numero2 = temp;
+                        e2Respuesta.value = 1 / e2Respuesta.value;
                     }
                 }
 
             }
 
-            const {dificultad: e1Dificultad, versionReto: e1VersionReto, reto: e1Reto, reiniciarReto: e1ReiniciarReto, generarReto: e1GenerarReto, respuesta: e1Respuesta, respuestaUsuarioCorrecta: e1RespuestaUsuarioCorrecta, versionRespuestaUsuario: e1VersionRespuestaUsuario, inputRespuestaUsuario: e1InputRespuestaUsuario, evaluarRespuestaUsuario: e1EvaluarRespuestaUsuario} = useEvaluacionNodo(e1AddToGenerarReto);
+            const {dificultad: e2Dificultad, versionReto: e2VersionReto, reto: e2Reto, reiniciarReto: e2ReiniciarReto, generarReto: e2GenerarReto, respuesta: e2Respuesta, respuestaUsuarioCorrecta: e2RespuestaUsuarioCorrecta, versionRespuestaUsuario: e2VersionRespuestaUsuario, inputRespuestaUsuario: e2InputRespuestaUsuario, evaluarRespuestaUsuario: e2EvaluarRespuestaUsuario} = useEvaluacionNodo(e2AddToGenerarReto);
 
             return {
-                e1Dificultad, e1VersionReto, e1Reto, e1ReiniciarReto, e1GenerarReto, e1Respuesta, e1RespuestaUsuarioCorrecta, e1VersionRespuestaUsuario, e1InputRespuestaUsuario, e1EvaluarRespuestaUsuario
+                scrollToElemento,
+                e2Dificultad, e2VersionReto, e2Reto, e2ReiniciarReto, e2GenerarReto, e2Respuesta, e2RespuestaUsuarioCorrecta, e2VersionRespuestaUsuario, e2InputRespuestaUsuario, e2EvaluarRespuestaUsuario
             }
         },
     }).mount("#doc");
 </script>
 
 <style>
+    .contenedorNumeros {
+        display: flex;
+        gap: 20px;
+    }
 
+    .contenedorNumeros .numero {
+        background-color: var(--paletaPrevio);
+        border-radius: 50%;
+        padding: 5px;
+        height: 60px;
+        width: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>

@@ -7,7 +7,7 @@ export const radToDeg = function(rad) {
 export const truncar = function(num, decimales) {
     let versionTruncada = num.toFixed(decimales);
     if (Number(versionTruncada.split(".")[1]) === 0) {
-        return num
+        return versionTruncada.split(".")[0];
     }
     return versionTruncada;
 }

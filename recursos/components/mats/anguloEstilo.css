@@ -20,7 +20,7 @@
 .componenteAngulo .label {
     position: absolute;
     display: flex;
-    
+    z-index: 0;
 }
 
 .componenteAngulo .label.explicitable:hover,

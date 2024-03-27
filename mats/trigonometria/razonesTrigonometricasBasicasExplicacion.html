@@ -7,26 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
-    <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
 
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/anguloEstilo.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/trianguloEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/mats/anguloEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/mats/trianguloEstilo.css">
 
 
 
@@ -35,109 +26,145 @@
 
 <body>
     <div id="doc">
-
         <p>
-            Si se traza cierto ángulo y a partir de él se construyen triángulos rectángulos, todos los triángulos
-            trazados son semejantes.
+            En los triángulos rectángulos es interesante comparar los lados y determinar las razones entre ellos.
         </p>
 
-        <bloque-component tipo='herramientaInteractiva' @plegado="h1Reiniciar">
+        <p>
+            Cuando se tiene un triángulo rectángulo construido a partir de cierto ángulo, las razones entre sus lados
+            tienen nombres:
+        </p>
+
+        <ul>
+            <li>
+                La razón entre el cateto opuesto y la hipotenusa se llama <span class="resaltado">seno</span>.
+            </li>
+            <li>
+                La razón entre el cateto adyacente y la hipotenusa se llama <span class="resaltado">coseno</span>.
+            </li>
+            <li>
+                La razón entre el cateto opuesto y el cateto adyacente se llama <span class="resaltado">tangente</span>.
+            </li>
+        </ul>
+
+        <bloque-component tipo='herramientaInteractiva' @desplegado="h1Reiniciar">
             <template #cabecera>
-                En este cuadro se pueden construir triángulos semejantes a partir de cierto ángulo.
+                En este cuadro se puede construir un triángulo rectángulo a partir de cierto ángulo y calcular sus
+                razones trigonométricas básicas.
             </template>
 
-            <div class="zonaInteraccion">
-                <componente-angulo :angulo="degToRad(h1Angulo)" :size="100" :angulo-representado="true" id="h1Angulo"
+            <div class="zonaInteraccion" id="h1ZonaInteraccion">
+                <componente-angulo :size="150" :angulo="degToRad(h1Angulo)" :rotacion="h1RotacionAngulo" id="h1Angulo"
                     :en-grados="true">
-                    <componente-triangulo v-for="triangulo, index of h1Triangulos" :key="index" v-bind="triangulo"
-                        :propiedades-simbolizadas="[]" :x-punta="triangulo.ancho" class="h1Triangulo">
+                    <componente-triangulo v-bind="h1Triangulo" v-if="h1Triangulo" :propiedades-simbolizadas="[]"
+                        :ancho="h1AnchoTriangulo" :unidad="h1UnidadTriangulo" :style="[h1EstiloTriangulo]"
+                        color-relleno="transparent" id="h1Triangulo">
                     </componente-triangulo>
+                    <transition name="fadeIn">
+                        <div id="h1ContenedorCatetos" :style="[h1EstiloContenedorCatetos]" v-if="h1Triangulo">
+                            <div class="cateto" id="h1CatetoAdyacente">
+                                <transition name="fadeIn">
+                                    <div class="nombreCateto" :style="[h1EstiloNombresCatetos]">
+                                        {{truncar(h1Triangulo.ancho, 2)}}
+                                    </div>
+                                </transition>
+                            </div>
+                            <div class="cateto" id="h1CatetoOpuesto">
+                                <transition name="fadeIn">
+                                    <div class="nombreCateto" :style="[h1EstiloNombresCatetos]">
+                                        {{truncar(h1Triangulo.largo, 2)}}
+                                    </div>
+                                </transition>
+                            </div>
+                            <div class="cateto" id="h1Hipotenusa" :style="[h1EstiloHipotenusa]">
+                            </div>
+                            <div class="nombreCateto" id="nombreHipotenusa" :style="[h1EstiloNombresCatetos]">
+                                {{truncar(h1Triangulo.hipotenusa, 2)}}
+                            </div>
+                        </div>
+                    </transition>
                 </componente-angulo>
-
+                {{h1StepCalculoRazon}}
                 <transition name="fadeIn">
-                    <recuadro-component tipo='instruccionPointer' v-show="h1Step===1">
+                    <recuadro-component tipo='datoNuevo' v-if="h1Step>=3">
                         <div class="flexVertical">
-                            Selecciona el ángulo
-                            <input type="range" min="5" max="45" v-model.number="h1Angulo">
-                            <button class="boton" @click="h1Step=2">
-                                Aceptar
+                            <div id="h1ProcesoEnCalculo">
+                                <span>
+                                    {{h1RazonEnCalculo}}
+                                </span>
+                                <span>
+                                    =
+                                </span>
+                                <div class="ladoDerecho" :style="h1EstiloLadoDerecho">
+                                    <transition name="fade">
+                                        <div class="descripcionRazon" v-show="h1StepCalculoRazon === 1">
+                                            {{h1DescripcionRazon}}
+                                        </div>
+                                    </transition>
+
+                                    <transition name="unfoldHorizontalAbsolute">
+                                        <template v-if="h1StepCalculoRazon>=2">
+                                            <transition name="fade" mode="out-in">
+                                                <div class="division flexVertical" v-if="h1StepCalculoRazon === 2">
+                                                    <transition name="fade" mode="out-in">
+                                                        <button class="boton"
+                                                            v-if="h1RazonMostrandoNumeroArriba === false"
+                                                            @click="h1RazonMostrandoNumeroArriba=true">
+                                                            {{h1LadoArriba}}
+                                                        </button>
+                                                        <div v-else>
+                                                            {{truncar(h1NumeroArriba, 2)}}
+                                                        </div>
+                                                    </transition>
+                                                    <div class="lineaDivision">
+                                                    </div>
+                                                    <transition name="fade" mode="out-in">
+                                                        <button class="boton"
+                                                            v-if="h1RazonMostrandoNumeroAbajo === false"
+                                                            @click="h1RazonMostrandoNumeroAbajo=true">
+                                                            {{h1LadoAbajo}}
+                                                        </button>
+                                                        <div v-else>
+                                                            {{truncar(h1NumeroAbajo, 2)}}
+                                                        </div>
+                                                    </transition>
+                                                </div>
+                                                <div class="resultado" v-else>
+                                                    {{truncar(h1ResultadoRazonEscogida, 2)}}
+                                                </div>
+                                            </transition>
+                                        </template>
+                                    </transition>
+
+                                </div>
+
+                            </div>
+
+                            <transition name="fadeIn">
+                                <div id="aclaracionRazonAngulo" v-show="h1Step>=4">
+                                    Para triángulos construidos a partir de un ángulo de {{h1Angulo}}°.
+                                </div>
+                            </transition>
+                            <button class="boton"
+                                :disabled="h1StepCalculoRazon>=3 || (h1StepCalculoRazon === 2 && (!h1RazonMostrandoNumeroAbajo || !h1RazonMostrandoNumeroArriba))"
+                                :class="{deshabilitado: h1StepCalculoRazon>=3 || (h1StepCalculoRazon===2 && (!h1RazonMostrandoNumeroAbajo || !h1RazonMostrandoNumeroArriba))}"
+                                @click="h1StepCalculoRazon=h1StepCalculoRazon>3?3:h1StepCalculoRazon+1">
+                                Continuar
                             </button>
                         </div>
-                    </recuadro-component>
-                </transition>
-
-                <transition name="fadeIn">
-                    <recuadro-component tipo='instruccionPointer' v-show="h1Step===2">
-                        <div class="flexVertical">
-                            Selecciona un tamaño
-                            <input type="range" min="5" max="14" v-model.number="h1SizeProximoTriangulo">
-                            {{h1SizeProximoTriangulo}}
-                        </div>
-                        <button class="boton" @click="h1InsertarTriangulo">
-                            Trazar triángulo
-                        </button>
 
                     </recuadro-component>
                 </transition>
-                <div class="flexVertical">
-                    <transition name="fadeIn">
-                        <button class="boton" @click="h1Reiniciar">
-                            Reiniciar
-                        </button>
-                    </transition>
-                </div>
-            </div>
 
-        </bloque-component>
-
-        <p>Cuando se construye un triángulo rectángulo a partir de cierto ángulo:</p>
-        <ul>
-            <li> Uno de los catetos está frente a dicho ángulo, se lo llama <span class="resaltado">cateto
-                    opuesto</span>.</li>
-            <li> Uno de los catetos está junto a dicho ángulo, se lo llama <span class="resaltado">cateto
-                    adyacente</span>.</li>
-        </ul>
-        <bloque-component tipo='herramientaInteractiva'>
-            <template #cabecera>
-                En este cuadro se puede construir un triángulo rectángulo a partir de cierto ángulo y ver los nombres de
-                sus catetos
-            </template>
-
-            <div class="zonaInteraccion" id="h2ZonaInteraccion">
-                <componente-angulo :size="150" :angulo="degToRad(h2Angulo)" :rotacion="h2RotacionAngulo" id="h2Angulo"
-                    :en-grados="true">
-                    <componente-triangulo v-bind="h2Triangulo" v-if="h2Triangulo" :propiedades-simbolizadas="[]"
-                        :ancho="h2AnchoTriangulo" :unidad="h2UnidadTriangulo" :style="[h2EstiloTriangulo]"
-                        id="h2Triangulo">
-                    </componente-triangulo>
-                    <transition name="fadeIn">
-                        <div id="h2ContenedorCatetos" :style="[h2EstiloContenedorCatetos]" v-show="h2Step>=3">
-                            <div class="cateto" id="h2CatetoAdyacente">
-                                <transition name="fadeIn">
-                                    <div class="nombreCateto" v-show="h2Step===4" :style="[h2EstiloNombresCatetos]">
-                                        Cateto adyacente
-                                    </div>
-                                </transition>
-                            </div>
-                            <div class="cateto" id="h2CatetoOpuesto">
-                                <transition name="fadeIn">
-                                    <div class="nombreCateto" v-show="h2Step===4" :style="[h2EstiloNombresCatetos]">
-                                        Cateto opuesto
-                                    </div>
-                                </transition>
-                            </div>
-                        </div>
-                    </transition>
-                </componente-angulo>
             </div>
             <transition name="fadeIn">
-                <recuadro-component tipo='instruccionPointer' v-show="h2Step===1">
+                <recuadro-component tipo='instruccionPointer' v-show="h1Step===1">
                     <div class="flexVertical">
                         Selecciona el ángulo
-                        <input type="range" min="15" max="45" v-model.number="h2Angulo">
-                        {{h2Angulo}}
+                        <input type="range" min="15" max="45" v-model.number="h1Angulo">
+                        {{h1Angulo}}
                     </div>
-                    <button class="boton" @click="h2Step=2">
+                    <button class="boton" @click="h1Step=2">
                         Trazar triángulo
                     </button>
 
@@ -146,21 +173,27 @@
 
             <div class="flexVertical">
                 <transition name="fadeIn">
-                    <button class="boton" @click="h2Step=3" v-show="h2Step===2">
-                        Mostrar los catetos
-                    </button>
+                    <div class="flexHorizontal">
+                        <button class="boton" @click="h1EscogerRazon('seno')" v-show="h1Step===2">
+                            Calcular seno
+                        </button>
+                        <button class="boton" @click="h1EscogerRazon('coseno')" v-show="h1Step===2">
+                            Calcular coseno
+                        </button>
+                        <button class="boton" @click="h1EscogerRazon('tangente')" v-show="h1Step===2">
+                            Calcular tangente
+                        </button>
+                    </div>
                 </transition>
-                <transition name="fadeIn">
-                    <button class="boton" @click="h2Step=4" v-show="h2Step===3">
-                        Mostrar nombres de los catetos
-                    </button>
-                </transition>
-                <button class="boton" @click="h2Reiniciar">
+
+                <button class="boton" @click="h1Reiniciar" v-show="h1Step>=1">
                     Reiniciar
                 </button>
             </div>
 
         </bloque-component>
+
+
 
     </div>
 </body>
@@ -168,86 +201,128 @@
 </html>
 
 <script type="module">
-    import {degToRad} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/funciones/utilsMats.js"
-    import {componenteAngulo} from "http://192.168.1.106:8080/recursos/components/mats/angulo.js"
-    import {componenteTriangulo} from "http://192.168.1.106:8080/recursos/components/mats/triangulo.js"
+    import {degToRad, truncar} from "http://127.0.0.1:8080/recursos/funciones/utilsMats.js"
+    import {componenteAngulo} from "http://127.0.0.1:8080/recursos/components/mats/angulo.js"
+    import {componenteTriangulo} from "http://127.0.0.1:8080/recursos/components/mats/triangulo.js"
 
 
     const {ref, computed, nextTick, watch} = Vue;
     const {createApp} = Vue;
     createApp({
         setup() {
-            const h1Angulo = ref(15);
-            const h1Step = ref(1);
-            const h1SizeProximoTriangulo = ref(5);
-            const h1Triangulos = ref([]);
-
-            function h1InsertarTriangulo() {
-                if (h1Triangulos.value.some(t => t.ancho === h1SizeProximoTriangulo.value)) {
-                    console.log(`Ya estaba`);
-                    return;
-                }
-                h1Triangulos.value.push({
-                    ancho: h1SizeProximoTriangulo.value,
-                    largo: Math.tan(degToRad(h1Angulo.value)) * h1SizeProximoTriangulo.value,
-                })
-            }
-            function h1Reiniciar() {
-                h1Step.value = 1;
-                h1SizeProximoTriangulo.value = 5;
-                h1Triangulos.value = [];
-            }
-
-            //h2
-            const h2Angulo = ref(15);
-            const h2AnchoTriangulo = ref(6);
-            const h2UnidadTriangulo = ref(20);
-            const h2RotacionAngulo = ref(Math.random() * Math.PI * 2);
-            const h2EstiloTriangulo = computed(() => {
-                console.log(`Computando estilo triángulo con ${h2Angulo.value} y ${h2RotacionAngulo.value}`);
+            const h1Angulo = ref(30);
+            const h1AnchoTriangulo = ref(6);
+            const h1UnidadTriangulo = ref(20);
+            const h1RotacionAngulo = ref(Math.random() * Math.PI * 2);
+            const h1EstiloTriangulo = computed(() => {
+                console.log(`Computando estilo triángulo con ${h1Angulo.value} y ${h1RotacionAngulo.value}`);
                 return {
-                    transform: `rotate(${- h2RotacionAngulo.value}rad)`
+                    transform: `rotate(${- h1RotacionAngulo.value}rad)`
 
                 }
             })
-            const h2Step = ref(1);
-            const h2Triangulo = computed(() => {
-                if (h2Step.value >= 2) {
+            const h1Step = ref(1);
+            const h1Triangulo = computed(() => {
+                if (h1Step.value >= 2) {
+                    let largo = Math.tan(degToRad(h1Angulo.value)) * h1AnchoTriangulo.value;
                     return {
-                        ancho: h2AnchoTriangulo.value,
-                        xPunta: h2AnchoTriangulo.value,
-                        largo: Math.tan(degToRad(h2Angulo.value)) * h2AnchoTriangulo.value,
+                        ancho: h1AnchoTriangulo.value,
+                        xPunta: h1AnchoTriangulo.value,
+                        largo: largo,
+                        hipotenusa: Math.sqrt(Math.pow(h1AnchoTriangulo.value, 2) + Math.pow(largo, 2)),
                     }
                 }
                 return null
             })
 
-            function h2Reiniciar() {
-                h2RotacionAngulo.value = Math.random() * Math.PI * 2;
-                h2Step.value = 1;
+            function h1Reiniciar() {
+                h1RotacionAngulo.value = Math.round(Math.random() * 4) * Math.PI / 2;
+                h1Step.value = 1;
+                h1StepCalculoRazon.value = 1;
+                h1RazonMostrandoNumeroArriba.value = false;
+                h1RazonMostrandoNumeroAbajo.value = false;
             }
-            const h2EstiloContenedorCatetos = computed(() => {
+            const h1EstiloContenedorCatetos = computed(() => {
                 return {
-                    height: Math.tan(degToRad(h2Angulo.value)) * h2AnchoTriangulo.value * h2UnidadTriangulo.value + 'px',
-                    width: h2AnchoTriangulo.value * h2UnidadTriangulo.value + 'px',
-                    transform: `rotate(-${h2RotacionAngulo.value}rad)`
+                    height: Math.tan(degToRad(h1Angulo.value)) * h1AnchoTriangulo.value * h1UnidadTriangulo.value + 'px',
+                    width: h1AnchoTriangulo.value * h1UnidadTriangulo.value + 'px',
+                    transform: `rotate(-${h1RotacionAngulo.value}rad)`
                 }
             });
-            const h2EstiloNombresCatetos = computed(() => {
+
+            const h1EstiloNombresCatetos = computed(() => {
                 return {
-                    transform: `rotate(${h2RotacionAngulo.value}rad)`
+                    transform: `rotate(${h1RotacionAngulo.value}rad)`
+                }
+            })
+            const h1EstiloHipotenusa = computed(() => {
+                if (!h1Triangulo.value) {
+                    return {}
+                }
+                let rotacion = Math.atan(h1Triangulo.value.largo / h1Triangulo.value.ancho);
+                return {
+                    width: h1Triangulo.value.hipotenusa * h1UnidadTriangulo.value + 'px',
+                    transform: `rotate(${-rotacion}rad)`,
                 }
             })
 
+            const h1DescripcionRazon = ref('');
+            const h1LadoArriba = ref('');
+            const h1LadoAbajo = ref('');
+            const h1NumeroArriba = ref(null);
+            const h1NumeroAbajo = ref(null);
+            const h1ResultadoRazonEscogida = ref(null);
+            const h1RazonEnCalculo = ref(null);
+            const h1StepCalculoRazon = ref(1);
+            watch(h1StepCalculoRazon, step => {
+                if (step === 3) {
+                    setTimeout(() => {
+                        h1Step.value = 4;
+                    }, 3000);
+                }
+            })
+            function h1EscogerRazon(nombreRazon) {
+                h1RazonEnCalculo.value = nombreRazon;
+                if (nombreRazon === 'seno') {
+                    h1LadoArriba.value = 'cateto opuesto';
+                    h1LadoAbajo.value = 'hipotenusa';
+
+                    h1NumeroArriba.value = h1Triangulo.value.largo;
+                    h1NumeroAbajo.value = h1Triangulo.value.hipotenusa;
+                }
+                if (nombreRazon === 'coseno') {
+                    h1LadoArriba.value = 'cateto adyacente';
+                    h1LadoAbajo.value = 'hipotenusa';
+
+                    h1NumeroArriba.value = h1Triangulo.value.ancho;
+                    h1NumeroAbajo.value = h1Triangulo.value.hipotenusa;
+                }
+                if (nombreRazon === 'tangente') {
+                    h1LadoArriba.value = 'cateto opuesto';
+                    h1LadoAbajo.value = 'cateto adyacente';
+
+                    h1NumeroArriba.value = h1Triangulo.value.largo;
+                    h1NumeroAbajo.value = h1Triangulo.value.ancho;
+                }
+                h1ResultadoRazonEscogida.value = h1NumeroArriba.value / h1NumeroAbajo.value;
+                h1DescripcionRazon.value = 'Razón entre ' + h1LadoArriba.value + ' y ' + h1LadoAbajo.value;
+
+                h1Step.value = 3;
+            }
+            const h1EstiloLadoDerecho = computed(() => {
+                return {
+                    width: h1StepCalculoRazon.value < 3 && (!h1RazonMostrandoNumeroAbajo.value || !h1RazonMostrandoNumeroArriba.value) ? '150px' : '40px',
+                }
+            })
+            const h1RazonMostrandoNumeroArriba = ref(false);
+            const h1RazonMostrandoNumeroAbajo = ref(false);
 
             return {
-                degToRad,
-                h1Step, h1Angulo, h1Triangulos, h1InsertarTriangulo, h1SizeProximoTriangulo, h1Reiniciar,
-
-                h2Angulo, h2RotacionAngulo, h2Step, h2Triangulo, h2AnchoTriangulo, h2UnidadTriangulo, h2Reiniciar, h2EstiloTriangulo,
-                h2EstiloContenedorCatetos, h2EstiloNombresCatetos
+                degToRad, truncar,
+                h1Angulo, h1AnchoTriangulo, h1UnidadTriangulo, h1RotacionAngulo, h1EstiloTriangulo, h1Step, h1Triangulo, h1Reiniciar, h1EstiloContenedorCatetos, h1EstiloNombresCatetos, h1EstiloHipotenusa,
+                h1DescripcionRazon, h1LadoArriba, h1LadoAbajo, h1NumeroArriba, h1NumeroAbajo, h1ResultadoRazonEscogida, h1EscogerRazon, h1RazonEnCalculo, h1StepCalculoRazon, h1RazonMostrandoNumeroArriba, h1RazonMostrandoNumeroAbajo,
+                h1EstiloLadoDerecho,
             }
-
         },
         components: {
             recuadroComponent,
@@ -261,42 +336,39 @@
 
 <style>
     #h1Angulo {
-        margin: 10px auto;
-        margin-top: 150px;
-        transform: translateX(-100%);
-    }
-
-    .h1Triangulo {
-        position: absolute;
-        bottom: 50%;
-        left: 50%;
-        z-index: -1;
-    }
-
-    #h2Angulo {
         margin: 100px auto;
     }
 
-    #h2Triangulo {
-        position: absolute;
-        bottom: 50%;
-        left: 50%;
-        transform-origin: bottom left;
+    #h1Angulo .linea {
+        pointer-events: none;
     }
 
-    #h2ContenedorCatetos {
+    .labelAngulo {
+        z-index: 1;
+    }
+
+    #h1Triangulo {
         position: absolute;
         bottom: 50%;
         left: 50%;
         transform-origin: bottom left;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    #h1ContenedorCatetos {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom left;
+        pointer-events: none;
     }
 
     .cateto {
         position: absolute;
-        background-color: var(--paletaPrevio);
     }
 
-    #h2CatetoAdyacente {
+    #h1CatetoAdyacente {
         top: 100%;
         left: 0%;
         height: 2px;
@@ -305,7 +377,7 @@
 
     }
 
-    #h2CatetoOpuesto {
+    #h1CatetoOpuesto {
         left: 100%;
         top: 0%;
         width: 2px;
@@ -313,19 +385,73 @@
         transform: translateX(-50%);
     }
 
+    #h1Hipotenusa {
+        left: 0%;
+        bottom: 0%;
+        height: 2px;
+        transform-origin: center left;
+    }
+
     .nombreCateto {
         position: absolute;
-        font-size: 13px;
+        font-size: 15px;
         text-align: center;
     }
 
-    #h2CatetoAdyacente .nombreCateto {
+    #h1CatetoAdyacente .nombreCateto {
         top: calc(100% + 10px);
         left: calc(50% - 10px);
     }
 
-    #h2CatetoOpuesto .nombreCateto {
+    #h1CatetoOpuesto .nombreCateto {
         left: calc(100% + 10px);
         top: calc(50% - 10px);
+    }
+
+    #nombreHipotenusa {
+        left: calc(50% - 20px);
+        bottom: calc(50% + 30px);
+    }
+
+    #h1ProcesoEnCalculo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    #h1ProcesoEnCalculo .ladoDerecho {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        min-height: 100px;
+        transition: width 1s;
+        transition-delay: 1s;
+    }
+
+    #h1ProcesoEnCalculo .division {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    #h1ProcesoEnCalculo .division .lineaDivision {
+        height: 2px;
+        width: 100%;
+        background-color: whitesmoke;
+    }
+
+    .fade-enter-active {
+        animation-duration: 1s;
+    }
+
+    .unfoldHorizontalAbsolute-leave-to {
+        opacity: 0;
+    }
+
+    .unfoldHorizontalAbsolute-leave-active {
+        transition: opacity 1s;
     }
 </style>

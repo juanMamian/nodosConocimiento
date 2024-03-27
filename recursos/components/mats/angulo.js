@@ -1,4 +1,4 @@
-import { radToDeg, truncar } from "http://192.168.1.106:8080/recursos/funciones/utilsMats.js"
+import { radToDeg, truncar } from "http://127.0.0.1:8080/recursos/funciones/utilsMats.js"
 export const componenteAngulo = {
     template: `
         <div class="componenteAngulo" :style="[estiloComponente]">
@@ -155,6 +155,11 @@ export const componenteAngulo = {
                 this.trazarAngulo();
             },
             immediate: true
+        },
+        rotacion: {
+            handler: function() {
+                this.trazarAngulo();
+            },
         },
         anguloRepresentado: {
             handler: function(representado) {

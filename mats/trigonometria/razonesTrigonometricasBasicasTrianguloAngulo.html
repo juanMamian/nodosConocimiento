@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/anguloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/trianguloEstilo.css">
+
+
+
+    <title>Razones trigonométricas básicas - triángulos</title>
+</head>
+
+<body>
+    <div id="doc">
+
+        <p>
+            Si se traza cierto ángulo y a partir de él se construyen triángulos rectángulos, todos los triángulos
+            trazados son semejantes.
+        </p>
+
+        <bloque-component tipo='herramientaInteractiva' @plegado="h1Reiniciar">
+            <template #cabecera>
+                En este cuadro se pueden construir triángulos semejantes a partir de cierto ángulo.
+            </template>
+
+            <div class="zonaInteraccion">
+                <componente-angulo :angulo="degToRad(h1Angulo)" :size="100" :angulo-representado="true" id="h1Angulo"
+                    :en-grados="true">
+                    <componente-triangulo v-for="triangulo, index of h1Triangulos" :key="index" v-bind="triangulo"
+                        :propiedades-simbolizadas="[]" :x-punta="triangulo.ancho" class="h1Triangulo">
+                    </componente-triangulo>
+                </componente-angulo>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionPointer' v-show="h1Step===1">
+                        <div class="flexVertical">
+                            Selecciona el ángulo
+                            <input type="range" min="5" max="45" v-model.number="h1Angulo">
+                            <button class="boton" @click="h1Step=2">
+                                Aceptar
+                            </button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionPointer' v-show="h1Step===2">
+                        <div class="flexVertical">
+                            Selecciona un tamaño
+                            <input type="range" min="5" max="14" v-model.number="h1SizeProximoTriangulo">
+                            {{h1SizeProximoTriangulo}}
+                        </div>
+                        <button class="boton" @click="h1InsertarTriangulo">
+                            Trazar triángulo
+                        </button>
+
+                    </recuadro-component>
+                </transition>
+                <div class="flexVertical">
+                    <transition name="fadeIn">
+                        <button class="boton" @click="h1Reiniciar">
+                            Reiniciar
+                        </button>
+                    </transition>
+                </div>
+            </div>
+
+        </bloque-component>
+
+        <p>Cuando se construye un triángulo rectángulo a partir de cierto ángulo:</p>
+        <ul>
+            <li> Uno de los catetos está frente a dicho ángulo; se lo llama <span class="resaltado">cateto
+                    opuesto</span>.</li>
+            <li> Uno de los catetos está junto a dicho ángulo; se lo llama <span class="resaltado">cateto
+                    adyacente</span>.</li>
+        </ul>
+        <bloque-component tipo='herramientaInteractiva'>
+            <template #cabecera>
+                En este cuadro se puede construir un triángulo rectángulo a partir de cierto ángulo y ver los nombres de
+                sus catetos
+            </template>
+
+            <div class="zonaInteraccion" id="h2ZonaInteraccion">
+                <componente-angulo :size="150" :angulo="degToRad(h2Angulo)" :rotacion="h2RotacionAngulo" id="h2Angulo"
+                    :en-grados="true">
+                    <componente-triangulo v-bind="h2Triangulo" v-if="h2Triangulo" :propiedades-simbolizadas="[]"
+                        :ancho="h2AnchoTriangulo" :unidad="h2UnidadTriangulo" :style="[h2EstiloTriangulo]" color-relleno="transparent"
+                        id="h2Triangulo">
+                    </componente-triangulo>
+                    <transition name="fadeIn">
+                        <div id="h2ContenedorCatetos" :style="[h2EstiloContenedorCatetos]" v-show="h2Step>=3">
+                            <div class="cateto" id="h2CatetoAdyacente">
+                                <transition name="fadeIn">
+                                    <div class="nombreCateto" v-show="h2Step===4" :style="[h2EstiloNombresCatetos]">
+                                        Cateto adyacente
+                                    </div>
+                                </transition>
+                            </div>
+                            <div class="cateto" id="h2CatetoOpuesto">
+                                <transition name="fadeIn">
+                                    <div class="nombreCateto" v-show="h2Step===4" :style="[h2EstiloNombresCatetos]">
+                                        Cateto opuesto
+                                    </div>
+                                </transition>
+                            </div>
+                        </div>
+                    </transition>
+                </componente-angulo>
+            </div>
+            <transition name="fadeIn">
+                <recuadro-component tipo='instruccionPointer' v-show="h2Step===1">
+                    <div class="flexVertical">
+                        Selecciona el ángulo
+                        <input type="range" min="15" max="45" v-model.number="h2Angulo">
+                        {{h2Angulo}}
+                    </div>
+                    <button class="boton" @click="h2Step=2">
+                        Trazar triángulo
+                    </button>
+
+                </recuadro-component>
+            </transition>
+
+            <div class="flexVertical">
+                <transition name="fadeIn">
+                    <button class="boton" @click="h2Step=3" v-show="h2Step===2">
+                        Mostrar los catetos
+                    </button>
+                </transition>
+                <transition name="fadeIn">
+                    <button class="boton" @click="h2Step=4" v-show="h2Step===3">
+                        Mostrar nombres de los catetos
+                    </button>
+                </transition>
+                <button class="boton" @click="h2Reiniciar">
+                    Reiniciar
+                </button>
+            </div>
+
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    import {degToRad} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/funciones/utilsMats.js"
+    import {componenteAngulo} from "http://127.0.0.1:8080/recursos/components/mats/angulo.js"
+    import {componenteTriangulo} from "http://127.0.0.1:8080/recursos/components/mats/triangulo.js"
+
+
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+    createApp({
+        setup() {
+            const h1Angulo = ref(15);
+            const h1Step = ref(1);
+            const h1SizeProximoTriangulo = ref(5);
+            const h1Triangulos = ref([]);
+
+            function h1InsertarTriangulo() {
+                if (h1Triangulos.value.some(t => t.ancho === h1SizeProximoTriangulo.value)) {
+                    console.log(`Ya estaba`);
+                    return;
+                }
+                h1Triangulos.value.push({
+                    ancho: h1SizeProximoTriangulo.value,
+                    largo: Math.tan(degToRad(h1Angulo.value)) * h1SizeProximoTriangulo.value,
+                })
+            }
+            function h1Reiniciar() {
+                h1Step.value = 1;
+                h1SizeProximoTriangulo.value = 5;
+                h1Triangulos.value = [];
+            }
+
+            //h2
+            const h2Angulo = ref(15);
+            const h2AnchoTriangulo = ref(6);
+            const h2UnidadTriangulo = ref(20);
+            const h2RotacionAngulo = ref(Math.random() * Math.PI * 2);
+            const h2EstiloTriangulo = computed(() => {
+                console.log(`Computando estilo triángulo con ${h2Angulo.value} y ${h2RotacionAngulo.value}`);
+                return {
+                    transform: `rotate(${- h2RotacionAngulo.value}rad)`
+
+                }
+            })
+            const h2Step = ref(1);
+            const h2Triangulo = computed(() => {
+                if (h2Step.value >= 2) {
+                    return {
+                        ancho: h2AnchoTriangulo.value,
+                        xPunta: h2AnchoTriangulo.value,
+                        largo: Math.tan(degToRad(h2Angulo.value)) * h2AnchoTriangulo.value,
+                    }
+                }
+                return null
+            })
+
+            function h2Reiniciar() {
+                h2RotacionAngulo.value = Math.random() * Math.PI * 2;
+                h2Step.value = 1;
+            }
+            const h2EstiloContenedorCatetos = computed(() => {
+                return {
+                    height: Math.tan(degToRad(h2Angulo.value)) * h2AnchoTriangulo.value * h2UnidadTriangulo.value + 'px',
+                    width: h2AnchoTriangulo.value * h2UnidadTriangulo.value + 'px',
+                    transform: `rotate(-${h2RotacionAngulo.value}rad)`
+                }
+            });
+            const h2EstiloNombresCatetos = computed(() => {
+                return {
+                    transform: `rotate(${h2RotacionAngulo.value}rad)`
+                }
+            })
+
+
+            return {
+                degToRad,
+                h1Step, h1Angulo, h1Triangulos, h1InsertarTriangulo, h1SizeProximoTriangulo, h1Reiniciar,
+
+                h2Angulo, h2RotacionAngulo, h2Step, h2Triangulo, h2AnchoTriangulo, h2UnidadTriangulo, h2Reiniciar, h2EstiloTriangulo,
+                h2EstiloContenedorCatetos, h2EstiloNombresCatetos
+            }
+
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteAngulo,
+            componenteTriangulo,
+        },
+    }).mount("#doc");
+</script>
+
+<style>
+    #h1Angulo {
+        margin: 10px auto;
+        margin-top: 150px;
+        transform: translateX(-100%);
+    }
+
+    .h1Triangulo {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        z-index: -1;
+    }
+
+    #h2Angulo {
+        margin: 100px auto;
+    }
+
+    #h2Triangulo {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom left;
+    }
+
+    #h2ContenedorCatetos {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom left;
+    }
+
+    .cateto {
+        position: absolute;
+        background-color: var(--paletaPrevio);
+    }
+
+    #h2CatetoAdyacente {
+        top: 100%;
+        left: 0%;
+        height: 2px;
+        width: 100%;
+        transfomr: translateY(-50%);
+
+    }
+
+    #h2CatetoOpuesto {
+        left: 100%;
+        top: 0%;
+        width: 2px;
+        height: 100%;
+        transform: translateX(-50%);
+    }
+
+    .nombreCateto {
+        position: absolute;
+        font-size: 13px;
+        text-align: center;
+    }
+
+    #h2CatetoAdyacente .nombreCateto {
+        top: calc(100% + 10px);
+        left: calc(50% - 10px);
+    }
+
+    #h2CatetoOpuesto .nombreCateto {
+        left: calc(100% + 10px);
+        top: calc(50% - 10px);
+    }
+</style>

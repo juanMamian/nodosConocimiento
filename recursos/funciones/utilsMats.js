@@ -6,8 +6,19 @@ export const radToDeg = function(rad) {
 }
 export const truncar = function(num, decimales) {
     let versionTruncada = num.toFixed(decimales);
-    if (Number(versionTruncada.split(".")[1]) === 0) {
-        return versionTruncada.split(".")[0];
+    let [parteEntera, parteDecimal] = versionTruncada.split('.');
+    for (let i = parteDecimal.length - 1; i >= 0; i--) {
+        if (versionTruncada[i] === '0') {
+            versionTruncada = versionTruncada.slice(0, i);
+        }
+        else {
+            break;
+        }
     }
-    return versionTruncada;
+    let versionFinal = parteEntera;
+    if (Number(parteDecimal) > 0) {
+        versionFinal += '.' + parteDecimal;
+    }
+
+    return versionFinal;
 }

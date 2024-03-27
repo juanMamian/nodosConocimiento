@@ -56,10 +56,11 @@
 
                 <transition name="fadeIn">
                     <div class="zonaReto" v-if="e2Reto">
-                        <componente-angulo :angulo="e2Reto.angulo" :rotacion="e2Reto.rotacionAngulo" id="e2Angulo"
-                            :en-grados="true">
-                            <componente-triangulo v-bind="e2Reto.triangulo" :style="[e2Reto.estiloTriangulo]"
-                                color-relleno="transparent" :propiedades-simbolizadas="[]" id="e2Triangulo">
+                        <componente-angulo class="sinLineas" :angulo="e2Reto.angulo" :rotacion="e2Reto.rotacionAngulo"
+                            id="e2Angulo" :en-grados="true">
+                            <componente-triangulo class="trianguloEnAngulo" v-bind="e2Reto.triangulo"
+                                :style="[e2Reto.estiloTriangulo]" color-relleno="transparent"
+                                :propiedades-simbolizadas="[]" id="e2Triangulo">
                                 <div class="labelSize labelCatetoAdyacente" :style="[e2Reto.estiloLabelsSize]">
                                     {{truncar(e2Reto.triangulo.ancho, 2)}}
                                 </div>
@@ -82,15 +83,18 @@
                             <div class="contenedorInputs flexVertical">
                                 <div class="bloqueInput">
                                     <label for="e2InputSeno">Seno</label>
-                                    <input type="number" ref="e2InputSeno" id="e2InputSeno">
+                                    <input type="number" ref="e2InputSeno" id="e2InputSeno"
+                                        @keypress.enter.prevent="$refs.e2InputCoseno.focus(); $refs.e2InputCoseno.select()">
                                 </div>
                                 <div class="bloqueInput">
                                     <label for="e2InputCoseno">Coseno</label>
-                                    <input type="number" ref="e2InputCoseno" id="e2InputCoseno">
+                                    <input type="number" ref="e2InputCoseno" id="e2InputCoseno"
+                                        @keypress.enter.prevent="$refs.e2InputTangente.focus(); $refs.e2InputTangente.select()">
                                 </div>
                                 <div class="bloqueInput">
                                     <label for="e2InputTangente">Tangente</label>
-                                    <input type="number" ref="e2InputTangente" id="e2InputTangente">
+                                    <input type="number" ref="e2InputTangente" id="e2InputTangente"
+                                        @keypress.enter.prevent="e2EvaluarRespuestaUsuario">
                                 </div>
                             </div>
                             <button class="boton" @click="e2EvaluarRespuestaUsuario">
@@ -109,6 +113,203 @@
             </div>
         </bloque-component>
 
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dado cualquier triángulo rectángulo del cual sólo conozco un ángulo, puedo averiguar sus razones
+                trigonométricas básicas.
+            </template>
+
+            <div class="flexVertical">
+                <button class="boton" @click="e3GenerarReto">
+                    Generar triángulo
+                </button>
+
+
+                <transition name="fadeIn">
+                    <div class="zonaReto" v-if="e3Reto">
+                        <componente-angulo class="sinLineas" :angulo="e3Reto.angulo" :rotacion="e3Reto.rotacionAngulo"
+                            id="e3Angulo" :en-grados="true">
+                            <componente-triangulo class="trianguloEnAngulo" v-bind="e3Reto.triangulo"
+                                :style="[e3Reto.estiloTriangulo]" color-relleno="transparent"
+                                :propiedades-simbolizadas="[]" id="e3Triangulo">
+                            </componente-triangulo>
+                        </componente-angulo>
+                    </div>
+                </transition>
+
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionTeclado' v-show="e3Reto">
+                        <div class="flexVertical">
+                            Introduce las razones trigonométricas
+                            <div class="contenedorInputs flexVertical">
+                                <div class="bloqueInput">
+                                    <label for="e3InputSeno">Seno</label>
+                                    <input type="number" ref="e3InputSeno" id="e3InputSeno"
+                                        @keypress.enter.prevent="$refs.e3InputCoseno.focus(); $refs.e3InputCoseno.select()">
+                                </div>
+                                <div class="bloqueInput">
+                                    <label for="e3InputCoseno">Coseno</label>
+                                    <input type="number" ref="e3InputCoseno" id="e3InputCoseno"
+                                        @keypress.enter.prevent="$refs.e3InputTangente.focus(); $refs.e3InputTangente.select()">
+                                </div>
+                                <div class="bloqueInput">
+                                    <label for="e3InputTangente">Tangente</label>
+                                    <input type="number" ref="e3InputTangente" id="e3InputTangente"
+                                        @keypress.enter.prevent="e3EvaluarRespuestaUsuario">
+                                </div>
+                            </div>
+                            <button class="boton" @click="e3EvaluarRespuestaUsuario">
+                                Aceptar
+                            </button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e3RespuestaUsuarioCorrecta!=null"
+                        :modo="e3RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e3VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+
+            </div>
+        </bloque-component>
+
+        <bloque-component tipo='evaluacion' @desplegado="e4Reiniciar">
+            <template #cabecera>
+                Sé de memoria algunas razones trigonométricas para ciertos ángulos.
+            </template>
+            <div class="flexVertical" id="e4ListaPreguntas">
+                <div class="bloquePreguntaRazon">
+                    <label for="e4PreguntaSin30">Seno para triángulos construidos a partir de un ángulo de 30°</label>
+                    <input type="number" id="e4PreguntaSin30" ref="e4InputRespuesta0"
+                        @keypress.enter="e4EvaluarRespuestaUsuario(0)">
+                    <button class="boton" @click="e4EvaluarRespuestaUsuario(0)">
+                        Aceptar
+                    </button>
+                    <transition name="fadeIn" @enter="scrollToElemento">
+                        <recuadro-component tipo="infoResultado" v-if="e4RespuestasUsuarioCorrectas[0]!=null"
+                            :modo="e4RespuestasUsuarioCorrectas[0]?'correcto':'incorrecto'"
+                            :key="e4VersionesRespuestaUsuario[0]">
+                        </recuadro-component>
+                    </transition>
+                </div>
+                <div class="bloquePreguntaRazon">
+                    <label for="e4PreguntaCos60">Coseno para triángulos construidos a partir de un ángulo de 60°</label>
+                    <input type="number" id="e4PreguntaCos60" ref="e4InputRespuesta1"
+                        @keypress.enter="e4EvaluarRespuestaUsuario(1)">
+                    <button class="boton" @click="e4EvaluarRespuestaUsuario(1)">
+                        Aceptar
+                    </button>
+                    <transition name="fadeIn" @enter="scrollToElemento">
+                        <recuadro-component tipo="infoResultado" v-if="e4RespuestasUsuarioCorrectas[1]!=null"
+                            :modo="e4RespuestasUsuarioCorrectas[1]?'correcto':'incorrecto'"
+                            :key="e4VersionesRespuestaUsuario[1]">
+                        </recuadro-component>
+                    </transition>
+                </div>
+                <div class="bloquePreguntaRazon">
+                    <label for="e4PreguntaTan45">Tangente para triángulos construidos a partir de un ángulo de
+                        60°</label>
+                    <input type="number" id="e4PreguntaTan45" ref="e4InputRespuesta2"
+                        @keypress.enter="e4EvaluarRespuestaUsuario(2)">
+                    <button class="boton" @click="e4EvaluarRespuestaUsuario(2)">
+                        Aceptar
+                    </button>
+                    <transition name="fadeIn" @enter="scrollToElemento">
+                        <recuadro-component tipo="infoResultado" v-if="e4RespuestasUsuarioCorrectas[2]!=null"
+                            :modo="e4RespuestasUsuarioCorrectas[2]?'correcto':'incorrecto'"
+                            :key="e4VersionesRespuestaUsuario[2]">
+                        </recuadro-component>
+                    </transition>
+                </div>
+            </div>
+
+        </bloque-component>
+
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Dado un triángulo rectángulo con información suficiente, puedo calcular la longitud de cada lado
+            </template>
+
+            <div class="flexVertical">
+                <button class="boton" @click="e5GenerarReto">
+                    Generar triángulo
+                </button>
+
+                <transition name="fadeIn">
+                    <div class="zonaReto" v-if="e5Reto">
+                        <componente-angulo class="sinLineas" :angulo="e5Reto.angulo" :rotacion="e5Reto.rotacionAngulo"
+                            id="e5Angulo" :en-grados="true">
+                            <componente-triangulo class="trianguloEnAngulo" v-bind="e5Reto.triangulo"
+                                :style="[e5Reto.estiloTriangulo]" color-relleno="transparent"
+                                :propiedades-simbolizadas="[]" id="e5Triangulo">
+                                <div class="labelSize labelCatetoAdyacente" :style="[e5Reto.estiloLabelsSize]"
+                                    v-show="e5Reto.ladoRevelado==='catetoAdyacente'">
+                                    {{truncar(e5Reto.triangulo.ancho, 2)}}
+                                </div>
+                                <div class="labelSize labelCatetoOpuesto" :style="[e5Reto.estiloLabelsSize]"
+                                    v-show="e5Reto.ladoRevelado==='catetoOpuesto'">
+                                    {{truncar(e5Reto.triangulo.largo, 2)}}
+                                </div>
+                                <div class="labelSize labelHipotenusa" :style="[e5Reto.estiloLabelsSize]"
+                                    v-show="e5Reto.ladoRevelado==='hipotenusa'">
+                                    {{truncar(e5Reto.triangulo.hipotenusa, 2)}}
+                                </div>
+                            </componente-triangulo>
+                        </componente-angulo>
+                    </div>
+                </transition>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionTeclado' v-if="e5Reto">
+                        <div class="flexVertical">
+                            Introduce las razones trigonométricas
+                            <div class="contenedorInputs flexVertical">
+                                <div class="bloqueInput">
+                                    <label for="e5InputCatetoAdyacente">CatetoAdyacente</label>
+                                    <input type="number" ref="e5InputCatetoAdyacente" id="e5InputCatetoAdyacente"
+                                        lang="en" :disabled="e5Reto.ladoRevelado==='catetoAdyacente'"
+                                        :class="{deshabilitado: e5Reto.ladoRevelado==='catetoAdyacente'}"
+                                        v-model="e5ValorInputCatetoAdyacente"
+                                        @keypress.enter.prevent="$refs.e5InputCatetoOpuesto.focus(); $refs.e5InputCatetoOpuesto.select()">
+                                </div>
+                                <div class="bloqueInput">
+                                    <label for="e5InputCatetoOpuesto">CatetoOpuesto</label>
+                                    <input type="number" ref="e5InputCatetoOpuesto" id="e5InputCatetoOpuesto" lang="en"
+                                        :disabled="e5Reto.ladoRevelado==='catetoOpuesto'"
+                                        :class="{deshabilitado: e5Reto.ladoRevelado==='catetoOpuesto'}"
+                                        v-model="e5ValorInputCatetoOpuesto"
+                                        @keypress.enter.prevent="$refs.e5InputHipotenusa.focus(); $refs.e5InputHipotenusa.select()">
+                                </div>
+                                <div class="bloqueInput">
+                                    <label for="e5InputHipotenusa">Hipotenusa</label>
+                                    <input type="number" ref="e5InputHipotenusa" id="e5InputHipotenusa" lang="en"
+                                        :disabled="e5Reto.ladoRevelado==='hipotenusa'"
+                                        :class="{deshabilitado: e5Reto.ladoRevelado==='hipotenusa'}"
+                                        v-model="e5ValorInputHipotenusa"
+                                        @keypress.enter.prevent="e5EvaluarRespuestaUsuario">
+                                </div>
+                            </div>
+                            <button class="boton" @click="e5EvaluarRespuestaUsuario">
+                                Aceptar
+                            </button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e5RespuestaUsuarioCorrecta!=null"
+                        :modo="e5RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e5VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+
+            </div>
+
+        </bloque-component>
+
+
     </div>
 </body>
 
@@ -125,6 +326,7 @@
         setup() {
             const {scrollToElemento} = useUtils();
             function e2AddTogenerarReto() {
+
                 e2Reto.value = {};
                 const minAngulo = 10;
                 const maxAngulo = 45;
@@ -180,13 +382,14 @@
                 e2RespuestaUsuario.value = [respuestaSeno, respuestaCoseno, respuestaTangente];
                 if (e2RespuestaUsuario.value.some(r => r == null)) {
                     console.log(`Respuesta incompleta`);
+                    e2RespuestaUsuarioCorrecta.value = false;
                     return;
                 }
 
                 e2RespuestaUsuarioCorrecta.value = true;
                 console.log(`Comparando ${e2RespuestaUsuario.value} con ${e2Respuesta.value}`);
                 for (let i = 0; i < e2Respuesta.value.length; i++) {
-                    if (Math.abs(e2RespuestaUsuario.value[i] - e2Respuesta.value[i]) > 0.1) {
+                    if (Math.abs(e2RespuestaUsuario.value[i] - e2Respuesta.value[i]) > 0.015) {
                         e2RespuestaUsuarioCorrecta.value = false;
                         break;
                     }
@@ -207,12 +410,253 @@
                 e2Respuesta.value = null;
             }
 
-
             const {versionReto: e2VersionReto, reto: e2Reto, reiniciarReto: e2ReiniciarReto, generarReto: e2GenerarReto, respuesta: e2Respuesta, respuestaUsuarioCorrecta: e2RespuestaUsuarioCorrecta, versionRespuestaUsuario: e2VersionRespuestaUsuario, inputRespuestaUsuario: e2InputRespuestaUsuario} = useEvaluacionNodo(e2AddTogenerarReto, e2AddToReiniciar);
+            //e3
+
+            function e3AddTogenerarReto() {
+                e3Reto.value = {};
+                const minAngulo = 10;
+                const maxAngulo = 45;
+                const rangoAngulo = maxAngulo - minAngulo;
+                e3Reto.value.angulo = degToRad(Math.round(Math.random() * rangoAngulo + minAngulo));
+
+                e3Reto.value.rotacionAngulo = ref(Math.random() * Math.PI * 2);
+
+                const minSize = 5;
+                const maxSize = 10;
+                const rangoSize = maxSize - minSize;
+                let anchoTriangulo = Math.round(Math.random() * rangoSize + minSize);
+                let largoTriangulo = anchoTriangulo * Math.tan(e3Reto.value.angulo);
+                e3Reto.value.triangulo = {
+                    ancho: anchoTriangulo,
+                    xPunta: anchoTriangulo,
+                    largo: largoTriangulo,
+                    hipotenusa: Math.sqrt(Math.pow(anchoTriangulo, 2) + Math.pow(largoTriangulo, 2)),
+                }
+                e3Reto.value.estiloTriangulo = {
+                    transform: `rotate(${- e3Reto.value.rotacionAngulo}rad)`
+                }
+                e3Reto.value.estiloLabelsSize = {
+                    transform: `rotate(${e3Reto.value.rotacionAngulo}rad)`
+                }
+
+                e3Respuesta.value = [
+                    e3Reto.value.triangulo.largo / e3Reto.value.triangulo.hipotenusa,
+                    e3Reto.value.triangulo.ancho / e3Reto.value.triangulo.hipotenusa,
+                    e3Reto.value.triangulo.largo / e3Reto.value.triangulo.ancho,
+                ]
+                console.log(`Respuesta queda ${e3Respuesta.value}`);
+            }
+
+
+            const e3InputSeno = ref(null);
+            const e3InputCoseno = ref(null);
+            const e3InputTangente = ref(null);
+            const e3RespuestaUsuario = ref(null);
+            function e3EvaluarRespuestaUsuario() {
+                if (!e3InputSeno.value || !e3InputCoseno.value || !e3InputTangente.value) {
+                    console.log(`Input de razón no existente`);
+                    return;
+                }
+                if (!e3Respuesta.value || e3Respuesta.value.some(r => r == null)) {
+                    console.log(`Respuesta no precalculada`);
+                    return;
+                }
+
+                let respuestaSeno = Number(e3InputSeno.value.value.trim());
+                let respuestaCoseno = Number(e3InputCoseno.value.value.trim());
+                let respuestaTangente = Number(e3InputTangente.value.value.trim());
+                e3RespuestaUsuario.value = [respuestaSeno, respuestaCoseno, respuestaTangente];
+                if (e3RespuestaUsuario.value.some(r => r == null)) {
+                    console.log(`Respuesta incompleta`);
+                    e3RespuestaUsuarioCorrecta.value = false;
+                    return;
+                }
+
+                e3RespuestaUsuarioCorrecta.value = true;
+                console.log(`Comparando ${e3RespuestaUsuario.value} con ${e3Respuesta.value}`);
+                for (let i = 0; i < e3Respuesta.value.length; i++) {
+                    if (Math.abs(e3RespuestaUsuario.value[i] - e3Respuesta.value[i]) > 0.015) {
+                        e3RespuestaUsuarioCorrecta.value = false;
+                        break;
+                    }
+                }
+                e3VersionRespuestaUsuario.value++;
+            }
+
+            function e3AddToReiniciar() {
+                if (e3InputSeno.value) {
+                    e3InputSeno.value.value = null;
+                }
+                if (e3InputCoseno.value) {
+                    e3InputCoseno.value.value = null;
+                }
+                if (e3InputTangente.value) {
+                    e3InputTangente.value.value = null;
+                }
+                e3Respuesta.value = null;
+            }
+
+            const {versionReto: e3VersionReto, reto: e3Reto, reiniciarReto: e3ReiniciarReto, generarReto: e3GenerarReto, respuesta: e3Respuesta, respuestaUsuarioCorrecta: e3RespuestaUsuarioCorrecta, versionRespuestaUsuario: e3VersionRespuestaUsuario, inputRespuestaUsuario: e3InputRespuestaUsuario} = useEvaluacionNodo(e3AddTogenerarReto, e3AddToReiniciar);
+
+            //e4
+            const e4InputRespuesta0 = ref(null);
+            const e4InputRespuesta1 = ref(null);
+            const e4InputRespuesta2 = ref(null);
+            const e4InputsRespuesta = computed(() => {
+                return [e4InputRespuesta0, e4InputRespuesta1, e4InputRespuesta2];
+            })
+            const e4Respuestas = [0.5, 0.5, 1];
+            const e4RespuestasUsuarioCorrectas = ref(Array(3).fill(null));
+            const e4VersionesRespuestaUsuario = ref(Array(3).fill(0));
+            function e4Reiniciar() {
+                e4InputsRespuesta.value.forEach(input => {
+                    if (input.value) {
+                        input.value.value = null;
+                    }
+                });
+                e4RespuestasUsuarioCorrectas.value=Array(3).fill(null);
+            }
+            function e4EvaluarRespuestaUsuario(index) {
+                console.log(`Evaluando respuesta ${index}`);
+                let inputUsuario = e4InputsRespuesta.value[index].value.value.trim();
+                console.log(`Comparando ${inputUsuario} con ${e4Respuestas[index]}`)
+                if (inputUsuario == null) {
+                    e4RespuestasUsuarioCorrectas.value[index] = false;
+                }
+                if (inputUsuario == e4Respuestas[index]) {
+                    e4RespuestasUsuarioCorrectas.value[index] = true;
+                }
+                else {
+                    e4RespuestasUsuarioCorrectas.value[index] = false;
+                }
+                e4VersionesRespuestaUsuario.value[index]++;
+            }
+
+            //e5
+
+
+            const e5ValorInputCatetoAdyacente = ref(null);
+            const e5ValorInputCatetoOpuesto = ref(null);
+            const e5ValorInputHipotenusa = ref(null);
+            function e5AddTogenerarReto() {
+                console.log(`Generando`);
+                e5Reto.value = {};
+                const minAngulo = 10;
+                const maxAngulo = 45;
+                const rangoAngulo = maxAngulo - minAngulo;
+                e5Reto.value.angulo = degToRad(Math.round(Math.random() * rangoAngulo + minAngulo));
+
+                e5Reto.value.rotacionAngulo = ref(Math.random() * Math.PI * 2);
+
+                const minSize = 5;
+                const maxSize = 10;
+                const rangoSize = maxSize - minSize;
+                let anchoTriangulo = Math.round(Math.random() * rangoSize + minSize);
+                let largoTriangulo = anchoTriangulo * Math.tan(e5Reto.value.angulo);
+                e5Reto.value.triangulo = {
+                    ancho: anchoTriangulo,
+                    xPunta: anchoTriangulo,
+                    largo: largoTriangulo,
+                    hipotenusa: Math.sqrt(Math.pow(anchoTriangulo, 2) + Math.pow(largoTriangulo, 2)),
+                }
+                e5Reto.value.estiloTriangulo = {
+                    transform: `rotate(${- e5Reto.value.rotacionAngulo}rad)`
+                }
+                e5Reto.value.estiloLabelsSize = {
+                    transform: `rotate(${e5Reto.value.rotacionAngulo}rad)`
+                }
+                let dado = Math.random();//Dado para decidir cuál de los 3 lados estará revelado.
+
+                if (dado > 0.66) {
+                    e5Reto.value.ladoRevelado = 'hipotenusa';
+                    e5ValorInputHipotenusa.value = Number(truncar(e5Reto.value.triangulo.hipotenusa, 2));
+                }
+                else if (dado > 0.33) {
+                    e5Reto.value.ladoRevelado = 'catetoOpuesto';
+                    e5ValorInputCatetoOpuesto.value = Number(truncar(e5Reto.value.triangulo.largo, 2));
+                }
+                else {
+                    e5Reto.value.ladoRevelado = 'catetoAdyacente';
+                    e5ValorInputCatetoAdyacente.value = Number(truncar(e5Reto.value.triangulo.ancho, 2));
+                }
+
+
+                e5Respuesta.value = [
+                    e5Reto.value.triangulo.ancho,
+                    e5Reto.value.triangulo.largo,
+                    e5Reto.value.triangulo.hipotenusa,
+                ]
+                console.log(`Respuesta queda ${e5Respuesta.value}`);
+            }
+
+            const e5InputCatetoAdyacente = ref(null);
+            const e5InputCatetoOpuesto = ref(null);
+            const e5InputHipotenusa = ref(null);
+            const e5RespuestaUsuario = ref(null);
+            function e5EvaluarRespuestaUsuario() {
+                if (!e5InputCatetoAdyacente.value || !e5InputCatetoOpuesto.value || !e5InputHipotenusa.value) {
+                    console.log(`Input de lado no existente`);
+                    return;
+                }
+                if (!e5Respuesta.value || e5Respuesta.value.some(r => r == null)) {
+                    console.log(`Respuesta no precalculada`);
+                    return;
+                }
+
+                let respuestaCatetoAdyacente = Number(e5InputCatetoAdyacente.value.value.trim());
+                let respuestaCatetoOpuesto = Number(e5InputCatetoOpuesto.value.value.trim());
+                let respuestaHipotenusa = Number(e5InputHipotenusa.value.value.trim());
+                e5RespuestaUsuario.value = [respuestaCatetoAdyacente, respuestaCatetoOpuesto, respuestaHipotenusa];
+                if (e5RespuestaUsuario.value.some(r => r == null)) {
+                    console.log(`Respuesta incompleta`);
+                    e5RespuestaUsuarioCorrecta.value = false;
+                    return;
+                }
+
+                e5RespuestaUsuarioCorrecta.value = true;
+                console.log(`Comparando ${e5RespuestaUsuario.value} con ${e5Respuesta.value}`);
+                for (let i = 0; i < e5Respuesta.value.length; i++) {
+                    if (Math.abs(e5RespuestaUsuario.value[i] - e5Respuesta.value[i]) > 0.015) {
+                        e5RespuestaUsuarioCorrecta.value = false;
+                        break;
+                    }
+                }
+                e5VersionRespuestaUsuario.value++;
+            }
+
+            function e5AddToReiniciar() {
+                if (e5InputCatetoAdyacente.value) {
+                    e5InputCatetoAdyacente.value.value = null;
+                }
+                if (e5InputCatetoOpuesto.value) {
+                    e5InputCatetoOpuesto.value.value = null;
+                }
+                if (e5InputHipotenusa.value) {
+                    e5InputHipotenusa.value.value = null;
+                }
+                e5Respuesta.value = null;
+                e5ValorInputCatetoAdyacente.value = null;
+                e5ValorInputCatetoOpuesto.value = null;
+                e5ValorInputHipotenusa.value = null;
+
+            }
+
+            const {versionReto: e5VersionReto, reto: e5Reto, reiniciarReto: e5ReiniciarReto, generarReto: e5GenerarReto, respuesta: e5Respuesta, respuestaUsuarioCorrecta: e5RespuestaUsuarioCorrecta, versionRespuestaUsuario: e5VersionRespuestaUsuario, inputRespuestaUsuario: e5InputRespuestaUsuario} = useEvaluacionNodo(e5AddTogenerarReto, e5AddToReiniciar);
+
+
             return {
                 degToRad, truncar, scrollToElemento,
                 e2InputSeno, e2InputCoseno, e2InputTangente,
                 e2VersionReto, e2Reto, e2ReiniciarReto, e2GenerarReto, e2Respuesta, e2RespuestaUsuarioCorrecta, e2VersionRespuestaUsuario, e2InputRespuestaUsuario, e2EvaluarRespuestaUsuario,
+
+                e3InputSeno, e3InputCoseno, e3InputTangente,
+                e3VersionReto, e3Reto, e3ReiniciarReto, e3GenerarReto, e3Respuesta, e3RespuestaUsuarioCorrecta, e3VersionRespuestaUsuario, e3InputRespuestaUsuario, e3EvaluarRespuestaUsuario,
+
+                e4InputRespuesta0, e4InputRespuesta1, e4InputRespuesta2, e4Reiniciar, e4EvaluarRespuestaUsuario, e4VersionesRespuestaUsuario, e4RespuestasUsuarioCorrectas,
+
+                e5InputCatetoAdyacente, e5InputCatetoOpuesto, e5InputHipotenusa, e5ValorInputCatetoAdyacente, e5ValorInputCatetoOpuesto, e5ValorInputHipotenusa,
+                e5VersionReto, e5Reto, e5ReiniciarReto, e5GenerarReto, e5Respuesta, e5RespuestaUsuarioCorrecta, e5VersionRespuestaUsuario, e5InputRespuestaUsuario, e5EvaluarRespuestaUsuario
             }
         },
         components: {
@@ -225,18 +669,18 @@
     }).mount("#doc");
 </script>
 <style>
-    #e2Triangulo {
+    .trianguloEnAngulo {
         position: absolute;
         bottom: 50%;
         left: 50%;
         transform-origin: bottom left;
     }
 
-    #e2Angulo .linea {
+    .sinLineas .linea {
         background-color: transparent;
     }
 
-    #e2Angulo .labelAngulo {
+    .sinLineas .labelAngulo {
         z-index: 2;
     }
 
@@ -265,17 +709,38 @@
         bottom: calc(50% + 20px);
     }
 
-    .contenedorInputs {}
+    .contenedorInputs {
+        min-width: 250px;
+    }
 
     .contenedorInputs .bloqueInput {
         display: flex;
         gap: 10px;
         align-items: center;
         justify-content: space-between;
-        width: 250px;
+        width: 100%;
     }
 
     .contenedorInputs input {
         width: 140px;
+    }
+
+    .bloquePreguntaRazon {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        padding: 10px 15px;
+        border: 2px dashed gray;
+    }
+
+    .bloquePreguntaRazon input {
+        width: 80px;
+        padding: 3px 3px;
+    }
+
+    .bloquePreguntaRazon label {
+        display: flex;
+        align-items: center;
     }
 </style>

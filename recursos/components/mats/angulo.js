@@ -72,7 +72,7 @@ export const componenteAngulo = {
             heightCanvas: 0,
 
             canvasConfigurado: false,
-            observador: new IntersectionObserver(this.configurarCanvas, { threshold: 0.1 }),
+            observador: new IntersectionObserver((entries)=>{if(entries[0].isIntersecting===true)this.configurarCanvas();}, { threshold: 0.1 }),
         }
     },
     computed: {
@@ -131,6 +131,7 @@ export const componenteAngulo = {
             this.heightCanvas = canvas.height;
 
             this.canvasConfigurado = true;
+            this.trazarAngulo();
 
         },
         trazarAngulo() {
@@ -141,6 +142,7 @@ export const componenteAngulo = {
             if (!this.canvasConfigurado) {
                 this.configurarCanvas();
             }
+            console.log(`Trazando ángulo`);
             const lapiz = this.$refs.canvasAngulo.getContext("2d");
             const radio = this.widthCanvas * this.porcentajeTrazoAngulo / 100;
             lapiz.clearRect(0, 0, this.widthCanvas, this.heightCanvas);

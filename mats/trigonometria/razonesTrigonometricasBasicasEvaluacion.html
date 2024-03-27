@@ -5,51 +5,277 @@
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/trianguloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/anguloEstilo.css">
 
-   
+
 
     <title>Razones trigonométricas básicas - Evaluación</title>
 </head>
 
 <body>
     <div id="doc">
-       Conozco las razones trigonométricas básicas si:
+        Conozco las razones trigonométricas básicas si:
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Puedo nombrar las tres razones trigonométricas básicas y explicarlas.
+                Puedo enumerar las razones trigonométricas básicas y explicarlas.
             </template>
         </bloque-component>
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dada cualquier descripción suficiente de un triángulo rectángulo, puedo calcular sus razones trigonométricas básicas.
+                Dada cualquier descripción suficiente de un triángulo rectángulo, puedo calcular sus razones
+                trigonométricas básicas.
             </template>
-        </bloque-component>              
-        
+
+            <div class="flexVertical">
+                <button class="boton" @click="e2GenerarReto">
+                    Generar triángulo
+                </button>
+
+
+                <transition name="fadeIn">
+                    <div class="zonaReto" v-if="e2Reto">
+                        <componente-angulo :angulo="e2Reto.angulo" :rotacion="e2Reto.rotacionAngulo" id="e2Angulo"
+                            :en-grados="true">
+                            <componente-triangulo v-bind="e2Reto.triangulo" :style="[e2Reto.estiloTriangulo]"
+                                color-relleno="transparent" :propiedades-simbolizadas="[]" id="e2Triangulo">
+                                <div class="labelSize labelCatetoAdyacente" :style="[e2Reto.estiloLabelsSize]">
+                                    {{truncar(e2Reto.triangulo.ancho, 2)}}
+                                </div>
+                                <div class="labelSize labelCatetoOpuesto" :style="[e2Reto.estiloLabelsSize]">
+                                    {{truncar(e2Reto.triangulo.largo, 2)}}
+                                </div>
+                                <div class="labelSize labelHipotenusa" :style="[e2Reto.estiloLabelsSize]">
+                                    {{truncar(e2Reto.triangulo.hipotenusa, 2)}}
+                                </div>
+                            </componente-triangulo>
+                        </componente-angulo>
+                    </div>
+                </transition>
+
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionTeclado' v-show="e2Reto">
+                        <div class="flexVertical">
+                            Introduce las razones trigonométricas
+                            <div class="contenedorInputs flexVertical">
+                                <div class="bloqueInput">
+                                    <label for="e2InputSeno">Seno</label>
+                                    <input type="number" ref="e2InputSeno" id="e2InputSeno">
+                                </div>
+                                <div class="bloqueInput">
+                                    <label for="e2InputCoseno">Coseno</label>
+                                    <input type="number" ref="e2InputCoseno" id="e2InputCoseno">
+                                </div>
+                                <div class="bloqueInput">
+                                    <label for="e2InputTangente">Tangente</label>
+                                    <input type="number" ref="e2InputTangente" id="e2InputTangente">
+                                </div>
+                            </div>
+                            <button class="boton" @click="e2EvaluarRespuestaUsuario">
+                                Aceptar
+                            </button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e2RespuestaUsuarioCorrecta!=null"
+                        :modo="e2RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e2VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+
+            </div>
+        </bloque-component>
+
     </div>
 </body>
 
 </html>
 
-<script>
-    const doc = new Vue({
-        el: "#doc",
+<script type="module">
+    import {componenteTriangulo} from "http://127.0.0.1:8080/recursos/components/mats/triangulo.js";
+    import {componenteAngulo} from "http://127.0.0.1:8080/recursos/components/mats/angulo.js";
+    import {useEvaluacionNodo} from "http://127.0.0.1:8080/recursos/composables/evaluacionNodo.js";
+    import {degToRad, truncar} from "http://127.0.0.1:8080/recursos/funciones/utilsMats.js"
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
+    const {createApp, computed, ref} = Vue;
+    createApp({
+        setup() {
+            const {scrollToElemento} = useUtils();
+            function e2AddTogenerarReto() {
+                e2Reto.value = {};
+                const minAngulo = 10;
+                const maxAngulo = 45;
+                const rangoAngulo = maxAngulo - minAngulo;
+                e2Reto.value.angulo = degToRad(Math.round(Math.random() * rangoAngulo + minAngulo));
+
+                e2Reto.value.rotacionAngulo = ref(Math.random() * Math.PI * 2);
+
+                const minSize = 5;
+                const maxSize = 10;
+                const rangoSize = maxSize - minSize;
+                let anchoTriangulo = Math.round(Math.random() * rangoSize + minSize);
+                let largoTriangulo = anchoTriangulo * Math.tan(e2Reto.value.angulo);
+                e2Reto.value.triangulo = {
+                    ancho: anchoTriangulo,
+                    xPunta: anchoTriangulo,
+                    largo: largoTriangulo,
+                    hipotenusa: Math.sqrt(Math.pow(anchoTriangulo, 2) + Math.pow(largoTriangulo, 2)),
+                }
+                e2Reto.value.estiloTriangulo = {
+                    transform: `rotate(${- e2Reto.value.rotacionAngulo}rad)`
+                }
+                e2Reto.value.estiloLabelsSize = {
+                    transform: `rotate(${e2Reto.value.rotacionAngulo}rad)`
+                }
+
+                e2Respuesta.value = [
+                    e2Reto.value.triangulo.largo / e2Reto.value.triangulo.hipotenusa,
+                    e2Reto.value.triangulo.ancho / e2Reto.value.triangulo.hipotenusa,
+                    e2Reto.value.triangulo.largo / e2Reto.value.triangulo.ancho,
+                ]
+                console.log(`Respuesta queda ${e2Respuesta.value}`);
+            }
+
+
+            const e2InputSeno = ref(null);
+            const e2InputCoseno = ref(null);
+            const e2InputTangente = ref(null);
+            const e2RespuestaUsuario = ref(null);
+            function e2EvaluarRespuestaUsuario() {
+                if (!e2InputSeno.value || !e2InputCoseno.value || !e2InputTangente.value) {
+                    console.log(`Input de razón no existente`);
+                    return;
+                }
+                if (!e2Respuesta.value || e2Respuesta.value.some(r => r == null)) {
+                    console.log(`Respuesta no precalculada`);
+                    return;
+                }
+
+                let respuestaSeno = Number(e2InputSeno.value.value.trim());
+                let respuestaCoseno = Number(e2InputCoseno.value.value.trim());
+                let respuestaTangente = Number(e2InputTangente.value.value.trim());
+                e2RespuestaUsuario.value = [respuestaSeno, respuestaCoseno, respuestaTangente];
+                if (e2RespuestaUsuario.value.some(r => r == null)) {
+                    console.log(`Respuesta incompleta`);
+                    return;
+                }
+
+                e2RespuestaUsuarioCorrecta.value = true;
+                console.log(`Comparando ${e2RespuestaUsuario.value} con ${e2Respuesta.value}`);
+                for (let i = 0; i < e2Respuesta.value.length; i++) {
+                    if (Math.abs(e2RespuestaUsuario.value[i] - e2Respuesta.value[i]) > 0.1) {
+                        e2RespuestaUsuarioCorrecta.value = false;
+                        break;
+                    }
+                }
+                e2VersionRespuestaUsuario.value++;
+            }
+
+            function e2AddToReiniciar() {
+                if (e2InputSeno.value) {
+                    e2InputSeno.value.value = null;
+                }
+                if (e2InputCoseno.value) {
+                    e2InputCoseno.value.value = null;
+                }
+                if (e2InputTangente.value) {
+                    e2InputTangente.value.value = null;
+                }
+                e2Respuesta.value = null;
+            }
+
+
+            const {versionReto: e2VersionReto, reto: e2Reto, reiniciarReto: e2ReiniciarReto, generarReto: e2GenerarReto, respuesta: e2Respuesta, respuestaUsuarioCorrecta: e2RespuestaUsuarioCorrecta, versionRespuestaUsuario: e2VersionRespuestaUsuario, inputRespuestaUsuario: e2InputRespuestaUsuario} = useEvaluacionNodo(e2AddTogenerarReto, e2AddToReiniciar);
+            return {
+                degToRad, truncar, scrollToElemento,
+                e2InputSeno, e2InputCoseno, e2InputTangente,
+                e2VersionReto, e2Reto, e2ReiniciarReto, e2GenerarReto, e2Respuesta, e2RespuestaUsuarioCorrecta, e2VersionRespuestaUsuario, e2InputRespuestaUsuario, e2EvaluarRespuestaUsuario,
+            }
+        },
         components: {
             recuadroComponent,
             bloqueComponent,
-            enlaceComponent
-        },       
-    })
+            enlaceComponent,
+            componenteTriangulo,
+            componenteAngulo
+        },
+    }).mount("#doc");
 </script>
+<style>
+    #e2Triangulo {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom left;
+    }
+
+    #e2Angulo .linea {
+        background-color: transparent;
+    }
+
+    #e2Angulo .labelAngulo {
+        z-index: 2;
+    }
+
+    .zonaReto {
+        padding: 100px 0px;
+    }
+
+    .labelSize {
+        transform-origin: center center;
+        font-size: 14px;
+        position: absolute;
+    }
+
+    .labelSize.labelCatetoAdyacente {
+        top: calc(100% + 10px);
+        left: calc(50% - 10px);
+    }
+
+    .labelSize.labelCatetoOpuesto {
+        left: calc(100% + 10px);
+        top: calc(50% - 10px);
+    }
+
+    .labelSize.labelHipotenusa {
+        left: calc(50% - 10px);
+        bottom: calc(50% + 20px);
+    }
+
+    .contenedorInputs {}
+
+    .contenedorInputs .bloqueInput {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        width: 250px;
+    }
+
+    .contenedorInputs input {
+        width: 140px;
+    }
+</style>

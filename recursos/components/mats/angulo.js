@@ -9,7 +9,7 @@ export const componenteAngulo = {
             <canvas class="canvasAngulo" ref="canvasAngulo" v-if="anguloRepresentado">
             </canvas>
             <div :style="[estiloLabel]" class="label labelAngulo" :class="{explicitable: anguloExplicitable, explicitado: anguloExplicitado}" v-show="anguloSimbolizado">
-                <span class="visibleNormalmente">{{simboloAngulo}}</span><span class="visibleHovered">={{numeroGrados}}</span>
+                <span class="visibleNormalmente">{{simboloAngulo}}</span><span class="visibleHovered">={{numeroGrados}}<span v-show="enGrados">°</span></span> 
             </div>
             <slot>
             </slot>

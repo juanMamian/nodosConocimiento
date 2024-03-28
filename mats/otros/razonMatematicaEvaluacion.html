@@ -52,7 +52,7 @@
                 </button>
 
                 <transition name="fadeIn">
-                    <recuadro-component  :key="e1VersionReto" v-if="e1Reto" tipo="datoPrevio">
+                    <recuadro-component :key="e1VersionReto" v-if="e1Reto" tipo="datoPrevio">
                         {{e1Reto.texto}}
                     </recuadro-component>
                 </transition>
@@ -112,6 +112,56 @@
 
             </div>
         </bloque-component>
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Dada un número y conocida su razón matemática con otro, puedo descubrir el número faltante.
+            </template>
+            <div class="flexVertical">
+                <button class="boton" @click="e3GenerarReto">
+                    Generar reto
+                </button>
+
+                <div class="zonaReto flexVertical" v-if="e3Reto" :key="e3VersionReto">
+                    <div class="contenedorNumeros">
+                        <transition name="popIn" appear>
+                            <div class="numero numero1">
+                                {{e3Reto.numeroOculto===1 && e3RespuestaUsuarioCorrecta!=true?'?':e3Reto.numero1}}
+                            </div>
+                        </transition>
+                        <transition name="popIn" appear>
+                            <div class="numero numero2">
+                                {{e3Reto.numeroOculto===2 && e3RespuestaUsuarioCorrecta!=true?'?':e3Reto.numero2}}
+                            </div>
+                        </transition>
+                    </div>
+                    <recuadro-component tipo='datoPrevio' style="text-align: center">
+                        La razón entre estos dos números es {{e3Reto.razon}}
+                    </recuadro-component>
+
+                </div>
+
+                <recuadro-component tipo='instruccionTeclado' v-if="e3Reto">
+                    <div class="flexVertical">
+                        Escribe el número faltante
+                        <input type="number" ref="e3InputRespuestaUsuario"
+                            @keypress.enter="e3EvaluarRespuestaUsuario(undefined, true)">
+                        <button class="boton" @click="e3EvaluarRespuestaUsuario(undefined, true)">
+                            Aceptar
+                        </button>
+                    </div>
+                </recuadro-component>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e3RespuestaUsuarioCorrecta!=null"
+                        :modo="e3RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e3VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+
+            </div>
+
+        </bloque-component>
+
     </div>
 </body>
 
@@ -143,7 +193,7 @@
                 }
                 const rangoRazon = maxRazon - minRazon;
 
-console.log(`Resolución: ${resolucion}`);
+                console.log(`Resolución: ${resolucion}`);
                 const razon = Number((Math.round(Math.random() * rangoRazon + minRazon) * resolucion).toFixed(2));
                 console.log(`razon: ${razon}`);
 
@@ -192,9 +242,35 @@ console.log(`Resolución: ${resolucion}`);
 
             const {dificultad: e2Dificultad, versionReto: e2VersionReto, reto: e2Reto, reiniciarReto: e2ReiniciarReto, generarReto: e2GenerarReto, respuesta: e2Respuesta, respuestaUsuarioCorrecta: e2RespuestaUsuarioCorrecta, versionRespuestaUsuario: e2VersionRespuestaUsuario, inputRespuestaUsuario: e2InputRespuestaUsuario, evaluarRespuestaUsuario: e2EvaluarRespuestaUsuario} = useEvaluacionNodo(e2AddToGenerarReto);
 
+
+            function e3AddToGenerarReto() {
+                e3Reto.value = {};
+                const minNumero = 2;
+                const maxNumero = 50;
+                const rangoNumero = maxNumero - minNumero;
+                e3Reto.value.numero2 = Math.round(Math.random() * rangoNumero) + minNumero;
+
+                const minFactor = 2;
+                const resolucion = 0.5;
+                const maxFactor = 40;
+
+                const rangoFactor = maxFactor - minFactor;
+
+                const factor = Number((Math.round((Math.random() * rangoFactor + minFactor)) * resolucion).toFixed(2));
+                e3Reto.value.razon = factor;
+                e3Reto.value.numero1 = Number((e3Reto.value.numero2 * factor).toFixed(2));
+                console.log(`Número pequeño: ${e3Reto.value.numero2}`);
+                console.log(`Factor: ${factor}`);
+                e3Reto.value.numeroOculto = Math.round(Math.random()) + 1;
+                e3Respuesta.value = e3Reto.value.numeroOculto === 1 ? e3Reto.value.numero1 : e3Reto.value.numero2;
+            }
+
+            const {dificultad: e3Dificultad, versionReto: e3VersionReto, reto: e3Reto, reiniciarReto: e3ReiniciarReto, generarReto: e3GenerarReto, respuesta: e3Respuesta, respuestaUsuarioCorrecta: e3RespuestaUsuarioCorrecta, versionRespuestaUsuario: e3VersionRespuestaUsuario, inputRespuestaUsuario: e3InputRespuestaUsuario, evaluarRespuestaUsuario: e3EvaluarRespuestaUsuario} = useEvaluacionNodo(e3AddToGenerarReto);
+
             return {
                 scrollToElemento,
                 e2Dificultad, e2VersionReto, e2Reto, e2ReiniciarReto, e2GenerarReto, e2Respuesta, e2RespuestaUsuarioCorrecta, e2VersionRespuestaUsuario, e2InputRespuestaUsuario, e2EvaluarRespuestaUsuario,
+                e3Dificultad, e3VersionReto, e3Reto, e3ReiniciarReto, e3GenerarReto, e3Respuesta, e3RespuestaUsuarioCorrecta, e3VersionRespuestaUsuario, e3InputRespuestaUsuario, e3EvaluarRespuestaUsuario,
 
                 e1Dificultad, e1VersionReto, e1Reto, e1ReiniciarReto, e1GenerarReto, e1Respuesta, e1RespuestaUsuarioCorrecta, e1VersionRespuestaUsuario, e1InputRespuestaUsuario, e1EvaluarRespuestaUsuario
             }

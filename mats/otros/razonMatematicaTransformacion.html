@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+
+
+    <title>Razón matemática - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            La razón matemática:
+        </p>
+
+        <ul>
+            <li>
+                Expresa cuantas veces se debe mutliplicar el segundo número para igualar al
+                primero.
+            </li>
+            <li>
+                Expresa en cuánto se debe dividir el primer número para igualar el segundo.
+            </li>
+        </ul>
+
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se puede ver algunas razones matemáticas y las operaciones que relacionan los números.
+            </template>
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="descripcionRazon">
+                        Entre el 22 y el 11 la razón matemática es <span class="resaltado">2</span>.
+                    </div>
+
+                    <div class="diagrama">
+                        <div class="numero">
+                            22
+                        </div>
+                        <div class="contenedorFlechas">
+
+                            <transition name="unveilLeft">
+                                <div class="flecha izquierda delayed" v-show="e1DireccionDiagramas[0]==='izquierda'">
+                                    Igual
+                                </div>
+                            </transition>
+
+                            <transition name="unveilRight">
+                                <div class="flecha derecha" v-show="e1DireccionDiagramas[0]==='derecha'">
+                                    Dividido
+                                </div>
+                            </transition>
+                        </div>
+                        <div class="razon">
+                            2
+                        </div>
+                        <div class="contenedorFlechas">
+
+                            <transition name="unveilLeft">
+                                <div class="flecha izquierda" v-show="e1DireccionDiagramas[0]==='izquierda'">
+                                    Multiplicado
+                                </div>
+                            </transition>
+
+                            <transition name="unveilRight">
+                                <div class="flecha derecha delayed" v-show="e1DireccionDiagramas[0]==='derecha'">
+                                    Igual
+                                </div>
+                            </transition>
+                        </div>
+                        <div class="numero">
+                            11
+                        </div>
+                    </div>
+
+                    <button class="boton" @click="e1DireccionDiagramas[0]='derecha'">
+                        Ver la relación del primero con el segundo
+                    </button>
+                    <button class="boton" @click="e1DireccionDiagramas[0]='izquierda'">
+                        Ver la relación del segundo con el primero
+                    </button>
+
+                </div>
+                <div class="itemEjemplo">
+                    <div class="descripcionRazon">
+                        Entre el 15 y el 5 la razón matemática es <span class="resaltado">3</span>.
+                    </div>
+
+                    <div class="diagrama">
+                        <div class="numero">
+                            15
+                        </div>
+                        <div class="contenedorFlechas">
+
+                            <transition name="unveilLeft">
+                                <div class="flecha izquierda delayed" v-show="e1DireccionDiagramas[1]==='izquierda'">
+                                    Igual
+                                </div>
+                            </transition>
+
+                            <transition name="unveilRight">
+                                <div class="flecha derecha" v-show="e1DireccionDiagramas[1]==='derecha'">
+                                    Dividido
+                                </div>
+                            </transition>
+                        </div>
+                        <div class="razon">
+                            3
+                        </div>
+                        <div class="contenedorFlechas">
+
+                            <transition name="unveilLeft">
+                                <div class="flecha izquierda" v-show="e1DireccionDiagramas[1]==='izquierda'">
+                                    Multiplicado
+                                </div>
+                            </transition>
+
+                            <transition name="unveilRight">
+                                <div class="flecha derecha delayed" v-show="e1DireccionDiagramas[1]==='derecha'">
+                                    Igual
+                                </div>
+                            </transition>
+                        </div>
+                        <div class="numero">
+                            5
+                        </div>
+                    </div>
+
+                    <button class="boton" @click="e1DireccionDiagramas[1]='derecha'">
+                        Ver la relación del primero con el segundo
+                    </button>
+                    <button class="boton" @click="e1DireccionDiagramas[1]='izquierda'">
+                        Ver la relación del segundo con el primero
+                    </button>
+
+                </div>
+                <div class="itemEjemplo">
+                    <div class="descripcionRazon">
+                        Entre el 6 y el 24 la razón matemática es <span class="resaltado">0.25</span>.
+                    </div>
+
+                    <div class="diagrama">
+                        <div class="numero">
+                            6
+                        </div>
+                        <div class="contenedorFlechas">
+
+                            <transition name="unveilLeft">
+                                <div class="flecha izquierda delayed" v-show="e1DireccionDiagramas[2]==='izquierda'">
+                                    Igual
+                                </div>
+                            </transition>
+
+                            <transition name="unveilRight">
+                                <div class="flecha derecha" v-show="e1DireccionDiagramas[2]==='derecha'">
+                                    Dividido
+                                </div>
+                            </transition>
+                        </div>
+                        <div class="razon">
+                            0.25
+                        </div>
+                        <div class="contenedorFlechas">
+
+                            <transition name="unveilLeft">
+                                <div class="flecha izquierda" v-show="e1DireccionDiagramas[2]==='izquierda'">
+                                    Multiplicado
+                                </div>
+                            </transition>
+
+                            <transition name="unveilRight">
+                                <div class="flecha derecha delayed" v-show="e1DireccionDiagramas[2]==='derecha'">
+                                    Igual
+                                </div>
+                            </transition>
+                        </div>
+                        <div class="numero">
+                            24
+                        </div>
+                    </div>
+
+                    <button class="boton" @click="e1DireccionDiagramas[2]='derecha'">
+                        Ver la relación del primero con el segundo
+                    </button>
+                    <button class="boton" @click="e1DireccionDiagramas[2]='izquierda'">
+                        Ver la relación del segundo con el primero
+                    </button>
+
+                </div>
+                <div class="itemEjemplo">
+                    <div class="descripcionRazon">
+                        Entre el 8 y el 16 la razón matemática es <span class="resaltado">0.5</span>.
+                    </div>
+
+                    <div class="diagrama">
+                        <div class="numero">
+                            8
+                        </div>
+                        <div class="contenedorFlechas">
+
+                            <transition name="unveilLeft">
+                                <div class="flecha izquierda delayed" v-show="e1DireccionDiagramas[3]==='izquierda'">
+                                    Igual
+                                </div>
+                            </transition>
+
+                            <transition name="unveilRight">
+                                <div class="flecha derecha" v-show="e1DireccionDiagramas[3]==='derecha'">
+                                    Dividido
+                                </div>
+                            </transition>
+                        </div>
+                        <div class="razon">
+                            0.5
+                        </div>
+                        <div class="contenedorFlechas">
+
+                            <transition name="unveilLeft">
+                                <div class="flecha izquierda" v-show="e1DireccionDiagramas[3]==='izquierda'">
+                                    Multiplicado
+                                </div>
+                            </transition>
+
+                            <transition name="unveilRight">
+                                <div class="flecha derecha delayed" v-show="e1DireccionDiagramas[3]==='derecha'">
+                                    Igual
+                                </div>
+                            </transition>
+                        </div>
+                        <div class="numero">
+                            16
+                        </div>
+                    </div>
+
+                    <button class="boton" @click="e1DireccionDiagramas[3]='derecha'">
+                        Ver la relación del primero con el segundo
+                    </button>
+                    <button class="boton" @click="e1DireccionDiagramas[3]='izquierda'">
+                        Ver la relación del segundo con el primero
+                    </button>
+
+                </div>
+            </div>
+        </bloque-component>
+
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const {createApp, ref} = Vue;
+    createApp({
+        setup() {
+            const e1DireccionDiagramas = ref(Array(4).fill(null));
+            return {
+                e1DireccionDiagramas
+            }
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+    }).mount("#doc");
+</script>
+
+<style>
+    .itemEjemplo {
+        width: min(200px, 80%);
+    }
+
+    .razonMatematica {
+        width: 10px;
+        height: 10px;
+        padding: 10px;
+        border-radius: 50%;
+        background-color: brown;
+        margin: 10px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .diagrama {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .razon {
+        width: 40px;
+        height: 40px;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--paletaPrevio);
+        border-radius: 50%;
+    }
+
+    .contenedorFlechas {
+        width: 100px;
+        height: 50px;
+        padding: 10px 5px;
+
+    }
+
+    .flecha {
+        border: 2px solid transparent;
+        border-radius: 80%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        position: relative;
+    }
+
+    .flecha.derecha {
+        border-top-color: black;
+    }
+
+    .flecha.derecha::after {
+        content: "";
+        border: 5px solid transparent;
+        border-left-color: black;
+        transform: rotate(39deg) translate(-50%, -50%);
+        position: absolute;
+        top: 24%;
+        left: 86%;
+        width: 0px;
+        height: 0px;
+    }
+
+    .flecha.izquierda {
+        border-bottom-color: black;
+    }
+
+    .flecha.izquierda::after {
+        content: "";
+        border: 5px solid transparent;
+        border-right-color: black;
+        transform: rotate(47deg) translate(50%, 50%);
+        position: absolute;
+        bottom: 24%;
+        right: 83%;
+        width: 0px;
+        height: 0px;
+    }
+
+    .unveilRight-enter-from {
+        clip-path: polygon(0% 0%, 1% 0%, 1% 100%, 0% 100%, 0% 0%);
+    }
+
+    .unveilRight-enter-to {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%);
+    }
+
+    .unveilRight-enter-active {
+        transition: clip-path 1s;
+    }
+
+    .delayed.unveilRight-enter-active {
+        transition-delay: 1s;
+    }
+
+    .unveilLeft-enter-from {
+        clip-path: polygon(99% 0%, 100% 0%, 100% 100%, 99% 100%, 99% 0%);
+    }
+
+    .unveilLeft-enter-to {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%);
+    }
+
+    .unveilLeft-enter-active {
+        transition: clip-path 1s;
+    }
+
+    .delayed.unveilLeft-enter-active {
+        transition-delay: 1s;
+    }
+</style>

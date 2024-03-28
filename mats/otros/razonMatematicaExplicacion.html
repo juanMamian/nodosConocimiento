@@ -7,14 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
 
 
 
@@ -72,7 +79,8 @@
         </bloque-component>
 
         <recuadro-component tipo="datoPrevio">
-            La comparación entre las dos cantidades de puede expresar simplemente con un número. Ese número es la <span class="resaltado">razon matemática</span>.
+            La comparación entre las dos cantidades de puede expresar simplemente con un número. Ese número es la <span
+                class="resaltado">razon matemática</span>.
         </recuadro-component>
 
         <bloque-component tipo="ejemplo">
@@ -81,47 +89,56 @@
             </template>
 
             <div class="listaEjemplos">
-                <div class="itemEjemplo">                    
+                <div class="itemEjemplo">
                     <div class="comparacion">
                         El 10 es igual de grande que <span class="resaltado">dos veces</span> el 5.
                     </div>
-                    <div class="boton" :class="{deshabilitado: mostrandoRazon1}"
-                        @click="mostrandoRazon1=true;">Mostrar la razón matemática entre el 10 y el 5</div>
+                    <div class="boton" :class="{deshabilitado: mostrandoRazon1}" @click="mostrandoRazon1=true;">Mostrar
+                        la razón matemática entre el 10 y el 5</div>
+
+                    <transition name="enterTop">
                         <div class="razonMatematica" v-show="mostrandoRazon1">
                             2
                         </div>
+                    </transition>
                 </div>
-                <div class="itemEjemplo">                    
+                <div class="itemEjemplo">
                     <div class="comparacion">
                         El 21 es igual de grande que <span class="resaltado">tres veces</span> el 7.
                     </div>
-                    <div class="boton" :class="{deshabilitado: mostrandoRazon2}"
-                        @click="mostrandoRazon2=true;">Mostrar la razón matemática entre el 21 y el 7</div>
+                    <div class="boton" :class="{deshabilitado: mostrandoRazon2}" @click="mostrandoRazon2=true;">Mostrar
+                        la razón matemática entre el 21 y el 7</div>
+                    <transition name="enterTop">
                         <div class="razonMatematica" v-show="mostrandoRazon2">
                             3
                         </div>
+                    </transition>
                 </div>
-                <div class="itemEjemplo">                    
+                <div class="itemEjemplo">
                     <div class="comparacion">
                         El 18 es igual de grande que <span class="resaltado">seis veces</span> el 3.
                     </div>
-                    <div class="boton" :class="{deshabilitado: mostrandoRazon3}"
-                        @click="mostrandoRazon3=true;">Mostrar la razón matemática entre el 18 y el 3</div>
+                    <div class="boton" :class="{deshabilitado: mostrandoRazon3}" @click="mostrandoRazon3=true;">Mostrar
+                        la razón matemática entre el 18 y el 3</div>
+                    <transition name="enterTop">
                         <div class="razonMatematica" v-show="mostrandoRazon3">
                             6
                         </div>
+                    </transition>
                 </div>
-                <div class="itemEjemplo">                    
+                <div class="itemEjemplo">
                     <div class="comparacion">
                         El 100 es igual de grande que <span class="resaltado">diez veces</span> el 10.
                     </div>
-                    <div class="boton" :class="{deshabilitado: mostrandoRazon4}"
-                        @click="mostrandoRazon4=true;">Mostrar la razón matemática entre el 100 y el 10</div>
+                    <div class="boton" :class="{deshabilitado: mostrandoRazon4}" @click="mostrandoRazon4=true;">Mostrar
+                        la razón matemática entre el 100 y el 10</div>
+                    <transition name="enterTop">
                         <div class="razonMatematica" v-show="mostrandoRazon4">
                             10
                         </div>
+                    </transition>
                 </div>
-                
+
             </div>
         </bloque-component>
 
@@ -154,29 +171,29 @@
                 mostrandoRazon4: false,
             }
         },
-        methods:{
-            reiniciar(){
-                this.mostrandoComparacion1=false;
-                this.mostrandoComparacion2=false;
-                this.mostrandoComparacion3=false;
-                this.mostrandoComparacion4=false;
+        methods: {
+            reiniciar() {
+                this.mostrandoComparacion1 = false;
+                this.mostrandoComparacion2 = false;
+                this.mostrandoComparacion3 = false;
+                this.mostrandoComparacion4 = false;
             },
-            reiniciarRazon(){
-                this.mostrandoRazon1=false;
-                this.mostrandoRazon2=false;
-                this.mostrandoRazon3=false;
-                this.mostrandoRazon4=false;
+            reiniciarRazon() {
+                this.mostrandoRazon1 = false;
+                this.mostrandoRazon2 = false;
+                this.mostrandoRazon3 = false;
+                this.mostrandoRazon4 = false;
             }
         }
     })
 </script>
 
 <style>
-    .itemEjemplo{
-        width:min(200px, 80%);
+    .itemEjemplo {
+        width: min(200px, 80%);
     }
 
-    .razonMatematica{
+    .razonMatematica {
         width: 10px;
         height: 10px;
         padding: 10px;

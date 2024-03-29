@@ -5,40 +5,172 @@
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
 
     <title>Porcentajes - Evaluación</title>
 </head>
 
 <body>
     <div id="doc">
-        <p>Manejo el tema de porcentajes si: </p>
+        <p>comprengo los porcentajes si: </p>
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
                 Dado cualquier número, puedo determinar cuánto es su 1%.
             </template>
+            <div class="flexVertical">
+                <recuadro-component tipo='instruccionPointer'>
+                    <div class="flexVertical">
+                        Dificultad
+                        <input type="range" min="1" max="4" v-model.number="e1Dificultad">
+                        {{e1Dificultad}}
+
+                    </div>
+                </recuadro-component>
+
+                <button class="boton" @click="e1GenerarReto">
+                    Generar número
+                </button>
+
+                <transition name="fadeIn">
+                    <div class="zonaReto" v-if="e1Reto" :key="e1VersionReto">
+                        {{truncar(e1Reto, 2)}}
+                    </div>
+                </transition>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionTeclado' v-if="e1Reto">
+                        <div class="flexVertical">
+                            Introduce tu respuesta
+                            <input type="number" ref="e1InputRespuestaUsuario" id="e1InputRespuestaUsuario"
+                                ref="e1InputRespuestaUsuario"
+                                @keypress.enter="e1EvaluarRespuestaUsuario(undefined, true)">
+                            <button class="boton" @click="e1EvaluarRespuestaUsuario(undefined, true)">
+                                Aceptar
+                            </button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e1RespuestaUsuarioCorrecta!=null"
+                        :modo="e1RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e1VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+
+            </div>
         </bloque-component>
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
                 Dado cualquier número, puedo determinar cuánto es cualquier cantidad de por cientos.
             </template>
+            <div class="flexVertical">
+
+                <recuadro-component tipo='instruccionPointer'>
+                    <div class="flexVertical">
+                        Dificultad
+                        <input type="range" min="1" max="4" v-model.number="e2Dificultad">
+                        {{e2Dificultad}}
+
+                    </div>
+                </recuadro-component>
+
+                <button class="boton" @click="e2GenerarReto">
+                    Generar número
+                </button>
+
+                <transition name="fadeIn">
+                    <div class="zonaReto" v-if="e2Reto" :key="e2VersionReto">
+                        {{e2Reto.porcentaje}}% de {{truncar(e2Reto.numero, 2)}}
+                    </div>
+                </transition>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionTeclado' v-if="e2Reto">
+                        <div class="flexVertical">
+                            Introduce tu respuesta
+                            <input type="number" ref="e2InputRespuestaUsuario" id="e2InputRespuestaUsuario"
+                                ref="e2InputRespuestaUsuario"
+                                @keypress.enter="e2EvaluarRespuestaUsuario(undefined, true)">
+                            <button class="boton" @click="e2EvaluarRespuestaUsuario(undefined, true)">
+                                Aceptar
+                            </button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e2RespuestaUsuarioCorrecta!=null"
+                        :modo="e2RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e2VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+
+            </div>
+
         </bloque-component>
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
                 Dado el valor de cualquier porcentaje, puedo determinar el número original.
             </template>
+            <div class="flexVertical">
+                <recuadro-component tipo='instruccionPointer'>
+                    <div class="flexVertical">
+                        Dificultad
+                        <input type="range" min="1" max="3" v-model.number="e3Dificultad">
+                        {{e3Dificultad}}
+
+                    </div>
+                </recuadro-component>
+
+                <button class="boton" @click="e3GenerarReto">
+                    Generar número
+                </button>
+
+                <transition name="fadeIn">
+                    <div class="zonaReto" v-if="e3Reto" :key="e3VersionReto">
+                        {{e3Reto.porcentaje}}% de cierta cantidad desconocida es {{truncar(e3Reto.numero, 2)}}
+                    </div>
+                </transition>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo='instruccionTeclado' v-if="e3Reto">
+                        <div class="flexVertical">
+                            Introduce la cantidad desconocida
+                            <input type="number" ref="e3InputRespuestaUsuario" id="e3InputRespuestaUsuario"
+                                ref="e3InputRespuestaUsuario"
+                                @keypress.enter="e3EvaluarRespuestaUsuario(undefined, true)">
+                            <button class="boton" @click="e3EvaluarRespuestaUsuario(undefined, true)">
+                                Aceptar
+                            </button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e3RespuestaUsuarioCorrecta!=null"
+                        :modo="e3RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e3VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+
+            </div>
         </bloque-component>
     </div>
 </body>
@@ -46,18 +178,118 @@
 </html>
 
 
-<script>
-    const doc = new Vue({
-        el: "#doc",
+<script type="module">
+    import {useEvaluacionNodo} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/evaluacionNodo.js"
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js"
+    import {truncar} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/funciones/utilsMats.js"
+    const {createApp} = Vue;
+    createApp({
+        setup() {
+            const {scrollToElemento} = useUtils();
+            function e1AddToGenerarReto() {
+                let minNumero = 100;
+                let maxNumero = 900;
+                let resolucion = 100;
+                if (e1Dificultad.value === 2) {
+                    resolucion = 1;
+                }
+                if (e1Dificultad.value === 3) {
+                    minNumero = 20;
+                    maxNumero = 150;
+                    resolucion = 1;
+                }
+                if (e1Dificultad.value === 4) {
+                    minNumero = 10;
+                    maxNumero = 550;
+                    resolucion = 0.1;
+                }
+                const rangoNumero = maxNumero - minNumero;
+
+                e1Reto.value = Math.round(Math.random() * rangoNumero) + minNumero;
+                e1Reto.value = e1Reto.value - e1Reto.value % resolucion;
+                e1Respuesta.value = e1Reto.value / 100;
+            }
+
+            const {versionReto: e1VersionReto, dificultad: e1Dificultad, reto: e1Reto, reiniciarReto: e1ReiniciarReto, generarReto: e1GenerarReto, respuesta: e1Respuesta, respuestaUsuarioCorrecta: e1RespuestaUsuarioCorrecta, versionRespuestaUsuario: e1VersionRespuestaUsuario, inputRespuestaUsuario: e1InputRespuestaUsuario, evaluarRespuestaUsuario: e1EvaluarRespuestaUsuario} = useEvaluacionNodo(e1AddToGenerarReto);
+
+
+            //e2
+            function e2AddToGenerarReto() {
+                e2Reto.value = {};
+
+                let minNumero = 100;
+                let maxNumero = 900;
+                let resolucion = 100;
+                if (e2Dificultad.value === 2) {
+                    resolucion = 1;
+                }
+                if (e2Dificultad.value === 3) {
+                    minNumero = 20;
+                    maxNumero = 150;
+                    resolucion = 1;
+                }
+                const rangoNumero = maxNumero - minNumero;
+
+                e2Reto.value.numero = Math.round(Math.random() * rangoNumero) + minNumero;
+                e2Reto.value.numero = e2Reto.value.numero - e2Reto.value.numero % resolucion;
+
+                const minPorcentaje = 2;
+                const maxPorcentaje = 100;
+                const rangoPorcentaje = maxPorcentaje - minPorcentaje;
+
+                e2Reto.value.porcentaje = Math.round(Math.random() * rangoPorcentaje) + minPorcentaje;
+
+                e2Respuesta.value = e2Reto.value.numero * e2Reto.value.porcentaje / 100;
+            }
+
+            const {versionReto: e2VersionReto, dificultad: e2Dificultad, reto: e2Reto, reiniciarReto: e2ReiniciarReto, generarReto: e2GenerarReto, respuesta: e2Respuesta, respuestaUsuarioCorrecta: e2RespuestaUsuarioCorrecta, versionRespuestaUsuario: e2VersionRespuestaUsuario, inputRespuestaUsuario: e2InputRespuestaUsuario, evaluarRespuestaUsuario: e2EvaluarRespuestaUsuario} = useEvaluacionNodo(e2AddToGenerarReto);
+
+            //e3
+            function e3AddToGenerarReto() {
+                e3Reto.value = {};
+
+                let minNumero = 100;
+                let maxNumero = 900;
+                let resolucion = 100;
+                if (e3Dificultad.value === 2) {
+                    resolucion = 1;
+                }
+                if (e3Dificultad.value === 3) {
+                    minNumero = 20;
+                    maxNumero = 150;
+                    resolucion = 1;
+                }
+                if (e3Dificultad.value === 4) {
+                    minNumero = 10;
+                    maxNumero = 550;
+                    resolucion = 0.1;
+                }
+                const rangoNumero = maxNumero - minNumero;
+
+                e3Respuesta.value = Math.round(Math.random() * rangoNumero) + minNumero;
+                e3Respuesta.value = e3Respuesta.value - e3Respuesta.value % resolucion;
+
+                const minPorcentaje = 2;
+                const maxPorcentaje = 100;
+                const rangoPorcentaje = maxPorcentaje - minPorcentaje;
+
+                e3Reto.value.porcentaje = Math.round(Math.random() * rangoPorcentaje) + minPorcentaje;
+                e3Reto.value.numero= e3Respuesta.value * e3Reto.value.porcentaje / 100;
+            }
+
+            const {versionReto: e3VersionReto, dificultad: e3Dificultad, reto: e3Reto, reiniciarReto: e3ReiniciarReto, generarReto: e3GenerarReto, respuesta: e3Respuesta, respuestaUsuarioCorrecta: e3RespuestaUsuarioCorrecta, versionRespuestaUsuario: e3VersionRespuestaUsuario, inputRespuestaUsuario: e3InputRespuestaUsuario, evaluarRespuestaUsuario: e3EvaluarRespuestaUsuario} = useEvaluacionNodo(e3AddToGenerarReto);
+
+            return {
+                scrollToElemento, truncar,
+                e1VersionReto, e1Dificultad, e1Reto, e1ReiniciarReto, e1GenerarReto, e1Respuesta, e1RespuestaUsuarioCorrecta, e1VersionRespuestaUsuario, e1InputRespuestaUsuario, e1EvaluarRespuestaUsuario,
+                e2VersionReto, e2Dificultad, e2Reto, e2ReiniciarReto, e2GenerarReto, e2Respuesta, e2RespuestaUsuarioCorrecta, e2VersionRespuestaUsuario, e2InputRespuestaUsuario, e2EvaluarRespuestaUsuario,
+                e3VersionReto, e3Dificultad, e3Reto, e3ReiniciarReto, e3GenerarReto, e3Respuesta, e3RespuestaUsuarioCorrecta, e3VersionRespuestaUsuario, e3InputRespuestaUsuario, e3EvaluarRespuestaUsuario,
+            }
+        },
         components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-        data() {
-            return {
-                marca: null,
-            }
-        }
-    })
+    }).mount("#doc")
 </script>

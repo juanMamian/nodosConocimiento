@@ -12,6 +12,9 @@ export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, 
         if (addToReiniciarReto) {
             addToReiniciarReto();
         }
+        if(inputRespuestaUsuario.value){
+            inputRespuestaUsuario.value.value=null;
+        }
     }
     function generarReto() {
         reiniciarReto();

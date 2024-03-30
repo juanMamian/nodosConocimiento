@@ -249,7 +249,8 @@ li {
 input {
     font-size: 22px;
     padding: 5px 5px;
-    max-width: 80%;
+    max-width: 40vw;
+
 }
 
 .inputRespuestaEvaluacion {
@@ -537,3 +538,4 @@ input {
         opacity: 1;
     }
 }
+

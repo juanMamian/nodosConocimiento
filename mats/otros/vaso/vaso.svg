@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="47.226189mm"
+   height="75.792175mm"
+   viewBox="0 0 47.226189 75.792175"
+   version="1.1"
+   id="svg5"
+   inkscape:export-filename="brillo.svg"
+   inkscape:export-xdpi="8.5500002"
+   inkscape:export-ydpi="8.5500002"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-85.250834,-158.12875)">
+    <path
+       style="fill:#d4e7eb;fill-opacity:1;stroke:#f9f9f9;stroke-width:1.106;stroke-dasharray:none"
+       d="m 85.886726,158.68176 9.990078,71.2939 25.974206,-0.0493 9.99007,-71.24458 z"
+       id="path176"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="vaso.svg"
+       inkscape:export-xdpi="8.5500002"
+       inkscape:export-ydpi="8.5500002" />
+    <path
+       style="fill:#f9f9f9;fill-opacity:1;stroke:#f9f9f9;stroke-width:0;stroke-dasharray:none"
+       d="m 95.263268,229.59824 v 4.28838 l 27.075612,0.0343 v -5.03428 c -3.52207,-0.02 -5.5753,0.4211 -7.89294,0 -1.3556,-0.2463 -5.26872,-1.0075 -10.12741,0 -4.65003,1.18304 -9.055262,0.7116 -9.055262,0.7116 z"
+       id="path2565"
+       sodipodi:nodetypes="ccccscc" />
+  </g>
+</svg>

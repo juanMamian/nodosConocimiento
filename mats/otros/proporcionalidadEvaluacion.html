@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
 
     <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
     <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
@@ -33,13 +33,13 @@
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Puedo explicar en qué consiste la proporcionalidad inversa y la proporcionalidad directa.
+                Puedo nombrar y explicar los tipos de proporcionalidad.
             </template>
         </bloque-component>   
 
         <bloque-component tipo="evaluacion">
             <template #cabecera>
-                Dada cualquier descripción de dos cantidades puedo decidir si son proporcionales o no. Y puedo decidir si son proporcionales directamente o inversamente.
+                Dada cualquier descripción de dos cantidades puedo decidir si son proporcionales o no y, en caso afirmativo, cuál es el tipo.
             </template>
         </bloque-component>        
 
@@ -51,12 +51,12 @@
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-    })
+    }).mount("#doc");
 </script>

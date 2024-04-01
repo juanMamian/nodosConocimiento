@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
+
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080//recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/octoEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/contadorTiempoEstilo.css">
+
+
+
+    <title>Proporcionalidad - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Hay cantidades que están relacionadas de modo que si una cambia, la otra también. La relación que las une se
+            llama <span class="resaltado">proporcionalidad</span>. Se dice de ellas que son cantidades <span class="resaltado">proporcionales</span>.
+        </p>
+
+        <p>
+            Si dos cantidades son proporcionales de modo que cuando una crece entonces la otra también, se dice que son
+            <span class="resaltado">directamente proporcionales</span>. Su relación es de <span class="resaltado">proporcionalidad directa</span>.
+        </p>
+
+        <bloque-component tipo='herramientaInteractiva'>
+            <template #cabecera>
+                En este cuadro se muestra la relación de proporcionalidad directa entre cantidad de naranjas y cantidad
+                de jugo.
+            </template>
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    <recuadro-component tipo='instruccionPointer'>
+                        <div class="flexVertical">
+                            Cambia la cantidad de naranjas
+                            <input type="range" min="1" max="10" v-model.number="e1CantidadNaranjas">
+                            {{e1CantidadNaranjas}}
+                        </div>
+                    </recuadro-component>
+                    <div class="flexHorizontal" id="contenedorNaranjas">
+                        <img src="naranja.png" alt="Naranja" v-for="naranja of e1CantidadNaranjas" class="e1Naranja">
+                    </div>
+                    <div class="flecha">
+                    </div>
+                    <div id="contenedorVaso">
+                        <img src="vaso/vaso.svg" alt="" id="imgVaso">
+                        <img src="vaso/brillo.svg" alt="" id="imgBrillo">
+                        <div id="jugoNaranja" :style="[e1EstiloJugoNaranja]">
+
+                        </div>
+                    </div>
+
+
+                    <recuadro-component tipo='datoNuevo'>
+                        La cantidad de naranjas y la cantidad de jugo están relacionadas: si una cambia, la otra
+                        también.
+
+                    </recuadro-component>
+
+                </div>
+            </div>
+
+        </bloque-component>
+        <p>
+            Si dos cantidades son proporcionales de modo que cuando una crece entonces la otra decrece, se dice que son
+            <span class="resaltado">inversamente proporcionales</span>. Su relación es de <span class="resaltado">proporcionalidad inversa</span>.
+        </p>
+
+        <bloque-component tipo='herramientaInteractiva'>
+            <template #cabecera>
+                En este cuadro se muestra una relación de proporcionalidad inversa entre cantidad de trabajadores y el
+                tiempo que toma construir una casa
+            </template>
+
+            <div class="flexVertical">
+
+                <recuadro-component tipo='instruccionPointer' :class="{deshabilitado: h2EstadoTimer!='stop'}">
+                    <div class="flexVertical">
+                        Selecciona la cantidad de trabajadores.
+                        <input type="range" min="1" max="10" v-model.number="h2CantidadTrabajadores"
+                            :disabled="h2EstadoTimer!='stop'">
+                        {{h2CantidadTrabajadores}}
+                    </div>
+                </recuadro-component>
+
+                <div id="h2ContenedorTrabajadores" class="flexHorizontal">
+                    <img src="propInversa/worker.png" alt="Trabajador" v-for="trabajador of h2CantidadTrabajadores"
+                        class="imgTrabajador">
+                </div>
+                <div id="h2ContenedorCasa">
+                    <img src="propInversa/casa.png" alt="Casa" :style="[h2EstiloCasa]" id="h2ImagenCasa">
+                    <img src="propInversa/casa.png" alt="Casa" id="h2ImagenCasaOpaca">
+                    <button class="boton h2BotonCentral" @click="h2IniciarConstruccion" v-show="h2EstadoTimer==='stop'">
+                        Construir
+                    </button>
+                    <button class="boton h2BotonCentral" @click="h2EstadoTimer='stop'"
+                        v-show="h2EstadoTimer==='play' && h2TiempoTimer<h2TiempoConstruccionCasa*1000">
+                        Cancelar
+                    </button>
+                    <button class="boton h2BotonCentral" @click="h2Reiniciar"
+                        v-if="h2EstadoTimer==='pause' && h2TiempoTimer>=h2TiempoConstruccionCasa * 1000">
+                        Reiniciar
+                    </button>
+                </div>
+                <componente-contador-tiempo :estado="h2EstadoTimer" @tiempo="h2TiempoTimer=$event" :size-octos="5"
+                    ref="h2ContadorTiempo">
+                </componente-contador-tiempo>
+
+
+                <recuadro-component tipo='datoNuevo'>
+                    Si crece la cantidad de trabajadores, se reduce el tiempo que toma construir una casa.
+                </recuadro-component>
+
+
+            </div>
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    const {createApp, ref, computed, watch, nextTick} = Vue;
+    import {componenteOcto} from "http://127.0.0.1:8080/recursos/components/octo.js"
+    import {componenteContadorTiempo} from "http://127.0.0.1:8080/recursos/components/contadorTiempo.js"
+
+    createApp({
+        setup() {
+            const e1CantidadNaranjas = ref(1);
+            const e1EstiloJugoNaranja = computed(() => {
+                let llenura = e1CantidadNaranjas.value * 10;
+                let altura = 100 - llenura;
+                let baseAncho = 50;
+                let ancho = baseAncho + ((94 - baseAncho) / 100) * llenura;
+                let paddingX = (100 - ancho) / 2;
+
+                return {
+                    "clip-path": `polygon(${paddingX}% ${altura}%, ${100 - paddingX}% ${altura}%, 75% 95%, 25% 95%, ${paddingX}% ${altura}%)`
+
+                }
+            })
+
+            //h2
+            const h2CantidadTrabajadores = ref(1);
+            function h2IniciarConstruccion() {
+                console.log(`Iniciando construcción`);
+                h2EstadoTimer.value = 'play';
+            }
+            const h2TiempoConstruccionCasa = computed(() => {
+                let tiempoBase = 30; //En segundos
+                return tiempoBase / h2CantidadTrabajadores.value;
+            })
+            const h2TiempoTimer = ref(0);
+            const h2EstiloCasa = computed(() => {
+                let porcentaje = Math.round((h2TiempoTimer.value / 1000) / (h2TiempoConstruccionCasa.value / 100));
+                let alturaClip = 100 - porcentaje;
+                return {
+                    "clip-path": `polygon(0% ${alturaClip}%, 100% ${alturaClip}%, 100% 100%, 0% 100%, 0% ${alturaClip}%)`
+                }
+            })
+            const h2ContadorTiempo = ref(null);
+            const h2EstadoTimer = ref("stop");
+            function h2Reiniciar() {
+                h2EstadoTimer.value = 'stop';
+            }
+            watch(h2TiempoTimer, async tiempo => {
+                if (tiempo / 1000 > h2TiempoConstruccionCasa.value) {
+                    h2EstadoTimer.value = "pause"
+                    await nextTick();
+                    if (h2ContadorTiempo.value) {
+                        h2ContadorTiempo.value.forceSetTime(h2TiempoConstruccionCasa.value * 1000);
+                    }
+                }
+            })
+            return {
+                e1CantidadNaranjas, e1EstiloJugoNaranja,
+                h2EstiloCasa, h2CantidadTrabajadores, h2IniciarConstruccion, h2EstadoTimer, h2Reiniciar, h2TiempoTimer, h2ContadorTiempo, h2TiempoConstruccionCasa
+            }
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteOcto,
+            componenteContadorTiempo,
+        },
+    }).mount("#doc");
+</script>
+<style>
+    #contenedorVaso {
+        height: 200px;
+        position: relative;
+        width: fit-content;
+        margin: 30px auto;
+        z-index: 0;
+    }
+
+    #imgVaso {
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        z-index: 0;
+    }
+
+    #imgBrillo {
+        position: absolute;
+        top: 2%;
+        left: 16%;
+        opacity: 0.4;
+        height: 98%;
+        z-index: 2;
+    }
+
+    .e1Naranja {
+        height: 40px;
+    }
+
+    #contenedorNaranjas {
+        max-width: min(250px, 90%);
+        justify-content: center;
+        margin: 30px auto;
+        gap: 5px;
+    }
+
+    .flecha {
+        width: 2px;
+        height: 30px;
+        background-color: black;
+        position: relative;
+        margin: 20px auto;
+    }
+
+    .flecha::after {
+        content: "";
+        width: 0px;
+        height: 0px;
+        border: 10px solid transparent;
+        border-top-color: black;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #jugoNaranja {
+        background-color: orange;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        transition: clip-path 0.2s;
+        left: 0px;
+        z-index: 1;
+    }
+
+    #h2ContenedorTrabajadores {
+        gap: 10px;
+        margin: 5px auto;
+    }
+
+    .imgTrabajador {
+        height: 40px;
+    }
+
+    #h2ContenedorCasa {
+        position: relative;
+        z-index: 0;
+    }
+
+    #h2ImagenCasa {
+        transition: clip-path 0.3s;
+        z-index: 2;
+        width: min(400px, 80vw);
+    }
+
+    #h2ImagenCasaOpaca {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.1;
+        height: 100%;
+        z-index: 0;
+    }
+
+    .h2BotonCentral {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+    }
+</style>

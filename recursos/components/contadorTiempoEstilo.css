@@ -1,0 +1,72 @@
+.componenteContadorTiempo {
+    position: relative;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    gap: 10px;
+}
+
+.componenteContadorTiempo .circuloReloj {
+    border: 2px solid gray;
+    position: relative;
+    border-radius: 50%;
+}
+
+.componenteContadorTiempo .circuloReloj::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: gray;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.componenteContadorTiempo .circuloReloj .horero {
+    width: 25%;
+    height: 2px;
+}
+
+.componenteContadorTiempo .circuloReloj .minutero {
+    width: 35%;
+}
+
+.componenteContadorTiempo .circuloReloj .segundero {}
+
+
+
+.componenteContadorTiempo .aguja {
+    height: 1px;
+    width: 45%;
+    background-color: gray;
+    transform-origin: center left;
+    position: absolute;
+    top: calc(50% - 1px);
+    left: 50%;
+}
+
+.componenteContadorTiempo .aguja .horero {
+    width: 25%;
+}
+
+.componenteContadorTiempo .aguja .minutero {
+    width: 35%;
+}
+
+.componenteContadorTiempo .aguja .segundero {
+    width: 45%;
+}
+
+.componenteContadorTiempo .display {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.componenteContadorTiempo .dosPuntos {
+    font-size: 1em;
+    align-items: center;
+}

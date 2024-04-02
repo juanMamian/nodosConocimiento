@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/anguloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/trianguloEstilo.css">
+
+
+
+    <title>La regla de tres - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            La regla de tres es un procedimiento mecánico usado para analizar cantidades proporcionales. Permite
+            encontrar una cantidad si ésta es proporcional a alguna otra.
+        </p>
+
+        <p>
+            Se puede usar si:
+        </p>
+
+        <ul>
+            <li>
+                Se necesita calcular una cantidad que es proporcional a alguna otra que es conocida.
+            </li>
+            <li>
+                Se tiene un caso en el que se conoce el valor de ámbas cantidades.
+            </li>
+        </ul>
+
+        <p>
+            Es necesario organizar los datos así:
+        </p>
+        <ul>
+            <li>
+                Se escribe un caso donde se conocen ámbas cantidades.
+            </li>
+            <li>
+                Se escribe, debajo, el caso en el que se desconoce una cantidad.
+            </li>
+        </ul>
+
+        <bloque-component tipo='ejemplo' @desplegado="e1Reiniciar">
+            <template #cabecera>
+                En este cuadro se muestra un ejemplo en el que se organizan los datos para una regla de tres.
+            </template>
+
+            <p>
+                Se tiene la siguiente situación:
+            </p>
+            <recuadro-component tipo='datoPrevio'>
+                ¿Cuántas naranjas se necesitan para obtener 3 vasos de jugo si se sabe que con 5 naranjas se obtienen 2
+                vasos de jugo?
+            </recuadro-component>
+
+            <ul>
+                <li>
+                    Se necesita calcular la cantidad de naranjas, que es proporcional a la cantidad de jugo, cuyo valor
+                    es conocido: <span class="resaltado">3 vasos</span>.
+                </li>
+                <li>
+                    Se tiene un caso donde ámbas cantidades son conocidas: <span class="resaltado">5 naranjas &#x2192; 2
+                        vasos</span>.
+                </li>
+            </ul>
+
+            <div class="flexVertical" style="gap: 5px">
+                <button class="boton" @click="e1Step=1" :disabled="e1Step>=1">
+                    Escribir el caso en el que se conocen ambas cantidades.
+                </button>
+                <button class="boton" @click="e1Step=2" :disabled="e1Step>=2">
+                    Escribir el caso en el que se desconoce una cantidad.
+                </button>
+            </div>
+
+            <div class="reglaTres flexVertical" ref="elementoReglaTres">
+                <transition name="unveilLeft" @enter="scrollToElemento(elementoReglaTres)">
+                    <div class="caso" v-show="e1Step>=1">
+                        5 naranjas &#x2192; 2 vasos
+                    </div>
+                </transition>
+                <transition name="unveilLeft" @enter="scrollToElemento(elementoReglaTres)">
+                    <div class="caso" v-show="e1Step>=2">
+                        ? naranjas &#x2192; 3 vasos
+                    </div>
+                </transition>
+            </div>
+
+            <transition name="fadeIn">
+                <recuadro-component tipo='datoNuevo' v-show="e1Step>=3">
+                    Los datos han quedado organizados. Hay 1 dato desconocido y tres conocidos.
+                </recuadro-component>
+            </transition>
+        </bloque-component>
+
+
+        <p>
+            Después de organizados los datos, la cantidad desconocida se descubre siguiendo dos pasos simples. Éstos
+            cambian ligeramente para cada tipo de proporcionalidad.
+        </p>
+
+        <div id="h2SelectorTipo" class="flexHorizontal">
+            <button class="boton selector" @click="h2TipoProporcionalidad='directa'"
+                :class="{seleccionado: h2TipoProporcionalidad==='directa'}">
+                Cantidades directamente proporcionales
+            </button>
+            <button class="boton selector" @click="h2TipoProporcionalidad='inversa'"
+                :class="{seleccionado: h2TipoProporcionalidad==='inversa'}">
+                Cantidades inversamente proporcionales
+            </button>
+        </div>
+
+        <transition name="unveilTop">
+            <div id="h2PasosCalculo" :key="h2TipoProporcionalidad">
+                <ul>
+                    <li>
+                        Empezar con el número que está frente a la cantidad desconocida.
+                    </li>
+                    <li>
+                        {{h2TipoProporcionalidad==='directa'?'Multiplicar':'Dividir'}} con la cantidad que está en
+                        diagonal.
+                    </li>
+                    <li>
+                        {{h2TipoProporcionalidad==='inversa'?'Multiplicar':'Dividir'}} el resultado con la otra
+                        cantidad..
+                    </li>
+                </ul>
+            </div>
+        </transition>
+
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js"
+
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+    createApp({
+        setup() {
+            const {scrollToElemento} = useUtils();
+            const e1Step = ref(0);
+            const elementoReglaTres = ref(null);
+            let timerAutoStep = null;
+            watch(e1Step, (step) => {
+                if (step === 2) {
+                    timerAutoStep = setTimeout(() => {
+                        e1Step.value++;
+                    }, 3000);
+                }
+            })
+            function e1Reiniciar() {
+                e1Step.value = 0;
+                if (timerAutoStep) {
+                    clearTimeout(timerAutoStep);
+                }
+            }
+
+            const h2TipoProporcionalidad = ref('directa');
+            return {
+                e1Step, e1Reiniciar, scrollToElemento, elementoReglaTres, h2TipoProporcionalidad,
+            }
+        },
+
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    }).mount("#doc");
+</script>
+
+<style>
+    .reglaTres {
+        border: 2px dashed var(--paletaPrevio);
+        min-height: 90px;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 20px 10px;
+    }
+
+    #h2SelectorTipo button {
+        width: 200px;
+    }
+    .unveilTop-enter-active{
+        transition-duration: 0.7s;
+    }
+</style>

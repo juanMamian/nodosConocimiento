@@ -269,6 +269,15 @@ input {
     border-radius: 5px;
     max-width: 90%;
 }
+.fadeOut-leave-from{
+    opacity:1;
+}
+.fadeOut-leave-to{
+    opacity:0;
+}
+.fadeOut-leave-active{
+    transition: opacity 1s;
+}
 
 @keyframes fade {
     0% {

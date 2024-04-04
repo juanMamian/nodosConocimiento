@@ -105,7 +105,9 @@
                 </transition>
                 <transition name="unveilLeft" @enter="scrollToElemento(elementoReglaTres)">
                     <div class="caso" v-show="e1Step>=2">
-                        ? naranjas &#x2192; 3 vasos
+                        <span>?</span>
+                        naranjas
+                        &#x2192; 3 vasos
                     </div>
                 </transition>
             </div>
@@ -152,36 +154,40 @@
             </div>
         </transition>
 
-        <bloque-component tipo='ejemplo'>
+        <bloque-component tipo='ejemplo' @plegado="e3Reiniciar">
             <template #cabecera>
                 En este cuadro se puede ver un ejemplo en el que se resuelve un problema donde las cantidades son
                 directamente proporcionales.
             </template>
 
             <div class="problema">
-                ¿Si 45 personas tienen una masa equivalente a 3 carros, entonces cuántos carros son equivalentes a 100
+                ¿Si 45 personas tienen una masa equivalente a 3 carros, entonces cuántos carros son equivalentes a 114
                 personas?
             </div>
-            <input type="range" min="0" max="10" v-model.number="e3Step">
-            <div class="contenedorBotones flexHorizontal">
-                <button class="boton" @click="e3Step--" :disabled="e3Step<=0">
-                    Anterior
-                </button>
-                <button class="boton" @click="e3Step++" :disabled="e3Step>=12">
-                    {{e3Step===0?'Empezar':'Siguiente'}}
-                </button>
-            </div>
-
             <recuadro-component tipo='datoNuevo' v-show="e3Step===0">
                 La cantidad de personas es directamente proporcional a la cantidad de carros.
             </recuadro-component>
 
+            <button class="boton" @click="e3Step=1" v-show="e3Step===0" style="margin: 0px auto; display: block">
+                Empezar
+            </button>
+
             <transition name="fadeIn">
                 <div class='cuadroTrabajo' v-show="e3Step>=1">
+                    <input type="range" min="1" max="10" v-model.number="e3Step"
+                        style="display:block; margin: 2px auto">
+                    <div class="contenedorBotones flexHorizontal">
+                        <button class="boton" @click="e3Step--" :disabled="e3Step<=0">
+                            Anterior
+                        </button>
+                        <button class="boton" @click="e3Step++"
+                            :disabled="e3Step>=16 || e3PasosRealizables.includes(e3Step)">
+                            {{e3Step===0?'Empezar':'Siguiente'}}
+                        </button>
+                    </div>
                     <div class="flexVertical">
 
                         <div id="e3ContenedorRelatos">
-
                             <transition name="fadeIn" mode="out-in">
                                 <span v-if="e3Step===1">Se organizarán los datos</span>
                                 <span v-else-if="e3Step===2 || e3Step===3">Se escribe un caso en el que se conocen ambas
@@ -189,77 +195,107 @@
                                 <span v-else-if="e3Step===4 || e3Step===5">Se escribe el caso en el que se desconoce una
                                     cantidad.</span>
                                 <span v-else-if="e3Step===6">Los datos están organizados</span>
-                                <span v-else-if="e3Step===7">Se empieza con la cantidad que está frente a la cantidad
+                                <span v-else-if="e3Step===7 || e3Step===8">Se empieza con la cantidad que está frente a
+                                    la cantidad
                                     desconocida.</span>
-                                <span v-else-if="e3Step===8 || e3Step===9">Se multiplica por la cantidad que está en
+                                <span v-else-if="e3Step===9 || e3Step===10 || e3Step===11">Se multiplica por la cantidad
+                                    que está en
                                     diagonal.</span>
-                                <span v-else-if="e3Step===10 || e3Step===11">El resultado se divide con la otra
+                                <span v-else-if="e3Step===12 || e3Step===13 || e3Step===14">El resultado se divide con
+                                    la otra
                                     cantidad.</span>
                                 <span v-else>El resultado es la cantidad desconocida.</span>
                             </transition>
                         </div>
 
-                        <transition name="unfoldHorizontal">
-                            <div class="reglaTres flexVertical" v-show="e3Step>=1" id="e3Regla3" ref="e3Regla3">
-                                <transition name="unveilLeft">
-                                    <div class="caso" v-show="e3Step>=3">
-                                        <span class="signalable" :class="{signaled: e3Step>=9, actualmenteSignaled: e3Step===9}"
-                                            ref="e3Numero1">45
-                                        </span>personas
-                                        &#x2192; <span class="signalable" :class="{signaled: e3Step>=8, actualmenteSignaled: e3Step===8}"
-                                            ref="e3Numero2">3
-                                        </span>carros
-                                    </div>
-                                </transition>
-                                <transition name="unveilLeft">
-                                    <div class="caso" v-show="e3Step>=5">
-                                        <span  class="signalable" :class="{signaled: e3Step>=7, actualmenteSignaled: e3Step===7}"
-                                            ref="e3Numero3">100</span>
-                                        personas
-                                        &#x2192; <span>?</span>carros
-                                    </div>
-                                </transition>
-                                <div class="linea" id="e3LineaDiagonal" :style="[e3EstiloLineaDiagonal]">
+                        <transition name="fadeIn">
+                            <button class="boton selector"
+                                v-show="e3PasosRealizables.includes(e3Step) || e3PasosRealizables.includes(e3Step-1)"
+                                :class="{seleccionado: e3PasosRealizables.includes(e3Step-1) && !e3PasosRealizables.includes(e3Step)}"
+                                :disabled="e3PasosRealizables.includes(e3Step-1) && !e3PasosCalculables.includes(e3Step)"
+                                @click="e3Step++">
+                                {{e3PasosCalculables.includes(e3Step) ||
+                                e3PasosCalculables.includes(e3Step-1)?'Calcular':'Realizar'}}
+                            </button>
+                        </transition>
 
-                                </div>
+
+                        <transition name="fadeIn">
+                            <div id="e3ProcesoCalculo" v-show="e3Step>=6">
+                                <transition name="fadeOutTapada">
+                                    <div class="pasoCalculo" v-show="e3Step>=8 && e3Step<=10">
+                                        <transition name="unveilLeft">
+                                            <span v-show="e3Step>=8" class="numeroCorto">114</span>
+                                        </transition>
+                                        <transition name="unveilLeft">
+                                            <span v-show="e3Step>=10" class="trozoHorizontal numeroCorto">x 3</span>
+                                        </transition>
+                                    </div>
+                                </transition>
+                                <transition name="leaveCollapsingUp">
+                                    <div class="pasoCalculo flexVertical" v-show="e3Step>=11 && e3Step<=13">
+                                        <transition name="jumpIn" appear>
+                                            <div v-show="e3Step>=11">
+                                                342
+                                            </div>
+                                        </transition>
+                                        <transition name="unveilTop">
+                                            <div v-show="e3Step>=13" class="lineaDivision">
+                                            </div>
+                                        </transition>
+                                        <transition name="unveilTop">
+                                            <div v-show="e3Step>=13">
+                                                45
+                                            </div>
+                                        </transition>
+                                    </div>
+                                </transition>
+                                <transition name="jumpIn">
+                                    <div class="pasoCalculo transitionDelayed" v-show="e3Step>=14"
+                                        ref="e3RespuestaOrigen">
+                                        7.6
+                                    </div>
+                                </transition>
                             </div>
                         </transition>
-                        <div id="e3ProcesoCalculo" v-show="e3Step>=6">
-                            <transition name="fadeOutTapada">
-                                <div class="pasoCalculo" v-show="e3Step>=7 && e3Step<=8">
-                                    <transition name="unveilLeft">
-                                        <span v-show="e3Step>=7" class="numeroCorto">100</span>
-                                    </transition>
-                                    <transition name="unveilLeft">
-                                        <span v-show="e3Step>=8" class="trozoHorizontal numeroCorto">x 3</span>
-                                    </transition>
+                        <div class="reglaTres flexVertical" v-show="e3Step>=1" id="e3Regla3" ref="e3Regla3">
+                            <transition name="unveilLeft">
+                                <div class="caso" v-show="e3Step>=3">
+                                    <span class="signalable"
+                                        :class="{signaled: e3Step>=13, actualmenteSignaled: e3Step===13}"
+                                        ref="e3Numero1">45
+                                    </span>personas
+                                    &#x2192; <span class="signalable"
+                                        :class="{signaled: e3Step>=10, actualmenteSignaled: e3Step===11}"
+                                        ref="e3Numero2">3
+                                    </span>carros
                                 </div>
                             </transition>
-                            <transition name="leaveCollapsingUp">
-                                <div class="pasoCalculo flexVertical" v-show="e3Step>=9 && e3Step<=10">
-                                    <transition name="jumpIn" appear>
-                                        <div v-show="e3Step>=9">
-                                            300
-                                        </div>
-                                    </transition>
-                                    <transition name="unveilTop">
-                                        <div v-show="e3Step>=10" class="lineaDivision">
-                                        </div>
-                                    </transition>
-                                    <transition name="unveilTop">
-                                        <div v-show="e3Step>=10">
-                                            45
-                                        </div>
-                                    </transition>
+                            <transition name="unveilLeft">
+                                <div class="caso" v-show="e3Step>=5">
+                                    <span class="signalable"
+                                        :class="{signaled: e3Step>=8, actualmenteSignaled: e3Step===8}"
+                                        ref="e3Numero3">114</span>
+                                    personas
+                                    &#x2192; <span v-show="e3Step<16">?</span>
+                                    <transition @enter="e3EnterTravelling"><span class="respuestaReglaTres"
+                                            v-show="e3Step>=16">7.6</span></transition> carros
                                 </div>
                             </transition>
-                            <transition name="jumpIn">
-                                <div class="pasoCalculo transitionDelayed" v-show="e3Step>=11">
-                                    6.66666666
+                            <transition name="unveilLeft">
+                                <div class="linea" id="e3LineaDiagonal" :style="[e3EstiloLineaDiagonal]"
+                                    v-show="e3Step>=10">
+                                </div>
+                            </transition>
+                            <transition name="unveilRight">
+                                <div v-show="e3Step>=13" :style="e3EstiloContenedorLineaCurva"
+                                    id="e3ContenedorLineaCurva">
+                                    <div class="linea" id="e3LineaCurva">
+                                    </div>
                                 </div>
                             </transition>
                         </div>
-                        {{e3Step}}
+
 
                     </div>
                 </div>
@@ -302,15 +338,21 @@
 
             //e3
             const e3Step = ref(0);
+            const e3PasosRealizables = [2, 4, 7, 9, 10, 12, 13, 15];
+            const e3PasosCalculables = [10, 13];
 
             const e3EstiloLineaDiagonal = ref({});
+            const e3EstiloContenedorLineaCurva = ref({});
             const e3Numero3 = ref(null);
             const e3Numero2 = ref(null);
             const e3Numero1 = ref(null);
             const e3Regla3 = ref(null);
+            function e3Reiniciar() {
+                e3Step.value = 0;
+            }
 
-            watch(e3Step, step => {
-                if (step === 6) {
+            watch(e3Step, (step, stepPrevio) => {
+                if (step >= 6 && stepPrevio < 6) {
                     console.log(`Dando estilo a la línea diagonal`);
                     if (!e3Numero3.value || !e3Numero2.value || !e3Regla3.value) {
                         console.log(`No hay elementos suficientes`);
@@ -328,16 +370,50 @@
                     console.log(`Left: ${posNumero3.left - posReglaTres.left}`);
                     e3EstiloLineaDiagonal.value = {
                         width: ancho * 0.8 + 'px',
-                        transform: `rotate(${rotacion}rad)`,
-                        left: posNumero3.left - posReglaTres.left + posNumero3.width + ancho * 0.1 + 'px',
+                        transform: `rotate(${rotacion - 0.1}rad)`,
+                        left: posNumero3.left - posReglaTres.left - 5 + posNumero3.width + ancho * 0.1 + 'px',
                         top: posNumero3.top - posReglaTres.top - 1 + 'px',
+                    }
+
+                    //Linea curva
+                    console.log(`Dando estilo a la línea curva`);
+                    const posNumero1 = e3Numero1.value.getBoundingClientRect();
+                    const ancho2 = posNumero2.left - posNumero1.right;
+                    e3EstiloContenedorLineaCurva.value = {
+                        width: ancho2 + 'px',
+                        left: posNumero1.right - posReglaTres.left - 6 + 'px',
+                        top: posNumero1.top - posReglaTres.top - 20 + 'px',
                     }
                 }
             })
+            const e3RespuestaOrigen = ref(null);
+            function e3EnterTravelling(elemento) {
+                console.log(`Entrando traveling`);
+                if (!e3RespuestaOrigen.value) {
+                    console.log(`No hay origen de respuesta`);
+                    return;
+                }
+                let posicionOrigen = e3RespuestaOrigen.value.getBoundingClientRect();
+                let posicionElemento = elemento.getBoundingClientRect();
+                let diffTop = posicionOrigen.top - posicionElemento.top;
+                let diffLeft = posicionOrigen.left - posicionElemento.left;
+                elemento.animate([
+                    {
+                        top: diffTop + 'px',
+                        left: diffLeft + 'px',
+
+                    },
+                    {
+                        top: '0px',
+                        left: '0px',
+                    }
+
+                ], {duration: 1000});
+            }
 
             return {
                 e1Step, e1Reiniciar, scrollToElemento, elementoReglaTres, h2TipoProporcionalidad,
-                e3Step, e3Numero3, e3Numero2, e3Numero1, e3EstiloLineaDiagonal, e3Regla3,
+                e3Reiniciar, e3Step, e3Numero3, e3Numero2, e3Numero1, e3EstiloLineaDiagonal, e3EstiloContenedorLineaCurva, e3Regla3, e3PasosRealizables, e3PasosCalculables, e3EnterTravelling, e3RespuestaOrigen
             }
         },
 
@@ -370,13 +446,16 @@
 
 
     .cuadroTrabajo {
+        margin: 20px auto;
         padding: 20px 10px;
         border-radius: 10px;
         background-color: #c8c8c8;
     }
 
     #e3ContenedorRelatos {
-        min-height: 50px;
+        min-height: 20px;
+        text-align: center;
+        padding: 10px 20px;
     }
 
     #e3Regla3 {
@@ -511,6 +590,7 @@
         background-color: var(--paletaActual);
         transform-origin: center left;
         position: absolute;
+        pointer-events: none;
     }
 
     .signalable {
@@ -525,10 +605,11 @@
     .signalable:not(.signaled)::after {
         border-color: transparent;
     }
+
     .signalable::after {
         content: "";
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         border-width: 2px;
         border-style: solid;
@@ -536,5 +617,38 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+    }
+
+    #e3LineaDiagonal.unveilLeft-enter-active {
+        transition: clip-path 0.7s;
+    }
+
+    #e3ContenedorLineaCurva {
+        position: absolute;
+        height: 200px;
+    }
+
+    #e3LineaCurva {
+        height: 100px;
+        width: 120%;
+        left: -10%;
+        border-radius: 50%;
+        border: 2px solid var(--paletaActual);
+        background-color: transparent;
+        clip-path: polygon(0% 0%, 100% 0%, 50% 50%);
+        position: absolute;
+        top: 0px;
+    }
+
+    .contenedorBotones {
+        justify-content: center;
+    }
+
+    .contenedorBotones button {
+        margin: 10px 10px;
+    }
+
+    .respuestaReglaTres {
+        position: relative;
     }
 </style>

@@ -543,6 +543,16 @@ input {
     transition: clip-path 1.5s linear;
 }
 
+.unveilRight-enter-from{
+    clip-path: polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%);
+}
+.unveilRight-enter-to{
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+.unveilRight-enter-active{
+    transition: clip-path 1.5s linear;
+}
+
 .unveilTop-enter-from{
     clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
 }

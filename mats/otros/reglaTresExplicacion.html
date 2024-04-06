@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/anguloEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/trianguloEstilo.css">
+
+
+
+    <title>La regla de tres - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            La regla de tres es un procedimiento mecánico usado para analizar cantidades proporcionales. Permite
+            encontrar una cantidad si ésta es proporcional a alguna otra.
+        </p>
+
+        <p>
+            Se puede usar si:
+        </p>
+
+        <ul>
+            <li>
+                Se necesita calcular una cantidad que es proporcional a alguna otra que es conocida.
+            </li>
+            <li>
+                Se tiene un caso en el que se conoce el valor de ámbas cantidades.
+            </li>
+        </ul>
+
+        <p>
+            Es necesario organizar los datos así:
+        </p>
+        <ul>
+            <li>
+                Se escribe un caso donde se conocen ámbas cantidades.
+            </li>
+            <li>
+                Se escribe, debajo, el caso en el que se desconoce una cantidad.
+            </li>
+        </ul>
+
+        <bloque-component tipo='ejemplo' @desplegado="e1Reiniciar">
+            <template #cabecera>
+                En este cuadro se muestra un ejemplo en el que se organizan los datos para una regla de tres.
+            </template>
+
+            <p>
+                Se tiene la siguiente situación:
+            </p>
+            <recuadro-component tipo='datoPrevio'>
+                ¿Cuántas naranjas se necesitan para obtener 3 vasos de jugo si se sabe que con 5 naranjas se obtienen 2
+                vasos de jugo?
+            </recuadro-component>
+
+            <ul>
+                <li>
+                    Se necesita calcular la cantidad de naranjas, que es proporcional a la cantidad de jugo, cuyo valor
+                    es conocido: <span class="resaltado">3 vasos</span>.
+                </li>
+                <li>
+                    Se tiene un caso donde ámbas cantidades son conocidas: <span class="resaltado">5 naranjas &#x2192; 2
+                        vasos</span>.
+                </li>
+            </ul>
+
+            <div class="flexVertical" style="gap: 5px">
+                <button class="boton" @click="e1Step=1" :disabled="e1Step>=1">
+                    Escribir el caso en el que se conocen ambas cantidades.
+                </button>
+                <button class="boton" @click="e1Step=2" :disabled="e1Step>=2">
+                    Escribir el caso en el que se desconoce una cantidad.
+                </button>
+            </div>
+
+            <div class="reglaTres flexVertical" ref="elementoReglaTres">
+                <transition name="unveilLeft" @enter="scrollToElemento(elementoReglaTres)">
+                    <div class="caso" v-show="e1Step>=1">
+                        5 naranjas &#x2192; 2 vasos
+                    </div>
+                </transition>
+                <transition name="unveilLeft" @enter="scrollToElemento(elementoReglaTres)">
+                    <div class="caso" v-show="e1Step>=2">
+                        <span>?</span>
+                        naranjas
+                        &#x2192; 3 vasos
+                    </div>
+                </transition>
+            </div>
+
+            <transition name="fadeIn">
+                <recuadro-component tipo='datoNuevo' v-show="e1Step>=3">
+                    Los datos han quedado organizados. Hay 1 dato desconocido y tres conocidos.
+                </recuadro-component>
+            </transition>
+        </bloque-component>
+
+
+        <p>
+            Después de organizados los datos, la cantidad desconocida se descubre siguiendo dos pasos simples. Éstos
+            cambian ligeramente para cada tipo de proporcionalidad.
+        </p>
+
+        <div id="h2SelectorTipo" class="flexHorizontal">
+            <button class="boton selector" @click="h2TipoProporcionalidad='directa'"
+                :class="{seleccionado: h2TipoProporcionalidad==='directa'}">
+                Cantidades directamente proporcionales
+            </button>
+            <button class="boton selector" @click="h2TipoProporcionalidad='inversa'"
+                :class="{seleccionado: h2TipoProporcionalidad==='inversa'}">
+                Cantidades inversamente proporcionales
+            </button>
+        </div>
+
+        <transition name="unveilTop">
+            <div id="h2PasosCalculo" :key="h2TipoProporcionalidad">
+                <ul>
+                    <li>
+                        Empezar con el número que está frente a la cantidad desconocida.
+                    </li>
+                    <li>
+                        {{h2TipoProporcionalidad==='directa'?'Multiplicar':'Dividir'}} con la cantidad que está en
+                        diagonal.
+                    </li>
+                    <li>
+                        {{h2TipoProporcionalidad==='inversa'?'Multiplicar':'Dividir'}} el resultado con la otra
+                        cantidad..
+                    </li>
+                </ul>
+            </div>
+        </transition>
+
+        <bloque-component tipo='ejemplo' @plegado="e3Reiniciar">
+            <template #cabecera>
+                En este cuadro se puede ver un ejemplo en el que se resuelve un problema donde las cantidades son
+                directamente proporcionales.
+            </template>
+
+            <div class="problema">
+                ¿Si 45 personas tienen una masa equivalente a 3 carros, entonces cuántos carros son equivalentes a 114
+                personas?
+            </div>
+            <recuadro-component tipo='datoNuevo' v-show="e3Step===0">
+                La cantidad de personas es directamente proporcional a la cantidad de carros.
+            </recuadro-component>
+
+            <button class="boton" @click="e3Step=1" v-show="e3Step===0" style="margin: 0px auto; display: block">
+                Empezar
+            </button>
+
+            <transition name="fadeIn">
+                <div class='cuadroTrabajo' v-show="e3Step>=1">
+                    <input type="range" min="1" max="10" v-model.number="e3Step"
+                        style="display:block; margin: 2px auto">
+                    <div class="contenedorBotones flexHorizontal">
+                        <button class="boton" @click="e3Step--" :disabled="e3Step<=0">
+                            Anterior
+                        </button>
+                        <button class="boton" @click="e3Step++"
+                            :disabled="e3Step>=16 || e3PasosRealizables.includes(e3Step)">
+                            {{e3Step===0?'Empezar':'Siguiente'}}
+                        </button>
+                    </div>
+                    <div class="flexVertical">
+
+                        <div id="e3ContenedorRelatos">
+                            <transition name="fadeIn" mode="out-in">
+                                <span v-if="e3Step===1">Se organizarán los datos</span>
+                                <span v-else-if="e3Step===2 || e3Step===3">Se escribe un caso en el que se conocen ambas
+                                    cantidades.</span>
+                                <span v-else-if="e3Step===4 || e3Step===5">Se escribe el caso en el que se desconoce una
+                                    cantidad.</span>
+                                <span v-else-if="e3Step===6">Los datos están organizados</span>
+                                <span v-else-if="e3Step===7 || e3Step===8">Se empieza con la cantidad que está frente a
+                                    la cantidad
+                                    desconocida.</span>
+                                <span v-else-if="e3Step===9 || e3Step===10 || e3Step===11">Se multiplica por la cantidad
+                                    que está en
+                                    diagonal.</span>
+                                <span v-else-if="e3Step===12 || e3Step===13 || e3Step===14">El resultado se divide con
+                                    la otra
+                                    cantidad.</span>
+                                <span v-else>El resultado es la cantidad desconocida.</span>
+                            </transition>
+                        </div>
+
+                        <transition name="fadeIn">
+                            <button class="boton selector"
+                                v-show="e3PasosRealizables.includes(e3Step) || e3PasosRealizables.includes(e3Step-1)"
+                                :class="{seleccionado: e3PasosRealizables.includes(e3Step-1) && !e3PasosRealizables.includes(e3Step)}"
+                                :disabled="e3PasosRealizables.includes(e3Step-1) && !e3PasosCalculables.includes(e3Step)"
+                                @click="e3Step++">
+                                {{e3PasosCalculables.includes(e3Step) ||
+                                e3PasosCalculables.includes(e3Step-1)?'Calcular':'Realizar'}}
+                            </button>
+                        </transition>
+
+
+                        <transition name="fadeIn">
+                            <div id="e3ProcesoCalculo" v-show="e3Step>=6">
+                                <transition name="fadeOutTapada">
+                                    <div class="pasoCalculo" v-show="e3Step>=8 && e3Step<=10">
+                                        <transition name="unveilLeft">
+                                            <span v-show="e3Step>=8" class="numeroCorto">114</span>
+                                        </transition>
+                                        <transition name="unveilLeft">
+                                            <span v-show="e3Step>=10" class="trozoHorizontal numeroCorto">x 3</span>
+                                        </transition>
+                                    </div>
+                                </transition>
+                                <transition name="leaveCollapsingUp">
+                                    <div class="pasoCalculo flexVertical" v-show="e3Step>=11 && e3Step<=13">
+                                        <transition name="jumpIn" appear>
+                                            <div v-show="e3Step>=11">
+                                                342
+                                            </div>
+                                        </transition>
+                                        <transition name="unveilTop">
+                                            <div v-show="e3Step>=13" class="lineaDivision">
+                                            </div>
+                                        </transition>
+                                        <transition name="unveilTop">
+                                            <div v-show="e3Step>=13">
+                                                45
+                                            </div>
+                                        </transition>
+                                    </div>
+                                </transition>
+                                <transition name="jumpIn">
+                                    <div class="pasoCalculo transitionDelayed" v-show="e3Step>=14"
+                                        ref="e3RespuestaOrigen">
+                                        7.6
+                                    </div>
+                                </transition>
+                            </div>
+                        </transition>
+                        <div class="reglaTres flexVertical" v-show="e3Step>=1" id="e3Regla3" ref="e3Regla3">
+                            <transition name="unveilLeft">
+                                <div class="caso" v-show="e3Step>=3">
+                                    <span class="signalable"
+                                        :class="{signaled: e3Step>=13, actualmenteSignaled: e3Step===13}"
+                                        ref="e3Numero1">45
+                                    </span>personas
+                                    &#x2192; <span class="signalable"
+                                        :class="{signaled: e3Step>=10, actualmenteSignaled: e3Step===11}"
+                                        ref="e3Numero2">3
+                                    </span>carros
+                                </div>
+                            </transition>
+                            <transition name="unveilLeft">
+                                <div class="caso" v-show="e3Step>=5">
+                                    <span class="signalable"
+                                        :class="{signaled: e3Step>=8, actualmenteSignaled: e3Step===8}"
+                                        ref="e3Numero3">114</span>
+                                    personas
+                                    &#x2192; <span v-show="e3Step<16">?</span>
+                                    <transition @enter="e3EnterTravelling"><span class="respuestaReglaTres"
+                                            v-show="e3Step>=16">7.6</span></transition> carros
+                                </div>
+                            </transition>
+                            <transition name="unveilLeft">
+                                <div class="linea" id="e3LineaDiagonal" :style="[e3EstiloLineaDiagonal]"
+                                    v-show="e3Step>=10">
+                                </div>
+                            </transition>
+                            <transition name="unveilRight">
+                                <div v-show="e3Step>=13" :style="e3EstiloContenedorLineaCurva"
+                                    id="e3ContenedorLineaCurva">
+                                    <div class="linea" id="e3LineaCurva">
+                                    </div>
+                                </div>
+                            </transition>
+                        </div>
+
+
+                    </div>
+                </div>
+            </transition>
+        </bloque-component>
+
+
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js"
+
+    const {ref, computed, nextTick, watch} = Vue;
+    const {createApp} = Vue;
+    createApp({
+        setup() {
+            const {scrollToElemento} = useUtils();
+            const e1Step = ref(0);
+            const elementoReglaTres = ref(null);
+            let timerAutoStep = null;
+            watch(e1Step, (step) => {
+                if (step === 2) {
+                    timerAutoStep = setTimeout(() => {
+                        e1Step.value++;
+                    }, 3000);
+                }
+            })
+            function e1Reiniciar() {
+                e1Step.value = 0;
+                if (timerAutoStep) {
+                    clearTimeout(timerAutoStep);
+                }
+            }
+
+            const h2TipoProporcionalidad = ref('directa');
+
+            //e3
+            const e3Step = ref(0);
+            const e3PasosRealizables = [2, 4, 7, 9, 10, 12, 13, 15];
+            const e3PasosCalculables = [10, 13];
+
+            const e3EstiloLineaDiagonal = ref({});
+            const e3EstiloContenedorLineaCurva = ref({});
+            const e3Numero3 = ref(null);
+            const e3Numero2 = ref(null);
+            const e3Numero1 = ref(null);
+            const e3Regla3 = ref(null);
+            function e3Reiniciar() {
+                e3Step.value = 0;
+            }
+
+            watch(e3Step, (step, stepPrevio) => {
+                if (step >= 6 && stepPrevio < 6) {
+                    console.log(`Dando estilo a la línea diagonal`);
+                    if (!e3Numero3.value || !e3Numero2.value || !e3Regla3.value) {
+                        console.log(`No hay elementos suficientes`);
+                        return;
+                    }
+                    const posNumero3 = e3Numero3.value.getBoundingClientRect();
+                    const posNumero2 = e3Numero2.value.getBoundingClientRect();
+                    const posReglaTres = e3Regla3.value.getBoundingClientRect();
+                    const vector = {
+                        x: posNumero2.left - posNumero3.right,
+                        y: posNumero2.bottom - 1 - (posNumero3.top + 1),
+                    }
+                    const ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    const rotacion = Math.atan2(vector.y, vector.x);
+                    console.log(`Left: ${posNumero3.left - posReglaTres.left}`);
+                    e3EstiloLineaDiagonal.value = {
+                        width: ancho * 0.8 + 'px',
+                        transform: `rotate(${rotacion - 0.1}rad)`,
+                        left: posNumero3.left - posReglaTres.left - 5 + posNumero3.width + ancho * 0.1 + 'px',
+                        top: posNumero3.top - posReglaTres.top - 1 + 'px',
+                    }
+
+                    //Linea curva
+                    console.log(`Dando estilo a la línea curva`);
+                    const posNumero1 = e3Numero1.value.getBoundingClientRect();
+                    const ancho2 = posNumero2.left - posNumero1.right;
+                    e3EstiloContenedorLineaCurva.value = {
+                        width: ancho2 + 'px',
+                        left: posNumero1.right - posReglaTres.left - 6 + 'px',
+                        top: posNumero1.top - posReglaTres.top - 20 + 'px',
+                    }
+                }
+            })
+            const e3RespuestaOrigen = ref(null);
+            function e3EnterTravelling(elemento) {
+                console.log(`Entrando traveling`);
+                if (!e3RespuestaOrigen.value) {
+                    console.log(`No hay origen de respuesta`);
+                    return;
+                }
+                let posicionOrigen = e3RespuestaOrigen.value.getBoundingClientRect();
+                let posicionElemento = elemento.getBoundingClientRect();
+                let diffTop = posicionOrigen.top - posicionElemento.top;
+                let diffLeft = posicionOrigen.left - posicionElemento.left;
+                elemento.animate([
+                    {
+                        top: diffTop + 'px',
+                        left: diffLeft + 'px',
+
+                    },
+                    {
+                        top: '0px',
+                        left: '0px',
+                    }
+
+                ], {duration: 1000});
+            }
+
+            return {
+                e1Step, e1Reiniciar, scrollToElemento, elementoReglaTres, h2TipoProporcionalidad,
+                e3Reiniciar, e3Step, e3Numero3, e3Numero2, e3Numero1, e3EstiloLineaDiagonal, e3EstiloContenedorLineaCurva, e3Regla3, e3PasosRealizables, e3PasosCalculables, e3EnterTravelling, e3RespuestaOrigen
+            }
+        },
+
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    }).mount("#doc");
+</script>
+
+<style>
+    .reglaTres {
+        border: 2px dashed var(--paletaPrevio);
+        min-height: 90px;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 20px 10px;
+    }
+
+    #h2SelectorTipo {
+        margin: 10px auto;
+        width: min(800px, 90vw);
+    }
+
+    #h2SelectorTipo button {
+        width: 200px;
+    }
+
+
+    .cuadroTrabajo {
+        margin: 20px auto;
+        padding: 20px 10px;
+        border-radius: 10px;
+        background-color: #c8c8c8;
+    }
+
+    #e3ContenedorRelatos {
+        min-height: 20px;
+        text-align: center;
+        padding: 10px 20px;
+    }
+
+    #e3Regla3 {
+        min-width: 250px;
+        position: relative;
+    }
+
+    #e3ProcesoCalculo {
+        position: relative;
+    }
+
+    .unveilTop-enter-active {
+        transition-duration: 0.7s;
+    }
+
+    .numeroCorto.unveilLeft-enter-active {
+        transition-duration: 0.3s;
+    }
+
+    .pasoCalculo {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .trozoHorizontal {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        flex-shrink: 0;
+    }
+
+    .fadeOutTapada-leave-active {
+        transition: opacity 1s, clip-path 1s;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .fadeOutTapada-leave-from {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+        opacity: 1;
+    }
+
+    .fadeOutTapada-leave-to {
+        clip-path: polygon(20% 0%, 80% 0%, 80% 100%, 20% 100%);
+        opacity: 0;
+    }
+
+    .fadeOutTapadaVertical-leave-active {
+        transition: opacity 1s, clip-path 1s;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .fadeOutTapadaVertical-leave-from {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+        opacity: 1;
+    }
+
+    .fadeOutTapadaVertical-leave-to {
+        clip-path: polygon(10% 30%, 90% 30%, 90% 70%, 10% 70%);
+        opacity: 0;
+    }
+
+    .leaveCollapsingDown.unveilTop-leave-to {
+        clip-path: polygon(0% 90%, 100% 90%, 100% 100%, 0% 100%);
+    }
+
+    .leaveCollapsingDown.unveilTop-leave-active {
+        transition: clip-path 1s;
+    }
+
+    .leaveCollapsingDown.unveilTop-leave-from {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+
+    .leaveCollapsingUp-leave-from {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+        opacity: 1;
+    }
+
+    .leaveCollapsingUp-leave-to {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 10%, 0% 10%);
+        opacity: 0.5
+    }
+
+    .leaveCollapsingUp-leave-active {
+        transition: clip-path 0.5s, opacity 0.5s;
+        position: absolute;
+        left: 50%;
+        top: 0px;
+        transform: translateX(-50%);
+    }
+
+    .lineaDivision {
+        width: 100%;
+        height: 2px;
+        background-color: whitesmoke;
+        margin: 10px auto;
+    }
+
+    .fadeOut-leave-active {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+    }
+
+    .jumpIn-enter-from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    .jumpIn-enter-to {
+        transform: scale(1.02);
+        opacity: 1;
+    }
+
+    .jumpIn-enter-active {
+        transition: transform 0.4s, opacity 0.4s;
+        transition-delay: 0.5s;
+    }
+
+    .linea {
+        height: 2px;
+        background-color: var(--paletaActual);
+        transform-origin: center left;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    .signalable {
+        position: relative;
+    }
+
+    .signaled::after {
+        border-color: var(--paletaActual);
+        transition: border-color 1s;
+    }
+
+    .signalable:not(.signaled)::after {
+        border-color: transparent;
+    }
+
+    .signalable::after {
+        content: "";
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border-width: 2px;
+        border-style: solid;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #e3LineaDiagonal.unveilLeft-enter-active {
+        transition: clip-path 0.7s;
+    }
+
+    #e3ContenedorLineaCurva {
+        position: absolute;
+        height: 200px;
+    }
+
+    #e3LineaCurva {
+        height: 100px;
+        width: 120%;
+        left: -10%;
+        border-radius: 50%;
+        border: 2px solid var(--paletaActual);
+        background-color: transparent;
+        clip-path: polygon(0% 0%, 100% 0%, 50% 50%);
+        position: absolute;
+        top: 0px;
+    }
+
+    .contenedorBotones {
+        justify-content: center;
+    }
+
+    .contenedorBotones button {
+        margin: 10px 10px;
+    }
+
+    .respuestaReglaTres {
+        position: relative;
+    }
+</style>

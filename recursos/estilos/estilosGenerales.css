@@ -23,6 +23,14 @@ body {
 li {
     margin: 10px 0px;
 }
+button:disabled{
+    opacity: 0.4;
+    pointer-events: none;
+}
+input:disabled{
+    opacity: 0.4;
+    pointer-events: none;
+}
 
 .fondoGris {
     position: fixed;
@@ -260,6 +268,15 @@ input {
     padding: 5px 3px;
     border-radius: 5px;
     max-width: 90%;
+}
+.fadeOut-leave-from{
+    opacity:1;
+}
+.fadeOut-leave-to{
+    opacity:0;
+}
+.fadeOut-leave-active{
+    transition: opacity 1s;
 }
 
 @keyframes fade {
@@ -515,6 +532,35 @@ input {
     transform-origin: center center;
     transition: transform 1s, opacity 1s;
 
+}
+.unveilLeft-enter-from{
+    clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+}
+.unveilLeft-enter-to{
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+.unveilLeft-enter-active{
+    transition: clip-path 1.5s linear;
+}
+
+.unveilRight-enter-from{
+    clip-path: polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%);
+}
+.unveilRight-enter-to{
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+.unveilRight-enter-active{
+    transition: clip-path 1.5s linear;
+}
+
+.unveilTop-enter-from{
+    clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+}
+.unveilTop-enter-to{
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+.unveilTop-enter-active{
+    transition: clip-path 1.5s linear;
 }
 
 @keyframes unfoldHorizontal {

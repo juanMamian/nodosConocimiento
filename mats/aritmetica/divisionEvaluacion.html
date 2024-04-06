@@ -10,14 +10,21 @@
         src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
 
 
     <title>División - evaluación</title>
@@ -45,24 +52,23 @@
                     </div>
                 </transition>
 
-                <div class="bloqueConfirmarRespuesta" v-show="expresionDivision">
-                    <span>Confirma aquí tu respuesta</span>
-                    <input type="number" :class="{deshabilitado: estadoRespuestaDivision=='correcto'}"
-                        v-model="inputResultadoDivision" style="max-width: 70px;">
+                <recuadro-component tipo="instruccionTeclado" v-show="expresionDivision">
+                    <div class="flexVertical">
+                        <span>Introduce aquí tu respuesta</span>
+                        <input type="number" :class="{deshabilitado: estadoRespuestaDivision=='correcto'}"
+                            @keypress.enter="confirmarDivision" v-model="inputResultadoDivision"
+                            style="max-width: 70px;">
 
-                    <div class="boton" @click="confirmarDivision" :class="{deshabilitado: !inputResultadoDivision}"
-                        v-show="estadoRespuestaDivision!='correcto'">Aceptar</div>
+                        <div class="boton" @click="confirmarDivision" :class="{deshabilitado: !inputResultadoDivision}"
+                            v-show="estadoRespuestaDivision!='correcto'">Aceptar</div>
+                    </div>
 
-                </div>
+                </recuadro-component>
 
                 <transition name="popIn">
-                    <div class="bloqueInfoResultado" v-show="estadoRespuestaDivision"
-                        :key="versionInputResultadoDivision">
-                        <div class="mensajeInfoResultado"
-                            :style="[{backgroundColor: estadoRespuestaDivision=='correcto'?'#269d26':'#ea4b4b'}]">
-                            {{estadoRespuestaDivision=='correcto'?'¡Correcto!':'Incorrecto... ¡Sigue intentando!'}}
-                        </div>
-                    </div>
+                    <recuadro-component tipo="infoResultado" :modo="estadoRespuestaDivision"
+                        v-show="estadoRespuestaDivision" :key="versionInputResultadoDivision">
+                    </recuadro-component>
                 </transition>
             </div>
 
@@ -84,36 +90,37 @@
                     </div>
                 </transition>
 
-                <div class="bloqueConfirmarRespuesta" id="bloqueConfirmarRespuestaInexacta" v-show="expresionDivInexacta">
-                    <span>Confirma aquí tu respuesta</span> <br> <br>
+                <recuadro-component tipo="instruccionTeclado" id="bloqueConfirmarRespuestaInexacta"
+                    v-show="expresionDivInexacta">
+                    <div class="flexVertical">
 
-                    <label for="inputResultadoDivInexacta">Resultado</label>
-                    <input name="inputResultadoDivInexacta" type="number"
-                        :class="{deshabilitado: estadoRespuestaDivInexacta=='correcto'}"
-                        v-model="inputResultadoDivInexacta" style="max-width: 70px;">
-<br>
-                    <label for="inputResiduoDivInexacta">Residuo</label>
-                    <input type="number" :class="{deshabilitado: estadoRespuestaDivInexacta=='correcto'}"
-                        v-model="inputResiduoDivInexacta" style="max-width: 70px;">
+                        <span>Introduce aquí tu respuesta</span> <br> <br>
 
-                    <div class="boton" @click="confirmarDivInexacta"
-                        :class="{deshabilitado: !inputResultadoDivInexacta}"
-                        v-show="estadoRespuestaDivInexacta!='correcto'">Aceptar</div>
+                        <label for="inputResultadoDivInexacta">Resultado</label>
+                        <input name="inputResultadoDivInexacta" type="number"
+                            :class="{deshabilitado: estadoRespuestaDivInexacta=='correcto'}"
+                            v-model="inputResultadoDivInexacta" style="max-width: 70px;">
+                        <br>
+                        <label for="inputResiduoDivInexacta">Residuo</label>
+                        <input type="number" :class="{deshabilitado: estadoRespuestaDivInexacta=='correcto'}"
+                            @keypress.enter="confirmarDivInexacta" v-model="inputResiduoDivInexacta"
+                            style="max-width: 70px;">
 
-                </div>
+                        <div class="boton" @click="confirmarDivInexacta"
+                            :class="{deshabilitado: !inputResultadoDivInexacta}"
+                            v-show="estadoRespuestaDivInexacta!='correcto'">Aceptar</div>
+
+                    </div>
+                </recuadro-component>
 
                 <transition name="popIn">
-                    <div class="bloqueInfoResultado" v-show="estadoRespuestaDivInexacta"
-                        :key="versionInputResultadoDivInexacta">
-                        <div class="mensajeInfoResultado"
-                            :style="[{backgroundColor: estadoRespuestaDivInexacta=='correcto'?'#269d26':'#ea4b4b'}]">
-                            {{estadoRespuestaDivInexacta=='correcto'?'¡Correcto!':'Incorrecto... ¡Sigue intentando!'}}
-                        </div>
-                    </div>
+                    <recuadro-component tipo="infoResultado" :modo="estadoRespuestaDivInexacta"
+                        v-show="estadoRespuestaDivInexacta" :key="versionInputResultadoDivInexacta">
+                    </recuadro-component>
                 </transition>
             </div>
         </bloque-component>
-        
+
     </div>
 </body>
 
@@ -265,12 +272,11 @@
 
 
 <style>
-    #bloqueConfirmarRespuestaInexacta{
+    #bloqueConfirmarRespuestaInexacta {
         width: min(400px, 90%);
     }
 
-    #bloqueConfirmarRespuestaInexacta input{
+    #bloqueConfirmarRespuestaInexacta input {
         float: right;
     }
-
 </style>

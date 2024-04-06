@@ -1,0 +1,21 @@
+.componenteControlSteps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background-color: var(--paletaActual);
+    color: whitesmoke;
+    padding: 40px 80px;
+    border-radius: 20px;
+}
+
+.componenteControlSteps .contenedorRelato {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.componenteControlSteps .icono {
+    height: 20px;
+    margin: 20px auto;
+    filter: invert(100%);
+}

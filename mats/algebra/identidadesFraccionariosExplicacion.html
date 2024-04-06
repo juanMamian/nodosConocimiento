@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/librerias/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento//recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/controlStepsEstilo.css">
+
+    <script id="MathJax-script" async
+        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+
+    <title>Identidades de fraccionarios - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Las expresiones numéricas que son operaciones entre fraccionarios tienen identidades útiles.
+        </p>
+
+        <recuadro-component tipo='datoPrevio'>
+            <div class="flexVertical">
+
+                <span>Una suma de fraccionarios como esta:</span>
+
+                <div class="expresion expresionPrimera">
+                    \({a \over b} + {c \over d} \)
+                </div>
+                <span>Es idéntica a una división formada así:</span>
+                <button class="boton" v-show="!d1Relatando" @click="d1Relatando=true">
+                    Empezar
+                </button>
+
+                <componente-control-steps v-show="d1Relatando" :steps="d1Steps" @step="d1Step=$event"
+                    @acciones-realizadas="d1AccionesRealizadas=$event">
+                </componente-control-steps>
+
+
+                <transition name="fadeIn">
+                    <div class="expresion expresionSegunda" v-show="d1Relatando">
+                        <div class="numerador">
+                            <transition name="unveilLeft">
+                                <span v-show="(d1Step>=2 && d1AccionesRealizadas.includes('Realizar')) || d1Step>2">\(a
+                                    \cdot
+                                    d\)</span>
+                            </transition>
+                            <transition name="unveilLeft">
+                                <span v-show="(d1Step>=1 && d1AccionesRealizadas.includes('Realizar')) || d1Step>1">\( +
+                                    \)</span>
+                            </transition>
+                            <transition name="unveilLeft">
+                                <span v-show="(d1Step>=3 && d1AccionesRealizadas.includes('Realizar')) || d1Step>3"> \(b
+                                    \cdot
+                                    c\)</span>
+                            </transition>
+                        </div>
+                        <transition name="unveilLeft">
+                            <div class="lineaDivision"
+                                v-show="(d1Step>=0 && d1AccionesRealizadas.includes('Realizar')) || d1Step>0">
+                            </div>
+                        </transition>
+                        <div class="denominador">
+                            <transition name="unveilLeft">
+                                <span v-show="(d1Step>=4 && d1AccionesRealizadas.includes('Realizar')) || d1Step>4">\( b
+                                    \cdot d \)</span>
+                            </transition>
+                        </div>
+                    </div>
+                </transition>
+            </div>
+        </recuadro-component>
+
+
+        <bloque-component tipo='ejemplo'>
+            <template #cabecera>
+                En este cuadro se puede ver algunos ejemplos de sumas de fraccionarios y se construye su.
+            </template>
+            <div class="listaEjemplos">
+                <div class="itemEjemplo">
+                    \( 4 \over 3\)
+                </div>
+                <div class="itemEjemplo">
+                    \( 18 \over 5\)
+                </div>
+                <div class="itemEjemplo">
+                    \( 8 \over {5 + 2}\)
+                </div>
+                <div class="itemEjemplo">
+                    \( {3-1} \over {6 - 5}\)
+                </div>
+
+            </div>
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    const {createApp, ref, computed, watch, nextTick} = Vue;
+    import {componenteControlSteps} from "http://127.0.0.1:8080/recursos/components/controlSteps.js"
+
+    const app = createApp({
+        setup() {
+
+            const d1Step = ref(0);
+            const d1AccionesRealizadas = ref([]);
+            const d1Relatando = ref(false);
+            const d1Steps = [
+                {
+                    texto: "Se prepara una división",
+                    acciones: ["Realizar"],
+                },
+                {
+                    texto: "El numerador será una suma",
+                    acciones: ["Realizar"],
+                },
+                {
+                    texto: "El primer sumando será el producto de la primera diagonal",
+                    acciones: ["Realizar"],
+                },
+                {
+                    texto: "El segundo sumando será el producto de la segunda diagonal",
+                    acciones: ["Realizar"],
+                },
+                {
+                    texto: "El denominador será el producto de los denominadores originales",
+                    acciones: ["Realizar"],
+                },
+            ]
+            return {
+                d1Step, d1Relatando, d1Steps, d1AccionesRealizadas
+            }
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteControlSteps
+        },
+    });
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('mjx');
+    app.mount("#doc");
+</script>
+
+<style>
+    .identidad {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .numerador {
+        display: flex;
+        justify-content: center;
+
+    }
+
+    .denominador {
+        display: flex;
+        justify-content: center;
+    }
+
+    .lineaDivision {
+        height: 2px;
+        background-color: black;
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .expresionSegunda {
+        min-width: 100px;
+    }
+</style>

@@ -16,16 +16,19 @@
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento//recursos/components/enlaceEstilo.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/controlStepsEstilo.css">
 
-    <script id="MathJax-script" async
-        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="http://127.0.0.1:8080/recursos/librerias/MathJax/es5/tex-chtml.js"></script>
+
+
 
     <title>Identidades de fraccionarios - explicación</title>
 </head>
@@ -38,11 +41,35 @@
 
         <recuadro-component tipo='datoPrevio'>
             <div class="flexVertical">
-
+                {{d1Step}}
                 <span>Una suma de fraccionarios como esta:</span>
 
-                <div class="expresion expresionPrimera">
-                    \({a \over b} + {c \over d} \)
+                <div class="contenedorMath" ref="d1ContenedorExpresionOriginal">
+                    <div class="signal" ref="d1SignalA" v-show="d1Step===2" :style="[d1EstiloSignalA]"> </div>
+                    <div class="signal" ref="d1SignalB" v-show="d1Step===3 || d1Step===4" :style="[d1EstiloSignalB]">
+                    </div>
+                    <div class="signal" ref="d1SignalC" v-show="d1Step===3" :style="[d1EstiloSignalC]"> </div>
+                    <div class="signal" ref="d1SignalD" v-show="d1Step===2 || d1Step===4" :style="[d1EstiloSignalD]">
+                    </div>
+                    <div class="lineaSignal" :style="[d1EstiloLineaSignal1]" v-show="d1Step===2">
+                    </div>
+                    <div class="lineaSignal" :style="[d1EstiloLineaSignal2]" v-show="d1Step===3">
+                    </div>
+                    <div class="lineaSignal" :style="[d1EstiloLineaSignal3]" v-show="d1Step===4">
+                    </div>
+                    <math class="expresion expresionPrimera">
+                        <mfrac>
+                            <mn ref="d1LugarA">a</mn>
+                            <mn ref="d1LugarB">b</mn>
+                        </mfrac>
+                        <mo>
+                            +
+                        </mo>
+                        <mfrac>
+                            <mn ref="d1LugarC">c</mn>
+                            <mn ref="d1LugarD">d</mn>
+                        </mfrac>
+                    </math>
                 </div>
                 <span>Es idéntica a una división formada así:</span>
                 <button class="boton" v-show="!d1Relatando" @click="d1Relatando=true">
@@ -116,7 +143,7 @@
 </html>
 
 <script type="module">
-    const {createApp, ref, computed, watch, nextTick} = Vue;
+    const {createApp, ref, computed, watch, nextTick, onMounted} = Vue;
     import {componenteControlSteps} from "http://127.0.0.1:8080/recursos/components/controlSteps.js"
 
     const app = createApp({
@@ -147,8 +174,172 @@
                     acciones: ["Realizar"],
                 },
             ]
+
+            const d1ContenedorExpresionOriginal = ref(null);
+            const d1LugarA = ref(null);
+            const d1LugarB = ref(null);
+            const d1LugarC = ref(null);
+            const d1LugarD = ref(null);
+
+            const d1EstiloSignalA = ref({});
+            const d1EstiloSignalB = ref({});
+            const d1EstiloSignalC = ref({});
+            const d1EstiloSignalD = ref({});
+            watch(d1Step, async function () {
+                await nextTick();
+                console.log(`Preparando estilo de señales`);
+                if (!d1ContenedorExpresionOriginal.value) {
+                    console.log(`No hay contenedor de la expresion`);
+                    return;
+                }
+                const posContenedor = d1ContenedorExpresionOriginal.value.getBoundingClientRect();
+
+                if (d1LugarA.value) {
+                    const posLugarA = d1LugarA.value.getBoundingClientRect();
+                    d1EstiloSignalA.value = {
+                        top: posLugarA.top + posLugarA.height / 2 - posContenedor.top + "px",
+                        left: posLugarA.left + posLugarA.width / 2 - posContenedor.left + "px",
+                        height: posLugarA.height * 1.4 + 'px',
+                        width: posLugarA.height * 1.4 + 'px',
+                    }
+                }
+                if (d1LugarB.value) {
+                    const posLugarB = d1LugarB.value.getBoundingClientRect();
+                    d1EstiloSignalB.value = {
+                        top: posLugarB.top + posLugarB.height / 2 - posContenedor.top + "px",
+                        left: posLugarB.left + posLugarB.width / 2 - posContenedor.left + "px",
+                        height: posLugarB.height * 1.4 + 'px',
+                        width: posLugarB.height * 1.4 + 'px',
+                    }
+                }
+                if (d1LugarC.value) {
+                    const posLugarC = d1LugarC.value.getBoundingClientRect();
+                    d1EstiloSignalC.value = {
+                        top: posLugarC.top + posLugarC.height / 2 - posContenedor.top + "px",
+                        left: posLugarC.left + posLugarC.width / 2 - posContenedor.left + "px",
+                        height: posLugarC.height * 1.4 + 'px',
+                        width: posLugarC.height * 1.4 + 'px',
+                    }
+                }
+                if (d1LugarD.value) {
+                    const posLugarD = d1LugarD.value.getBoundingClientRect();
+                    d1EstiloSignalD.value = {
+                        top: posLugarD.top + posLugarD.height / 2 - posContenedor.top + "px",
+                        left: posLugarD.left + posLugarD.width / 2 - posContenedor.left + "px",
+                        height: posLugarD.height * 1.4 + 'px',
+                        width: posLugarD.height * 1.4 + 'px',
+                    }
+                }
+
+            })
+
+            const d1SignalA = ref(null);
+            const d1SignalB = ref(null);
+            const d1SignalC = ref(null);
+            const d1SignalD = ref(null);
+
+            const d1EstiloLineaSignal1 = ref({});
+            const d1EstiloLineaSignal2 = ref({});
+            const d1EstiloLineaSignal3 = ref({});
+            watch(d1Step, async (step, prevStep) => {
+                if (step >= 2 && prevStep < 2) {
+                    await nextTick();
+                    if (!d1ContenedorExpresionOriginal.value) {
+                        console.log(`No hay contenedor de expresión original`);
+                        return;
+                    }
+                    let posicionContenedor = d1ContenedorExpresionOriginal.value.getBoundingClientRect();
+
+                    //Estilos de líneas
+                    if (!d1SignalA.value || !d1SignalD.value) {
+                        console.log(`No había signals suficientes para la linea signal 1`);
+                        return;
+                    }
+                    console.log(`Calculando estilo de linea signal1`);
+                    const posA = d1SignalA.value.getBoundingClientRect();
+                    const posD = d1SignalD.value.getBoundingClientRect();
+
+                    const vector = {
+                        x: posD.left - posA.right,
+                        y: (posD.top + posD.height * 0.25) - (posA.top + posA.height * 0.75),
+                    }
+                    const ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    const rotacion = Math.atan2(vector.y, vector.x);
+
+                    d1EstiloLineaSignal1.value = {
+                        width: ancho + 'px',
+                        transform: `rotate(${rotacion}rad)`,
+                        left: posA.right - posicionContenedor.left + 2 + 'px',
+                        top: posA.top + posA.height * 0.75 - posicionContenedor.top - 1 + 'px',
+                    }
+                }
+                if (step >= 3 && prevStep < 3) {
+                    await nextTick();
+                    if (!d1ContenedorExpresionOriginal.value) {
+                        console.log(`No hay contenedor de expresión original`);
+                        return;
+                    }
+                    let posicionContenedor = d1ContenedorExpresionOriginal.value.getBoundingClientRect();
+                    if (!d1SignalB.value || !d1SignalC.value) {
+                        console.log(`No había signals suficientes para la linea signal 2`);
+                        return;
+                    }
+                    console.log(`Calculando estilo de linea signal2`);
+                    const posB = d1SignalB.value.getBoundingClientRect();
+                    const posC = d1SignalC.value.getBoundingClientRect();
+
+                    const vector = {
+                        x: posC.left - posB.right,
+                        y: (posC.top + posC.height * 0.75) - (posB.top + posB.height * 0.25),
+                    }
+                    const ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    const rotacion = Math.atan2(vector.y, vector.x);
+
+                    console.log(`Ancho: ${ancho}`);
+                    console.log(`Rotación: ${rotacion}`);
+                    d1EstiloLineaSignal2.value = {
+                        width: ancho + 'px',
+                        transform: `rotate(${rotacion}rad)`,
+                        left: posB.right - posicionContenedor.left + 'px',
+                        top: posB.top + posB.height * 0.25 - posicionContenedor.top - 1 + 'px',
+                    }
+                }
+                if (step >= 4 && prevStep < 4) {
+                    await nextTick();
+                    if (!d1ContenedorExpresionOriginal.value) {
+                        console.log(`No hay contenedor de expresión original`);
+                        return;
+                    }
+                    let posicionContenedor = d1ContenedorExpresionOriginal.value.getBoundingClientRect();
+                    if (!d1SignalB.value || !d1SignalD.value) {
+                        console.log(`No había signals suficientes para la linea signal 3`);
+                        return;
+                    }
+                    console.log(`Calculando estilo de linea signal3`);
+                    const posB = d1SignalB.value.getBoundingClientRect();
+                    const posD = d1SignalD.value.getBoundingClientRect();
+
+                    const vector = {
+                        x: posD.left - posB.right,
+                        y: (posD.top + posD.height * 0.5) - (posB.top + posB.height * 0.5),
+                    }
+                    const ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    const rotacion = Math.atan2(vector.y, vector.x);
+
+                    console.log(`Ancho: ${ancho}`);
+                    console.log(`Rotación: ${rotacion}`);
+                    d1EstiloLineaSignal3.value = {
+                        width: ancho + 'px',
+                        transform: `rotate(${rotacion}rad)`,
+                        left: posB.right - posicionContenedor.left + 'px',
+                        top: posB.top + posB.height * 0.5 - posicionContenedor.top - 1 + 'px',
+                    }
+                }
+            });
+
             return {
-                d1Step, d1Relatando, d1Steps, d1AccionesRealizadas
+                d1Step, d1Relatando, d1Steps, d1AccionesRealizadas, d1EstiloSignalA, d1EstiloSignalB, d1EstiloSignalC, d1EstiloSignalD, d1ContenedorExpresionOriginal, d1LugarA, d1LugarB, d1LugarC, d1LugarD, d1EstiloLineaSignal1, d1EstiloLineaSignal2, d1EstiloLineaSignal3, d1SignalA, d1SignalB, d1SignalC, d1SignalD,
+
             }
         },
         components: {
@@ -173,11 +364,12 @@
     .numerador {
         display: flex;
         justify-content: center;
-
+        gap: 10px;
     }
 
     .denominador {
         display: flex;
+        gap: 10px;
         justify-content: center;
     }
 
@@ -188,7 +380,42 @@
         margin: 10px auto;
     }
 
+    .expresionPrimera {
+        font-size: 200%;
+    }
+
     .expresionSegunda {
         min-width: 100px;
+        padding: 20px 20px;
+        border: 2px dashed var(--paletaActual);
+        border-radius: 5px;
+    }
+
+    .expresion .unveilLeft-enter-active {
+        transition: clip-path 0.8s;
+    }
+
+    .contenedorMath {
+        position: relative;
+    }
+
+    .signal {
+        position: absolute;
+        border-radius: 50%;
+        border: 2px solid var(--paletaActual);
+        transform: translate(-50%, -50%);
+    }
+
+    .lineaSignal {
+        height: 3px;
+        background-color: var(--paletaActual);
+        position: absolute;
+        transform-origin: center left;
+    }
+
+    mo {
+        margin: 0px 10px;
+        opacity: 0.6;
+        font-size: 70%;
     }
 </style>

@@ -72,7 +72,11 @@ export const componenteControlSteps = {
                 console.log(`No había siguiente acción`);
                 return;
             }
-            this.accionesRealizadas.push(this.siguienteAccion);
+            if (this.accionesRealizadas.includes(this.siguienteAccion)) {
+                console.log(`Acción ya estaba realizada`);
+                return;
+            }
+            this.accionesRealizadas = [...this.accionesRealizadas, this.siguienteAccion];
         },
         stepForward() {
             if (this.steps[this.step].acciones && this.steps[this.step].acciones.some(accion => !this.accionesRealizadas.includes(accion))) {
@@ -99,7 +103,7 @@ export const componenteControlSteps = {
             this.accionesRealizadas = [];
             this.$emit('step', step);
         },
-        accionesRealizadas(acciones){
+        accionesRealizadas(acciones) {
             this.$emit("accionesRealizadas", acciones);
         }
 

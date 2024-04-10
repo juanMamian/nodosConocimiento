@@ -1,36 +1,42 @@
-.bloque-component{
+.bloque-component {
     border-radius: 15px;
     max-width: 90%;
     margin: 35px auto;
-    padding: 25px;
+    padding: 5px;
     background-color: #DEDEDE;
+    display: flex;
+    align-items: center;
 }
 
-.iconoBloque{
-    height: 25px;    
+.iconoBloque {
+    height: 25px;
 }
 
 
-#zonaCabecera{
-    display:flex;
+#zonaCabecera {
+    display: flex;
     align-items: center;
     margin-bottom: 40px;
 }
-#zonaCabecera:not(.spoiler){
+
+#zonaCabecera:not(.spoiler) {
     flex-direction: row;
 }
-#zonaCabecera.spoiler{
+
+#zonaCabecera.spoiler {
     flex-direction: column;
 }
-#zonaCabecera:not(.spoiler) .iconoBloque{
+
+#zonaCabecera:not(.spoiler) .iconoBloque {
     margin-right: 25px;
 }
-#textoSpoiler{
+
+#textoSpoiler {
     margin: 10px auto;
     font-size: 11px;
     text-align: center;
 }
 
-#desplegable{
+#desplegable {
     padding: 40px 0px;
 }

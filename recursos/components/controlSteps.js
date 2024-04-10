@@ -28,7 +28,7 @@ export const componenteControlSteps = {
         </div>
     `,
     props: {
-        steps: {//Array con objetos que tienen: {relato, realizable}
+        steps: {//Array con objetos que tienen: {relato, acciones}
             type: Array,
             default: [],
         },
@@ -99,7 +99,7 @@ export const componenteControlSteps = {
             this.accionesRealizadas = [];
             this.$emit('step', step);
         },
-        accionesRealizadas(acciones){
+        accionesRealizadas(acciones) {
             this.$emit("accionesRealizadas", acciones);
         }
 

@@ -25,6 +25,8 @@ export const componenteControlSteps = {
                     </button>
                 </transition>
             </div>
+                <slot>
+                </slot>
         </div>
     `,
     props: {

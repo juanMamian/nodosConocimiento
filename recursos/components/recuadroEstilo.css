@@ -98,3 +98,14 @@ flex-grow: 1;
 }
 
 
+@media (max-width: 500px){
+    .recuadro{
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        padding-right: 25px;
+    }
+    .recuadro .iconoRecuadro{
+        margin: 10px auto;
+    }
+}

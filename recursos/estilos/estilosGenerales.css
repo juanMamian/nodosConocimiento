@@ -23,11 +23,13 @@ body {
 li {
     margin: 10px 0px;
 }
-button:disabled{
+
+button:disabled {
     opacity: 0.4;
     pointer-events: none;
 }
-input:disabled{
+
+input:disabled {
     opacity: 0.4;
     pointer-events: none;
 }
@@ -274,13 +276,16 @@ input {
     border-radius: 5px;
     max-width: 90%;
 }
-.fadeOut-leave-from{
-    opacity:1;
+
+.fadeOut-leave-from {
+    opacity: 1;
 }
-.fadeOut-leave-to{
-    opacity:0;
+
+.fadeOut-leave-to {
+    opacity: 0;
 }
-.fadeOut-leave-active{
+
+.fadeOut-leave-active {
     transition: opacity 1s;
 }
 
@@ -522,15 +527,17 @@ input {
     animation: unfoldHorizontal 0.5s;
 }
 
-.unfoldHorizontalAbsolute-enter-from{
+.unfoldHorizontalAbsolute-enter-from {
     transform: translate(-50%, -50%) scaleX(0);
     opacity: 0;
 }
-.unfoldHorizontalAbsolute-enter-to{
+
+.unfoldHorizontalAbsolute-enter-to {
     transform: translate(-50%, -50%) scaleX(1);
     opacity: 1;
 }
-.unfoldHorizontalAbsolute-enter-active{
+
+.unfoldHorizontalAbsolute-enter-active {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -538,33 +545,40 @@ input {
     transition: transform 1s, opacity 1s;
 
 }
-.unveilLeft-enter-from{
+
+.unveilLeft-enter-from {
     clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
 }
-.unveilLeft-enter-to{
+
+.unveilLeft-enter-to {
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
-.unveilLeft-enter-active{
+
+.unveilLeft-enter-active {
     transition: clip-path 1.5s linear;
 }
 
-.unveilRight-enter-from{
+.unveilRight-enter-from {
     clip-path: polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%);
 }
-.unveilRight-enter-to{
+
+.unveilRight-enter-to {
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
-.unveilRight-enter-active{
+
+.unveilRight-enter-active {
     transition: clip-path 1.5s linear;
 }
 
-.unveilTop-enter-from{
+.unveilTop-enter-from {
     clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
 }
-.unveilTop-enter-to{
+
+.unveilTop-enter-to {
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
-.unveilTop-enter-active{
+
+.unveilTop-enter-active {
     transition: clip-path 1.5s linear;
 }
 
@@ -590,3 +604,6 @@ input {
     }
 }
 
+math {
+    font-family: MJXZERO, MJXTEX-I;
+}

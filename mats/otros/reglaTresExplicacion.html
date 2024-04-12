@@ -47,7 +47,71 @@
             <span class="resaltado">regla de tres</span>.
         </p>
 
-        <bloque-component tipo='ejemplo'>
+
+        <p>
+            La regla de tres se ejecuta así:
+        </p>
+        <bloque-component class='herramientaInteractiva' id="h1HerramientaInteractiva">
+            <template #cabecera>
+                <div class="selectorModo flexHorizontal">
+                    <button class="boton selector" @click="h1Modo='directo'"
+                        :class="{seleccionado: h1Modo==='directo'}">
+                        Cantidades directamente proporcionales
+                    </button>
+                    <button class="boton selector" @click="h1Modo='inverso'"
+                        :class="{ seleccionado: h1Modo==='inverso' }">
+                        Cantidades inversamente proporcionales
+                    </button>
+                </div>
+
+                {{h1Step}}
+                <componente-control-steps @executed-tuples="h1TuplasEjecutadas=$event" :steps="h1Steps"
+                    ref="h1ControlSteps" @acciones-realizadas="h1AccionesRealizadas=$event">
+                    <div class="reglaTres" ref="h1ReglaTres" :key="h1Modo">
+                        <transition name="unveilLeft">
+                            <div class="caso" v-show="h1TuplasEjecutadas.some(t=>t[0]===0 && t[1]===0)">
+                                <span ref="h1Numero1" class="signalable"
+                                    :class="{ signaled:h1TuplasEjecutadas.some(t=>t[0]===2 && t[1]===0)}">a</span>
+                                <span>&#x2192;</span> <span :style="h1Modo==='directo'?'--tDelay: 3s':'--tDelay: 1s'"
+                                    class="signalable"
+                                    :class="{ signaled: h1TuplasEjecutadas.some(t=>t[0]===2 && t[1]===0)}"
+                                    ref="h1Numero2">b</span>
+                            </div>
+                        </transition>
+
+
+                        <transition name="unveilLeft">
+                            <div class="caso" v-show="h1TuplasEjecutadas.some(t=>t[0]===1 && t[1]===0)">
+                                <span ref="h1Numero3">?</span> <span>&#x2192;</span> <span class="signalable"
+                                    :class="{ signaled: h1TuplasEjecutadas.some(t=>t[0]===2 && t[1]===0)}"
+                                    ref="h1Numero4" :style="h1Modo==='directo'?'--tDelay: 1s':'--tDelay: 3s'">d</span>
+                            </div>
+                        </transition>
+                        <transition name="unveilLeft">
+                            <div class="linea h1Linea linea1" :style="[ h1EstiloLinea1 ]"
+                                v-show="h1TuplasEjecutadas.some(t=>t[0]===2 && t[1]===0)">
+                                <div class="descripcion" :style="[ h1EstiloDescripcionLinea1 ]">
+                                    Multiplicar
+                                </div>
+                            </div>
+                        </transition>
+                        <transition name="unveilLeft">
+                            <div class="linea h1Linea linea2" :style="[ h1EstiloLinea2 ]" v-show="h1MostrarLinea2">
+                                <div class="descripcion" :style="[h1EstiloDescripcionLinea2]">
+                                    Dividir
+                                </div>
+                            </div>
+                        </transition>
+                    </div>
+                </componente-control-steps>
+                <recuadro-component tipo='datoNuevo' v-show="h1TuplasEjecutadas.length>=3">
+                    El resultado es el número faltante
+                </recuadro-component>
+
+            </template>
+        </bloque-component>
+
+        <!-- <bloque-component tipo='ejemplo'>
             <template #cabecera>
                 En este cuadro se muestran ejemplos de problemas en los que se puede usar la regla de tres.
             </template>
@@ -112,57 +176,7 @@
                     </ul>
                 </div>
             </div>
-        </bloque-component>
-
-        <p>
-            La regla de tres se expresa así:
-        </p>
-        <bloque-component class='herramientaInteractiva'>
-            <template #cabecera>
-                <div class="selectorModo flexHorizontal">
-                    <button class="boton selector" @click="h1Modo='directo'"
-                        :class="{seleccionado: h1Modo==='directo'}">
-                        Cantidades directamente proporcionales
-                    </button>
-                    <button class="boton selector" @click="h1Modo='inverso'"
-                        :class="{ seleccionado: h1Modo==='inverso' }">
-                        Cantidades inversamente proporcionales
-                    </button>
-                </div>
-
-                <componente-control-steps @step="h1Step=$event" :steps="h1Steps"
-                    @acciones-realizadas="h1AccionesRealizadas=$event">
-                    <div class="reglaTres">
-                        <div class="caso"
-                            v-show="( h1Step===0 && h1Steps[0].acciones.every(accion=>h1AccionesRealizadas.includes(accion)) ) || h1Step >0">
-                            a &#x2192; b
-                        </div>
-                        <div class="caso"
-                            v-show="( h1Step==1 && h1Steps[1].acciones.every(accion=>h1AccionesRealizadas.includes(accion)) ) || h1Step >1">
-                            c &#x2192; d
-                        </div>
-                    </div>
-                </componente-control-steps>
-            </template>
-        </bloque-component>
-
-
-        <bloque-component tipo='ejemplo' @plegado="e3Reiniciar">
-            <template #cabecera>
-                En este cuadro se puede ver un ejemplo en el que se resuelve un problema donde las cantidades son
-                directamente proporcionales.
-            </template>
-
-
-        </bloque-component>
-
-
-        <bloque-component tipo='ejemplo' @plegado="e4Reiniciar">
-            <template #cabecera>
-                En este cuadro se puede ver un ejemplo en el que se resuelve un problema donde las cantidades son
-                inversamente proporcionales.
-            </template>
-        </bloque-component>
+        </bloque-component> -->
 
 
     </div>
@@ -181,7 +195,12 @@
             const {scrollToElemento} = useUtils();
             //h1
             const h1Modo = ref('directo');
+            const h1ControlSteps = ref(null);
+            watch(h1Modo, () => {
+                h1ControlSteps.value.reiniciar();
+            })
             const h1Step = ref(0);
+            const h1TuplasEjecutadas = ref([]);
             const h1AccionesRealizadas = ref([]);
             const h1Steps = [
                 {
@@ -195,9 +214,128 @@
                 {
                     texto: 'Multiplicar y dividir',
                     acciones: ["Mostrar"]
-                }
+                },
             ]
 
+            const h1ReglaTres = ref(null);
+            const h1Numero1 = ref(null);
+            const h1Numero2 = ref(null);
+            const h1Numero3 = ref(null);
+            const h1Numero4 = ref(null);
+            const h1EstiloLinea1 = ref({});
+            const h1EstiloLinea2 = ref({});
+            watch(h1TuplasEjecutadas, function () {
+                if (!h1TuplasEjecutadas.value.some(t => t[0] === 2 && t[1] === 0)) {
+                    return;
+                }
+                (async function () {
+                    await nextTick();
+                    console.log(`Setting estilo de linea1`);
+
+                    if (!h1ReglaTres.value) {
+                        console.log(`No hay elemento regla de tres`);
+                        return;
+                    }
+                    const posReglaTres = h1ReglaTres.value.getBoundingClientRect();
+                    let origen = h1Numero1;
+                    let final = h1Modo.value === 'directo' ? h1Numero4 : h1Numero2
+                    if (!origen.value || !final.value) {
+                        console.log(`No hay elementos para trazar la línea 1`);
+                        return;
+                    }
+                    const posOrigen = origen.value.getBoundingClientRect();
+                    const posFinal = final.value.getBoundingClientRect();
+                    const vector = {
+                        x: (posFinal.left + posFinal.width / 2) - (posOrigen.left + posOrigen.width / 2),
+                        y: (posFinal.top + posFinal.height / 2) - (posOrigen.top + posOrigen.height / 2),
+                    }
+                    const distancia = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    const rotacion = Math.atan2(vector.y, vector.x);
+
+                    console.log(`Left origen: ${posOrigen.left}`);
+                    console.log(`Left reglaTres: ${posReglaTres.left}`);
+
+
+                    h1EstiloLinea1.value = {
+                        width: distancia + 'px',
+                        transform: `rotate(${rotacion}rad)`,
+                        left: posOrigen.left + posOrigen.width / 2 - posReglaTres.left - 2 + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posReglaTres.top - 2 + 'px',
+                    }
+
+                    //Linea 2
+                    let origen2 = h1Modo.value === 'directo' ? h1Numero4 : h1Numero2;
+                    let final2 = h1Modo.value === 'directo' ? h1Numero2 : h1Numero4
+                    if (!origen2.value || !final2.value) {
+                        console.log(`No hay elementos para trazar la línea 2`);
+                        return;
+                    }
+                    const posOrigen2 = origen2.value.getBoundingClientRect();
+                    const posFinal2 = final2.value.getBoundingClientRect();
+                    const vector2 = {
+                        x: (posFinal2.left + posFinal2.width / 2) - (posOrigen2.left + posOrigen2.width / 2),
+                        y: (posFinal2.top + posFinal2.height / 2) - (posOrigen2.top + posOrigen2.height / 2),
+                    }
+                    const distancia2 = Math.sqrt(Math.pow(vector2.x, 2) + Math.pow(vector2.y, 2));
+                    const rotacion2 = Math.atan2(vector2.y, vector2.x);
+
+                    console.log(`Left origen2: ${posOrigen2.left}`);
+                    console.log(`Left reglaTres: ${posReglaTres.left}`);
+
+
+                    h1EstiloLinea2.value = {
+                        width: distancia2 + 'px',
+                        transform: `rotate(${rotacion2}rad)`,
+                        left: posOrigen2.left + posOrigen2.width / 2 - posReglaTres.left - 2 + 'px',
+                        top: posOrigen2.top + posOrigen2.height / 2 - posReglaTres.top - 2 + 'px',
+                    }
+
+                })();
+            })
+            const h1EstiloDescripcionLinea1 = computed(() => {
+                if (h1Modo.value === 'directo') {
+                    return {
+                        top: 'calc(100% + 5px)'
+                    }
+                }
+                return {
+                    bottom: 'calc(100% + 20px)'
+                }
+            })
+            const h1EstiloDescripcionLinea2 = computed(() => {
+                if (h1Modo.value === 'directo') {
+                    return {
+                        top: 'calc(100% + 20px)',
+                        transform: `translate(-50%, -50%) rotate(${Math.PI / 2}rad) `
+                    }
+                }
+                return {
+                    bottom: 'calc(100% + 20px)',
+                    transform: `translate(-50%, -50%) rotate(${-Math.PI / 2}rad) `
+                }
+            })
+
+            const h1MostrarLinea2 = ref(false);
+            let h1TimerMostrarLinea2 = null;
+            watch(h1TuplasEjecutadas, (tuplas, prevTuplas) => {
+                if (tuplas.some(t => t[0] === 2 && t[1] === 0) && !prevTuplas.some(t => t[0] === 2 && t[1] === 0)) {
+                    h1TimerMostrarLinea2 = setTimeout(() => {
+                        h1MostrarLinea2.value = true;
+                    }, 2000)
+
+                }
+                else {
+                    if (h1TimerMostrarLinea2) {
+                        clearTimeout(h1TimerMostrarLinea2);
+                    }
+                    if (tuplas.some(t => t[0] === 2 && t[1] === 0)) {
+                        h1MostrarLinea2.value = true;
+                    }
+                    else {
+                        h1MostrarLinea2.value = false;
+                    }
+                }
+            })
             //e3
             const e3Step = ref(0);
             function e3Reiniciar() {
@@ -217,7 +355,9 @@
 
             //return data
             return {
-                h1Modo, h1Step, h1Steps, h1AccionesRealizadas,
+                h1ControlSteps, h1ReglaTres, h1Modo, h1Step, h1Steps, h1AccionesRealizadas, h1Numero1, h1Numero2, h1Numero3, h1Numero4, h1EstiloLinea1, h1EstiloLinea2, h1EstiloDescripcionLinea1, h1EstiloDescripcionLinea2, h1MostrarLinea2,
+                h1TuplasEjecutadas,
+
                 e3Reiniciar,
                 e4Reiniciar,
             }
@@ -236,10 +376,59 @@
     .reglaTres {
         border: 2px dashed var(--paletaPrevio);
         min-height: 90px;
+        display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 30px;
         padding: 20px 10px;
+        min-width: min(300px, 90%);
+        box-sizing: border-box;
+
+        position: relative;
+    }
+
+    .reglaTres .caso {
+        display: flex;
+        gap: 20px;
+        z-index: 1;
+        padding: 10px 10px;
+        transition: background-color 1s;
+    }
+
+    .reglaTres .caso.unveilLeft-enter-active {
+        transition: clip-path 1.2s;
+        background-color: var(--paletaMain);
+    }
+
+    .reglaTres .caso.unveilLeft-leave-active {
+        transition: unset;
+    }
+
+    .reglaTres .caso span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .reglaTres .caso span.signalable::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        content: "";
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: transparent;
+        z-index: -1;
+    }
+
+    .reglaTres .caso span.signaled::after {
+        background-color: var(--paletaPrevio);
+        transition: background-color 1s;
+        transition-delay: var(--tDelay);
     }
 
     #h2SelectorTipo {
@@ -263,11 +452,6 @@
         min-height: 20px;
         text-align: center;
         padding: 10px 20px;
-    }
-
-    .reglaTres {
-        min-width: 250px;
-        position: relative;
     }
 
     .procesoCalculo {
@@ -404,28 +588,6 @@
         position: relative;
     }
 
-    .signaled::after {
-        border-color: var(--paletaActual);
-        transition: border-color 1s;
-    }
-
-    .signalable:not(.signaled)::after {
-        border-color: transparent;
-    }
-
-    .signalable::after {
-        content: "";
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border-width: 2px;
-        border-style: solid;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
     .lineaDiagonal.unveilLeft-enter-active {
         transition: clip-path 0.7s;
     }
@@ -459,22 +621,21 @@
         position: relative;
     }
 
-    .contenedorRelatos span {
+    #h1HerramientaInteractiva {
+        margin: 10px auto;
+        width: min(700px, 95%);
+    }
+
+    #h1HerramientaInteractiva .zonaCabecera {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    #h1HerramientaInteractiva .textoCabecera {
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
-    }
-
-    .contenedorRelatos span.enEspera {
-        color: gray;
-    }
-
-    .contenedorRelatos span img {
-        height: 20px;
-    }
-
-    .boton.underRelato {
-        margin-top: -20px;
+        flex-direction: column;
+        flex-grow: 1;
     }
 
     .selectorModo {
@@ -487,5 +648,25 @@
         margin: 10px 10px;
         flex-shrink: 1;
 
+    }
+
+    .h1Linea {
+        position: absolute;
+        height: 2px;
+        background-color: var(--paletaPrevio);
+        z-index: 0;
+        transform-origin: center left;
+    }
+
+    .h1Linea::before {}
+
+
+    .h1Linea .descripcion {
+        font-size: 12px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        transform-origin: center;
     }
 </style>

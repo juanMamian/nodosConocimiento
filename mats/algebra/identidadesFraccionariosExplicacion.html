@@ -41,101 +41,177 @@
 
         <recuadro-component tipo='datoPrevio'>
             <div class="flexVertical">
-                {{d1Step}}
                 <span>Una suma de fraccionarios como esta:</span>
 
-                <div class="contenedorMath" ref="d1ContenedorExpresionOriginal">
-                    <div class="signal" ref="d1SignalA" v-show="d1Step===2" :style="[d1EstiloSignalA]"> </div>
-                    <div class="signal" ref="d1SignalB" v-show="d1Step===3 || d1Step===4" :style="[d1EstiloSignalB]">
+                <div class="contenedorMath" id="i1ContenedorMath" ref="i1ContenedorMath">
+                    <div class="signal diagonal i1Diagonal" id="i1Diagonal1" :style="[ i1EstiloLinea1 ]"
+                        v-show="i1MostrandoDiagonal1">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
                     </div>
-                    <div class="signal" ref="d1SignalC" v-show="d1Step===3" :style="[d1EstiloSignalC]"> </div>
-                    <div class="signal" ref="d1SignalD" v-show="d1Step===2 || d1Step===4" :style="[d1EstiloSignalD]">
+                    <div class="signal diagonal i1Diagonal" id="i1Diagonal2" :style="[ i1EstiloLinea2 ]"
+                        v-show="i1MostrandoDiagonal2">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
                     </div>
-                    <div class="lineaSignal" :style="[d1EstiloLineaSignal1]" v-show="d1Step===2">
+                    <div class="signal diagonal i1Diagonal" id="i1Diagonal3" :style="[ i1EstiloLinea3 ]"
+                        v-show="i1MostrandoDiagonal3">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
                     </div>
-                    <div class="lineaSignal" :style="[d1EstiloLineaSignal2]" v-show="d1Step===3">
+                    <div class="signal bolaOperadorCentral" :style="[ i1EstiloBolaOperadorCentral ]"
+                        v-show="i1MostrandoBolaOperadorCentral">
                     </div>
-                    <div class="lineaSignal" :style="[d1EstiloLineaSignal3]" v-show="d1Step===4">
-                    </div>
-                    <math class="expresion expresionPrimera">
+                    <math class="expresion expresionPrimera" id="i1ExpresionPrimera" style="font-size: 200%;">
                         <mfrac>
-                            <mn ref="d1LugarA">a</mn>
-                            <mn ref="d1LugarB">b</mn>
+                            <mn ref="i1LugarA">a</mn>
+                            <mn ref="i1LugarB">b</mn>
                         </mfrac>
-                        <mo>
+                        <mo style="font-size: 50%" ref="i1OperadorCentral">
                             +
                         </mo>
                         <mfrac>
-                            <mn ref="d1LugarC">c</mn>
-                            <mn ref="d1LugarD">d</mn>
+                            <mn ref="i1LugarC">c</mn>
+                            <mn ref="i1LugarD">d</mn>
                         </mfrac>
                     </math>
                 </div>
-                <span>Es idéntica a una división formada así:</span>
-                <button class="boton" v-show="!d1Relatando" @click="d1Relatando=true">
-                    Empezar
-                </button>
+                <span>Es idéntica a:</span>
 
-                <componente-control-steps v-show="d1Relatando" :steps="d1Steps" @step="d1Step=$event"
-                    @acciones-realizadas="d1AccionesRealizadas=$event">
-                </componente-control-steps>
+                <math style="font-size: 200%">
+                    <mfrac>
+                        <mrow>
+                            <mpadded class="hoverable" width="35px" height="130%" depth="5px" lspace="3px">
+                                <mrow @pointerenter="i1MostrandoDiagonal1=true"
+                                    @pointerleave="i1MostrandoDiagonal1=false">
+                                    <mn>
+                                        a
+                                    </mn>
+                                    <mn>
+                                        d
+                                    </mn>
+                                </mrow>
+                            </mpadded>
+                            <mpadded class="hoverable" width="22px" height="90%" depth="5px"
+                                @pointerenter="i1MostrandoBolaOperadorCentral=true"
+                                @pointerleave="i1MostrandoBolaOperadorCentral=false">
+                                <mo>
+                                    +
+                                </mo>
+                            </mpadded>
+                            <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px">
+                                <mrow @pointerenter="i1MostrandoDiagonal2=true"
+                                    @pointerleave="i1MostrandoDiagonal2=false">
+                                    <mn>
+                                        b
+                                    </mn>
+                                    <mn>
+                                        c
+                                    </mn>
+                                </mrow>
+                            </mpadded>
+                        </mrow>
 
-
-                <transition name="fadeIn">
-                    <div class="expresion expresionSegunda" v-show="d1Relatando">
-                        <div class="numerador">
-                            <transition name="unveilLeft">
-                                <span v-show="(d1Step>=2 && d1AccionesRealizadas.includes('Realizar')) || d1Step>2">\(a
-                                    \cdot
-                                    d\)</span>
-                            </transition>
-                            <transition name="unveilLeft">
-                                <span v-show="(d1Step>=1 && d1AccionesRealizadas.includes('Realizar')) || d1Step>1">\( +
-                                    \)</span>
-                            </transition>
-                            <transition name="unveilLeft">
-                                <span v-show="(d1Step>=3 && d1AccionesRealizadas.includes('Realizar')) || d1Step>3"> \(b
-                                    \cdot
-                                    c\)</span>
-                            </transition>
-                        </div>
-                        <transition name="unveilLeft">
-                            <div class="lineaDivision"
-                                v-show="(d1Step>=0 && d1AccionesRealizadas.includes('Realizar')) || d1Step>0">
-                            </div>
-                        </transition>
-                        <div class="denominador">
-                            <transition name="unveilLeft">
-                                <span v-show="(d1Step>=4 && d1AccionesRealizadas.includes('Realizar')) || d1Step>4">\( b
-                                    \cdot d \)</span>
-                            </transition>
-                        </div>
-                    </div>
-                </transition>
+                        <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px">
+                            <mrow @pointerenter="i1MostrandoDiagonal3=true" @pointerleave="i1MostrandoDiagonal3=false">
+                                <mn>b</mn>
+                                <mn>d</mn>
+                            </mrow>
+                        </mpadded>
+                    </mfrac>
+                </math>
             </div>
         </recuadro-component>
 
+        <recuadro-component tipo='datoPrevio'>
+            <div class="flexVertical">
+                <span>Una resta de fraccionarios como esta:</span>
 
-        <bloque-component tipo='ejemplo'>
-            <template #cabecera>
-                En este cuadro se puede ver algunos ejemplos de sumas de fraccionarios y se construye su.
-            </template>
-            <div class="listaEjemplos">
-                <div class="itemEjemplo">
-                    \( 4 \over 3\)
+                <div class="contenedorMath" id="i2ContenedorMath" ref="i2ContenedorMath">
+                    <div class="signal diagonal i2Diagonal" id="i2Diagonal1" :style="[ i2EstiloLinea1 ]"
+                        v-show="i2MostrandoDiagonal1">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
+                    </div>
+                    <div class="signal diagonal i2Diagonal" id="i2Diagonal2" :style="[ i2EstiloLinea2 ]"
+                        v-show="i2MostrandoDiagonal2">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
+                    </div>
+                    <div class="signal diagonal i2Diagonal" id="i2Diagonal3" :style="[ i2EstiloLinea3 ]"
+                        v-show="i2MostrandoDiagonal3">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
+                    </div>
+                    <div class="signal bolaOperadorCentral" :style="[ i2EstiloBolaOperadorCentral ]"
+                        v-show="i2MostrandoBolaOperadorCentral">
+                    </div>
+                    <math class="expresion expresionPrimera" id="i2ExpresionPrimera" style="font-size: 200%;">
+                        <mfrac>
+                            <mn ref="i2LugarA">a</mn>
+                            <mn ref="i2LugarB">b</mn>
+                        </mfrac>
+                        <mo style="font-size: 50%" ref="i2OperadorCentral">
+                            -
+                        </mo>
+                        <mfrac>
+                            <mn ref="i2LugarC">c</mn>
+                            <mn ref="i2LugarD">d</mn>
+                        </mfrac>
+                    </math>
                 </div>
-                <div class="itemEjemplo">
-                    \( 18 \over 5\)
-                </div>
-                <div class="itemEjemplo">
-                    \( 8 \over {5 + 2}\)
-                </div>
-                <div class="itemEjemplo">
-                    \( {3-1} \over {6 - 5}\)
-                </div>
+                <span>Es idéntica a:</span>
 
+                <math style="font-size: 200%">
+                    <mfrac>
+                        <mrow>
+                            <mpadded class="hoverable" width="35px" height="130%" depth="5px" lspace="3px">
+                                <mrow @pointerenter="i2MostrandoDiagonal1=true"
+                                    @pointerleave="i2MostrandoDiagonal1=false">
+                                    <mn>
+                                        a
+                                    </mn>
+                                    <mn>
+                                        d
+                                    </mn>
+                                </mrow>
+                            </mpadded>
+                            <mpadded class="hoverable" width="22px" height="130%" depth="5px">
+                                <mo @pointerenter="i2MostrandoBolaOperadorCentral=true"
+                                    @pointerleave="i2MostrandoBolaOperadorCentral=false">
+                                    -
+                                </mo>
+                            </mpadded>
+
+                            <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px">
+                                <mrow @pointerenter="i2MostrandoDiagonal2=true"
+                                    @pointerleave="i2MostrandoDiagonal2=false">
+                                    <mn>
+                                        b
+                                    </mn>
+                                    <mn>
+                                        c
+                                    </mn>
+                                </mrow>
+                            </mpadded>
+                        </mrow>
+
+                        <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px">
+                            <mrow @pointerenter="i2MostrandoDiagonal3=true" @pointerleave="i2MostrandoDiagonal3=false">
+                                <mn>b</mn>
+                                <mn>d</mn>
+                            </mrow>
+                        </mpadded>
+                    </mfrac>
+                </math>
             </div>
-        </bloque-component>
+        </recuadro-component>
 
     </div>
 </body>
@@ -148,197 +224,211 @@
 
     const app = createApp({
         setup() {
+            //i1
+            const i1MostrandoDiagonal1 = ref(false);
+            const i1MostrandoDiagonal2 = ref(false);
+            const i1MostrandoDiagonal3 = ref(false);
+            const i1MostrandoBolaOperadorCentral = ref(false);
+            const i1EstiloLinea1 = ref({});
+            const i1EstiloLinea2 = ref({});
+            const i1EstiloLinea3 = ref({});
+            const i1EstiloBolaOperadorCentral = ref({});
 
-            const d1Step = ref(0);
-            const d1AccionesRealizadas = ref([]);
-            const d1Relatando = ref(false);
-            const d1Steps = [
-                {
-                    texto: "Se prepara una división",
-                    acciones: ["Realizar"],
-                },
-                {
-                    texto: "El numerador será una suma",
-                    acciones: ["Realizar"],
-                },
-                {
-                    texto: "El primer sumando será el producto de la primera diagonal",
-                    acciones: ["Realizar"],
-                },
-                {
-                    texto: "El segundo sumando será el producto de la segunda diagonal",
-                    acciones: ["Realizar"],
-                },
-                {
-                    texto: "El denominador será el producto de los denominadores originales",
-                    acciones: ["Realizar"],
-                },
-            ]
-
-            const d1ContenedorExpresionOriginal = ref(null);
-            const d1LugarA = ref(null);
-            const d1LugarB = ref(null);
-            const d1LugarC = ref(null);
-            const d1LugarD = ref(null);
-
-            const d1EstiloSignalA = ref({});
-            const d1EstiloSignalB = ref({});
-            const d1EstiloSignalC = ref({});
-            const d1EstiloSignalD = ref({});
-            watch(d1Step, async function () {
-                await nextTick();
-                console.log(`Preparando estilo de señales`);
-                if (!d1ContenedorExpresionOriginal.value) {
-                    console.log(`No hay contenedor de la expresion`);
+            const i1ContenedorMath = ref(null);
+            const i1LugarA = ref(null);
+            const i1LugarB = ref(null);
+            const i1LugarC = ref(null);
+            const i1LugarD = ref(null);
+            const i1OperadorCentral = ref(null);
+            onMounted(() => {
+                if (!i1LugarA.value || !i1LugarB.value || !i1LugarC.value || !i1LugarD.value || !i1ContenedorMath.value) {
+                    console.log(`No había elementos de referencia`);
                     return;
                 }
-                const posContenedor = d1ContenedorExpresionOriginal.value.getBoundingClientRect();
 
-                if (d1LugarA.value) {
-                    const posLugarA = d1LugarA.value.getBoundingClientRect();
-                    d1EstiloSignalA.value = {
-                        top: posLugarA.top + posLugarA.height / 2 - posContenedor.top + "px",
-                        left: posLugarA.left + posLugarA.width / 2 - posContenedor.left + "px",
-                        height: posLugarA.height * 1.4 + 'px',
-                        width: posLugarA.height * 1.4 + 'px',
-                    }
-                }
-                if (d1LugarB.value) {
-                    const posLugarB = d1LugarB.value.getBoundingClientRect();
-                    d1EstiloSignalB.value = {
-                        top: posLugarB.top + posLugarB.height / 2 - posContenedor.top + "px",
-                        left: posLugarB.left + posLugarB.width / 2 - posContenedor.left + "px",
-                        height: posLugarB.height * 1.4 + 'px',
-                        width: posLugarB.height * 1.4 + 'px',
-                    }
-                }
-                if (d1LugarC.value) {
-                    const posLugarC = d1LugarC.value.getBoundingClientRect();
-                    d1EstiloSignalC.value = {
-                        top: posLugarC.top + posLugarC.height / 2 - posContenedor.top + "px",
-                        left: posLugarC.left + posLugarC.width / 2 - posContenedor.left + "px",
-                        height: posLugarC.height * 1.4 + 'px',
-                        width: posLugarC.height * 1.4 + 'px',
-                    }
-                }
-                if (d1LugarD.value) {
-                    const posLugarD = d1LugarD.value.getBoundingClientRect();
-                    d1EstiloSignalD.value = {
-                        top: posLugarD.top + posLugarD.height / 2 - posContenedor.top + "px",
-                        left: posLugarD.left + posLugarD.width / 2 - posContenedor.left + "px",
-                        height: posLugarD.height * 1.4 + 'px',
-                        width: posLugarD.height * 1.4 + 'px',
-                    }
-                }
+                const posContenedor = i1ContenedorMath.value.getBoundingClientRect();
 
+                const posA = i1LugarA.value.getBoundingClientRect();
+                const posB = i1LugarB.value.getBoundingClientRect();
+                const posC = i1LugarC.value.getBoundingClientRect();
+                const posD = i1LugarD.value.getBoundingClientRect();
+
+                //Diagonal 1
+                (function () {
+                    let posOrigen = posA;
+                    let posFinal = posD;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
+                    }
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
+
+                    i1EstiloLinea1.value = {
+                        width: ancho + 'px',
+                        transform: `rotate(${rotacion}rad)`,
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
+                    }
+                })();
+
+                //Diagonal 2
+                (function () {
+                    let posOrigen = posB;
+                    let posFinal = posC;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
+                    }
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
+
+                    i1EstiloLinea2.value = {
+                        width: ancho + 'px',
+                        transform: `rotate(${rotacion}rad)`,
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
+                    }
+                    return;
+                })();
+
+                //Diagonal 3
+                (function () {
+                    let posOrigen = posB;
+                    let posFinal = posD;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
+                    }
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
+
+                    i1EstiloLinea3.value = {
+                        width: ancho + 'px',
+                        transform: `rotate(${rotacion}rad)`,
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
+                    }
+                    return;
+                })();
+
+                //Bola operador central
+                if (!i1OperadorCentral.value) {
+                    console.log(`No había operador central para ubicar bola 1`);
+                    return;
+                }
+                const posOperador = i1OperadorCentral.value.getBoundingClientRect();
+                i1EstiloBolaOperadorCentral.value = {
+                    left: posOperador.left + posOperador.width / 2 - posContenedor.left + 'px',
+                    top: posOperador.top + posOperador.height / 2 - posContenedor.top + 'px',
+                }
             })
 
-            const d1SignalA = ref(null);
-            const d1SignalB = ref(null);
-            const d1SignalC = ref(null);
-            const d1SignalD = ref(null);
+            //i2
+            const i2MostrandoDiagonal1 = ref(false);
+            const i2MostrandoDiagonal2 = ref(false);
+            const i2MostrandoDiagonal3 = ref(false);
+            const i2MostrandoBolaOperadorCentral = ref(false);
+            const i2EstiloLinea1 = ref({});
+            const i2EstiloLinea2 = ref({});
+            const i2EstiloLinea3 = ref({});
+            const i2EstiloBolaOperadorCentral = ref({});
 
-            const d1EstiloLineaSignal1 = ref({});
-            const d1EstiloLineaSignal2 = ref({});
-            const d1EstiloLineaSignal3 = ref({});
-            watch(d1Step, async (step, prevStep) => {
-                if (step >= 2 && prevStep < 2) {
-                    await nextTick();
-                    if (!d1ContenedorExpresionOriginal.value) {
-                        console.log(`No hay contenedor de expresión original`);
-                        return;
+            const i2ContenedorMath = ref(null);
+            const i2LugarA = ref(null);
+            const i2LugarB = ref(null);
+            const i2LugarC = ref(null);
+            const i2LugarD = ref(null);
+            const i2OperadorCentral = ref(null);
+            onMounted(() => {
+                if (!i2LugarA.value || !i1LugarB.value || !i1LugarC.value || !i1LugarD.value || !i1ContenedorMath.value) {
+                    console.log(`No había elementos de referencia`);
+                    return;
+                }
+
+                const posContenedor = i2ContenedorMath.value.getBoundingClientRect();
+
+                const posA = i2LugarA.value.getBoundingClientRect();
+                const posB = i2LugarB.value.getBoundingClientRect();
+                const posC = i2LugarC.value.getBoundingClientRect();
+                const posD = i2LugarD.value.getBoundingClientRect();
+
+                //Diagonal 1
+                (function () {
+                    let posOrigen = posA;
+                    let posFinal = posD;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
                     }
-                    let posicionContenedor = d1ContenedorExpresionOriginal.value.getBoundingClientRect();
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
 
-                    //Estilos de líneas
-                    if (!d1SignalA.value || !d1SignalD.value) {
-                        console.log(`No había signals suficientes para la linea signal 1`);
-                        return;
-                    }
-                    console.log(`Calculando estilo de linea signal1`);
-                    const posA = d1SignalA.value.getBoundingClientRect();
-                    const posD = d1SignalD.value.getBoundingClientRect();
-
-                    const vector = {
-                        x: posD.left - posA.right,
-                        y: (posD.top + posD.height * 0.25) - (posA.top + posA.height * 0.75),
-                    }
-                    const ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
-                    const rotacion = Math.atan2(vector.y, vector.x);
-
-                    d1EstiloLineaSignal1.value = {
+                    i2EstiloLinea1.value = {
                         width: ancho + 'px',
                         transform: `rotate(${rotacion}rad)`,
-                        left: posA.right - posicionContenedor.left + 2 + 'px',
-                        top: posA.top + posA.height * 0.75 - posicionContenedor.top - 1 + 'px',
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
-                }
-                if (step >= 3 && prevStep < 3) {
-                    await nextTick();
-                    if (!d1ContenedorExpresionOriginal.value) {
-                        console.log(`No hay contenedor de expresión original`);
-                        return;
-                    }
-                    let posicionContenedor = d1ContenedorExpresionOriginal.value.getBoundingClientRect();
-                    if (!d1SignalB.value || !d1SignalC.value) {
-                        console.log(`No había signals suficientes para la linea signal 2`);
-                        return;
-                    }
-                    console.log(`Calculando estilo de linea signal2`);
-                    const posB = d1SignalB.value.getBoundingClientRect();
-                    const posC = d1SignalC.value.getBoundingClientRect();
+                })();
 
-                    const vector = {
-                        x: posC.left - posB.right,
-                        y: (posC.top + posC.height * 0.75) - (posB.top + posB.height * 0.25),
+                //Diagonal 2
+                (function () {
+                    let posOrigen = posB;
+                    let posFinal = posC;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
                     }
-                    const ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
-                    const rotacion = Math.atan2(vector.y, vector.x);
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
 
-                    console.log(`Ancho: ${ancho}`);
-                    console.log(`Rotación: ${rotacion}`);
-                    d1EstiloLineaSignal2.value = {
+                    i2EstiloLinea2.value = {
                         width: ancho + 'px',
                         transform: `rotate(${rotacion}rad)`,
-                        left: posB.right - posicionContenedor.left + 'px',
-                        top: posB.top + posB.height * 0.25 - posicionContenedor.top - 1 + 'px',
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
-                }
-                if (step >= 4 && prevStep < 4) {
-                    await nextTick();
-                    if (!d1ContenedorExpresionOriginal.value) {
-                        console.log(`No hay contenedor de expresión original`);
-                        return;
-                    }
-                    let posicionContenedor = d1ContenedorExpresionOriginal.value.getBoundingClientRect();
-                    if (!d1SignalB.value || !d1SignalD.value) {
-                        console.log(`No había signals suficientes para la linea signal 3`);
-                        return;
-                    }
-                    console.log(`Calculando estilo de linea signal3`);
-                    const posB = d1SignalB.value.getBoundingClientRect();
-                    const posD = d1SignalD.value.getBoundingClientRect();
+                    return;
+                })();
 
-                    const vector = {
-                        x: posD.left - posB.right,
-                        y: (posD.top + posD.height * 0.5) - (posB.top + posB.height * 0.5),
+                //Diagonal 3
+                (function () {
+                    let posOrigen = posB;
+                    let posFinal = posD;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
                     }
-                    const ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
-                    const rotacion = Math.atan2(vector.y, vector.x);
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
 
-                    console.log(`Ancho: ${ancho}`);
-                    console.log(`Rotación: ${rotacion}`);
-                    d1EstiloLineaSignal3.value = {
+                    i2EstiloLinea3.value = {
                         width: ancho + 'px',
                         transform: `rotate(${rotacion}rad)`,
-                        left: posB.right - posicionContenedor.left + 'px',
-                        top: posB.top + posB.height * 0.5 - posicionContenedor.top - 1 + 'px',
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
+                    return;
+                })();
+
+                if (!i2OperadorCentral.value) {
+                    console.log(`No había operador central para ubicar bola 2`);
+                    return;
                 }
-            });
+                const posOperador = i2OperadorCentral.value.getBoundingClientRect();
+                i2EstiloBolaOperadorCentral.value = {
+                    left: posOperador.left + posOperador.width / 2 - posContenedor.left + 'px',
+                    top: posOperador.top - 2 + posOperador.height / 2 - posContenedor.top + 'px',
+                }
+            })
 
             return {
-                d1Step, d1Relatando, d1Steps, d1AccionesRealizadas, d1EstiloSignalA, d1EstiloSignalB, d1EstiloSignalC, d1EstiloSignalD, d1ContenedorExpresionOriginal, d1LugarA, d1LugarB, d1LugarC, d1LugarD, d1EstiloLineaSignal1, d1EstiloLineaSignal2, d1EstiloLineaSignal3, d1SignalA, d1SignalB, d1SignalC, d1SignalD,
+                i1EstiloLinea1, i1EstiloLinea2, i1EstiloLinea3, i1MostrandoDiagonal1, i1MostrandoDiagonal2, i1MostrandoDiagonal3, i1ContenedorMath, i1LugarA, i1LugarB, i1LugarC, i1LugarD,
+                i1OperadorCentral, i1EstiloBolaOperadorCentral, i1MostrandoBolaOperadorCentral,
+
+                i2EstiloLinea1, i2EstiloLinea2, i2EstiloLinea3, i2MostrandoDiagonal1, i2MostrandoDiagonal2, i2MostrandoDiagonal3, i2ContenedorMath, i2LugarA, i2LugarB, i2LugarC, i2LugarD,
+                i2OperadorCentral, i2EstiloBolaOperadorCentral, i2MostrandoBolaOperadorCentral
 
             }
         },
@@ -354,68 +444,73 @@
 </script>
 
 <style>
-    .identidad {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        justify-content: center;
-    }
-
-    .numerador {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .denominador {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-    }
-
-    .lineaDivision {
-        height: 2px;
-        background-color: black;
-        width: 90%;
-        margin: 10px auto;
-    }
-
-    .expresionPrimera {
-        font-size: 200%;
-    }
-
-    .expresionSegunda {
-        min-width: 100px;
-        padding: 20px 20px;
-        border: 2px dashed var(--paletaActual);
-        border-radius: 5px;
-    }
-
-    .expresion .unveilLeft-enter-active {
-        transition: clip-path 0.8s;
-    }
-
     .contenedorMath {
         position: relative;
     }
 
-    .signal {
-        position: absolute;
-        border-radius: 50%;
-        border: 2px solid var(--paletaActual);
-        transform: translate(-50%, -50%);
+    .contenedorMath math {
+        position: relative;
+        z-index: 1;
     }
 
-    .lineaSignal {
-        height: 3px;
-        background-color: var(--paletaActual);
+    math .hoverable {
+        padding: 5px 5px;
+        box-sizing: border-box;
+    }
+
+    math .hoverable:hover {
+        border: 1px solid whitesmoke;
+    }
+
+    .expresionPrimera mfrac {
+        margin: 0px 15px;
+    }
+
+    #i1Numerador {}
+
+    .signal {
+        z-index: 0;
+    }
+
+    .signal.diagonal {
         position: absolute;
         transform-origin: center left;
     }
 
-    mo {
-        margin: 0px 10px;
-        opacity: 0.6;
-        font-size: 70%;
+    .signal.diagonal .linea {
+        width: 100%;
+        height: 2px;
+        background-color: whitesmoke;
+    }
+
+    .signal.diagonal .bolita {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        position: absolute;
+        background-color: whitesmoke;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .signal.diagonal .bolita.inicial {
+        left: 0px;
+    }
+
+    .signal.diagonal .bolita.final {
+        left: 100%;
+    }
+
+    .signal.bolaOperadorCentral {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: whitesmoke;
+        position: absolute;
+        transform: translate(-50%, -50%);
+    }
+
+    .operador {
+        position: relative;
     }
 </style>

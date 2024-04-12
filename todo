@@ -4,4 +4,5 @@
 -Retirar los archivos de bloque y recuadro de la carpeta mats/components/ porque ya están en /components. Verificar que no hay ningún enlace apuntando hacia ellos.
 -También retirar la carpeta 3Dfiles que llegó por accidente con los nodos de Nico y Daniel.
 -Prevenir conflictos css arreglando los estilos de bloque y recuadro.
+-Probar si es mejor marcar con una linea punteada la razón matemática en el nodo de razón matemática para resaltar su caracter especial como enlace entre dos números.
 

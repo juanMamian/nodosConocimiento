@@ -120,6 +120,12 @@ export const componenteControlSteps = {
             let executedList = this.substeps.slice(0, index + 1);
             this.$emit('executedTuples', executedList);
         },
+        executionStep: {
+            handler: () => {
+                this.$emit('executionStep', this.executionStep);
+            },
+            immediate: true,
+        }
 
     }
 

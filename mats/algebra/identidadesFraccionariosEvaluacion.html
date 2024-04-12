@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/librerias/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://127.0.0.1:8080/mats/resources/expresionNumericaClass.js"></script>
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento//recursos/components/enlaceEstilo.css">
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="http://127.0.0.1:8080/recursos/librerias/MathJax/es5/tex-chtml.js"></script>
+
+
+
+    <title>Identidades de fraccionarios - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Conozco las identidades de los fraccionarios si:
+        </p>
+
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Dada cualquier expresión que es una suma entre fraccionarios puedo construir una expresión idéntica.
+            </template>
+            <div class="flexVertical">
+                <button class="boton">
+                    Generar reto
+                </button>
+
+                <div class="zonaReto" v-if="e1Reto">
+                    {{e1Reto.toMathJax}}
+                </div>
+            </div>
+        </bloque-component>
+
+
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    const {createApp, ref, computed, watch, nextTick, onMounted} = Vue;
+
+    const app = createApp({
+        setup() {
+
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    });
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('mjx');
+    app.mount("#doc");
+</script>
+
+<style>
+</style>

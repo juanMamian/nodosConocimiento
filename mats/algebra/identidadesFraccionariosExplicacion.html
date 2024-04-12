@@ -84,9 +84,9 @@
                 <math style="font-size: 200%">
                     <mfrac>
                         <mrow>
-                            <mpadded class="hoverable" width="35px" height="130%" depth="5px" lspace="3px">
-                                <mrow @pointerenter="i1MostrandoDiagonal1=true"
-                                    @pointerleave="i1MostrandoDiagonal1=false">
+                            <mpadded class="hoverable" width="35px" height="130%" depth="5px" lspace="3px"
+                                @pointerenter="i1MostrandoDiagonal1=true" @pointerleave="i1MostrandoDiagonal1=false">
+                                <mrow>
                                     <mn>
                                         a
                                     </mn>
@@ -102,9 +102,9 @@
                                     +
                                 </mo>
                             </mpadded>
-                            <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px">
-                                <mrow @pointerenter="i1MostrandoDiagonal2=true"
-                                    @pointerleave="i1MostrandoDiagonal2=false">
+                            <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px"
+                                @pointerenter="i1MostrandoDiagonal2=true" @pointerleave="i1MostrandoDiagonal2=false">
+                                <mrow>
                                     <mn>
                                         b
                                     </mn>
@@ -115,8 +115,9 @@
                             </mpadded>
                         </mrow>
 
-                        <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px">
-                            <mrow @pointerenter="i1MostrandoDiagonal3=true" @pointerleave="i1MostrandoDiagonal3=false">
+                        <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px"
+                            @pointerenter="i1MostrandoDiagonal3=true" @pointerleave="i1MostrandoDiagonal3=false">
+                            <mrow>
                                 <mn>b</mn>
                                 <mn>d</mn>
                             </mrow>
@@ -171,9 +172,9 @@
                 <math style="font-size: 200%">
                     <mfrac>
                         <mrow>
-                            <mpadded class="hoverable" width="35px" height="130%" depth="5px" lspace="3px">
-                                <mrow @pointerenter="i2MostrandoDiagonal1=true"
-                                    @pointerleave="i2MostrandoDiagonal1=false">
+                            <mpadded class="hoverable" width="35px" height="130%" depth="5px" lspace="3px"
+                                @pointerenter="i2MostrandoDiagonal1=true" @pointerleave="i2MostrandoDiagonal1=false">
+                                <mrow>
                                     <mn>
                                         a
                                     </mn>
@@ -182,16 +183,17 @@
                                     </mn>
                                 </mrow>
                             </mpadded>
-                            <mpadded class="hoverable" width="22px" height="130%" depth="5px">
-                                <mo @pointerenter="i2MostrandoBolaOperadorCentral=true"
-                                    @pointerleave="i2MostrandoBolaOperadorCentral=false">
+                            <mpadded class="hoverable" width="22px" height="130%" depth="5px"
+                                @pointerenter="i2MostrandoBolaOperadorCentral=true"
+                                @pointerleave="i2MostrandoBolaOperadorCentral=false">
+                                <mo>
                                     -
                                 </mo>
                             </mpadded>
 
-                            <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px">
-                                <mrow @pointerenter="i2MostrandoDiagonal2=true"
-                                    @pointerleave="i2MostrandoDiagonal2=false">
+                            <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px"
+                                @pointerenter="i2MostrandoDiagonal2=true" @pointerleave="i2MostrandoDiagonal2=false">
+                                <mrow>
                                     <mn>
                                         b
                                     </mn>
@@ -202,8 +204,9 @@
                             </mpadded>
                         </mrow>
 
-                        <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px">
-                            <mrow @pointerenter="i2MostrandoDiagonal3=true" @pointerleave="i2MostrandoDiagonal3=false">
+                        <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px"
+                            @pointerenter="i2MostrandoDiagonal3=true" @pointerleave="i2MostrandoDiagonal3=false">
+                            <mrow>
                                 <mn>b</mn>
                                 <mn>d</mn>
                             </mrow>
@@ -213,6 +216,139 @@
             </div>
         </recuadro-component>
 
+        <recuadro-component tipo='datoPrevio'>
+            <div class="flexVertical">
+                <span>Una multiplicación de fraccionarios como esta:</span>
+
+                <div class="contenedorMath" id="i3ContenedorMath" ref="i3ContenedorMath">
+                    <div class="signal diagonal i3Diagonal" id="i3Diagonal1" :style="[ i3EstiloLinea1 ]"
+                        v-show="i3MostrandoDiagonal1">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
+                    </div>
+                    <div class="signal diagonal i3Diagonal" id="i3Diagonal2" :style="[ i3EstiloLinea2 ]"
+                        v-show="i3MostrandoDiagonal2">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
+                    </div>
+                    <math class="expresion expresionPrimera" id="i3ExpresionPrimera" style="font-size: 200%;">
+                        <mfrac>
+                            <mn ref="i3LugarA">a</mn>
+                            <mn ref="i3LugarB">b</mn>
+                        </mfrac>
+                        <mo style="font-size: 50%">
+                            ×
+                        </mo>
+                        <mfrac>
+                            <mn ref="i3LugarC">c</mn>
+                            <mn ref="i3LugarD">d</mn>
+                        </mfrac>
+                    </math>
+                </div>
+                <span>Es idéntica a:</span>
+
+                <math style="font-size: 200%">
+                    <mfrac>
+                        <mrow>
+                            <mpadded class="hoverable" width="35px" height="130%" depth="5px" lspace="3px"
+                                @pointerenter="i3MostrandoDiagonal1=true" @pointerleave="i3MostrandoDiagonal1=false">
+                                <mrow>
+                                    <mn>
+                                        a
+                                    </mn>
+                                    <mn>
+                                        c
+                                    </mn>
+                                </mrow>
+                            </mpadded>
+                        </mrow>
+
+                        <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px"
+                            @pointerenter="i3MostrandoDiagonal2=true" @pointerleave="i3MostrandoDiagonal2=false">
+                            <mrow>
+                                <mn>b</mn>
+                                <mn>d</mn>
+                            </mrow>
+                        </mpadded>
+                    </mfrac>
+                </math>
+            </div>
+        </recuadro-component>
+
+
+        <recuadro-component tipo='datoPrevio'>
+            <div class="flexVertical">
+                <span>Una división de fraccionarios como esta:</span>
+
+                <div class="contenedorMath" id="i4ContenedorMath" ref="i4ContenedorMath">
+                    <div class="signal diagonal i4Diagonal i4DiagonalOreja" id="i4Diagonal1" :style="[ i4EstiloLinea1 ]"
+                        v-show="i4MostrandoDiagonal1 ">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
+                    </div>
+                    <div class="signal diagonal i4Diagonal i4DiagonalOreja" id="i4Diagonal2" :style="[ i4EstiloLinea2 ]"
+                        v-show="i4MostrandoDiagonal2">
+                        <div class="bolita inicial"> </div>
+                        <div class="linea"> </div>
+                        <div class="bolita final"> </div>
+                    </div>
+                    <math class="expresion expresionPrimera" id="i4ExpresionPrimera" style="font-size: 300%;">
+                        <mfrac>
+                            <mpadded depth="120%">
+                                <mrow>
+                                    <mphantom>
+                                        +
+                                    </mphantom>
+                                    <mfrac>
+                                        <mn ref="i4LugarA">a</mn>
+                                        <mn ref="i4LugarB">b</mn>
+                                    </mfrac>
+                                    <mphantom>
+                                        +
+                                    </mphantom>
+                                </mrow>
+                            </mpadded>
+                            <mpadded height="120%">
+                                <mfrac>
+                                    <mn ref="i4LugarC">c</mn>
+                                    <mn ref="i4LugarD">d</mn>
+                                </mfrac>
+                            </mpadded>
+                        </mfrac>
+                    </math>
+                </div>
+                <span>Es idéntica a:</span>
+
+                <math style="font-size: 200%">
+                    <mfrac>
+                        <mrow>
+                            <mpadded class="hoverable" width="35px" height="130%" depth="5px" lspace="3px"
+                                @pointerenter="i4MostrandoDiagonal1=true" @pointerleave="i4MostrandoDiagonal1=false">
+                                <mrow>
+                                    <mn>
+                                        a
+                                    </mn>
+                                    <mn>
+                                        c
+                                    </mn>
+                                </mrow>
+                            </mpadded>
+                        </mrow>
+
+                        <mpadded class="hoverable" width="30px" height="130%" depth="5px" lspace="3px"
+                            @pointerenter="i4MostrandoDiagonal2=true" @pointerleave="i4MostrandoDiagonal2=false">
+                            <mrow>
+                                <mn>b</mn>
+                                <mn>d</mn>
+                            </mrow>
+                        </mpadded>
+                    </mfrac>
+                </math>
+            </div>
+        </recuadro-component>
     </div>
 </body>
 
@@ -423,12 +559,145 @@
                 }
             })
 
+            //i3
+            const i3MostrandoDiagonal1 = ref(false);
+            const i3MostrandoDiagonal2 = ref(false);
+            const i3EstiloLinea1 = ref({});
+            const i3EstiloLinea2 = ref({});
+
+            const i3ContenedorMath = ref(null);
+            const i3LugarA = ref(null);
+            const i3LugarB = ref(null);
+            const i3LugarC = ref(null);
+            const i3LugarD = ref(null);
+            onMounted(() => {
+                if (!i3LugarA.value || !i1LugarB.value || !i1LugarC.value || !i1LugarD.value || !i1ContenedorMath.value) {
+                    console.log(`No había elementos de referencia`);
+                    return;
+                }
+
+                const posContenedor = i3ContenedorMath.value.getBoundingClientRect();
+
+                const posA = i3LugarA.value.getBoundingClientRect();
+                const posB = i3LugarB.value.getBoundingClientRect();
+                const posC = i3LugarC.value.getBoundingClientRect();
+                const posD = i3LugarD.value.getBoundingClientRect();
+
+                //Diagonal 1
+                (function () {
+                    let posOrigen = posA;
+                    let posFinal = posC;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
+                    }
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
+
+                    i3EstiloLinea1.value = {
+                        width: ancho + 'px',
+                        transform: `rotate(${rotacion}rad)`,
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
+                    }
+                })();
+
+                //Diagonal 2
+                (function () {
+                    let posOrigen = posB;
+                    let posFinal = posD;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
+                    }
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
+
+                    i3EstiloLinea2.value = {
+                        width: ancho + 'px',
+                        transform: `rotate(${rotacion}rad)`,
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
+                    }
+                    return;
+                })();
+
+            })
+
+            //i4
+            const i4MostrandoDiagonal1 = ref(false);
+            const i4MostrandoDiagonal2 = ref(false);
+            const i4EstiloLinea1 = ref({});
+            const i4EstiloLinea2 = ref({});
+
+            const i4ContenedorMath = ref(null);
+            const i4LugarA = ref(null);
+            const i4LugarB = ref(null);
+            const i4LugarC = ref(null);
+            const i4LugarD = ref(null);
+            onMounted(() => {
+                if (!i4LugarA.value || !i1LugarB.value || !i1LugarC.value || !i1LugarD.value || !i1ContenedorMath.value) {
+                    console.log(`No había elementos de referencia`);
+                    return;
+                }
+
+                const posContenedor = i4ContenedorMath.value.getBoundingClientRect();
+
+                const posA = i4LugarA.value.getBoundingClientRect();
+                const posB = i4LugarB.value.getBoundingClientRect();
+                const posC = i4LugarC.value.getBoundingClientRect();
+                const posD = i4LugarD.value.getBoundingClientRect();
+
+                //Diagonal 1
+                (function () {
+                    let posOrigen = posA;
+                    let posFinal = posD;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
+                    }
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
+
+                    i4EstiloLinea1.value = {
+                        width: ancho + 'px',
+                        height: ancho + 'px',
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
+                    }
+                })();
+
+                //Diagonal 2
+                (function () {
+                    let posOrigen = posB;
+                    let posFinal = posC;
+                    let vector = {
+                        x: posFinal.left + posFinal.width / 2 - (posOrigen.left + posOrigen.width / 2),
+                        y: posFinal.top + posFinal.height / 2 - (posOrigen.top + posOrigen.height / 2),
+                    }
+                    let ancho = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+                    let rotacion = Math.atan2(vector.y, vector.x);
+
+                    i4EstiloLinea2.value = {
+                        width: ancho + 'px',
+                        height: ancho + 'px',
+                        left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
+                        top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
+                    }
+                    return;
+                })();
+
+            })
             return {
                 i1EstiloLinea1, i1EstiloLinea2, i1EstiloLinea3, i1MostrandoDiagonal1, i1MostrandoDiagonal2, i1MostrandoDiagonal3, i1ContenedorMath, i1LugarA, i1LugarB, i1LugarC, i1LugarD,
                 i1OperadorCentral, i1EstiloBolaOperadorCentral, i1MostrandoBolaOperadorCentral,
 
                 i2EstiloLinea1, i2EstiloLinea2, i2EstiloLinea3, i2MostrandoDiagonal1, i2MostrandoDiagonal2, i2MostrandoDiagonal3, i2ContenedorMath, i2LugarA, i2LugarB, i2LugarC, i2LugarD,
-                i2OperadorCentral, i2EstiloBolaOperadorCentral, i2MostrandoBolaOperadorCentral
+                i2OperadorCentral, i2EstiloBolaOperadorCentral, i2MostrandoBolaOperadorCentral,
+
+                i3EstiloLinea1, i3EstiloLinea2, i3MostrandoDiagonal1, i3MostrandoDiagonal2, i3ContenedorMath, i3LugarA, i3LugarB, i3LugarC, i3LugarD,
+
+                i4EstiloLinea1, i4EstiloLinea2, i4MostrandoDiagonal1, i4MostrandoDiagonal2, i4ContenedorMath, i4LugarA, i4LugarB, i4LugarC, i4LugarD,
 
             }
         },
@@ -508,6 +777,23 @@
         background-color: whitesmoke;
         position: absolute;
         transform: translate(-50%, -50%);
+    }
+
+    .signal.i4DiagonalOreja {
+        transform-origin: center;
+        transform: rotate(90deg) translateY(50%);
+    }
+
+    .signal.i4DiagonalOreja .linea {
+        width: 100%;
+        height: 100%;
+        border: 2px solid whitesmoke;
+        border-radius: 50%;
+        background-color: transparent;
+        clip-path: polygon(-1% -1%, 101% -1%, 101% 101%, 101% 50%, -1% 50%);
+        transform: translateY(0%);
+        transform-origin: center;
+        position: absolute;
     }
 
     .operador {

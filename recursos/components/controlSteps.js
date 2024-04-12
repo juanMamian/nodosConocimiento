@@ -2,112 +2,124 @@ export const componenteControlSteps = {
     template: `
         <div class="componenteControlSteps">
             <img class="icono" src="http://127.0.0.1:8080/recursos/iconos/shoePrints.svg">
-            <input type="range" min="0" :max="steps.length-1" v-model.number="step">
-            <div class="flexHorizontal">
-                <button class="boton" @click="stepBackward" :disabled="step<=0">
-                    Anterior
-                </button>
-                <button class="boton" @click="stepForward" :disabled="(steps[step].acciones && steps[step].acciones.some(accion=>!accionesRealizadas.includes(accion))) || step>=steps.length-1">
-                    Siguiente
-                </button>
-            </div>
+            <input type="range" min="-1" :max="substeps.length-1" v-model.number="indexExecutedSubstep">
 
             <div class="contenedorRelato">
-                <transition name="fadeIn">
-                    <div class="itemRelato" :key="step">
-                    {{steps[step].texto}}
+                    <div class="itemRelato" :class="{ itemRelatoActivo: executionStep>=indexEsteStep }" :key="indexEsteStep" v-for="( esteStep, indexEsteStep ) of steps">
+                        {{esteStep.texto}}
+                        <div class="contenedorIconoEjecutarAccion" v-for="( accion, indexEstaAccion ) of esteStep.acciones">
+                            <button class="boton activador activo" v-if="getTupleSubstepIndex([indexEsteStep, indexEstaAccion])<=indexExecutedSubstep" @click="unsetExecutedTuple([indexEsteStep, indexEstaAccion])">
+                                <img src="http://127.0.0.1:8080/recursos/iconos/squareCheck.svg" class="iconoEjecutarAccion" >
+                            </button>
+                            <button class="boton" v-else @click="setExecutedTuple([indexEsteStep, indexEstaAccion])" :disabled="strictlyProgressive && indexExecutedSubstep+1!=getTupleSubstepIndex([indexEsteStep, indexEstaAccion])">
+                                <img src="http://127.0.0.1:8080/recursos/iconos/circlePlay.svg" class="iconoEjecutarAccion">
+                            </button>
+                        </div>
                     </div>
-                </transition>
 
-                <transition name="fadeIn">
-                    <button class="boton" v-if="siguienteAccion" @click="ejecutarSiguienteAccion">
-                        {{siguienteAccion}}
-                    </button>
-                </transition>
             </div>
                 <slot>
                 </slot>
         </div>
     `,
     props: {
+        strictlyProgressive: { //Every action can be executed only if previous ones has been as well
+            type: Boolean,
+            default: true,
+        },
         steps: {//Array con objetos que tienen: {relato, acciones}
             type: Array,
-            default: [],
+            default: () => [],
+            validator(value) {
+                return value.every(s => !s.acciones || s.acciones.length < 10)
+            }
         },
-        stepInicial: {
-            type: Number,
-            default: 0,
-        }
+        indexEx: {
+            type: Number, // Tuple. First element signals the step and second the executed action.
+            default: -1,
+        },
     },
     data() {
         return {
-            step: this.stepInicial,
             accionesRealizadas: [],
+            indexExecutedSubstep: this.indexEx,
         }
     },
     computed: {
-        currentStep() {
-            if (this.step >= this.steps.length) {
-                return this.steps[this.steps.length - 1];
-            }
-            if (this.step < 0) {
-                return this.steps[0];
-            }
-            return this.steps[this.step];
-        },
-        siguienteAccion() {
-            if (!this.currentStep.acciones) {
-                return null
-            }
-            let acciones = this.currentStep.acciones;
-            for (var i = 0; i < acciones.length; i++) {
-                if (!this.accionesRealizadas.includes(acciones[i])) {
-                    return acciones[i];
+        substeps() {
+            let arreglo = []; //Tuple array holding every possible [step, action] combination.
+            for (let i = 0; i < this.steps.length; i++) {
+                for (let j = 0; j < this.steps[i].acciones.length; j++) {
+                    arreglo.push([i, j]);
                 }
             }
-            return null;
+            return arreglo;
+        },
+        decimalTupleStep() {
+            return this.tupleStep[0] * 10 + this.tupleStep[1]
+        },
+        executedTuple() {
+            return this.substeps[this.indexExecutedSubstep];
+        },
+        executionStep() {//Step currently waiting for actions execution.
+            if (this.indexExecutedSubstep == null || this.indexExecutedSubstep < 0) {
+                return 0;
+            }
+            if (this.indexExecutedSubstep >= this.substeps.length - 1) {
+                return this.substeps[this.substeps.length - 1][0];
+            }
+            return this.substeps[this.indexExecutedSubstep + 1][0];
+        },
+        totalSubsteps() {
+            return this.steps.reduce((acc, s) => {
+                if (s.acciones) {
+                    return s.acciones.length + acc
+                }
+                return acc
+            }, 0)
         }
     },
     methods: {
-        ejecutarSiguienteAccion() {
-            if (!this.siguienteAccion) {
-                console.log(`No había siguiente acción`);
-                return;
-            }
-            if (this.accionesRealizadas.includes(this.siguienteAccion)) {
-                console.log(`Acción ya estaba realizada`);
-                return;
-            }
-            this.accionesRealizadas = [...this.accionesRealizadas, this.siguienteAccion];
+        reiniciar() {
+            console.log(`Reiniciando`);
+            this.indexExecutedSubstep = -1;
         },
-        stepForward() {
-            if (this.steps[this.step].acciones && this.steps[this.step].acciones.some(accion => !this.accionesRealizadas.includes(accion))) {
-                console.log(`Hay acciones sin realizar`);
+        setExecutedTuple(tuple) {
+            let tIndex = this.substeps.findIndex(st => st[0] === tuple[0] && st[1] === tuple[1]);
+            if (tIndex < 0) {
+                console.log(`Setting executed an unexisting tuple`);
                 return;
             }
-            if (this.step >= this.steps.length - 1) {
-                console.log(`No hay más steps`);
-                return;
-            }
-            this.step++
+            this.indexExecutedSubstep = tIndex;
         },
-        stepBackward() {
-            if (this.step < 1) {
-                console.log(`No hay steps menores`);
+        unsetExecutedTuple(tuple) {
+            let tIndex = this.substeps.findIndex(st => st[0] === tuple[0] && st[1] === tuple[1]);
+            if (tIndex < 0) {
+                console.log(`Setting unexecuted an unexisting tuple`);
                 return;
             }
-            this.step--
-
+            this.indexExecutedSubstep = tIndex - 1;
+        },
+        getTupleSubstepIndex(tuple) { //Get the substep index of a [step, action] tuple.
+            return this.substeps.findIndex(st => st[0] === tuple[0] && st[1] === tuple[1]);
         }
     },
     watch: {
-        step(step) {
-            this.accionesRealizadas = [];
-            this.$emit('step', step);
+        indexEx(index) {
+            this.indexExecutedSubstep = index;
         },
-        accionesRealizadas(acciones) {
-            this.$emit("accionesRealizadas", acciones);
-        }
+        indexExecutedSubstep(index) {
+            if (index < -1) {
+                console.log(`Index executed went under -1`);
+                return;
+            }
+            console.log(`Notificando`);
+            if (index < 0) {
+                this.$emit('executedTuples', []);
+            }
+            let executedList = this.substeps.slice(0, index + 1);
+            this.$emit('executedTuples', executedList);
+        },
 
     }
 

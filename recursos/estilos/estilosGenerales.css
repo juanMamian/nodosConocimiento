@@ -57,8 +57,10 @@ input:disabled {
 }
 
 .activador.activo {
-    background-color: var(--paletaPrevio);
+    background-color: var(--paletaCheck);
     box-shadow: 1px 1px 1px 1px gray;
+    transform: scale(0.98);
+    transition: all 0.3s;
 }
 
 .resaltado {
@@ -82,7 +84,8 @@ input:disabled {
     gap: 10px;
     justify-content: center;
 }
-.boton img{
+
+.boton img {
     height: 20px;
 }
 

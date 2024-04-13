@@ -3,11 +3,6 @@
     src: url("https://pe-pe-pe.herokuapp.com/public/resources/fonts/Salsa/Salsa-Regular.ttf");
     font-style: normal;
 }
-@font-face {
-    font-family: "MJXZERO";
-    src: url("http://127.0.0.1:8080/recursos/librerias/MathJax/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff");
-    font-style: normal;
-}
 
 :root {
     --paletaMain: #e2c044;

@@ -8,9 +8,12 @@
 
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
@@ -65,13 +68,13 @@
 
 
         <recuadro-component tipo="datoPrevio">
-            La acción rotatoria generada por una fuerza en un cuerpo se llama
+            La capacidad que tiene una fuerza para afectar rotatoriamente un cuerpo se llama
             <span class='resaltado'>torque</span> o <span class='resaltado'>par de torsión</span>.
         </recuadro-component>
 
         <p>
             Cuando se aplica una fuerza sobre un cuerpo
-            sólo la componente de fuerza que está en la dirección de la rotación genera torque
+            sólo la componente de fuerza que está en la dirección de la rotación tiene torque.
         </p>
 
         <bloque-component tipo="herramientaInteractiva" @desplegado="configurarCanvas2">
@@ -196,8 +199,8 @@
 
                 const boundaryEje = this.$refs.ejeRotacion.getBoundingClientRect();
 
-                const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion.offsetWidth ));
-                const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion.offsetHeight ));
+                const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion.offsetWidth));
+                const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion.offsetHeight));
 
                 var direccionBrazo = Math.atan(brazoY / brazoX);
                 if (brazoY < 0 && brazoX < 0) {
@@ -408,8 +411,8 @@
 
                 const boundaryEje = this.$refs.ejeRotacion2.getBoundingClientRect();
 
-                const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion2.offsetWidth ));
-                const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion2.offsetHeight ));
+                const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion2.offsetWidth));
+                const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion2.offsetHeight));
 
                 var direccionBrazo = Math.atan(brazoY / brazoX);
                 if (brazoY < 0 && brazoX < 0) {

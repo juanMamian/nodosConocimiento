@@ -82,7 +82,7 @@
                         <math>
                             <mfrac>
                                 <mpadded depth="110%" height="110%">
-                                    <transition name="expresionOut" mode="out-in">
+                                    <transition name="rotacionBlurred" mode="out-in">
                                         <mrow v-if="!h1NumeradorCalculado">
                                             <transition>
                                                 <mn v-show="h1NumeradorDividido" id="h1NumeradorResultado">
@@ -109,7 +109,7 @@
 
                                 </mpadded>
                                 <mpadded depth="110%" height="110%">
-                                    <transition name="expresionOut" mode="out-in">
+                                    <transition name="rotacionBlurred" mode="out-in">
                                         <mrow v-if="!h1DenominadorCalculado">
                                             <transition>
                                                 <mn v-show="h1DenominadorDividido" id="h1DenominadorResultado">
@@ -174,6 +174,90 @@
 
         </bloque-component>
 
+        <p>
+            Si los resultados de dividir el numerador y el denominador son <span class="resaltado">enteros</span>,
+            entonces el nuevo fraccionario es más
+            fácil de leer y de evaluar; está mas simple.
+        </p>
+
+        <recuadro-component tipo='datoPrevio'>
+            Encontrar el fraccionario idéntico más simple posible se llama <span class="resaltado">simplificar</span> un
+            fracccionario.
+        </recuadro-component>
+
+        <bloque-component tipo='ejemplo' @desplegado="e2ReiniciarEjemplos">
+            <template #cabecera>
+                En este cuadro se pueden ver algunos fraccionarios y simplificarlos.
+            </template>
+            <div class="listaEjemplos" id="e2ListaEjemplos">
+                <div class="itemEjemplo" v-for="( fraccionario, indexFraccionario ) of e2Fraccionarios"
+                    ref="e2ElementosFraccion">
+                    <div class="fraccionOriginal">
+                        <math>
+                            <mfrac>
+                                <mrow>
+                                    <transition name="rotacionBlurred" mode="out-in">
+                                        <mrow class="numeradorDivision" :key="fraccionario.fraccionActual[0]">
+                                            <mn class="numeradorSimplificacion">
+                                                {{ fraccionario.fraccionActual[0] }}
+                                            </mn>
+                                            <mrow>
+                                                <mo v-if="fraccionario.proxDivisor" v-show="fraccionario.dividiendo"
+                                                    class="operadorSimplificacion">
+                                                    /
+                                                </mo>
+                                                <mn v-if="fraccionario.proxDivisor" v-show="fraccionario.dividiendo"
+                                                    class="denominadorSimplificacion">
+                                                    {{fraccionario.proxDivisor}}
+                                                </mn>
+                                            </mrow>
+                                        </mrow>
+                                    </transition>
+                                </mrow>
+                                <mrow>
+                                    <transition name="rotacionBlurred" mode="out-in">
+                                        <mrow class="denominadorDivision" :key="fraccionario.fraccionActual[1]">
+                                            <mn class="numeradorSimplificacion">
+                                                {{ fraccionario.fraccionActual[1] }}
+                                            </mn>
+                                            <mrow>
+                                                <mo v-if="fraccionario.proxDivisor" v-show="fraccionario.dividiendo"
+                                                    class="operadorSimplificacion">
+                                                    /
+                                                </mo>
+                                                <mn v-if="fraccionario.proxDivisor" v-show="fraccionario.dividiendo"
+                                                    class="denominadorSimplificacion">
+                                                    {{fraccionario.proxDivisor}}
+                                                </mn>
+                                            </mrow>
+                                        </mrow>
+                                    </transition>
+                                </mrow>
+                            </mfrac>
+                        </math>
+                    </div>
+                    <button class="boton" @click="e2Simplificar(indexFraccionario)" :disabled="fraccionario.dividiendo"
+                        v-if="fraccionario.proxDivisor!=null">
+                        Simplificar dividiendo entre {{fraccionario.proxDivisor}}
+                    </button>
+                    <template v-else>
+                        <transition name="fadeIn2" appear>
+                            <recuadro-component tipo='datoNuevo' class="e2DatoFinalEjemplo">
+                                El fraccionario ha sido simplificado
+                            </recuadro-component>
+                        </transition>
+                        <transition name="fadeIn2" appear>
+                            <button class="boton e2BotonReiniciarEjemplo" @click="e2Reiniciar(indexFraccionario)">
+                                Reiniciar
+                            </button>
+                        </transition>
+                    </template>
+                </div>
+            </div>
+
+        </bloque-component>
+
+
     </div>
 </body>
 
@@ -230,10 +314,145 @@
                 h1Version.value++;
             }
 
+            //e2
+            function encontrarProxDivisor(num1, num2) {
+                let upperBoundary = Math.ceil(Math.min(num1, num2));
+                for (let i = 2; i <= upperBoundary; i++) {
+                    console.log(`Probando el ${i} para el ${num1} y el ${num2}`);
+                    if (num1 % i === 0 && num2 % i === 0) {
+                        console.log(`Seleccionado`);
+                        return i
+                        break;
+                    }
+                }
+                return null;
+            }
+            const e2Fraccionarios = ref([
+                {
+                    fraccionOriginal: [16, 128],
+                    fraccionActual: [16, 128],
+                    proxDivisor: 2,
+                },
+                {
+                    fraccionOriginal: [45, 36],
+                    fraccionActual: [45, 36],
+                    proxDivisor: 2,
+                },
+                {
+                    fraccionOriginal: [900, 40],
+                    fraccionActual: [900, 40],
+                    proxDivisor: 2,
+                },
+                {
+                    fraccionOriginal: [72, 60],
+                    fraccionActual: [72, 60],
+                    proxDivisor: 2,
+                }
+            ])
+            function e2ReiniciarEjemplos() {
+                console.log(`Reiniciando todos los ejemplos`);
+                e2Fraccionarios.value.forEach(fraccionario => {
+                    fraccionario.fraccionActual = [...fraccionario.fraccionOriginal];
+                    fraccionario.dividiendo = false;
+                    fraccionario.proxDivisor = encontrarProxDivisor(fraccionario.fraccionActual[0], fraccionario.fraccionActual[1]);
+
+                })
+            }
+            function e2Reiniciar(index) {
+                console.log(`Reiniciando ${index}`);
+                e2Fraccionarios.value[index].fraccionActual = [...e2Fraccionarios.value[index].fraccionOriginal];
+                e2Fraccionarios.value[index].dividiendo = false;
+                e2Fraccionarios.value[index].proxDivisor = encontrarProxDivisor(e2Fraccionarios.value[index].fraccionActual[0], e2Fraccionarios.value[index].fraccionActual[1]);
+            }
+
+            const e2ElementosFraccion = ref(null);
+            async function e2Simplificar(index) {
+                console.log(`Simplificando el ${index}`);
+
+                //Animar la división
+                if (!e2ElementosFraccion.value || !e2ElementosFraccion.value[index]) {
+                    console.log(`No hay elemento fracción`);
+                    return;
+                }
+                let numeradoresSimplificacion = e2ElementosFraccion.value[index].querySelectorAll(".numeradorSimplificacion");
+                console.log(`Animando ${numeradoresSimplificacion.length} numeradores de simplificacion`);
+                numeradoresSimplificacion.forEach(elemento => {
+                    elemento.animate([
+                        {
+                            transform: 'translateX( 20px )',
+                        },
+                        {
+                            transform: 'translateX( 0px )',
+                        },
+                    ], {duration: 800});
+                });
+
+                let numeradorDivision = e2ElementosFraccion.value[index].querySelector(".numeradorDivision");
+
+                await nextTick();
+                let operadoresSimplificacion = e2ElementosFraccion.value[index].querySelectorAll(".operadorSimplificacion");
+                let denominadoresSimplificacion = e2ElementosFraccion.value[index].querySelectorAll(".denominadorSimplificacion");
+                let fadersIn = [...operadoresSimplificacion, ...denominadoresSimplificacion];
+                fadersIn.forEach(elemento => {
+                    elemento.animate([
+                        {
+                            opacity: 0,
+                            position: 'absolute',
+                        },
+                        {
+                            opacity: 0.3,
+                        },
+                        {
+                            opacity: 1,
+                            position: 'absolute',
+                        }
+
+                    ], {duration: 1400});
+                });
+
+                e2Fraccionarios.value[index].dividiendo = true;
+
+                setTimeout(() => {
+                    /* numeradorDivision.animate([
+                        {
+                            transform: 'rotate(0deg) scale(1.1)',
+                            filter: `blur(0px)`
+
+                        },
+                        {
+                            transform: 'rotate(-180deg) scale(0.4)',
+                            filter: `blur(3px)`,
+                        }
+                    ], {duration: 100}).finished.then(() => { */
+                    e2Fraccionarios.value[index].dividiendo = false;
+
+                    e2Fraccionarios.value[index].fraccionActual[0] /= e2Fraccionarios.value[index].proxDivisor;
+                    e2Fraccionarios.value[index].fraccionActual[1] /= e2Fraccionarios.value[index].proxDivisor;
+
+                    /* numeradorDivision.animate([
+                        {
+                            transform: 'rotate(-180deg) scale(0.4)',
+                            filter: `blur(3px)`,
+                        },
+                        {
+                            transform: 'rotate(-360deg) scale(1.1)',
+                            filter: `blur(0px)`
+
+                        },
+                    ], {duration: 100}); */
+
+
+                    //Encontrar el próximo divisor.
+                    e2Fraccionarios.value[index].proxDivisor = encontrarProxDivisor(e2Fraccionarios.value[index].fraccionActual[0], e2Fraccionarios.value[index].fraccionActual[1]);
+                    //})
+                }, 1400);
+            }
+
 
 
             return {
                 h1OperandosDivision, h1Divisor, h1Reiniciar, h1NumeradorDividido, h1DenominadorDividido, h1NumeradorCalculado, h1DenominadorCalculado, h1Version, h1Dividiendo, h1OperandosCalculados,
+                e2Fraccionarios, e2Simplificar, e2ElementosFraccion, e2Reiniciar, e2ReiniciarEjemplos,
 
             }
         },
@@ -323,8 +542,64 @@
         transition: opacity 2s;
         transition-delay: 3s;
     }
+
     #h1RecuadroIdentidad.fadeIn2-enter-active {
         transition: opacity 1s;
         transition-delay: 1s;
+    }
+
+    /* e2 */
+    #e2ListaEjemplos .itemEjemplo {
+        width: min(400px, 95%);
+    }
+
+    .fraccionOriginal {
+        font-size: 200%;
+    }
+
+    .numeradorDivision {
+        position: relative;
+    }
+
+    .numeradorSimplificacion {
+        position: relative;
+    }
+
+    .e2DatoFinalEjemplo.fadeIn2-enter-active {
+        transition-delay: 1s;
+    }
+
+    .e2BotonReiniciarEjemplo {
+        transition-delay: 2.5s;
+    }
+
+    .rotacionBlurred-enter-from {
+        transform: rotate(-180deg) scale(0.3);
+        filter: blur(3px);
+    }
+
+    .rotacionBlurred-enter-to {
+        transform: rotate(-360deg) scale(1.01);
+        filter: blur(0px);
+    }
+
+    .rotacionBlurred-enter-active {
+        transition: all 0.15s linear;
+        transform-origin: center;
+    }
+
+    .rotacionBlurred-leave-from {
+        transform: rotate(0deg) scale(1.01);
+        filter: blur(0px);
+    }
+
+    .rotacionBlurred-leave-to {
+        transform: rotate(-180deg) scale(0.3);
+        filter: blur(3px);
+    }
+
+    .rotacionBlurred-leave-active {
+        transition: all 0.15s linear;
+        transform-origin: center;
     }
 </style>

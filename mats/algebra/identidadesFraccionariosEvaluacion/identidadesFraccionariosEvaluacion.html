@@ -39,10 +39,27 @@
             Conozco las identidades de los fraccionarios si:
         </p>
 
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Dado cualquier fraccionario puedo simplificarlo
+            </template>
+            <div class="flexVertical">
+                <button class="boton" @click="e0GenerarReto">
+                    Generar reto
+                </button>
+
+                <div class="zonaReto" v-if="e0Reto!=null" :key="e0VersionReto">
+                    {{e0Reto.enTexto}}
+                </div>
+
+            </div>
+        </bloque-component>
+
 
         <bloque-component tipo='evaluacion'>
             <template #cabecera>
-                Dada cualquier expresión que es una suma entre fraccionarios puedo construir una expresión idéntica y puedo simplificarla.
+                Dada cualquier expresión que es una suma entre fraccionarios puedo construir una expresión idéntica y
+                puedo simplificarla.
             </template>
             <div class="flexVertical">
                 <button class="boton" @click="e1GenerarReto">
@@ -57,7 +74,8 @@
 
         <bloque-component tipo='evaluacion'>
             <template #cabecera>
-                Dada cualquier expresión que es una resta entre fraccionarios puedo construir una expresión idéntica y puedo simplificarla.
+                Dada cualquier expresión que es una resta entre fraccionarios puedo construir una expresión idéntica y
+                puedo simplificarla.
             </template>
             <div class="flexVertical">
                 <button class="boton" @click="e2GenerarReto">
@@ -71,7 +89,8 @@
 
         <bloque-component tipo='evaluacion'>
             <template #cabecera>
-                Dada cualquier expresión que es una multiplicación entre fraccionarios puedo construir una expresión idéntica y puedo simplificarla.
+                Dada cualquier expresión que es una multiplicación entre fraccionarios puedo construir una expresión
+                idéntica y puedo simplificarla.
             </template>
             <div class="flexVertical">
                 <button class="boton" @click="e3GenerarReto">
@@ -85,7 +104,8 @@
 
         <bloque-component tipo='evaluacion'>
             <template #cabecera>
-                Dada cualquier expresión que es una división entre fraccionarios puedo construir una expresión idéntica y puedo simplificarla.
+                Dada cualquier expresión que es una división entre fraccionarios puedo construir una expresión idéntica
+                y puedo simplificarla.
             </template>
             <div class="flexVertical">
                 <button class="boton" @click="e4GenerarReto">
@@ -108,6 +128,17 @@
 
     const app = createApp({
         setup() {
+            const {versionReto: e0VersionReto, dificultad: e0Dificultad, reto: e0Reto, reiniciarReto: e0ReiniciarReto, generarReto: e0GenerarReto, respuesta: e0Respuesta, respuestaUsuarioCorrecta: e0RespuestaUsuarioCorrecta, versionRespuestaUsuario: e0VersionRespuestaUsuario, inputRespuestaUsuario: e0InputRespuestaUsuario, evaluarRespuestaUsuario: e0EvaluarRespuestaUsuario} = useEvaluacionNodo(e0AddToGenerarReto);
+            async function e0AddToGenerarReto() {
+                console.log(`Added to generar reto`);
+                e0Reto.value = {};
+                let expresion1 = new ExpresionNumerica({operacion: 'division'});
+                expresion1.fillExpresion({keepInter:true}),
+                e0Reto.value.expresion = expresion1;
+                e0Reto.value.enTexto = "\\(" + e0Reto.value.expresion.toMathJax() + "\\)";
+                await nextTick();
+                MathJax.typeset();
+            }
 
             const {versionReto: e1VersionReto, dificultad: e1Dificultad, reto: e1Reto, reiniciarReto: e1ReiniciarReto, generarReto: e1GenerarReto, respuesta: e1Respuesta, respuestaUsuarioCorrecta: e1RespuestaUsuarioCorrecta, versionRespuestaUsuario: e1VersionRespuestaUsuario, inputRespuestaUsuario: e1InputRespuestaUsuario, evaluarRespuestaUsuario: e1EvaluarRespuestaUsuario} = useEvaluacionNodo(e1AddToGenerarReto);
             async function e1AddToGenerarReto() {
@@ -167,6 +198,7 @@
             }
 
             return {
+                e0Dificultad, e0VersionReto, e0Reto, e0ReiniciarReto, e0GenerarReto, e0Respuesta, e0RespuestaUsuarioCorrecta, e0VersionRespuestaUsuario, e0InputRespuestaUsuario, e0EvaluarRespuestaUsuario,
                 e1Dificultad, e1VersionReto, e1Reto, e1ReiniciarReto, e1GenerarReto, e1Respuesta, e1RespuestaUsuarioCorrecta, e1VersionRespuestaUsuario, e1InputRespuestaUsuario, e1EvaluarRespuestaUsuario,
                 e2Dificultad, e2VersionReto, e2Reto, e2ReiniciarReto, e2GenerarReto, e2Respuesta, e2RespuestaUsuarioCorrecta, e2VersionRespuestaUsuario, e2InputRespuestaUsuario, e2EvaluarRespuestaUsuario,
                 e3Dificultad, e3VersionReto, e3Reto, e3ReiniciarReto, e3GenerarReto, e3Respuesta, e3RespuestaUsuarioCorrecta, e3VersionRespuestaUsuario, e3InputRespuestaUsuario, e3EvaluarRespuestaUsuario,
@@ -184,4 +216,7 @@
 </script>
 
 <style>
+.zonaReto{
+    font-size: 45px;
+}
 </style>

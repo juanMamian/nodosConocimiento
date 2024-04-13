@@ -7,18 +7,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
     <script id="MathJax-script" async
         src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
 
 
     <title>Plano cartesiano - evaluación</title>
@@ -44,6 +50,25 @@
             <template #cabecera>
                 Dada cualquier pareja de números, puedo encontrar en el plano el punto que representan.
             </template>
+            <div class="flexVertical">
+                <recuadro-component tipo='instruccionTeclado'>
+                    <div class="flexVertical">
+                        Selecciona la dificultad
+                        <input type="range" min="1" max="2" v-model.number="e3Dificultad">
+                        {{e3Dificultad}}
+                    </div>
+                </recuadro-component>
+
+                <button class="boton" @click="e3GenerarReto">
+                    Generar reto
+                </button>
+
+                <transition name="fadeIn">
+                    <div class="reto" v-if="e3Reto!=null" :key="e3VersionReto">
+                        {{e3Reto.numero1}}, {{e3Reto.numero2}}
+                    </div>
+                </transition>
+            </div>
         </bloque-component>
 
         <bloque-component tipo="evaluacion">
@@ -51,20 +76,47 @@
                 Dado cualquier punto en el plano y conocida su pareja de números correspondiente, identifico a
                 la abscisa y la
                 ordenada.
-            </template>            
+            </template>
         </bloque-component>
     </div>
 </body>
 
 </html>
 
-<script>
-    const doc = new Vue({
-        el: "#doc",
+<script type="module">
+    const {createApp} = Vue;
+    import {useEvaluacionNodo} from "http://127.0.0.1:8080/recursos/composables/evaluacionNodo.js"
+    createApp({
+        setup() {
+            function e3AddToGenerarReto() {
+                e3Reto.value = {};
+                let minNumero = -15;
+                let maxNumero = 15;
+                let step = 1;
+                if (e3Dificultad === 2) {
+                    step = 0.5;
+                }
+                else if (e3Dificultad.value === 3) {
+                    step = 0.25;
+                }
+                const rangoNumero = maxNumero - minNumero;
+
+                e3Reto.value.numero1 = (Math.random() * rangoNumero + minNumero);
+                e3Reto.value.numero1 -= e3Reto.value.numero1 % step;
+
+                e3Reto.value.numero2 = (Math.random() * rangoNumero + minNumero);
+                e3Reto.value.numero2 -= e3Reto.value.numero2 % step;
+            }
+            const {versionReto: e3VersionReto, dificultad: e3Dificultad, reto: e3Reto, reiniciarReto: e3ReiniciarReto, generarReto: e3GenerarReto, respuesta: e3Respuesta, respuestaUsuarioCorrecta: e3RespuestaUsuarioCorrecta, versionRespuestaUsuario: e3VersionRespuestaUsuario, inputRespuestaUsuario: e3InputRespuestaUsuario, evaluarRespuestaUsuario: e3EvaluarRespuestaUsuario} = useEvaluacionNodo(e3AddToGenerarReto);
+
+            return {
+                e3Dificultad, e3VersionReto, e3Reto, e3ReiniciarReto, e3GenerarReto, e3Respuesta, e3RespuestaUsuarioCorrecta, e3VersionRespuestaUsuario, e3InputRespuestaUsuario, e3EvaluarRespuestaUsuario
+            }
+        },
         components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-    })
+    }).mount("#doc");
 </script>

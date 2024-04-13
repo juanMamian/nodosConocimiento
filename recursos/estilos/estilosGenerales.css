@@ -34,6 +34,18 @@ input:disabled {
     pointer-events: none;
 }
 
+/* En las secciones de evaluacion */
+.reto {
+    padding: 40px 10px;
+    margin: 10px auto;
+    border: 2px dashed var(--paletaMain);
+    min-width: min(300px, 95%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
 .fondoGris {
     position: fixed;
     top: 0px;
@@ -263,13 +275,16 @@ input:disabled {
 .fadeIn-enter-active {
     animation: fade 0.8s;
 }
-.fadeIn2-enter-from{
+
+.fadeIn2-enter-from {
     opacity: 0;
 }
-.fadeIn2-enter-to{
+
+.fadeIn2-enter-to {
     opacity: 1;
 }
-.fadeIn2-enter-active{
+
+.fadeIn2-enter-active {
     transition: opacity 1s;
 }
 

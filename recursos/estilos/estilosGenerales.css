@@ -3,6 +3,11 @@
     src: url("https://pe-pe-pe.herokuapp.com/public/resources/fonts/Salsa/Salsa-Regular.ttf");
     font-style: normal;
 }
+@font-face {
+    font-family: "MJXZERO";
+    src: url("http://127.0.0.1:8080/recursos/librerias/MathJax/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff");
+    font-style: normal;
+}
 
 :root {
     --paletaMain: #e2c044;
@@ -262,6 +267,15 @@ input:disabled {
 
 .fadeIn-enter-active {
     animation: fade 0.8s;
+}
+.fadeIn2-enter-from{
+    opacity: 0;
+}
+.fadeIn2-enter-to{
+    opacity: 1;
+}
+.fadeIn2-enter-active{
+    transition: opacity 1s;
 }
 
 input {

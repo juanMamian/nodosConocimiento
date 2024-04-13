@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/librerias/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="http://127.0.0.1:8080/recursos/librerias/MathJax/es5/tex-chtml.js"></script>
+
+
+
+    <title>Identidades de fraccionarios - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Conozco las identidades de los fraccionarios si:
+        </p>
+
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Dada cualquier expresión que es una suma entre fraccionarios puedo construir una expresión idéntica y puedo simplificarla.
+            </template>
+            <div class="flexVertical">
+                <button class="boton" @click="e1GenerarReto">
+                    Generar reto
+                </button>
+                <div class="zonaReto" v-if="e1Reto!=null" :key="e1VersionReto">
+                    {{e1Reto.enTexto}}
+                </div>
+            </div>
+        </bloque-component>
+
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Dada cualquier expresión que es una resta entre fraccionarios puedo construir una expresión idéntica y puedo simplificarla.
+            </template>
+            <div class="flexVertical">
+                <button class="boton" @click="e2GenerarReto">
+                    Generar reto
+                </button>
+                <div class="zonaReto" v-if="e2Reto!=null" :key="e2VersionReto">
+                    {{e2Reto.enTexto}}
+                </div>
+            </div>
+        </bloque-component>
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Dada cualquier expresión que es una multiplicación entre fraccionarios puedo construir una expresión idéntica y puedo simplificarla.
+            </template>
+            <div class="flexVertical">
+                <button class="boton" @click="e3GenerarReto">
+                    Generar reto
+                </button>
+                <div class="zonaReto" v-if="e3Reto!=null" :key="e3VersionReto">
+                    {{e3Reto.enTexto}}
+                </div>
+            </div>
+        </bloque-component>
+
+        <bloque-component tipo='evaluacion'>
+            <template #cabecera>
+                Dada cualquier expresión que es una división entre fraccionarios puedo construir una expresión idéntica y puedo simplificarla.
+            </template>
+            <div class="flexVertical">
+                <button class="boton" @click="e4GenerarReto">
+                    Generar reto
+                </button>
+                <div class="zonaReto" v-if="e4Reto!=null" :key="e4VersionReto">
+                    {{e4Reto.enTexto}}
+                </div>
+            </div>
+        </bloque-component>
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    import {useEvaluacionNodo} from "http://127.0.0.1:8080/recursos/composables/evaluacionNodo.js"
+    const {createApp, ref, computed, watch, nextTick, onMounted} = Vue;
+
+
+    const app = createApp({
+        setup() {
+
+            const {versionReto: e1VersionReto, dificultad: e1Dificultad, reto: e1Reto, reiniciarReto: e1ReiniciarReto, generarReto: e1GenerarReto, respuesta: e1Respuesta, respuestaUsuarioCorrecta: e1RespuestaUsuarioCorrecta, versionRespuestaUsuario: e1VersionRespuestaUsuario, inputRespuestaUsuario: e1InputRespuestaUsuario, evaluarRespuestaUsuario: e1EvaluarRespuestaUsuario} = useEvaluacionNodo(e1AddToGenerarReto);
+            async function e1AddToGenerarReto() {
+                console.log(`Added to generar reto`);
+                e1Reto.value = {};
+                let expresion1 = new ExpresionNumerica({operacion: 'division'});
+                let expresion2 = new ExpresionNumerica({operacion: 'division'});
+                expresion1.fillExpresion({keepInteger: true});
+                expresion2.fillExpresion({keepInteger: true});
+                e1Reto.value.expresion = new ExpresionNumerica({operacion: 'suma', numero1: expresion1, numero2: expresion2});
+                e1Reto.value.enTexto = "\\(" + e1Reto.value.expresion.toMathJax() + "\\)";
+                await nextTick();
+                MathJax.typeset();
+            }
+
+            const {versionReto: e2VersionReto, dificultad: e2Dificultad, reto: e2Reto, reiniciarReto: e2ReiniciarReto, generarReto: e2GenerarReto, respuesta: e2Respuesta, respuestaUsuarioCorrecta: e2RespuestaUsuarioCorrecta, versionRespuestaUsuario: e2VersionRespuestaUsuario, inputRespuestaUsuario: e2InputRespuestaUsuario, evaluarRespuestaUsuario: e2EvaluarRespuestaUsuario} = useEvaluacionNodo(e2AddToGenerarReto);
+            async function e2AddToGenerarReto() {
+                console.log(`Added to generar reto`);
+                e2Reto.value = {};
+                let expresion1 = new ExpresionNumerica({operacion: 'division'});
+                let expresion2 = new ExpresionNumerica({operacion: 'division'});
+                expresion1.fillExpresion({keepInteger: true});
+                expresion2.fillExpresion({keepInteger: true});
+                e2Reto.value.expresion = new ExpresionNumerica({operacion: 'resta', numero1: expresion1, numero2: expresion2});
+                e2Reto.value.enTexto = "\\(" + e2Reto.value.expresion.toMathJax() + "\\)";
+                await nextTick();
+                MathJax.typeset();
+            }
+
+            const {versionReto: e3VersionReto, dificultad: e3Dificultad, reto: e3Reto, reiniciarReto: e3ReiniciarReto, generarReto: e3GenerarReto, respuesta: e3Respuesta, respuestaUsuarioCorrecta: e3RespuestaUsuarioCorrecta, versionRespuestaUsuario: e3VersionRespuestaUsuario, inputRespuestaUsuario: e3InputRespuestaUsuario, evaluarRespuestaUsuario: e3EvaluarRespuestaUsuario} = useEvaluacionNodo(e3AddToGenerarReto);
+            async function e3AddToGenerarReto() {
+                console.log(`Added to generar reto`);
+                e3Reto.value = {};
+                let expresion1 = new ExpresionNumerica({operacion: 'division'});
+                let expresion2 = new ExpresionNumerica({operacion: 'division'});
+                expresion1.fillExpresion({keepInteger: true});
+                expresion2.fillExpresion({keepInteger: true});
+                e3Reto.value.expresion = new ExpresionNumerica({operacion: 'multiplicacion', numero1: expresion1, numero2: expresion2});
+                e3Reto.value.enTexto = "\\(" + e3Reto.value.expresion.toMathJax() + "\\)";
+                await nextTick();
+                MathJax.typeset();
+            }
+
+
+            const {versionReto: e4VersionReto, dificultad: e4Dificultad, reto: e4Reto, reiniciarReto: e4ReiniciarReto, generarReto: e4GenerarReto, respuesta: e4Respuesta, respuestaUsuarioCorrecta: e4RespuestaUsuarioCorrecta, versionRespuestaUsuario: e4VersionRespuestaUsuario, inputRespuestaUsuario: e4InputRespuestaUsuario, evaluarRespuestaUsuario: e4EvaluarRespuestaUsuario} = useEvaluacionNodo(e4AddToGenerarReto);
+            async function e4AddToGenerarReto() {
+                console.log(`Added to generar reto`);
+                e4Reto.value = {};
+                let expresion1 = new ExpresionNumerica({operacion: 'division'});
+                let expresion2 = new ExpresionNumerica({operacion: 'division'});
+                expresion1.fillExpresion({keepInteger: true});
+                expresion2.fillExpresion({keepInteger: true});
+                e4Reto.value.expresion = new ExpresionNumerica({operacion: 'division', numero1: expresion1, numero2: expresion2});
+                e4Reto.value.enTexto = "\\(" + e4Reto.value.expresion.toMathJax() + "\\)";
+                await nextTick();
+                MathJax.typeset();
+            }
+
+            return {
+                e1Dificultad, e1VersionReto, e1Reto, e1ReiniciarReto, e1GenerarReto, e1Respuesta, e1RespuestaUsuarioCorrecta, e1VersionRespuestaUsuario, e1InputRespuestaUsuario, e1EvaluarRespuestaUsuario,
+                e2Dificultad, e2VersionReto, e2Reto, e2ReiniciarReto, e2GenerarReto, e2Respuesta, e2RespuestaUsuarioCorrecta, e2VersionRespuestaUsuario, e2InputRespuestaUsuario, e2EvaluarRespuestaUsuario,
+                e3Dificultad, e3VersionReto, e3Reto, e3ReiniciarReto, e3GenerarReto, e3Respuesta, e3RespuestaUsuarioCorrecta, e3VersionRespuestaUsuario, e3InputRespuestaUsuario, e3EvaluarRespuestaUsuario,
+                e4Dificultad, e4VersionReto, e4Reto, e4ReiniciarReto, e4GenerarReto, e4Respuesta, e4RespuestaUsuarioCorrecta, e4VersionRespuestaUsuario, e4InputRespuestaUsuario, e4EvaluarRespuestaUsuario,
+            }
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    });
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('mjx');
+    app.mount("#doc");
+</script>
+
+<style>
+</style>

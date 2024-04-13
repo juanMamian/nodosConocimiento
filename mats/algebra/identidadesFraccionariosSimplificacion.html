@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/librerias/vue.global.js"></script>
+
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento//recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/controlStepsEstilo.css">
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="http://127.0.0.1:8080/recursos/librerias/MathJax/es5/tex-chtml.js"></script>
+
+
+
+    <title>Identidades de fraccionarios - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Los fraccionarios son identicos a fraccionarios hechos tomando numerador y denominador y dividiéndolos entre
+            algún número.
+        </p>
+
+        <bloque-component tipo='herramientaInteractiva' @desplegado="h1Reiniciar">
+            <template #cabecera>
+                En este cuadro se puede ver un fraccionario y se puede construir una expresion idéntica dividiéndo
+                numerador y denominador.
+            </template>
+
+            <div class="flexVertical">
+                <div class="expresionOriginal" id="h1ExpresionOriginal">
+                    <math>
+                        <mfrac>
+                            <mpadded depth="300%">
+                                <mrow>
+                                    <mn>
+                                        {{h1OperandosDivision[0]}}
+                                    </mn>
+                                </mrow>
+                            </mpadded>
+                            <mpadded height="200%">
+                                <mrow>
+                                    <mn>
+                                        {{h1OperandosDivision[1]}}
+                                    </mn>
+                                </mrow>
+                            </mpadded>
+                        </mfrac>
+                    </math>
+                    <transition name="fadeIn">
+                        <div class="contenedorBotones flexVertical" v-show="h1Dividiendo">
+                            <button class="boton activador" :class="{activo: h1NumeradorDividido}"
+                                :disabled="h1NumeradorDividido" @click="h1NumeradorDividido=true">
+                                Dividir entre {{h1Divisor}}
+                            </button>
+                            <button class="boton activador" :class="{activo: h1DenominadorDividido}"
+                                :disabled="h1DenominadorDividido" @click="h1DenominadorDividido=true">
+                                Dividir entre {{h1Divisor}}
+                            </button>
+                        </div>
+                    </transition>
+                    <div class="contenedorIdentidad" :key="h1Version">
+                        <math>
+                            <mfrac>
+                                <mpadded depth="110%" height="110%">
+                                    <transition name="expresionOut" mode="out-in">
+                                        <mrow v-if="!h1NumeradorCalculado">
+                                            <transition>
+                                                <mn v-show="h1NumeradorDividido" id="h1NumeradorResultado">
+                                                    {{h1OperandosDivision[0]}}
+                                                </mn>
+                                            </transition>
+                                            <transition name="localFadeIn">
+                                                <mo v-show="h1NumeradorDividido">
+                                                    /
+                                                </mo>
+                                            </transition>
+                                            <transition name="localFadeIn">
+                                                <mn v-show="h1NumeradorDividido">
+                                                    {{h1Divisor}}
+                                                </mn>
+                                            </transition>
+                                        </mrow>
+                                        <mrow v-else>
+                                            <mn>
+                                                {{h1OperandosDivision[0]/h1Divisor}}
+                                            </mn>
+                                        </mrow>
+                                    </transition>
+
+                                </mpadded>
+                                <mpadded depth="110%" height="110%">
+                                    <transition name="expresionOut" mode="out-in">
+                                        <mrow v-if="!h1DenominadorCalculado">
+                                            <transition>
+                                                <mn v-show="h1DenominadorDividido" id="h1DenominadorResultado">
+                                                    {{h1OperandosDivision[1]}}
+                                                </mn>
+                                            </transition>
+                                            <transition name="localFadeIn">
+                                                <mo v-show="h1DenominadorDividido">
+                                                    /
+                                                </mo>
+                                            </transition>
+                                            <transition name="localFadeIn">
+                                                <mn v-show="h1DenominadorDividido">
+                                                    {{h1Divisor}}
+                                                </mn>
+                                            </transition>
+                                        </mrow>
+                                        <mrow v-else>
+                                            <mpadded height="20px">
+                                                <mn>
+                                                    {{h1OperandosDivision[1]/h1Divisor}}
+                                                </mn>
+                                            </mpadded>
+                                        </mrow>
+                                    </transition>
+                                </mpadded>
+                            </mfrac>
+                        </math>
+                    </div>
+                </div>
+            </div>
+
+            <transition name="fadeIn2">
+                <recuadro-component tipo='datoNuevo' v-if="h1OperandosCalculados" id="h1RecuadroIdentidad">
+                    <div style="text-align: center; margin: 0px auto">
+                        Estas expresiones son idénticas.
+                    </div>
+                </recuadro-component>
+            </transition>
+            <transition name="fadeIn2">
+                <button class="boton" id="h1BotonReiniciar" @click="h1Reiniciar" v-show="h1OperandosCalculados">
+                    Reiniciar
+                </button>
+            </transition>
+
+
+            <recuadro-component tipo='instruccionTeclado' v-show="!h1Dividiendo">
+                <div class="flexVertical">
+                    Selecciona un número para dividir los operandos del fraccionario.
+                    <input type="range" ref="h1InputDivisor" min="2" max="20" v-model.number="h1Divisor">
+                    {{h1Divisor}}
+                    <button class="boton" @click="h1Dividiendo=true">
+                        Iniciar
+                    </button>
+                </div>
+            </recuadro-component>
+
+
+            <!-- <componente-control-steps :steps="h1Steps" @executed-tuples="h1ExecutedTuples=$event" @execution-step="h1ExecutionStep=$event">
+
+            </componente-control-steps> -->
+
+        </bloque-component>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    const {createApp, ref, computed, watch, nextTick, onMounted} = Vue;
+    import {componenteControlSteps} from "http://127.0.0.1:8080/recursos/components/controlSteps.js"
+
+    const app = createApp({
+        setup() {
+            const h1OperandosDivision = [45, 18];
+            const h1Divisor = ref(2);
+            const h1Dividiendo = ref(false);//Permite la aparición de los botones para ejecutar la división en los operandos.
+            const h1NumeradorDividido = ref(false);
+            const h1DenominadorDividido = ref(false);
+            const h1NumeradorCalculado = ref(false);
+            const h1DenominadorCalculado = ref(false);
+            const h1OperandosCalculados = computed(() => {
+                return h1NumeradorCalculado.value && h1DenominadorCalculado.value;
+            })
+
+            const h1Version = ref(0);
+
+            let h1TimerCalcularNumerador = null;
+            watch(h1NumeradorDividido, (dividido) => {
+                if (h1TimerCalcularNumerador) {
+                    clearTimeout(h1TimerCalcularNumerador);
+                }
+                if (dividido) {
+                    h1TimerCalcularNumerador = setTimeout(() => {
+                        h1NumeradorCalculado.value = true;
+                    }, 1500)
+                }
+            })
+            let h1TimerCalcularDenominador = null;
+            watch(h1DenominadorDividido, (dividido) => {
+                if (h1TimerCalcularDenominador) {
+                    clearTimeout(h1TimerCalcularDenominador);
+                }
+                if (dividido) {
+                    h1TimerCalcularDenominador = setTimeout(() => {
+                        h1DenominadorCalculado.value = true;
+                    }, 1500)
+                }
+            })
+            function h1Reiniciar() {
+                h1Dividiendo.value = false;
+                h1NumeradorDividido.value = false;
+                h1DenominadorDividido.value = false;
+                h1NumeradorCalculado.value = false;
+                h1DenominadorCalculado.value = false;
+
+                h1Version.value++;
+            }
+
+
+
+            return {
+                h1OperandosDivision, h1Divisor, h1Reiniciar, h1NumeradorDividido, h1DenominadorDividido, h1NumeradorCalculado, h1DenominadorCalculado, h1Version, h1Dividiendo, h1OperandosCalculados,
+
+            }
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+            componenteControlSteps
+        },
+    });
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('mjx');
+    app.mount("#doc");
+</script>
+
+<style>
+    #h1ExpresionOriginal {
+        font-size: 180%;
+    }
+
+    .expresionOriginal {
+        display: flex;
+        gap: 20px;
+    }
+
+    .expresionOriginal mrow {}
+
+    .contenedorBotones {
+        gap: 10px;
+        margin-top: -10px;
+    }
+
+    .contenedorBotones button {
+        font-size: 10px;
+        margin: 0px auto;
+    }
+
+    .contenedorIdentidad {
+        margin-top: -5px;
+    }
+
+    #h1NumeradorResultado.v-enter-from,
+    #h1DenominadorResultado.v-enter-from {
+        transform: translateX(-100px);
+    }
+
+    #h1NumeradorResultado.v-enter-to,
+    #h1DenominadorResultado.v-enter-to {
+        transform: translateX(0px);
+    }
+
+    #h1NumeradorResultado.v-enter-active,
+    #h1DenominadorResultado.v-enter-active {
+        transition: transform 1s;
+    }
+
+    .localFadeIn-enter-from {
+        opacity: 0;
+    }
+
+    .localFadeIn-enter-to {
+        opacity: 1;
+    }
+
+    .localFadeIn-enter-active {
+        transition: opacity 3s;
+    }
+
+    .expresionOut-leave-from,
+    .expresionOut-enter-to {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    .expresionOut-leave-to,
+    .expresionOut-enter-from {
+        filter: blur(2px);
+        transform: scale(0.7);
+        clip-path: polygon(0% 0%, 100% 0%, 100% 1%, 0% 1%);
+    }
+
+    .expresionOut-leave-active,
+    .expresionOut-enter-active {
+        transition: all 0.3s linear;
+        transform-origin: center;
+    }
+
+    #h1BotonReiniciar.fadeIn2-enter-active {
+        transition: opacity 2s;
+        transition-delay: 3s;
+    }
+    #h1RecuadroIdentidad.fadeIn2-enter-active {
+        transition: opacity 1s;
+        transition-delay: 1s;
+    }
+</style>

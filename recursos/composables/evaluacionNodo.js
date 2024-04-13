@@ -2,7 +2,7 @@ import "https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"
 const { ref } = Vue;
 
 export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, recolectarRespuestaUsuario) {
-    const dificultad=ref(1);
+    const dificultad = ref(1);
     const versionReto = ref(0);
     const reto = ref(null);
     function reiniciarReto() {
@@ -12,8 +12,8 @@ export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, 
         if (addToReiniciarReto) {
             addToReiniciarReto();
         }
-        if(inputRespuestaUsuario.value){
-            inputRespuestaUsuario.value.value=null;
+        if (inputRespuestaUsuario.value) {
+            inputRespuestaUsuario.value.value = null;
         }
     }
     function generarReto() {
@@ -40,7 +40,7 @@ export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, 
                     console.log(`No había input de respuesta usuario`);
                     return;
                 }
-                if(!inputRespuestaUsuario.value.value){
+                if (!inputRespuestaUsuario.value.value) {
                     console.log(`No había respuesta en el input`);
                     return;
                 }

@@ -7,14 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/controlesAnimacion.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script
+        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/controlesAnimacion.js"></script>
 
     <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosFisica.css">
+        href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet"
+        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosFisica.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
@@ -67,11 +72,12 @@
             <controles-animacion @estado-animacion="estadoAnimacion=$event">
             </controles-animacion>
             <div id='opcionesAplicacionFuerza'>
-                <button class='boton opcionAplicacionFuerza' :class="{deshabilitado: modoFuerza==='componentes'}"
-                    @click="setModoFuerzas('componentes')">Aplicar dos
+                <button class='boton opcionAplicacionFuerza activador' :class="{activo: modoFuerza==='componentes'}"
+                    :disabled="modoFuerza==='componentes'" @click="setModoFuerzas('componentes')">Aplicar dos
                     fuerzas</button>
-                <button class='boton opcionAplicacionFuerza' @click="setModoFuerzas('resultante')"
-                    :class="{deshabilitado: modoFuerza==='resultante'}">Aplicar una fuerza
+                <button class='boton opcionAplicacionFuerza activador' @click="setModoFuerzas('resultante')"
+                    :class="{activo: modoFuerza==='resultante'}" :disabled="modoFuerza==='resultante'">Aplicar
+                    una fuerza
                     resultante</button>
             </div>
 
@@ -134,7 +140,7 @@
                 }
             },
             offsetFuerzaResultante() {
-                let direccion = Math.atan(this.fuerza.y / this.fuerza.x);
+                let direccion = Math.atan2(this.fuerza.y, this.fuerza.x);
                 if (this.fuerza.y < 0 && this.fuerza.x < 0) {
                     direccion = Math.PI + direccion;
                 }
@@ -220,5 +226,11 @@
         gap: 20px;
         align-items: center;
         justify-content: center;
+    }
+
+    #opcionesAplicacionFuerza button {
+        margin: 30px 10px;
+        width: min(200px, 95%);
+
     }
 </style>

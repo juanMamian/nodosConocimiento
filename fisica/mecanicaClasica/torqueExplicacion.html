@@ -31,7 +31,7 @@
     <div id="doc">
 
         <p>
-            Una fuerza aplicada sobre un cuerpo puede producir cambios en su rotación.
+            Una fuerza aplicada sobre un cuerpo puede afectar su rotación.
         </p>
 
         <bloque-component tipo="herramientaInteractiva" @desplegado="configurarCanvas">
@@ -80,7 +80,7 @@
         <bloque-component tipo="herramientaInteractiva" @desplegado="configurarCanvas2">
             <template #cabecera>
                 En este cuadro se puede aplicar fuerza sobre un cuerpo unido a un eje y ver
-                la componente de fuerza que genera torque.
+                la componente de fuerza que tiene torque.
             </template>
 
             <div class="zonaInteraccion" ref="zonaInteraccion2" @mouseleave="finCreacionFuerza2"
@@ -108,7 +108,7 @@
         </bloque-component>
 
         <recuadro-component tipo="datoPrevio">
-            El torque generado por una fuerza es proporcional
+            El torque de una fuerza es proporcional
             a la distancia desde el punto de aplicación de la fuerza
             hasta el centro de rotación.
         </recuadro-component>
@@ -202,14 +202,7 @@
                 const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion.offsetWidth));
                 const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion.offsetHeight));
 
-                var direccionBrazo = Math.atan(brazoY / brazoX);
-                if (brazoY < 0 && brazoX < 0) {
-                    direccionBrazo = Math.PI + direccionBrazo;
-                }
-
-                if (brazoX < 0 && brazoY > 0) {
-                    direccionBrazo = Math.PI + direccionBrazo;
-                }
+                var direccionBrazo = Math.atan2(brazoY, brazoX);
 
                 if (direccionBrazo < 0) {
                     direccionBrazo += Math.PI * 2;
@@ -264,14 +257,7 @@
                 const fuerzaY = posY - this.inicioVectorY;
                 const fuerzaX = posX - this.inicioVectorX;
                 const moduloFuerza = Math.sqrt((Math.pow(fuerzaX, 2) + Math.pow(fuerzaY, 2)));
-                var direccionFuerza = Math.atan(fuerzaY / fuerzaX);
-                if (fuerzaY < 0 && fuerzaX < 0) {
-                    direccionFuerza = Math.PI + direccionFuerza;
-                }
-
-                if (fuerzaX < 0 && fuerzaY > 0) {
-                    direccionFuerza = Math.PI + direccionFuerza;
-                }
+                var direccionFuerza = Math.atan2(fuerzaY, fuerzaX);
                 let direccionCuerpo = this.rotacion % (Math.PI * 2);
                 if (direccionCuerpo < 0) {
                     direccionCuerpo += Math.PI * 2;
@@ -338,14 +324,7 @@
                 const vectorX = posX - this.inicioVectorX;
                 const vectorY = posY - this.inicioVectorY;
 
-                var direccionVector = Math.atan(vectorY / vectorX);
-                if (vectorY < 0 && vectorX < 0) {
-                    direccionVector = Math.PI + direccionVector;
-                }
-
-                if (vectorX < 0 && vectorY > 0) {
-                    direccionVector = Math.PI + direccionVector;
-                }
+                var direccionVector = Math.atan2(vectorY, vectorX);
 
                 // this.$set(this.offsetFlechaVector, "top", posY+'px');
                 // this.$set(this.offsetFlechaVector, "left", posX+'px');
@@ -376,7 +355,7 @@
                     this.$refs.canvasInteraccion.height = this.$refs.zonaInteraccion.offsetHeight;
 
                     this.lapiz.lineWidth = 3;
-                    this.lapiz.strokeStyle = "#FF0000";
+                    this.lapiz.strokeStyle = "#e2c044";
                 });
 
             },
@@ -414,14 +393,7 @@
                 const brazoX = eventoX - (boundaryEje.left + (this.$refs.ejeRotacion2.offsetWidth));
                 const brazoY = eventoY - (boundaryEje.top + (this.$refs.ejeRotacion2.offsetHeight));
 
-                var direccionBrazo = Math.atan(brazoY / brazoX);
-                if (brazoY < 0 && brazoX < 0) {
-                    direccionBrazo = Math.PI + direccionBrazo;
-                }
-
-                if (brazoX < 0 && brazoY > 0) {
-                    direccionBrazo = Math.PI + direccionBrazo;
-                }
+                var direccionBrazo = Math.atan2(brazoY, brazoX);
                 if (direccionBrazo < 0) {
                     direccionBrazo += Math.PI * 2;
                 }
@@ -474,14 +446,7 @@
                 const fuerzaY = posY - this.inicioVector2Y;
                 const fuerzaX = posX - this.inicioVector2X;
                 const moduloFuerza = Math.sqrt((Math.pow(fuerzaX, 2) + Math.pow(fuerzaY, 2)));
-                var direccionFuerza = Math.atan(fuerzaY / fuerzaX);
-                if (fuerzaY < 0 && fuerzaX < 0) {
-                    direccionFuerza = Math.PI + direccionFuerza;
-                }
-
-                if (fuerzaX < 0 && fuerzaY > 0) {
-                    direccionFuerza = Math.PI + direccionFuerza;
-                }
+                var direccionFuerza = Math.atan2(fuerzaY, fuerzaX);
                 let direccionCuerpo = this.rotacion2 % (Math.PI * 2);
                 if (direccionCuerpo < 0) {
                     direccionCuerpo += (Math.PI * 2)
@@ -525,7 +490,7 @@
                 const boundary = this.$refs.canvasInteraccion2.getBoundingClientRect();
 
                 this.lapiz2.clearRect(0, 0, canvas.width, canvas.height);
-                this.lapiz2.strokeStyle = "#FF0000"
+                this.lapiz2.strokeStyle = "#e2c044"
 
                 let eventoX = null;
                 let eventoY = null;
@@ -552,14 +517,7 @@
                 const vectorX = posX - this.inicioVector2X;
                 const vectorY = posY - this.inicioVector2Y;
                 const magnitudVector = Math.sqrt(Math.pow(vectorX, 2) + Math.pow(vectorY, 2));
-                var direccionVector = Math.atan(vectorY / vectorX);
-                if (vectorY < 0 && vectorX < 0) {
-                    direccionVector = Math.PI + direccionVector;
-                }
-
-                if (vectorX < 0 && vectorY > 0) {
-                    direccionVector = Math.PI + direccionVector;
-                }
+                var direccionVector = Math.atan2(vectorY, vectorX);
 
                 if (direccionVector < 0) {
                     direccionVector += Math.PI * 2;
@@ -677,7 +635,7 @@
                     this.$refs.canvasInteraccion2.height = this.$refs.zonaInteraccion2.offsetHeight;
 
                     this.lapiz2.lineWidth = 3;
-                    this.lapiz2.strokeStyle = "#FF0000";
+                    this.lapiz2.strokeStyle = "#e2c044";
                 });
 
             },

@@ -16,7 +16,7 @@
 
 
     <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+        href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
@@ -73,27 +73,27 @@
                         <div id="h1ContenedorCatetos" :style="[h1EstiloContenedorCatetos]" v-if="h1Triangulo">
                             <div class="cateto" id="h1CatetoAdyacente">
                                 <transition name="fadeIn">
-                                    <div class="nombreCateto" :style="[h1EstiloNombresCatetos]">
+                                    <div class="nombreCateto nombreCatetoAdyacente" :style="[h1EstiloNombresCatetos]">
                                         {{truncar(h1Triangulo.ancho, 2)}}
                                     </div>
                                 </transition>
                             </div>
                             <div class="cateto" id="h1CatetoOpuesto">
                                 <transition name="fadeIn">
-                                    <div class="nombreCateto" :style="[h1EstiloNombresCatetos]">
+                                    <div class="nombreCateto nombreCatetoOpuesto" :style="[h1EstiloNombresCatetos]">
                                         {{truncar(h1Triangulo.largo, 2)}}
                                     </div>
                                 </transition>
                             </div>
                             <div class="cateto" id="h1Hipotenusa" :style="[h1EstiloHipotenusa]">
                             </div>
-                            <div class="nombreCateto" id="nombreHipotenusa" :style="[h1EstiloNombresCatetos]">
+                            <div class="nombreCateto nombreHipotenusa" :style="[h1EstiloNombresCatetos]">
                                 {{truncar(h1Triangulo.hipotenusa, 2)}}
                             </div>
                         </div>
                     </transition>
                 </componente-angulo>
-                {{h1StepCalculoRazon}}
+
                 <transition name="fadeIn">
                     <recuadro-component tipo='datoNuevo' v-if="h1Step>=3">
                         <div class="flexVertical">
@@ -113,27 +113,27 @@
 
                                     <transition name="unfoldHorizontalAbsolute">
                                         <template v-if="h1StepCalculoRazon>=2">
-                                            <transition name="fade" mode="out-in">
+                                            <transition name="fade" mmode="out-in">
                                                 <div class="division flexVertical" v-if="h1StepCalculoRazon === 2">
-                                                    <transition name="fade" mode="out-in">
-                                                        <button class="boton"
+                                                    <transition name="fade" @enter="h1AnimarEntrada($event, 'arriba')">
+                                                        <button class="boton botonNombreLado h1OcupanteNumeroDivision"
                                                             v-if="h1RazonMostrandoNumeroArriba === false"
                                                             @click="h1RazonMostrandoNumeroArriba=true">
                                                             {{h1LadoArriba}}
                                                         </button>
-                                                        <div v-else>
+                                                        <div v-else class="h1OcupanteNumeroDivision h1NumeroExplicitoArriba">
                                                             {{truncar(h1NumeroArriba, 2)}}
                                                         </div>
                                                     </transition>
                                                     <div class="lineaDivision">
                                                     </div>
-                                                    <transition name="fade" mode="out-in">
-                                                        <button class="boton"
+                                                    <transition name="fade" @enter="h1AnimarEntrada($event, 'abajo')">
+                                                        <button  class="boton botonNombreLado h1OcupanteNumeroDivision h1OcupanteAbajo"
                                                             v-if="h1RazonMostrandoNumeroAbajo === false"
                                                             @click="h1RazonMostrandoNumeroAbajo=true">
                                                             {{h1LadoAbajo}}
                                                         </button>
-                                                        <div v-else>
+                                                        <div v-else class="h1OcupanteNumeroDivision h1NumeroExplicitoAbajo">
                                                             {{truncar(h1NumeroAbajo, 2)}}
                                                         </div>
                                                     </transition>
@@ -149,8 +149,8 @@
 
                             </div>
 
-                            <transition name="fadeIn">
-                                <div id="aclaracionRazonAngulo" v-show="h1Step>=4">
+                            <transition name="fadeIn2">
+                                <div id="aclaracionRazonAngulo" v-show="h1StepCalculoRazon>=3">
                                     Para triángulos construidos a partir de un ángulo de {{h1Angulo}}°.
                                 </div>
                             </transition>
@@ -166,8 +166,8 @@
                 </transition>
 
             </div>
-            <transition name="fadeIn">
-                <recuadro-component tipo='instruccionPointer' v-show="h1Step===1">
+            <transition name="fade" mode="out-in">
+                <recuadro-component tipo='instruccionPointer' v-if="h1Step===1">
                     <div class="flexVertical">
                         Selecciona el ángulo
                         <input type="range" min="15" max="45" v-model.number="h1Angulo">
@@ -178,27 +178,25 @@
                     </button>
 
                 </recuadro-component>
-            </transition>
 
-            <div class="flexVertical">
-                <transition name="fadeIn">
-                    <div class="flexHorizontal">
-                        <button class="boton" @click="h1EscogerRazon('seno')" v-show="h1Step===2">
+                <div class="flexVertical" v-else>
+                    <div class="flexHorizontal" v-show="h1Step===2">
+                        <button class="boton" @click="h1EscogerRazon('seno')">
                             Calcular seno
                         </button>
-                        <button class="boton" @click="h1EscogerRazon('coseno')" v-show="h1Step===2">
+                        <button class="boton" @click="h1EscogerRazon('coseno')">
                             Calcular coseno
                         </button>
-                        <button class="boton" @click="h1EscogerRazon('tangente')" v-show="h1Step===2">
+                        <button class="boton" @click="h1EscogerRazon('tangente')">
                             Calcular tangente
                         </button>
                     </div>
-                </transition>
 
-                <button class="boton" @click="h1Reiniciar" v-show="h1Step>=1">
-                    Reiniciar
-                </button>
-            </div>
+                    <button class="boton" @click="h1Reiniciar" v-show="h1Step>=1">
+                        Reiniciar
+                    </button>
+                </div>
+            </transition>
 
         </bloque-component>
 
@@ -283,13 +281,13 @@
             const h1ResultadoRazonEscogida = ref(null);
             const h1RazonEnCalculo = ref(null);
             const h1StepCalculoRazon = ref(1);
-            watch(h1StepCalculoRazon, step => {
+            /* watch(h1StepCalculoRazon, step => {
                 if (step === 3) {
                     setTimeout(() => {
                         h1Step.value = 4;
                     }, 3000);
                 }
-            })
+            }) */
             function h1EscogerRazon(nombreRazon) {
                 h1RazonEnCalculo.value = nombreRazon;
                 if (nombreRazon === 'seno') {
@@ -326,11 +324,58 @@
             const h1RazonMostrandoNumeroArriba = ref(false);
             const h1RazonMostrandoNumeroAbajo = ref(false);
 
+            function h1AnimarEntrada(elementoNumero, posicion) {
+                const elementoContenedor = document.querySelector("#h1ContenedorCatetos");
+                if (!elementoContenedor) {
+                    console.log(`No hay contenedorCatetos`);
+                    return;
+                }
+                let identificadorOrigen;
+                if (posicion === 'arriba') {
+                    identificadorOrigen = h1RazonEnCalculo.value == 'seno' ? '.nombreCatetoOpuesto' : h1RazonEnCalculo.value == 'coseno' ? '.nombreCatetoAdyacente' : h1RazonEnCalculo.value === 'tangente' ? '.nombreCatetoOpuesto' : null;
+                }
+                else {
+                    identificadorOrigen = h1RazonEnCalculo.value == 'seno' ? '.nombreHipotenusa' : h1RazonEnCalculo.value == 'coseno' ? '.nombreHipotenusa' : h1RazonEnCalculo.value === 'tangente' ? '.nombreCatetoAdyacente' : null;
+                }
+                if (!identificadorOrigen) {
+                    console.log(`Error seleccionando identificador de órigen`);
+                    return;
+                }
+                const elementoOrigen = elementoContenedor.querySelector(identificadorOrigen);
+                if (!elementoOrigen) {
+                    console.log(`No hay elementoOrigen`);
+                    return;
+                }
+                let posOrigen = elementoOrigen.getBoundingClientRect();
+                let posFinal = elementoNumero.getBoundingClientRect()
+                let vector = {
+                    x: posOrigen.left - posFinal.left,
+                    y: posOrigen.top - posFinal.top,
+                }
+                console.log(`Animando`);
+                elementoNumero.animate([
+                    {
+                        transform: `translate(${vector.x}px, ${vector.y}px)`,
+                        opacity: 1,
+                        color: 'black',
+                    },
+                    {
+                        transform: `translate(0px, 0px)`,
+                        color: 'white',
+                        opacity: 1,
+                    }
+
+                ], {duration: 900});
+
+
+
+            }
+
             return {
                 degToRad, truncar,
                 h1Angulo, h1AnchoTriangulo, h1UnidadTriangulo, h1RotacionAngulo, h1EstiloTriangulo, h1Step, h1Triangulo, h1Reiniciar, h1EstiloContenedorCatetos, h1EstiloNombresCatetos, h1EstiloHipotenusa,
                 h1DescripcionRazon, h1LadoArriba, h1LadoAbajo, h1NumeroArriba, h1NumeroAbajo, h1ResultadoRazonEscogida, h1EscogerRazon, h1RazonEnCalculo, h1StepCalculoRazon, h1RazonMostrandoNumeroArriba, h1RazonMostrandoNumeroAbajo,
-                h1EstiloLadoDerecho,
+                h1AnimarEntrada, h1EstiloLadoDerecho,
             }
         },
         components: {
@@ -417,7 +462,7 @@
         top: calc(50% - 10px);
     }
 
-    #nombreHipotenusa {
+    #h1ContenedorCatetos .nombreHipotenusa {
         left: calc(50% - 20px);
         bottom: calc(50% + 30px);
     }
@@ -462,5 +507,23 @@
 
     .unfoldHorizontalAbsolute-leave-active {
         transition: opacity 1s;
+    }
+    .botonNombreLado.fade-leave-active{
+        position: absolute;
+    }
+    .botonNombreLado.h1OcupanteAbajo.fade-leave-active{
+        bottom: 3px;
+    }
+    .h1OcupanteNumeroDivision{
+        height: 40px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+    .h1OcupanteNumeroDivision.h1NumeroExplicitoArriba{
+        display: flex;
+        align-items: flex-end;
+    }
+    #aclaracionRazonAngulo.fadeIn2-enter-active{
+        transition-delay: 3s;
     }
 </style>

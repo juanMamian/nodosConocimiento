@@ -15,8 +15,7 @@
         src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
 
 
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet"
         href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
@@ -71,21 +70,25 @@
                     </componente-triangulo>
                     <transition name="fadeIn">
                         <div id="h1ContenedorCatetos" :style="[h1EstiloContenedorCatetos]" v-if="h1Triangulo">
-                            <div class="cateto" id="h1CatetoAdyacente">
+                            <div class="cateto"
+                                :class="{deRazonEnCalculo: h1RazonEnCalculo==='coseno' || h1RazonEnCalculo==='tangente'}"
+                                id="h1CatetoAdyacente">
                                 <transition name="fadeIn">
                                     <div class="nombreCateto nombreCatetoAdyacente" :style="[h1EstiloNombresCatetos]">
                                         {{truncar(h1Triangulo.ancho, 2)}}
                                     </div>
                                 </transition>
                             </div>
-                            <div class="cateto" id="h1CatetoOpuesto">
+                            <div class="cateto" id="h1CatetoOpuesto"
+                                :class="{deRazonEnCalculo: h1RazonEnCalculo==='seno' || h1RazonEnCalculo==='tangente'}">
                                 <transition name="fadeIn">
                                     <div class="nombreCateto nombreCatetoOpuesto" :style="[h1EstiloNombresCatetos]">
                                         {{truncar(h1Triangulo.largo, 2)}}
                                     </div>
                                 </transition>
                             </div>
-                            <div class="cateto" id="h1Hipotenusa" :style="[h1EstiloHipotenusa]">
+                            <div class="cateto" id="h1Hipotenusa" :style="[h1EstiloHipotenusa]"
+                                :class="{deRazonEnCalculo: h1RazonEnCalculo==='coseno' || h1RazonEnCalculo==='seno'}">
                             </div>
                             <div class="nombreCateto nombreHipotenusa" :style="[h1EstiloNombresCatetos]">
                                 {{truncar(h1Triangulo.hipotenusa, 2)}}
@@ -121,19 +124,22 @@
                                                             @click="h1RazonMostrandoNumeroArriba=true">
                                                             {{h1LadoArriba}}
                                                         </button>
-                                                        <div v-else class="h1OcupanteNumeroDivision h1NumeroExplicitoArriba">
+                                                        <div v-else
+                                                            class="h1OcupanteNumeroDivision h1NumeroExplicitoArriba">
                                                             {{truncar(h1NumeroArriba, 2)}}
                                                         </div>
                                                     </transition>
                                                     <div class="lineaDivision">
                                                     </div>
                                                     <transition name="fade" @enter="h1AnimarEntrada($event, 'abajo')">
-                                                        <button  class="boton botonNombreLado h1OcupanteNumeroDivision h1OcupanteAbajo"
+                                                        <button
+                                                            class="boton botonNombreLado h1OcupanteNumeroDivision h1OcupanteAbajo"
                                                             v-if="h1RazonMostrandoNumeroAbajo === false"
                                                             @click="h1RazonMostrandoNumeroAbajo=true">
                                                             {{h1LadoAbajo}}
                                                         </button>
-                                                        <div v-else class="h1OcupanteNumeroDivision h1NumeroExplicitoAbajo">
+                                                        <div v-else
+                                                            class="h1OcupanteNumeroDivision h1NumeroExplicitoAbajo">
                                                             {{truncar(h1NumeroAbajo, 2)}}
                                                         </div>
                                                     </transition>
@@ -246,6 +252,7 @@
                 h1RotacionAngulo.value = Math.round(Math.random() * 4) * Math.PI / 2;
                 h1Step.value = 1;
                 h1StepCalculoRazon.value = 1;
+                h1RazonEnCalculo.value = null;
                 h1RazonMostrandoNumeroArriba.value = false;
                 h1RazonMostrandoNumeroAbajo.value = false;
             }
@@ -422,6 +429,14 @@
         position: absolute;
     }
 
+    .cateto .linea {
+        transition: background-color 0.5s;
+    }
+
+    .cateto.deRazonEnCalculo{
+        background-color: var(--paletaPrevio);
+    }
+
     #h1CatetoAdyacente {
         top: 100%;
         left: 0%;
@@ -508,22 +523,27 @@
     .unfoldHorizontalAbsolute-leave-active {
         transition: opacity 1s;
     }
-    .botonNombreLado.fade-leave-active{
+
+    .botonNombreLado.fade-leave-active {
         position: absolute;
     }
-    .botonNombreLado.h1OcupanteAbajo.fade-leave-active{
+
+    .botonNombreLado.h1OcupanteAbajo.fade-leave-active {
         bottom: 3px;
     }
-    .h1OcupanteNumeroDivision{
+
+    .h1OcupanteNumeroDivision {
         height: 40px;
         margin-top: 2px;
         margin-bottom: 2px;
     }
-    .h1OcupanteNumeroDivision.h1NumeroExplicitoArriba{
+
+    .h1OcupanteNumeroDivision.h1NumeroExplicitoArriba {
         display: flex;
         align-items: flex-end;
     }
-    #aclaracionRazonAngulo.fadeIn2-enter-active{
+
+    #aclaracionRazonAngulo.fadeIn2-enter-active {
         transition-delay: 3s;
     }
 </style>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negative Charges in Motion</title>
+    <style>
+        #container {
+            width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            position: relative;
+            background-color: lightblue;
+        }
+
+        .charge {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <script>
+        const container = document.getElementById('container');
+        const numCharges = 10;
+        const charges = [];
+
+        for (let i = 0; i < numCharges; i++) {
+            const charge = document.createElement('div');
+            charge.className = 'charge';
+            container.appendChild(charge);
+            charges.push(charge);
+        }
+
+        function updateChargePositions() {
+            charges.forEach(charge => {
+                const randomX = Math.random() * (container.offsetWidth - charge.offsetWidth);
+                const randomY = Math.random() * (container.offsetHeight - charge.offsetHeight);
+                charge.style.left = `${randomX}px`;
+                charge.style.top = `${randomY}px`;
+            });
+        }
+
+        function moveCharges() {
+            charges.forEach(charge => {
+                const randomX = Math.random() * 6 - 3; // Random horizontal velocity between -3 and 3
+                const randomY = Math.random() * 6 - 3; // Random vertical velocity between -3 and 3
+                const currentX = parseFloat(charge.style.left);
+                const currentY = parseFloat(charge.style.top);
+                const newX = currentX + randomX;
+                const newY = currentY + randomY;
+
+                // Keep charges inside the container
+                if (newX >= 0 && newX <= container.offsetWidth - charge.offsetWidth) {
+                    charge.style.left = `${newX}px`;
+                }
+                if (newY >= 0 && newY <= container.offsetHeight - charge.offsetHeight) {
+                    charge.style.top = `${newY}px`;
+                }
+            });
+        }
+
+        updateChargePositions();
+        setInterval(moveCharges, 1000 / 30); // Update charges 30 times per second
+    </script>
+</body>
+
+</html>

@@ -5,33 +5,23 @@
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
+    <script src="http://127.0.0.1:8080/mats/resources/expresionNumericaClass.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
-    <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
-    <script id="MathJax-script" async
-        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/rectanguloEstilo.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/circuloEstilo.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/mats/cuadriculaEstilo.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <script id="MathJax-script" async src="http://127.0.0.1:8080/recursos/librerias/MathJax/es5/tex-chtml.js"></script>
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/mats/rectanguloEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/mats/circuloEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/mats/cuadriculaEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
     <title>Algebrista mínimo - evaluación</title>
 </head>
@@ -90,7 +80,7 @@
 
 <script type="module">
 
-    import {useUtils} from "https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/composables/utils.js";
+    import {useUtils} from "http://127.0.0.1:8080/recursos/composables/utils.js";
     const {ref, computed, nextTick, watch} = Vue;
     const {createApp} = Vue;
 
@@ -122,6 +112,7 @@
                 laExpresion = ExpresionNumericaBuilder.generarExpresionNumericaRecursiva({}, e1Dificultad.value > 2 ? 2 : e1Dificultad.value, {keepInteger: true, operaciones: operacionesUsadas});
                 e1Expresion.value = laExpresion;
                 e1Respuesta.value = laExpresion.incognitarPrimerNumero().valor;
+                console.log(`Respuesta es: ${e1Respuesta.value}`);
                 e1ExpresionString.value = "\\({" + laExpresion.toMathJax() + '}={' + laExpresion.valor + "}\\)";
                 e1VersionReto.value++;
                 await nextTick();

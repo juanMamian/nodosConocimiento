@@ -6,26 +6,23 @@
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/librerias/vue.global.js"></script>
+        src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
     <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
+        src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
     <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
+        src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
     <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
     <script
-        src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
+        src="http://127.0.0.1:8080/mats/resources/expresionNumericaClass.js"></script>
 
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
+        href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet"
-        href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+        href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
-
-
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="http://127.0.0.1:8080/recursos/librerias/MathJax/es5/tex-chtml.js"></script>
 
 
@@ -133,8 +130,8 @@
                 console.log(`Added to generar reto`);
                 e0Reto.value = {};
                 let expresion1 = new ExpresionNumerica({operacion: 'division'});
-                expresion1.fillExpresion({keepInter:true}),
-                e0Reto.value.expresion = expresion1;
+                expresion1.fillExpresion({keepInter: true}),
+                    e0Reto.value.expresion = expresion1;
                 e0Reto.value.enTexto = "\\(" + e0Reto.value.expresion.toMathJax() + "\\)";
                 await nextTick();
                 MathJax.typeset();
@@ -216,7 +213,7 @@
 </script>
 
 <style>
-.zonaReto{
-    font-size: 45px;
-}
+    .zonaReto {
+        font-size: 45px;
+    }
 </style>

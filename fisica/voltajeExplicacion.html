@@ -6,148 +6,676 @@
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloque.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlace.js"></script>
-    <script src="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadro.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet" href="https://pe-pe-pe.herokuapp.com/public/atlasConocimiento/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/fisica/recursos/estilosElectricidad.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
     <title>Voltaje</title>
 </head>
 
 <body>
     <div id="doc">
+
         <p>
-            La energía con la que la carga eléctrica que está en un lugar se siente atraida hacia otro lugar se llama
-            <span class="resaltado">voltaje</span>
+            En algunos materiales carga electrica negativa es producida y, al tiempo que eso sucede, es empujada
+            hacia afuera con fuerza.
+        </p>
+        <recuadro-component tipo="datoPrevio">
+            Un objeto que contiene carga electrica negativa y la empuja hacia afuera es llamado <span
+                class="resaltado">ánodo</span>.
+        </recuadro-component>
+        <bloque-component tipo="herramientaInteractiva" @desplegado="h1AllowMovimiento=true"
+            @plegado="h1AllowMovimiento=false">
+            <template #cabecera>
+                En este cuadro se muestra un ánodo y sus partículas de carga eléctrica negativa.
+            </template>
+            <div class="flexVertical">
+
+                <input type="range" min="0" max="50" v-model.number="h1FactorFuerzaCentro">
+                {{h1FactorFuerzaCentro}}
+
+                <div class="zonaInteraccion">
+                    <div class="cuerpo anodo">
+                        <div class="cargaElectrica negativa h1CargasElectricasNegativas"
+                            v-for="carga of h1CargasElectricasNegativas"
+                            :style="[h1EstiloCargasElectricas, {left:  Math.round(carga.x) + '%', top: Math.round(carga.y)+'%'}]">
+                            <div class="fuerza fuerzaAnodo" :style="[getEstiloFuerzaAnodo(carga)]"
+                                v-show="h1MostrarFuerzas">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bloqueInput">
+                        <label for="h1MostrarFuerzas">Mostrar fuerzas: </label>
+                        <input type="checkbox" v-model="h1MostrarFuerzas">
+                    </div>
+                </div>
+            </div>
+
+        </bloque-component>
+
+        <p>
+            Algunos materiales producen una fuerza de atracción capaz de jalar hacia su interior carga eléctrica
+            negativa cercana.
         </p>
 
-        <bloque-component tipo="datoPrevio">
+        <recuadro-component tipo="datoPrevio">
+            Un objeto que jala hacia su interior la carga eléctrica negativa es llamado <span
+                class="resaltado">cátodo</span>.
+        </recuadro-component>
+
+        <bloque-component tipo="herramientaInteractiva" @desplegado="h2AllowMovimiento=true"
+            @plegado="h2AllowMovimiento=false">
             <template #cabecera>
-                En este cuadro se muestra una representación de voltaje.
+                En este cuadro se muestra un cátodo que ejerce fuerza de atracción sobre cargas negativas cercanas.
+            </template>
+            <recuadro-component tipo="instruccionPointer">
+                <div class="flexVertical">
+                    Cambia la fuerza de atracción del cátodo
+                    <input type="range" min="1" max="50" v-model="h2FuerzaCatodo">
+                    {{h2FuerzaCatodo}}
+                </div>
+            </recuadro-component>
+
+            <div class="zonaInteraccion" id="h2ZonaInteraccion">
+                <div class="cuerpo" ref="h2ElementoCuerpo1">
+                    <div class="cargaElectrica negativa h2CargasElectricasNegativas"
+                        v-for="carga of h2CargasElectricasNegativas"
+                        :style="[h2EstiloCargasElectricas, {left:  Math.round(carga.x) + '%', top: Math.round(carga.y)+'%'}]">
+                        <div class="fuerza fuerzaCatodo" :style="[getEstiloFuerzaCatodo(carga)]"
+                            v-show="h2MostrarFuerzas">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cuerpo catodo" ref="h2ElementoCatodo">
+
+                </div>
+                <div class="bloqueInput">
+                    <label for="h2InputMostrarFuerzas">Mostrar fuerzas: </label>
+                    <input type="checkbox" v-model="h2MostrarFuerzas">
+                </div>
+            </div>
+
+        </bloque-component>
+
+        <p>
+            La fuerza que empuja a las cargas eléctricas causada por un ánodo, un cátodo o ambos, se llama <span
+                class="resaltado">voltaje</span>.
+        </p>
+
+        <bloque-component tipo="herramientaInteractiva">
+            <template #cabecera>
+                En este cuadro se puede ver el voltaje que experimentan las cargas eléctricas debido a la acción
+                combinada de un ánodo y un cátodo.
             </template>
 
-            <div class="tierras"></div>
-
-            <div class="fuenteCargada">
-
-            </div>
-
-
         </bloque-component>
 
-
-        <bloque-component tipo="ejemplo">
-            <div class="matriz" id="matriz1">
-                <div class="fila" v-for="fila of m" :key="'fila'+fila">
-                    <div class="celda" v-for="celda of n" :class="{agrisado: i===fila}" :key="'celda'+celda">
-                        <input type="number" :value="Math.round(Math.random()*10)">
-                    </div>
-                </div>
-            </div>
-
-            <div class="matriz" id="matriz2">
-                <div class="fila" v-for="fila of o" :key="'fila'+fila">
-                    <div class="celda" v-for="celda of p" :class="{agrisado: j===celda}" :key="'celda'+celda">
-                        <input type="number" :value="Math.round(Math.random()*10)">
-                    </div>
-                </div>
-            </div>
-
-            <div class="boton" @click="step">
-                Sig
-            </div>
-
-            <div class="matriz" id="matriz3">
-                <div class="fila" v-for="fila of m" :key="'fila'+fila">
-                    <div class="celda" :class="{mirado:i===fila && j===celda}" v-for="celda of p" :key="'celda'+celda">
-                        <input type="number">
-                    </div>
-                </div>
-            </div>
-        </bloque-component>
     </div>
 </body>
 
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp, ref, watch, computed} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-        methods: {
-            step() {
-                if (i > m) return;
-                k++;
-                if (k > n) {
-                    k = 1;
-                    j++;
-
-                    if (j > p) {
-                        j = 1
-                        i++;
+        setup() {
+            const h1MostrarFuerzas = ref(false);
+            const h1CargasElectricasNegativas = ref([
+                {
+                    x: 10,
+                    y: 20,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaAnodo: {
+                        x: 0,
+                        y: 0
                     }
+                },
+                {
+                    x: 20,
+                    y: 30,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaAnodo: {
+                        x: 0,
+                        y: 0
+                    }
+                },
+                {
+                    x: 40,
+                    y: 50,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaAnodo: {
+                        x: 0,
+                        y: 0
+                    }
+                },
+                {
+                    x: 60,
+                    y: 70,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaAnodo: {
+                        x: 0,
+                        y: 0
+                    }
+                },
+                {
+                    x: 80,
+                    y: 90,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaAnodo: {
+                        x: 0,
+                        y: 0
+                    }
+                },
+                {
+                    x: 20,
+                    y: 10,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaAnodo: {
+                        x: 0,
+                        y: 0
+                    }
+                },
+            ]);
+            function getEstiloFuerzaAnodo(carga) {
+                let magnitud = Math.sqrt(Math.pow(carga.fuerzaAnodo.x, 2) + Math.pow(carga.fuerzaAnodo.y, 2));
+                return {
+                    transform: 'rotate(' + Math.atan2(carga.fuerzaAnodo.y, carga.fuerzaAnodo.x) + 'rad) scale(min(2,' + magnitud / 400 + '))',
+                }
+            }
+
+            let h1TimeoutMovimiento = null;
+            const h1AllowMovimiento = ref(false);
+            const h1PeriodoMovimiento = ref(50);
+            const h1FactorFuerzaCentro = ref(1);
+            function h1UpdatePosiciones() {
+                const sizeCargaPercent = 1.5; //La carga es 10% del cuerpo en width y height.
+                for (let i = 0; i < h1CargasElectricasNegativas.value.length; i++) {//Se calcularán las fuerzas que actuan sobre la carga i;
+                    let vectorFuerzaTotal = {
+                        x: 0,
+                        y: 0,
+                    }
+                    for (let j = 0; j < h1CargasElectricasNegativas.value.length; j++) { //Se suman todas las fuerzas causadas por las cargas cercanas.
+                        if (j === i) continue;
+                        let cargaActuante = JSON.parse(JSON.stringify(h1CargasElectricasNegativas.value[j]));
+
+                        if (h1CargasElectricasNegativas.value[i].x === h1CargasElectricasNegativas.value[j].x && h1CargasElectricasNegativas.value[i].y === h1CargasElectricasNegativas.value[j].y) {// Los dos objetos estaban en la misma posición exacta, Se calculará como si la carga actuante estuviera corrida en alguna otra dirección.
+                            let direccionBlink = Math.random() * 2 * Math.PI;
+                            cargaActuante.x += Math.cos(direccionBlink);
+                            cargaActuante.y += Math.sin(direccionBlink);
+                        }
+                        let vectorDistancia = { //Vector originado en j hacia i.
+                            x: h1CargasElectricasNegativas.value[i].x - cargaActuante.x,
+                            y: h1CargasElectricasNegativas.value[i].y - cargaActuante.y,
+                        }
+                        const moduloDistancia = Math.sqrt(Math.pow(vectorDistancia.x, 2) + Math.pow(vectorDistancia.y, 2));
+                        const direccionDistancia = Math.atan2(vectorDistancia.y, vectorDistancia.x);
+
+                        const factorConstante = 32000;
+                        let vectorFuerza = {
+                            x: factorConstante * Math.cos(direccionDistancia) / Math.pow(moduloDistancia, 2),
+                            y: factorConstante * Math.sin(direccionDistancia) / Math.pow(moduloDistancia, 2),
+                        }
+                        vectorFuerzaTotal.x += vectorFuerza.x;
+                        vectorFuerzaTotal.y += vectorFuerza.y;
+                    }
+                    //Ahora añadir una fuerza expulsora
+                    let vectorCentro = {//Vector originado en el centro con dirección a la carga.
+                        x: h1CargasElectricasNegativas.value[i].x + sizeCargaPercent / 2 - 50,
+                        y: h1CargasElectricasNegativas.value[i].y + sizeCargaPercent / 2 - 50,
+                    }
+                    const moduloVectorCentro = Math.sqrt(Math.pow(vectorCentro.x, 2) + Math.pow(vectorCentro.y, 2));
+                    const direccionVectorCentro = Math.atan2(vectorCentro.y, vectorCentro.x);
+                    const factorMagnificador = 40000;
+                    const fuerzaAnodo = {
+                        x: h1FactorFuerzaCentro.value * factorMagnificador * Math.cos(direccionVectorCentro) / Math.pow(moduloVectorCentro, 2),
+                        y: h1FactorFuerzaCentro.value * factorMagnificador * Math.sin(direccionVectorCentro) / Math.pow(moduloVectorCentro, 2),
+                    }
+                    h1CargasElectricasNegativas.value[i].fuerzaAnodo = fuerzaAnodo;
+
+                    vectorFuerzaTotal.x += fuerzaAnodo.x;
+                    vectorFuerzaTotal.y += fuerzaAnodo.y;
+                    h1CargasElectricasNegativas.value[i].fuerza = vectorFuerzaTotal;
+                    //Ahora que está formada la fuerza, se debe afectar la velocidad.
+                    const masaImaginaria = 1;
+                    let aceleracion = {
+                        x: vectorFuerzaTotal.x / masaImaginaria,
+                        y: vectorFuerzaTotal.y / masaImaginaria,
+                    }
+                    h1CargasElectricasNegativas.value[i].velocidad.x += aceleracion.x * h1PeriodoMovimiento.value / 1000;
+                    h1CargasElectricasNegativas.value[i].velocidad.y += aceleracion.y * h1PeriodoMovimiento.value / 1000;
+                    //Cap velocidad
+                    const maxVelocidad = 45;
+                    const razonRespectoMax = Math.sqrt(Math.pow(h1CargasElectricasNegativas.value[i].velocidad.x, 2) + Math.pow(h1CargasElectricasNegativas.value[i].velocidad.y, 2)) / maxVelocidad;
+                    if (razonRespectoMax > 1) { //Ajustar para que el módulo de velocidad sea maxVelocidad.
+                        h1CargasElectricasNegativas.value[i].velocidad.x /= razonRespectoMax;
+                        h1CargasElectricasNegativas.value[i].velocidad.y /= razonRespectoMax;
+                    }
+
+                    if (h1CargasElectricasNegativas.value[i].x >= 100 - sizeCargaPercent / 2 && h1CargasElectricasNegativas.value[i].velocidad.x > 0) {
+                        h1CargasElectricasNegativas.value[i].velocidad.x = -h1CargasElectricasNegativas.value[i].velocidad.x;
+                    }
+                    if (h1CargasElectricasNegativas.value[i].x <= 0 + sizeCargaPercent / 2 && h1CargasElectricasNegativas.value[i].velocidad.x < 0) {
+                        h1CargasElectricasNegativas.value[i].velocidad.x = -h1CargasElectricasNegativas.value[i].velocidad.x;
+                    }
+                    if (h1CargasElectricasNegativas.value[i].y >= 100 - sizeCargaPercent / 2 && h1CargasElectricasNegativas.value[i].velocidad.y > 0) {
+                        h1CargasElectricasNegativas.value[i].velocidad.y = -h1CargasElectricasNegativas.value[i].velocidad.y;
+                    }
+                    if (h1CargasElectricasNegativas.value[i].y <= 0 + sizeCargaPercent / 2 && h1CargasElectricasNegativas.value[i].velocidad.y < 0) {
+                        h1CargasElectricasNegativas.value[i].velocidad.y = -h1CargasElectricasNegativas.value[i].velocidad.y;
+                    }
+
+
+                    h1CargasElectricasNegativas.value[i].x += h1CargasElectricasNegativas.value[i].velocidad.x * h1PeriodoMovimiento.value / 1000;
+                    h1CargasElectricasNegativas.value[i].y += h1CargasElectricasNegativas.value[i].velocidad.y * h1PeriodoMovimiento.value / 1000;
+                }
+                if (h1AllowMovimiento.value) {
+                    h1TimeoutMovimiento = setTimeout(h1UpdatePosiciones, h1PeriodoMovimiento.value);
+                }
+            };
+            watch(h1AllowMovimiento, allow => {
+                if (allow) {
+                    if (h1TimeoutMovimiento) {
+                        clearTimeout(h1TimeoutMovimiento);
+                    }
+                    h1UpdatePosiciones();
                 }
 
+            });
+            h1EstiloCargasElectricas = computed(() => {
+                return {
+                    transition: `top ${h1PeriodoMovimiento.value / 1000}s linear, left ${h1PeriodoMovimiento.value / 1000}s linear`
+                }
 
+            });
+
+
+            //h2
+            const h2MostrarFuerzas = ref(false);
+            const h2CargasElectricasNegativas = ref([
+                {
+                    x: 50,
+                    y: 50,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaCatodo: {
+                        x: 0,
+                        y: 0,
+                    }
+                },
+                {
+                    x: 50,
+                    y: 50,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaCatodo: {
+                        x: 0,
+                        y: 0,
+                    }
+                },
+                {
+                    x: 50,
+                    y: 50,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaCatodo: {
+                        x: 0,
+                        y: 0,
+                    }
+                },
+                {
+                    x: 50,
+                    y: 50,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaCatodo: {
+                        x: 0,
+                        y: 0,
+                    }
+                },
+                {
+                    x: 50,
+                    y: 50,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaCatodo: {
+                        x: 0,
+                        y: 0,
+                    }
+                },
+                {
+                    x: 50,
+                    y: 50,
+                    velocidad: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerza: {
+                        x: 0,
+                        y: 0,
+                    },
+                    fuerzaCatodo: {
+                        x: 0,
+                        y: 0,
+                    }
+                },
+            ]);
+            function getEstiloFuerzaCatodo(carga) {
+                let magnitud = Math.sqrt(Math.pow(carga.fuerzaCatodo.x, 2) + Math.pow(carga.fuerzaCatodo.y, 2));
+                return {
+                    transform: 'rotate(' + Math.atan2(carga.fuerzaCatodo.y, carga.fuerzaCatodo.x) + 'rad) scale(' + magnitud / 150 + ')',
+                    width: magnitud / 3 + 'px',
+                }
             }
-        },
-        data() {
+
+            let h2TimeoutMovimiento = null;
+            const h2AllowMovimiento = ref(false);
+            const h2PeriodoMovimiento = ref(50);
+            const h2FuerzaCatodo = ref(5);
+            const h2ElementoCuerpo1 = ref(null);
+            const h2ElementoCatodo = ref(null);
+            function h2UpdatePosiciones() {
+                const sizeCargaPercent = 1.5; //La carga es 10% del cuerpo en width y height.
+                for (let i = 0; i < h2CargasElectricasNegativas.value.length; i++) {//Se calcularán las fuerzas que actuan sobre la carga i;
+                    let vectorFuerzaTotal = {
+                        x: 0,
+                        y: 0,
+                    }
+                    for (let j = 0; j < h2CargasElectricasNegativas.value.length; j++) { //Se suman todas las fuerzas causadas por las cargas cercanas.
+                        if (j === i) continue;
+                        let cargaActuante = JSON.parse(JSON.stringify(h2CargasElectricasNegativas.value[j]));
+
+                        if (h2CargasElectricasNegativas.value[i].x === h2CargasElectricasNegativas.value[j].x && h2CargasElectricasNegativas.value[i].y === h2CargasElectricasNegativas.value[j].y) {// Los dos objetos estaban en la misma posición exacta, Se calculará como si la carga actuante estuviera corrida en alguna otra dirección.
+                            let direccionBlink = Math.random() * 2 * Math.PI;
+                            cargaActuante.x += Math.cos(direccionBlink);
+                            cargaActuante.y += Math.sin(direccionBlink);
+                        }
+                        let vectorDistancia = { //Vector originado en j hacia i.
+                            x: h2CargasElectricasNegativas.value[i].x - cargaActuante.x,
+                            y: h2CargasElectricasNegativas.value[i].y - cargaActuante.y,
+                        }
+                        const moduloDistancia = Math.sqrt(Math.pow(vectorDistancia.x, 2) + Math.pow(vectorDistancia.y, 2));
+                        const direccionDistancia = Math.atan2(vectorDistancia.y, vectorDistancia.x);
+
+                        const factorConstante = 32000;
+                        let vectorFuerza = {
+                            x: factorConstante * Math.cos(direccionDistancia) / Math.pow(moduloDistancia, 2),
+                            y: factorConstante * Math.sin(direccionDistancia) / Math.pow(moduloDistancia, 2),
+                        }
+                        vectorFuerzaTotal.x += vectorFuerza.x;
+                        vectorFuerzaTotal.y += vectorFuerza.y;
+                    }
+                    //Ahora añadir una fuerza proveniente del cátodo
+                    if (h2ElementoCuerpo1.value && h2ElementoCatodo.value) {
+                        const posCuerpo1 = h2ElementoCuerpo1.value.getBoundingClientRect();
+                        const posCatodo = h2ElementoCatodo.value.getBoundingClientRect();
+                        if (posCuerpo1.width < 1 || posCatodo.width < 1) {
+                            break;
+                        }
+                        const posCentroCatodo = {//Relativo a la esquina del cuerpo 1 y en porcentajes para ser coherentes con la posición de las cargas.
+                            x: (posCatodo.left + posCatodo.width / 2 - posCuerpo1.left) * 100 / posCuerpo1.width,
+                            y: (posCatodo.top + posCatodo.height / 2 - posCuerpo1.top) * 100 / posCuerpo1.height,
+                        }
+
+                        let vectorDistanciaCentroCatodo = {//Vector originado en la carga con dirección a el centro del cátodo.
+                            x: posCentroCatodo.x - h2CargasElectricasNegativas.value[i].x,
+                            y: posCentroCatodo.y - h2CargasElectricasNegativas.value[i].y,
+                        }
+                        const moduloVectorCentro = Math.sqrt(Math.pow(vectorDistanciaCentroCatodo.x, 2) + Math.pow(vectorDistanciaCentroCatodo.y, 2));
+                        const direccionVectorCentro = Math.atan2(vectorDistanciaCentroCatodo.y, vectorDistanciaCentroCatodo.x);
+                        const factorAmplificadorFuerzaCatodo = 20000;
+                        const vectorFuerzaCatodo = {
+                            x: h2FuerzaCatodo.value * factorAmplificadorFuerzaCatodo * Math.cos(direccionVectorCentro) / Math.pow(moduloVectorCentro, 2),
+                            y: h2FuerzaCatodo.value * factorAmplificadorFuerzaCatodo * Math.sin(direccionVectorCentro) / Math.pow(moduloVectorCentro, 2),
+                        }
+                        h2CargasElectricasNegativas.value[i].fuerzaCatodo = vectorFuerzaCatodo;
+                        vectorFuerzaTotal.x += vectorFuerzaCatodo.x;
+                        vectorFuerzaTotal.y += vectorFuerzaCatodo.y;
+
+                    }
+                    else {
+                        console.log(`No hay elementos para calcular fuerza de cátodo`);
+                    }
+                    h2CargasElectricasNegativas.value[i].fuerza = vectorFuerzaTotal;
+                    //Ahora que está formada la fuerza, se debe afectar la velocidad.
+                    const masaImaginaria = 1;
+                    let aceleracion = {
+                        x: vectorFuerzaTotal.x / masaImaginaria,
+                        y: vectorFuerzaTotal.y / masaImaginaria,
+                    }
+                    h2CargasElectricasNegativas.value[i].velocidad.x += aceleracion.x * h2PeriodoMovimiento.value / 1000;
+                    h2CargasElectricasNegativas.value[i].velocidad.y += aceleracion.y * h2PeriodoMovimiento.value / 1000;
+                    //Cap velocidad
+                    const maxVelocidad = 45;
+                    const razonRespectoMax = Math.sqrt(Math.pow(h2CargasElectricasNegativas.value[i].velocidad.x, 2) + Math.pow(h2CargasElectricasNegativas.value[i].velocidad.y, 2)) / maxVelocidad;
+                    if (razonRespectoMax > 1) { //Ajustar para que el módulo de velocidad sea maxVelocidad.
+                        h2CargasElectricasNegativas.value[i].velocidad.x /= razonRespectoMax;
+                        h2CargasElectricasNegativas.value[i].velocidad.y /= razonRespectoMax;
+                    }
+
+                    if (h2CargasElectricasNegativas.value[i].x >= 100 - sizeCargaPercent / 2 && h2CargasElectricasNegativas.value[i].velocidad.x > 0) {
+                        h2CargasElectricasNegativas.value[i].velocidad.x = -h2CargasElectricasNegativas.value[i].velocidad.x;
+                    }
+                    if (h2CargasElectricasNegativas.value[i].x <= 0 + sizeCargaPercent / 2 && h2CargasElectricasNegativas.value[i].velocidad.x < 0) {
+                        h2CargasElectricasNegativas.value[i].velocidad.x = -h2CargasElectricasNegativas.value[i].velocidad.x;
+                    }
+                    if (h2CargasElectricasNegativas.value[i].y >= 100 - sizeCargaPercent / 2 && h2CargasElectricasNegativas.value[i].velocidad.y > 0) {
+                        h2CargasElectricasNegativas.value[i].velocidad.y = -h2CargasElectricasNegativas.value[i].velocidad.y;
+                    }
+                    if (h2CargasElectricasNegativas.value[i].y <= 0 + sizeCargaPercent / 2 && h2CargasElectricasNegativas.value[i].velocidad.y < 0) {
+                        h2CargasElectricasNegativas.value[i].velocidad.y = -h2CargasElectricasNegativas.value[i].velocidad.y;
+                    }
+
+
+                    h2CargasElectricasNegativas.value[i].x += h2CargasElectricasNegativas.value[i].velocidad.x * h2PeriodoMovimiento.value / 1000;
+                    h2CargasElectricasNegativas.value[i].y += h2CargasElectricasNegativas.value[i].velocidad.y * h2PeriodoMovimiento.value / 1000;
+                }
+                if (h2AllowMovimiento.value) {
+                    h2TimeoutMovimiento = setTimeout(h2UpdatePosiciones, h2PeriodoMovimiento.value);
+                }
+            };
+            watch(h2AllowMovimiento, allow => {
+                if (allow) {
+                    if (h2TimeoutMovimiento) {
+                        clearTimeout(h2TimeoutMovimiento);
+                    }
+                    h2UpdatePosiciones();
+                }
+
+            });
+            h2EstiloCargasElectricas = computed(() => {
+                return {
+                    transition: `top ${h2PeriodoMovimiento.value / 1000}s linear, left ${h2PeriodoMovimiento.value / 1000}s linear`
+                }
+
+            });
             return {
-                m: 3,
-                n: 4,
-                o: 4,
-                p: 6,
-
-                i: 1,
-                j: 1,
-                k: 1,
+                h1AllowMovimiento, h1CargasElectricasNegativas, h1EstiloCargasElectricas, h1FactorFuerzaCentro, h1MostrarFuerzas, getEstiloFuerzaAnodo,
+                h2CargasElectricasNegativas, h2EstiloCargasElectricas, h2AllowMovimiento, h2FuerzaCatodo, h2ElementoCatodo, h2ElementoCuerpo1, getEstiloFuerzaCatodo, h2MostrarFuerzas,
             }
-        }
-    })
+
+        },
+    }).mount("#doc");
 </script>
 
 <style>
-    .matriz {
+    .cuerpo {
+        position: relative;
+        border: 7px solid black;
+        width: 200px;
+        height: 200px;
+        border-radius: 15px;
+        padding: 30px;
+        box-sizing: content-box;
+    }
+
+    .cuerpo.anodo {
+        background-color: #eea5a5;
+    }
+
+    .cuerpo.anodo::after {
+        content: "Anodo";
+        position: absolute;
+        font-size: 14px;
+        font-style: italic;
+        opacity: 0.7;
+        z-index: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .cuerpo.catodo {
+        background-color: #a7d0f4;
+    }
+
+    .cuerpo.catodo::after {
+        content: "Catodo";
+        position: absolute;
+        font-size: 14px;
+        font-style: italic;
+        opacity: 0.7;
+        z-index: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+
+    .zonaInteraccion {
+        min-height: 400px;
+        width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 3px;
-        margin: 10px 10px;
-        border: 2px solid black;
+        gap: 20px;
+        align-items: center;
     }
 
-    .fila {
-        display: flex;
-        gap: 3px;
+    .h1CargasElectricasNegativas {
+        position: absolute;
+        transform: translate(-50%, -50%);
     }
 
-    .celda {
-        width: 60px;
-        height: 60px;
-        background-color: azure;
+    .h1CargasElectricasNegativas .lineaFuerza {
+        height: 2px;
+        background-color: black;
+        transform-origin: center left;
+        position: absolute;
+        top: 50%;
+        left: 50%;
     }
 
-    .celda input {
-        width: 100%;
-        height: 100%;
-        background-color: transparent;
-        text-align: center;
+    .h2CargasElectricasNegativas {
+        position: absolute;
+        transform: translate(-50%, -50%);
     }
 
-    .mirado {
-        background-color: turquoise;
+    #h2ZonaInteraccion {}
+
+    .fuerza {
+        height: 2px;
+        width: 50px;
+        transform-origin: center left;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background-color: black;
     }
 
-    .agrisado {
-        background-color: gray;
+    .fuerza::after {
+        content: "";
+        border: 5px solid transparent;
+        border-left-color: black;
+        border-left-width: 8px;
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        opacity: 0.5;
+        transform: translateY(-50%);
     }
 </style>

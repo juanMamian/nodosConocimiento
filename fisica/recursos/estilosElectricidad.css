@@ -1,0 +1,24 @@
+.cargaElectrica {
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+}
+
+.cargaElectrica.negativa {
+	background-color: red;
+}
+
+.cargaElectrica.negativa::after {
+	content: "-";
+}
+
+.cargaElectrica.positiva {
+	background-color: blue;
+}
+
+.cargaElectrica.positiva::after {
+	content: "+";
+}

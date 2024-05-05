@@ -121,7 +121,7 @@ export const componenteControlSteps = {
             this.$emit('executedTuples', executedList);
         },
         executionStep: {
-            handler: () => {
+            handler: function() {
                 this.$emit('executionStep', this.executionStep);
             },
             immediate: true,

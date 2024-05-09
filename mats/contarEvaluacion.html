@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
+
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/fisica/recursos/estilosElectricidad.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
+
+    <title>Contar - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Sé contar si:
+        </p>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada cualquier cantidad de cosas, puedo contarlas
+            </template>
+
+            <recuadro-component tipo="instruccionPointer">
+                <div class="flexVertical">
+                    <p>
+                        Selecciona la dificultad
+                    </p>
+                    <input type="range" min="1" max="5" v-model.number="e1Dificultad">
+                    {{e1Dificultad}}
+                </div>
+
+            </recuadro-component>
+
+            <button class="boton" @click="e1GenerarReto">
+                Generar reto
+            </button>
+
+            <transition name="fadeIn">
+                <div class="zonaReto" id="e1ZonaReto" v-if="e1Reto" :key="e1VersionReto" style="margin-top: 50px;">
+                    <div class="e1CosaContar" v-for="index of e1Reto" @click="toggleResaltado">
+                    </div>
+                </div>
+            </transition>
+
+            <recuadro-component tipo="instruccionTeclado" style="width: fit-content" v-if="e1Reto">
+                <div class="flexVertical">
+                    Escribe tu respuesta
+                </div>
+                <input type="number" v-model="e1RespuestaUsuario"
+                    @keypress.enter="e1EvaluarRespuestaUsuario(e1RespuestaUsuario, undefined, true)">
+                <button class="boton" @click="e1EvaluarRespuestaUsuario(e1RespuestaUsuario, undefined, true)">
+                    Aceptar
+                </button>
+
+            </recuadro-component>
+            <transition name="fadeIn" @enter="scrollToElemento">
+                <recuadro-component tipo="infoResultado" v-if="e1RespuestaUsuarioCorrecta!=null"
+                    :modo="e1RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e1VersionRespuestaUsuario">
+                </recuadro-component>
+            </transition>
+
+        </bloque-component>
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    const {createApp, ref, watch, computed} = Vue;
+    import {useUtils} from "http://127.0.0.1:8080/recursos/composables/utils.js";
+    import {useEvaluacionNodo} from "http://127.0.0.1:8080/recursos/composables/evaluacionNodo.js"
+    createApp({
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent
+        },
+        setup() {
+            const {scrollToElemento} = useUtils();
+            const e1RespuestaUsuario = ref(null);
+            const e1AddToGenerarReto = function () {
+                console.log(`Adding`);
+                let minNumero = 1;
+                let maxNumero = 1;
+                switch (e1Dificultad.value) {
+                    case 1:
+                        minNumero = 5;
+                        maxNumero = 15;
+                        break;
+                    case 2:
+                        minNumero = 15;
+                        maxNumero = 35;
+                        break;
+                    case 3:
+                        minNumero = 15;
+                        maxNumero = 35;
+                        break;
+                    case 4:
+                        minNumero = 35;
+                        maxNumero = 100;
+                        break;
+                    case 5:
+                        minNumero = 101;
+                        maxNumero = 350;
+                        break;
+                }
+                const rangoNumero = maxNumero - minNumero;
+
+                e1Reto.value = Math.round(Math.random() * rangoNumero + minNumero);
+                e1Respuesta.value = e1Reto.value;
+            }
+            const {versionReto: e1VersionReto, reto: e1Reto, reiniciarReto: e1ReiniciarReto, dificultad: e1Dificultad, generarReto: e1GenerarReto, respuesta: e1Respuesta, respuestaUsuarioCorrecta: e1RespuestaUsuarioCorrecta, versionRespuestaUsuario: e1VersionRespuestaUsuario, inputRespuestaUsuario: e1InputRespuestaUsuario, evaluarRespuestaUsuario: e1EvaluarRespuestaUsuario} = useEvaluacionNodo(e1AddToGenerarReto);
+
+            function toggleResaltado(evento) {
+                evento.target.classList.toggle("contado");
+            }
+
+            return {
+                scrollToElemento,
+                e1VersionReto, e1Dificultad, e1Reto, e1ReiniciarReto, e1GenerarReto, e1Respuesta, e1RespuestaUsuarioCorrecta, e1VersionRespuestaUsuario, e1InputRespuestaUsuario, e1EvaluarRespuestaUsuario, e1RespuestaUsuario,
+                toggleResaltado,
+
+            }
+
+        },
+
+    }).mount("#doc");
+</script>
+
+<style>
+    .e1CosaContar {
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        border-radius: 50%;
+    }
+
+    .e1CosaContar.contado {
+        filter: brightness(0.5);
+    }
+
+    #e1ZonaReto {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+</style>

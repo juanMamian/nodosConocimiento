@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
 
     <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
@@ -17,29 +16,22 @@
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
-    <title>Carga eléctrica - interacción</title>
+
+
+    <title>Agricultura - evaluación</title>
 </head>
 
 <body>
     <div id="doc">
-        <recuadro-component tipo="datoPrevio">
-            Los dos tipos de carga eléctrica son:
-            <ul>
-                <li>Carga eléctrica negativa.</li>
-                <li>Carga eléctrica positiva. </li>
-            </ul>
-        </recuadro-component>
-        <p>
-            Se ha observado que la presencia de carga eléctrica causa la aparición de fuerzas así:
-        </p>
-        <recuadro-component tipo="datoPrevio">
+        <p>Sé hacer agricultura si:</p>
 
-            Cuerpos con el mismo tipo de carga eléctrica se repelen.
-        </recuadro-component>
-
-        <recuadro-component tipo="datoPrevio">
-            Cuerpos con distinto tipo de carga eléctrica se atraen.
-        </recuadro-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>Soy capaz de establecer un plan de manejo de algún cultivo de mi interés en un lugar
+                concreto.</template>
+        </bloque-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>Soy capaz de desarrollar el ciclo de un cultivo de mi interés.</template>
+        </bloque-component>
     </div>
 </body>
 
@@ -62,7 +54,4 @@
 </script>
 
 <style>
-    ul li {
-        margin: 20px 0px;
-    }
-</style>
+    <

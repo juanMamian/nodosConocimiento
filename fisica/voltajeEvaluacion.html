@@ -6,63 +6,57 @@
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
     <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
     <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
     <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/fisica/recursos/estilosElectricidad.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
-    <title>Carga eléctrica - interacción</title>
+    <title>Voltaje</title>
 </head>
 
 <body>
     <div id="doc">
-        <recuadro-component tipo="datoPrevio">
-            Los dos tipos de carga eléctrica son:
-            <ul>
-                <li>Carga eléctrica negativa.</li>
-                <li>Carga eléctrica positiva. </li>
-            </ul>
-        </recuadro-component>
         <p>
-            Se ha observado que la presencia de carga eléctrica causa la aparición de fuerzas así:
+            Comprendo qué es el voltaje si:
         </p>
-        <recuadro-component tipo="datoPrevio">
 
-            Cuerpos con el mismo tipo de carga eléctrica se repelen.
-        </recuadro-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo explicar qué es el voltaje
+            </template>
+        </bloque-component>
 
-        <recuadro-component tipo="datoPrevio">
-            Cuerpos con distinto tipo de carga eléctrica se atraen.
-        </recuadro-component>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo explicar qué clase de objetos causan la aparición de voltaje y cómo aportan al mismo.
+            </template>
+
+        </bloque-component>
     </div>
 </body>
 
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp, ref, watch, computed} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-        data() {
-            return {
-
-            }
-        }
-    })
+        setup() {
+            return {}
+        },
+    }).mount("#doc");
 </script>
 
 <style>
-    ul li {
-        margin: 20px 0px;
-    }
 </style>

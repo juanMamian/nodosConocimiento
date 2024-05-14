@@ -6,23 +6,17 @@
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
-    <script
-        src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/fisica/recursos/estilos/estilosElectricidad.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
     <title>Carga eléctrica</title>
 </head>
@@ -35,26 +29,8 @@
         </p>
 
         <recuadro-component tipo="datoPrevio" class="hipotesis">
-            Todos los cuerpos contienen una sustancia oculta llamada <span class="resaltado">carga eléctrica</span>.
+            Los cuerpos pueden contener una sustancia oculta llamada <span class="resaltado">carga eléctrica</span>.
         </recuadro-component>
-        <p>
-            Cuando un cuerpo:
-        </p>
-
-        <ul>
-            <li>
-                Tiene una cantidad normal de carga eléctrica se dice que está <span class="resaltado">neutro</span>.
-            </li>
-            <li>
-                Tiene una cantidad excesiva de carga eléctrica se dice que está <span class="resaltado">cargado
-                    positivamente</span>.
-            </li>
-            <li>
-                Tiene un déficit de carga eléctrica se dice que está <span class="resaltado">cargado
-                    negativamente</span>.
-            </li>
-        </ul>
-
 
         <bloque-component tipo="ejemplo">
             <template #cabecera>
@@ -71,9 +47,74 @@
                     Lo mismo pasa con la goma. Los objetos de goma que son frotados con el pelaje de un animal
                     atraen a algunos otros objetos. Especialmente cuando están cerca.
                 </div>
-
+                <div class="itemEjemplo">
+                    Algunas personas al acercarse a otras personas u objetos sienten un súbito dolor y se puede ver y
+                    escuchar una pequeña chispa saltando entre los cuerpos.
+                </div>
             </div>
 
+        </bloque-component>
+
+        <p>
+            La observación detallada llevó a confirmar la primera hipótesis y a plantear una ampliación: la sustancia
+            carga eléctrica puede ser de dos tipos. Se los llamó: <span class="resaltado">carga eléctrica
+                positiva</span> y <span class="resaltado">carga eléctrica negativa</span>.
+        </p>
+
+        <p>
+            La carga eléctrica suele ser representada mediante una o muchas particulas.
+        </p>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se puede ver cómo se representan las partículas de carga eléctrica.
+            </template>
+
+            <div class="listaEjemplos" id="e2ListaEjemplos">
+                <div class="itemEjemplo">
+                    <div class="cargaElectrica positiva">
+
+                    </div>
+                    <recuadro-component tipo="datoPrevio">
+                        Esta es una carga eléctrica positiva.
+                    </recuadro-component>
+                </div>
+                <div class="itemEjemplo">
+                    <div class="cargaElectrica negativa">
+
+                    </div>
+                    <recuadro-component tipo="datoPrevio">
+                        Esta es una carga eléctrica negativa.
+                    </recuadro-component>
+                </div>
+            </div>
+
+        </bloque-component>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro se representa un cuerpo con carga eléctrica negativa en su interior.
+            </template>
+
+            {{e3CargasElectricas[0].x}}, {{e3CargasElectricas[0].y}}
+            <br>
+            {{e3CargasElectricas[1].x}}, {{e3CargasElectricas[1].y}}
+            <div class="zonaInteraccion">
+                <div class="cuerpo">
+                    <div class="cargaElectrica negativa e3CargasElectricas" v-for="carga of e3CargasElectricas"
+                        :style="[getEstiloPosicionCarga(carga)]">
+                    </div>
+                </div>
+            </div>
+
+            <div class="contenedorControles">
+                <button class="boton" @click="e3AllowUpdate=true">
+                    Pause
+                </button>
+                <button class="boton" @click="e3AllowUpdate=false">
+                    Play
+                </button>
+            </div>
         </bloque-component>
 
 
@@ -83,22 +124,43 @@
 
 </html>
 
-<script>
-    const doc = new Vue({
-        el: "#doc",
+<script type="module">
+    import {useUpdateMovimientoLibreCargasElectricas} from "http://127.0.0.1:8080/recursos/composables/cargasElectricasLibres.js"
+    const {createApp, ref, watch, computed} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
             enlaceComponent
         },
-        data() {
-            return {
+        setup() {
 
+            const {allowUpdate: e3AllowUpdate, cargas: e3CargasElectricas, getEstilo: getEstiloPosicionCarga} = useUpdateMovimientoLibreCargasElectricas([[0, 0], [200, 0], [200, 200], [0, 200]]);
+
+            return {
+                e3CargasElectricas, e3AllowUpdate, getEstiloPosicionCarga
             }
         }
-    })
+    }).mount("#doc");
+
 </script>
 
 <style>
+    #e2ListaEjemplos .itemEjemplo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
 
+    .e3CargasElectricas {
+        position: absolute;
+    }
+
+    .cuerpo {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        border: 2px solid black;
+    }
 </style>

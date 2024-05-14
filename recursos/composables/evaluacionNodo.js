@@ -1,4 +1,4 @@
-import "https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.global.js"
+import "http://127.0.0.1:8080/recursos/librerias/vue.global.js"
 const { ref } = Vue;
 
 export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, recolectarRespuestaUsuario) {

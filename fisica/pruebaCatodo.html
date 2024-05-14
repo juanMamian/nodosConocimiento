@@ -1,74 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Negative Charges in Motion</title>
+    <title>Electric Charges Animation</title>
     <style>
-        #container {
-            width: 600px;
-            height: 400px;
-            margin: 0 auto;
-            position: relative;
-            background-color: lightblue;
-        }
-
-        .charge {
-            width: 20px;
-            height: 20px;
-            background-color: red;
-            border-radius: 50%;
-            position: absolute;
+        canvas {
+            border: 1px solid black;
         }
     </style>
 </head>
 
 <body>
-    <div id="container"></div>
+    <canvas id="chargeCanvas" width="500" height="400"></canvas>
 
     <script>
-        const container = document.getElementById('container');
-        const numCharges = 10;
-        const charges = [];
+        // Get the canvas element and its 2D drawing context
+        const canvas = document.getElementById('chargeCanvas');
+        const ctx = canvas.getContext('2d');
 
-        for (let i = 0; i < numCharges; i++) {
-            const charge = document.createElement('div');
-            charge.className = 'charge';
-            container.appendChild(charge);
-            charges.push(charge);
-        }
+        // Define the electric charges as an array of objects
+        let charges = [];
 
-        function updateChargePositions() {
-            charges.forEach(charge => {
-                const randomX = Math.random() * (container.offsetWidth - charge.offsetWidth);
-                const randomY = Math.random() * (container.offsetHeight - charge.offsetHeight);
-                charge.style.left = `${randomX}px`;
-                charge.style.top = `${randomY}px`;
+        // Set up the initial charges
+        for (let i = 0; i < 20; i++) {
+            charges.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: 0, // Initial velocity is 0
+                vy: 0,
+                radius: 5, // Increased charge radius for visibility
+                charge: -1 // All charges are negative
             });
         }
 
-        function moveCharges() {
-            charges.forEach(charge => {
-                const randomX = Math.random() * 6 - 3; // Random horizontal velocity between -3 and 3
-                const randomY = Math.random() * 6 - 3; // Random vertical velocity between -3 and 3
-                const currentX = parseFloat(charge.style.left);
-                const currentY = parseFloat(charge.style.top);
-                const newX = currentX + randomX;
-                const newY = currentY + randomY;
+        // Constants
+        const k = 0.10; // Coulomb's constant (adjusted for scale)
 
-                // Keep charges inside the container
-                if (newX >= 0 && newX <= container.offsetWidth - charge.offsetWidth) {
-                    charge.style.left = `${newX}px`;
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Calculate forces and update velocities
+            for (let i = 0; i < charges.length; i++) {
+                let charge1 = charges[i];
+                let fx = 0, fy = 0;
+
+                for (let j = 0; j < charges.length; j++) {
+                    if (i !== j) {
+                        let charge2 = charges[j];
+                        let dx = charge2.x - charge1.x;
+                        let dy = charge2.y - charge1.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        let force = k * charge1.charge * charge2.charge / (distance * distance);
+                        fx += force * dx / distance;
+                        fy += force * dy / distance;
+                    }
                 }
-                if (newY >= 0 && newY <= container.offsetHeight - charge.offsetHeight) {
-                    charge.style.top = `${newY}px`;
+
+                // Update velocity based on force
+                charge1.vx += fx;
+                charge1.vy += fy;
+            }
+
+            // Move and draw the charges
+            for (let charge of charges) {
+                // Update the charge position based on velocity
+                charge.x += charge.vx;
+                charge.y += charge.vy;
+
+                // Bounce the charge off the canvas edges
+                if (charge.x - charge.radius < 0 || charge.x + charge.radius > canvas.width) {
+                    charge.vx = -charge.vx;
                 }
-            });
+                if (charge.y - charge.radius < 0 || charge.y + charge.radius > canvas.height) {
+                    charge.vy = -charge.vy;
+                }
+
+                // Draw the charge as a circle
+                ctx.beginPath();
+                ctx.arc(charge.x, charge.y, charge.radius, 0, 2 * Math.PI);
+                ctx.fillStyle = 'blue'; // All charges are blue (negative)
+                ctx.fill();
+            }
         }
 
-        updateChargePositions();
-        setInterval(moveCharges, 1000 / 30); // Update charges 30 times per second
+        // Start the animation
+        animate();
     </script>
 </body>
 

@@ -17,6 +17,7 @@
 
 .cargaElectrica.positiva {
 	background-color: blue;
+	color: whitesmoke;
 }
 
 .cargaElectrica.positiva::after {

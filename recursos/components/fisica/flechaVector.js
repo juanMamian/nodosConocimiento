@@ -1,21 +1,21 @@
-const FlechaVector={
-    template:`
+const componenteFlechaVector = {
+    template: `
         <div class="componenteFlechaVector">
 
         </div>
     `,
 
-    props:{
-        magnitud:{
+    props: {
+        magnitud: {
             type: Number,
             default: 5,
         },
-        direccion:{
+        direccion: {
             type: Number,
             default: 0,
         }
     },
-    data(){
+    data() {
         return {
         }
     }

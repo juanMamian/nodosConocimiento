@@ -508,7 +508,6 @@ class ExpresionNumerica {
         }
     }
     toMathJax(opciones = {}) {
-        let res = "";
         let operacionesAditivas = ["suma", "resta"];
         let operacionesExplicitas = ["division"];
         if (this.explicita) {
@@ -517,8 +516,8 @@ class ExpresionNumerica {
         if (!this.numero1 || !this.numero2) {
             throw "Expresión rota";
         }
-        let textoLado1 = this.numero1.toMathJax();
-        let textoLado2 = this.numero2.toMathJax();
+        let textoLado1 = this.numero1.toMathJax({ ...opciones });
+        let textoLado2 = this.numero2.toMathJax({ ...opciones });
         textoLado1 = "{" + textoLado1 + "}";
         //Decidiendo si add paréntesis en el lado1.
         let esNumNegativo = this.numero1.explicita && this.numero1.valor < 0;
@@ -583,7 +582,7 @@ class ExpresionNumerica {
         arr2.forEach(infoNum => {
             infoNum.direccion.unshift(1);
         });
-        if(opciones.operacionesCaminoIgnorado && opciones.operacionesCaminoIgnorado.includes(this.operacion)){
+        if (opciones.operacionesCaminoIgnorado && opciones.operacionesCaminoIgnorado.includes(this.operacion)) {
             return arr1;
         }
         return [...arr1, ...arr2];
@@ -606,11 +605,11 @@ class ExpresionNumerica {
         return numeroActual;
 
     }
-    incognitarRandomNumero(opciones={}) {
+    incognitarRandomNumero(opciones = {}) {
         if (!this.numero1 || !this.numero2 || !this.operacion) {
             throw "La expresión no está terminada";
         }
-        let nums = this.getNumsAndAdress({operacionesCaminoIgnorado:opciones.operacionesCaminoIgnorado});
+        let nums = this.getNumsAndAdress({ operacionesCaminoIgnorado: opciones.operacionesCaminoIgnorado });
         //Cada num es un objeto infoNumero.
         let numEscogido = nums[Math.floor(Math.random() * nums.length)];
         let numeroActual = this;

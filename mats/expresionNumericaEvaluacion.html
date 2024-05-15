@@ -5,37 +5,25 @@
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
-    <script id="MathJax-script" async
-        src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/MathJax/mathjax.js"></script>
+    <script id="MathJax-script" async src="http://127.0.0.1:8080/recursos/librerias/MathJax/es5/tex-chtml.js"></script>
 
+    <script src="http://127.0.0.1:8080/mats/resources/expresionNumericaClass.js"></script>
 
-    <script
-        src="http://127.0.0.1:8080/mats/resources/expresionNumericaClass.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
-    <script
-        src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
-
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
 
 
     <title>Expresión numérica - evaluación</title>
 </head>
-
-
 
 <body>
     <p>
@@ -160,10 +148,8 @@
 </html>
 
 <script>
-
-
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
@@ -245,8 +231,6 @@
                 this.estadoRespuesta = null;
 
                 this.$nextTick(() => {
-
-
                     let respuestaUsuario = this.$refs.inputRespuestaUsuario.value;
                     console.log(`Respuesta usuario ${respuestaUsuario}, ${typeof respuestaUsuario}`);
                     if (!respuestaUsuario || !this.expresionReto) {
@@ -418,7 +402,7 @@
             }
 
         }
-    })
+    }).mount("#doc");
 </script>
 
 <style>

@@ -10,11 +10,11 @@
     <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
     <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
     <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
-    <script src="http://127.0.0.1:8080/recursos/components/fisica/flechaVector.js"></script>
-    <script src="componenteRegla.js"></script>
 
-    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/fisica/estilosComponenteFlechaVector.css">
+    <script src="componenteRegla.js"></script>
     <link rel="stylesheet" href="componenteReglaEstilo.css">
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/mats/flechaVectorEstilo.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
@@ -48,9 +48,7 @@
                     <div id="reto1" class="reto" :key="versionReto1"
                         v-if="simboloReto1 && magnitudReto1 && direccionReto1!=null">
                         <div id="simboloReto1">
-                            <div class="flechita">
-                                {{simboloReto1}}
-                            </div>
+                            {{simboloReto1}}&#8407;
                         </div>
                         <span>=</span>
                         <span>
@@ -77,16 +75,19 @@
                 </button>
 
                 <transition name="fadeIn">
-                    <div id="reto2" ref="zonaRegla" v-if="simboloReto2 && magnitudReto2 && direccionReto2!=null"
+                    <div id="reto2" ref="e3ZonaRegla" v-if="simboloReto2 && magnitudReto2 && direccionReto2!=null"
                         :key="versionReto2" @mouseup.left="cancelDrawingRegla" @mousedown.left.exact="iniciarDrawRegla"
                         @mousemove.left="drawRegla" @mousemove="moverRegla" @mouseup.left.stop="ungrabRegla">
                         <componente-flecha-vector :simbolo="simboloReto2" :magnitud="magnitudReto2"
                             style="pointer-events: none" :direccion="direccionReto2" :mostrando-notacion="true">
                         </componente-flecha-vector>
-                        <componente-regla :longitud="sizeRegla" ref="reglaReto2" :posicion="puntoInicioRegla"
-                            v-show="mostrandoRegla" @mousedown.left.stop="iniciarGrabRegla" @click.stop=""
-                            :direccion-from-outside="direccionRegla"
-                            @iniciar-grab-rotacion="iniciarGrabRotacionRegla" />
+
+                        <transition name="fadeIn">
+                            <componente-regla :longitud="e3SizeRegla" ref="reglaReto2" :posicion="e3PuntoInicioRegla"
+                                v-show="e3MostrandoRegla" @mousedown.left.stop="iniciarGrabRegla" @click.stop=""
+                                :direccion-from-outside="direccionRegla"
+                                @iniciar-grab-rotacion="iniciarGrabRotacionRegla" />
+                        </transition>
                     </div>
                 </transition>
 
@@ -131,12 +132,13 @@
 
 <script type="module">
     import {useDibujarRegla} from "http://127.0.0.1:8080/recursos/composables/herramientasGeometricas.js";
+    import {componenteFlechaVector} from "http://127.0.0.1:8080/recursos/components/mats/flechaVector.js";
 
     const {createApp} = Vue;
     createApp({
         setup() {
-            const {regla: reglaReto2, zonaRegla, mostrandoRegla, puntoInicioRegla, sizeRegla, direccionRegla, iniciarDrawRegla, drawRegla, cancelDrawingRegla, ocultarRegla, iniciarGrabRegla, moverRegla, ungrabRegla, iniciarGrabRotacionRegla} = useDibujarRegla();
-            return {reglaReto2, zonaRegla, mostrandoRegla, puntoInicioRegla, sizeRegla, direccionRegla, iniciarDrawRegla, drawRegla, cancelDrawingRegla, ocultarRegla, iniciarGrabRegla, moverRegla, ungrabRegla, iniciarGrabRotacionRegla}
+            const {regla: reglaReto2, zonaRegla: e3ZonaRegla, mostrandoRegla: e3MostrandoRegla, puntoInicioRegla: e3PuntoInicioRegla, sizeRegla: e3SizeRegla, direccionRegla, iniciarDrawRegla, drawRegla, cancelDrawingRegla, ocultarRegla, iniciarGrabRegla, moverRegla, ungrabRegla, iniciarGrabRotacionRegla} = useDibujarRegla();
+            return {reglaReto2, e3ZonaRegla, e3MostrandoRegla, e3PuntoInicioRegla, e3SizeRegla, direccionRegla, iniciarDrawRegla, drawRegla, cancelDrawingRegla, ocultarRegla, iniciarGrabRegla, moverRegla, ungrabRegla, iniciarGrabRotacionRegla}
         },
         components: {
             recuadroComponent,
@@ -251,7 +253,7 @@
                 this.simboloReto2 = null;
                 this.magnitudReto2 = 0;
                 this.direccionReto2 = 0;
-                this.mostrandoRegla = false;
+                this.e3MostrandoRegla = false;
                 this.respuestaUsuarioReto2 = '';
             },
             generarReto2() {
@@ -260,8 +262,7 @@
 
                 let rangoMagnitud = 10;
                 let minMagnitud = 1;
-                let factorMagnitud = 20;
-                this.magnitudReto2 = Math.round(Math.random() * rangoMagnitud + minMagnitud) * factorMagnitud;
+                this.magnitudReto2 = Math.round(Math.random() * rangoMagnitud + minMagnitud);
 
                 let rangoDireccion = 7;
                 let minDireccion = 0;
@@ -270,6 +271,15 @@
                 let indexSimbolo = Math.floor(Math.random() * letras.length);
                 this.simboloReto2 = letras.charAt(indexSimbolo);
                 this.versionReto2++;
+
+                setTimeout(() => {
+                    const posZona = this.$refs.e3ZonaRegla.getBoundingClientRect();
+                    this.e3PuntoInicioRegla.y = posZona.height - 10;
+                    this.e3MostrandoRegla = true;
+                    this.e3SizeRegla = 10;
+                    this.e3PuntoInicioRegla.x = (posZona.width / 2) - this.e3SizeRegla * 20 / 2;
+
+                }, 1000);
             },
             evaluarRespuestaUsuarioReto2() {
                 this.versionRespuestaUsuarioReto2++;
@@ -288,34 +298,44 @@
                     this.respuestaUsuarioCorrectaReto2 = false;
                     return;
                 }
+                console.log(`Parte símbolo correcta`);
                 let parteDescripcion = partesPrincipales[1].trim();
                 if (parteDescripcion.charAt(0) != '(' || parteDescripcion.charAt(parteDescripcion.length - 1) != ')') {
                     this.respuestaUsuarioCorrectaReto2 = false;
                     return;
                 }
+                console.log(`Se evaluará ${parteDescripcion}`);
                 //Ahora módulo y dirección
                 let partesDescripcion = parteDescripcion.slice(1, parteDescripcion.length - 1).split(",");
                 if (partesDescripcion.length != 2) {
                     this.respuestaUsuarioCorrectaReto2 = false;
                     return;
                 }
-                let parteModulo = partesDescripcion[0].trim();
-                if (Number(parteModulo) != this.magnitudReto2 / this.factorMagnitudReto2) {
+                console.log(`Comparando con ${this.magnitudReto2} con factor ${this.factorMagnitudReto2}`);
+                let parteModulo = Number(partesDescripcion[0].trim());
+                if (parteModulo != this.magnitudReto2 && parteModulo != -this.magnitudReto2) {
                     this.respuestaUsuarioCorrectaReto2 = false;
                     return;
                 }
+                console.log(`Parte módulo correcta`);
+                let invertido = parteModulo === -this.magnitudReto2;
+                console.log(`Invertido: ${invertido}`);
                 let parteDireccion = partesDescripcion[1].trim();
+                let unidadesDireccion = 'deg';
                 if (parteDireccion.charAt(parteDireccion.length - 1) != '°') {
                     parteDireccion = radsToDeg(Number(parteDireccion));
+                    unidadesDireccion = 'rad';
                 }
                 else {
                     parteDireccion = parteDireccion.slice(0, parteDireccion.length - 1);
                 }
                 parteDireccion = Number(parteDireccion);
-                if (Math.abs(parteDireccion - this.direccionReto2) > 0.1) {
+
+                if (Math.abs(parteDireccion - (invertido ? invertirAngulo(this.direccionReto2, unidadesDireccion) : this.direccionReto2)) > 0.1) {
                     this.respuestaUsuarioCorrectaReto2 = false;
                     return;
                 }
+                console.log(`Parte dirección correcta`);
                 this.respuestaUsuarioCorrectaReto2 = true;
             },
             scrollInfoRespuestaReto2() {
@@ -335,6 +355,19 @@
 
         }
     }).mount("#doc");
+    function invertirAngulo(angulo, unidadesDireccion) {
+        if (unidadesDireccion === 'deg') {
+            angulo += 180;
+            angulo = angulo % 360;
+            return angulo;
+        }
+        else if (unidadesDireccion === 'rad') {
+            angulo += Math.PI;
+            angulo = angulo % 2 * Math.PI;
+            return angulo;
+        }
+        throw "Unidades desconocidas";
+    }
 </script>
 
 <style>

@@ -14,7 +14,7 @@ export const componenteFlechaVector = {
             type: Number,
             default: 20,
         },
-        factorMagnitud:{
+        factorMagnitud: {
             type: Number,
             default: 20,
         },
@@ -37,7 +37,7 @@ export const componenteFlechaVector = {
             type: Boolean,
             default: false,
         },
-        mostrarPuntoAplicacion:{
+        mostrarPuntoAplicacion: {
             type: Boolean,
             default: false,
         }

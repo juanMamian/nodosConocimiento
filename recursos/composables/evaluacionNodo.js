@@ -30,7 +30,7 @@ export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, 
     const versionRespuestaUsuario = ref(0);
     const inputRespuestaUsuario = ref(null);
 
-    function evaluarRespuestaUsuario(respuestaUsuario, numerica = false) {
+    function evaluarRespuestaUsuario(respuestaUsuario, numerica = false, tolerancia) {
         if (respuestaUsuario == null) {
             if (recolectarRespuestaUsuario) {
                 respuestaUsuario = recolectarRespuestaUsuario();
@@ -56,11 +56,17 @@ export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, 
             respuestaUsuario = Number(respuestaUsuario);
         }
         respuestaUsuarioCorrecta.value = false;
-        if (respuestaUsuario === respuesta.value) {
-            respuestaUsuarioCorrecta.value = true;
+        if (tolerancia && numerica) {
+            if (Math.abs(respuestaUsuario - respuesta.value) <= tolerancia) {
+                respuestaUsuarioCorrecta.value = true;
+            }
+        }
+        else {
+            if (respuestaUsuario === respuesta.value) {
+                respuestaUsuarioCorrecta.value = true;
+            }
         }
         versionRespuestaUsuario.value++;
-
     }
 
     return {

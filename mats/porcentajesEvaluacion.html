@@ -7,21 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
-    <script
-        src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
     <title>Porcentajes - Evaluación</title>
 </head>
@@ -61,7 +54,7 @@
                             <input type="number" ref="e1InputRespuestaUsuario" id="e1InputRespuestaUsuario"
                                 ref="e1InputRespuestaUsuario"
                                 @keypress.enter="e1EvaluarRespuestaUsuario(undefined, true)">
-                            <button class="boton" @click="e1EvaluarRespuestaUsuario(undefined, true)">
+                            <button class="boton" @click="e1EvaluarRespuestaUsuario(undefined, true, 0.001)">
                                 Aceptar
                             </button>
                         </div>
@@ -274,7 +267,7 @@
                 const rangoPorcentaje = maxPorcentaje - minPorcentaje;
 
                 e3Reto.value.porcentaje = Math.round(Math.random() * rangoPorcentaje) + minPorcentaje;
-                e3Reto.value.numero= e3Respuesta.value * e3Reto.value.porcentaje / 100;
+                e3Reto.value.numero = e3Respuesta.value * e3Reto.value.porcentaje / 100;
             }
 
             const {versionReto: e3VersionReto, dificultad: e3Dificultad, reto: e3Reto, reiniciarReto: e3ReiniciarReto, generarReto: e3GenerarReto, respuesta: e3Respuesta, respuestaUsuarioCorrecta: e3RespuestaUsuarioCorrecta, versionRespuestaUsuario: e3VersionRespuestaUsuario, inputRespuestaUsuario: e3InputRespuestaUsuario, evaluarRespuestaUsuario: e3EvaluarRespuestaUsuario} = useEvaluacionNodo(e3AddToGenerarReto);

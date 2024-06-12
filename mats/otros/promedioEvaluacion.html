@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
+
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080//recursos/components/enlaceEstilo.css">
+
+
+
+    <title>Promedio - evaluación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Comprendo el concepto de promedio si:
+        </p>
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Puedo explicar qué es promedio.
+            </template>
+        </bloque-component>
+
+        <bloque-component tipo="evaluacion">
+            <template #cabecera>
+                Dada cualquier cantidad de números, puedo calcular el promedio entre ellos.
+            </template>
+
+            <div class="flexVertical">
+                <recuadro-component tipo="instruccionPointer">
+                    <div class="flexVertical">
+                        <p>
+                            Selecciona la dificultad
+                        </p>
+                        <input type="range" min="1" max="4" v-model.number="e1Dificultad">
+                        {{e1Dificultad}}
+                        <button class="boton" @click="e1GenerarReto">
+                            Generar reto
+                        </button>
+                    </div>
+
+                </recuadro-component>
+
+                <transition name="fadeIn">
+                    <div class="reto" v-if="e1Reto" :key="e1VersionReto">
+                        <div class="numeroReto" v-for="numero of e1Reto.numeros">
+                            {{numero}}
+                        </div>
+                    </div>
+                </transition>
+
+                <transition name="fadeIn">
+                    <recuadro-component tipo="instruccionTeclado" v-if="e1Respuesta">
+                        <div class="flexVertical">
+                            <p>Escribe aquí tu respuesta</p>
+                            <input type="texto" id="e1InputRespuestaUsuario" ref="e1InputRespuestaUsuario"
+                                @keypress.enter="e1EvaluarRespuestaUsuario(undefined, true, 0.01)" />
+                            <button class="boton" @click="e1EvaluarRespuestaUsuario(undefined, true, 0.01)">
+                                Aceptar
+                            </button>
+                        </div>
+                    </recuadro-component>
+                </transition>
+
+                <transition name="fadeIn" @enter="scrollToElemento">
+                    <recuadro-component tipo="infoResultado" v-if="e1RespuestaUsuarioCorrecta!=null"
+                        :modo="e1RespuestaUsuarioCorrecta?'correcto':'incorrecto'" :key="e1VersionRespuestaUsuario">
+                    </recuadro-component>
+                </transition>
+            </div>
+
+        </bloque-component>
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    const {createApp, ref, computed, watch, nextTick} = Vue;
+    import {useEvaluacionNodo} from "http://127.0.0.1:8080/recursos/composables/evaluacionNodo.js"
+    import {useUtils} from "http://127.0.0.1:8080/recursos/composables/utils.js";
+
+    createApp({
+        setup() {
+            const {scrollToElemento} = useUtils();
+            function e1AddToGenerarReto() {
+                e1Reto.value = {};
+                let listaNumeros = [];
+                let step = 1;
+                let minNumero = 1;
+                let maxNumero = 20;
+                if (e1Dificultad.value >= 3) {
+                    step = 0.5;
+                }
+                let rangoSteps = (maxNumero - minNumero) / step;
+                for (let i = 0; i <= e1Dificultad.value; i++) {
+                    let nuevoNumero = Math.round(Math.random() * rangoSteps) * step + minNumero;
+                    listaNumeros.push(nuevoNumero);
+                }
+                e1Reto.value.numeros = listaNumeros;
+                e1Respuesta.value = listaNumeros.reduce((acc, num) => acc + num, 0) / listaNumeros.length;
+
+            }
+            const {versionReto: e1VersionReto, reto: e1Reto, reiniciarReto: e1ReiniciarReto, dificultad: e1Dificultad, generarReto: e1GenerarReto, respuesta: e1Respuesta, respuestaUsuarioCorrecta: e1RespuestaUsuarioCorrecta, versionRespuestaUsuario: e1VersionRespuestaUsuario, inputRespuestaUsuario: e1InputRespuestaUsuario, evaluarRespuestaUsuario: e1EvaluarRespuestaUsuario} = useEvaluacionNodo(e1AddToGenerarReto);
+            return {
+                e1VersionReto, e1Dificultad, e1Reto, e1ReiniciarReto, e1GenerarReto, e1Respuesta, e1RespuestaUsuarioCorrecta, e1VersionRespuestaUsuario, e1InputRespuestaUsuario, e1EvaluarRespuestaUsuario,
+                scrollToElemento
+            }
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    }).mount("#doc");
+</script>
+<style>
+    .numeroReto {
+        border-radius: 50%;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--paletaPrevio);
+        width: 30px;
+        height: 30px;
+        margin: 10px;
+    }
+</style>

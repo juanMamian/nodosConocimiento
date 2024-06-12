@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
+
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080//recursos/components/enlaceEstilo.css">
+
+
+
+    <title>Promedio - explicación</title>
+</head>
+
+<body>
+    <div id="doc">
+        <p>
+            Si se tienen varias cantidades relacionadas, suele ser útil conocer un valor intermedio entre ellas. Ese
+            valor intermedio se denomina <span class="resaltado">promedio</span>.
+        </p>
+
+        <bloque-component tipo="ejemplo">
+            <template #cabecera>
+                En este cuadro de muestran ejemplos de promedio.
+            </template>
+
+            <div class="listaEjemplos">
+                <div class="itemEjemplo" v-for="(caso, index) of e1Ejemplos">
+                    <div class="contenedorBarras">
+
+                        <transition-group name="fade">
+                            <div class="lineaMarcaBarra" v-for="numeroBase, indexNumeroBase of caso.numerosBase"
+                                :style="[getEstiloLineaMarcaBarra(numeroBase, caso.promediando, caso.animandoPromedio, caso.promediado, caso.promedio)]"
+                                :key="'numeroBase' + indexNumeroBase" v-show="caso.promediando">
+                                <Transition name="fade">
+                                    <div class="numeroLineaBarra">
+                                        {{numeroBase}}
+                                    </div>
+                                </Transition>
+                            </div>
+                        </transition-group>
+
+                        <div class="lineaMarcaBarra"
+                            :style="[getEstiloLineaPromedio(caso.promedio, caso.promediando, caso.animandoPromedio, caso.promediado)]">
+                            <div class="numeroLineaBarra">
+                                {{caso.promedio}}
+                            </div>
+                        </div>
+                        <div class="barra" v-for="numeroBase of caso.numerosBase"
+                            :style="[ getEstiloBarra(numeroBase) ]">
+                            <div class="numeroBarra" v-show="!caso.promediando">
+                                {{numeroBase}}
+                            </div>
+                        </div>
+                    </div>
+                    <button class="boton" @click="promediar(index)" v-show="!caso.promediado"
+                        :disabled="caso.promediando || caso.animandoPromedio">
+                        Encontrar el promedio
+                    </button>
+                    <button class="boton" @click="e1ReiniciarEjemplo(index)" v-show="caso.promediado">
+                        Reiniciar
+                    </button>
+                </div>
+            </div>
+
+        </bloque-component>
+
+        <p>
+            Un método popular para conocer el promedio entre varios números consiste en:
+        </p>
+        <ul>
+            <li>
+                Sumar todos los números.
+            </li>
+            <li>
+                Dividir el resultado entre la cantidad de números.
+            </li>
+        </ul>
+
+    </div>
+</body>
+
+</html>
+
+<script type="module">
+    const {createApp, ref, computed, watch, nextTick} = Vue;
+
+    const factorHeightBarra = 10;
+
+    createApp({
+        setup() {
+            const baseE1Ejemplos = [
+                {
+                    numerosBase: [
+                        12, 6
+                    ],
+                },
+                {
+                    numerosBase: [2, 6]
+                },
+                {
+                    numerosBase: [3, 9, 12]
+                },
+                {
+                    numerosBase: [5, 19, 6, 1]
+                }
+
+            ];
+
+            const e1Ejemplos = ref(baseE1Ejemplos.map(caso => {
+                return {
+                    numerosBase: caso.numerosBase,
+                    promedio: caso.numerosBase.reduce((acc, num) => acc + num, 0) / caso.numerosBase.length,
+                    promediando: false,
+                    animandoPromedio: false,
+                    promediado: false
+                }
+            }));
+
+
+            function promediar(index) { //Activar promedio en uno de los e1Ejemplo
+                e1Ejemplos.value[index].promediando = true;
+                e1Ejemplos.value[index].animandoPromedio = false;
+                e1Ejemplos.value[index].promediado = false;
+
+                setTimeout(() => {
+                    e1Ejemplos.value[index].animandoPromedio = true;
+                    e1Ejemplos.value[index].promediando = false;
+                }, 2000);
+                setTimeout(() => {
+                    e1Ejemplos.value[index].promediado = true;
+                    e1Ejemplos.value[index].animandoPromedio = false;
+                }, 3000);
+            }
+            function getEstiloBarra(numero) {
+                return {
+                    height: numero * factorHeightBarra + 'px'
+                }
+            }
+            function getEstiloLineaMarcaBarra(numero, promediando, animandoPromedio, promediado, promedio) {
+                const altura = animandoPromedio ? promedio : numero;
+                return {
+                    bottom: altura * factorHeightBarra + 'px',
+                    opacity: animandoPromedio ? 0 : 1,
+                }
+            }
+            function getEstiloLineaPromedio(numero, promediando, animandoPromedio, promediado) {
+                return {
+                    bottom: numero * factorHeightBarra + 'px',
+                    opacity: animandoPromedio || promediado ? 1 : 0
+                }
+            }
+            function e1ReiniciarEjemplo(index) {
+                e1Ejemplos.value[index].promediando = false;
+                e1Ejemplos.value[index].animandoPromedio = false;
+                e1Ejemplos.value[index].promediado = false;
+            }
+
+            return {
+                e1Ejemplos, getEstiloBarra, getEstiloLineaMarcaBarra, promediar, getEstiloLineaPromedio, e1ReiniciarEjemplo,
+            }
+        },
+        components: {
+            recuadroComponent,
+            bloqueComponent,
+            enlaceComponent,
+        },
+    }).mount("#doc");
+</script>
+<style>
+    .contenedorBarras {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+        height: 200px;
+        position: relative;
+        padding: 0px 30px;
+    }
+
+    .barra {
+        width: 20px;
+        background-color: gray;
+        position: relative;
+    }
+
+    .numeroBarra {
+        font-size: 14px;
+        position: absolute;
+        bottom: calc(100% + 0px);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .itemEjemplo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 180px;
+    }
+
+    .lineaMarcaBarra {
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: black;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        transition: bottom 0.5s ease-out, opacity 0.5s ease-out;
+    }
+
+    .numeroLineaBarra {
+        position: absolute;
+        right: calc(100% + 20px);
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 15px;
+    }
+
+    .lineaMarcaBarra::after {
+        content: "";
+        width: 1px;
+        height: 1px;
+        border-width: 8px;
+        border-top-width: 6px;
+        border-bottom-width: 6px;
+        border-style: solid;
+        border-color: transparent;
+        border-left-color: black;
+        position: absolute;
+        right: calc(100% - 6px);
+        top: calc(50% - 1px);
+        transform: translateY(-50%);
+    }
+</style>

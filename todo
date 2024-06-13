@@ -1,7 +1,6 @@
 -Subir la sección de notación exponencial en maestra vida.
 -Crear las secciónes de explicación y transformación en el nodo de razón matemática (MV)
 -Crear la sección de triángulos semejantes en el nodo de razones trigonométricas básicas.
--Cambiar los atan por atan2.
 -Retirar los archivos de bloque y recuadro de la carpeta mats/components/ porque ya están en /components. Verificar que no hay ningún enlace apuntando hacia ellos.
 -También retirar la carpeta 3Dfiles que llegó por accidente con los nodos de Nico y Daniel.
 -Prevenir conflictos css arreglando los estilos de bloque y recuadro.

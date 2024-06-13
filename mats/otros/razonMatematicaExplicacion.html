@@ -5,23 +5,16 @@
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
-    <script
-        src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
 
 
@@ -30,12 +23,10 @@
 
 <body>
     <div id="doc">
-        <recuadro-component tipo="datoPrevio">
-            La razón matemática es un modo de <span class="resaltado">comparar</span> dos cantidades.
-        </recuadro-component>
 
-        Cuando se comparan dos cantidades, es posible expresar que una de las cantidades es varias veces más grande que
-        la otra.
+        <p>Cuando se comparan dos cantidades, es posible expresar que una de las cantidades es varias veces más grande
+            que
+            la otra.</p>
 
         <bloque-component tipo="ejemplo" @plegado="reiniciar">
             <template #cabecera>
@@ -151,8 +142,8 @@
 </html>
 
 <script>
-    const doc = new Vue({
-        el: "#doc",
+    const {createApp} = Vue;
+    createApp({
         components: {
             recuadroComponent,
             bloqueComponent,
@@ -185,7 +176,7 @@
                 this.mostrandoRazon4 = false;
             }
         }
-    })
+    }).mount("#doc");
 </script>
 
 <style>
@@ -198,7 +189,8 @@
         height: 10px;
         padding: 10px;
         border-radius: 50%;
-        background-color: brown;
+        border: 3px dashed var(--paletaActual);
+        background-color: trasnparent;
         margin: 10px auto;
         display: flex;
         align-items: center;

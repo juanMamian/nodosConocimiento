@@ -7,21 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
-    <script
-        src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
 
 
 
@@ -292,17 +285,17 @@
         width: min(200px, 80%);
     }
 
-    .razonMatematica {
-        width: 10px;
-        height: 10px;
-        padding: 10px;
+    .numero {
+        background-color: var(--paletaPrevio);
         border-radius: 50%;
-        background-color: brown;
-        margin: 10px auto;
+        height: 40px;
+        width: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
+
 
     .diagrama {
         margin-top: 30px;
@@ -320,8 +313,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--paletaPrevio);
+        border: 3px dashed var(--paletaActual);
         border-radius: 50%;
+        font-size: 13px;
     }
 
     .contenedorFlechas {

@@ -1,9 +1,8 @@
 -Subir la sección de notación exponencial en maestra vida.
 -Crear las secciónes de explicación y transformación en el nodo de razón matemática (MV)
 -Crear la sección de triángulos semejantes en el nodo de razones trigonométricas básicas.
--También retirar la carpeta 3Dfiles que llegó por accidente con los nodos de Nico y Daniel.
+
 -Prevenir conflictos css arreglando los estilos de bloque y recuadro.
--Probar si es mejor marcar con una linea punteada la razón matemática en el nodo de razón matemática para resaltar su caracter especial como enlace entre dos números.
 -Reparar las marcas blancas en identidadesFraccionariosExplicacion. Salen corridas hacia abajo.
 -Verificar que mathjax solo está importada en los lugares en que se necesita.
 -En el nodo de evaluación de algebrista mínimo se descubrió que una expresión así: {numero1, radicacion, {numero1, division, {numero1, division, numero2}}} se traduce a MathJax de manera incorrecta.

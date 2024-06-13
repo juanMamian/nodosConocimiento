@@ -2,7 +2,7 @@ const recuadroComponent = {
 
     props: {
         tipo: String,
-        modo:String,
+        modo: String,
     },
     computed: {
         datoPrevio() {
@@ -29,14 +29,14 @@ const recuadroComponent = {
         infoResultado() {
             return this.tipo === 'infoResultado'
         },
-        correcto(){
-            return this.modo==='correcto';
+        correcto() {
+            return this.modo === 'correcto';
         },
-        incorrecto(){
-            return this.modo==='incorrecto';
+        incorrecto() {
+            return this.modo === 'incorrecto';
         },
         srcIcono() {
-            if(this.modo==='incorrecto'){
+            if (this.modo === 'incorrecto') {
                 return "http://127.0.0.1:8080/recursos/iconos/circleEquis.svg";
             }
 
@@ -51,7 +51,7 @@ const recuadroComponent = {
                 return "http://127.0.0.1:8080/recursos/iconos/iconoInstruccionTeclado.svg";
             }
             else if (this.infoResultado) {
-                if(this.modo==='correcto'){
+                if (this.modo === 'correcto') {
                     return "http://127.0.0.1:8080/recursos/iconos/circleCheck.svg";
                 }
                 return "http://127.0.0.1:8080/recursos/iconos/circleEquis.svg";
@@ -60,5 +60,10 @@ const recuadroComponent = {
 
         }
     },
-    template: '<div class="recuadro" :class="{datoPrevio, datoNuevo, descubrimiento, instruccion, instruccionPointer, infoResultado, instruccionTeclado, reto, correcto, incorrecto}"> <img class="iconoRecuadro" :src="srcIcono" /> <div class="textoRecuadro"> <slot>{{modo}}</slot> </div> </div>',
+    template: `<div class="recuadro" :class="{datoPrevio, datoNuevo, descubrimiento, instruccion, instruccionPointer, infoResultado, instruccionTeclado, reto, correcto, incorrecto}">
+                    <img class="iconoRecuadro" :src="srcIcono" />
+                    <div class="textoRecuadro">
+                        <slot>{{modo}}</slot>
+                    </div>
+                </div>`,
 }

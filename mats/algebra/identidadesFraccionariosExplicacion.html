@@ -5,22 +5,16 @@
     <meta charset="UTF-8">
     <meta https-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script
-        src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/librerias/vue.global.js"></script>
 
-    <script
-        src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
-    <script
-        src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet"
-        href="http://127.0.0.1:8080//recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080//recursos/components/enlaceEstilo.css">
     <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/controlStepsEstilo.css">
 
 
@@ -389,7 +383,7 @@
                 const posD = i1LugarD.value.getBoundingClientRect();
 
                 //Diagonal 1
-                (function () {
+                function setLinea1() {
                     let posOrigen = posA;
                     let posFinal = posD;
                     let vector = {
@@ -405,10 +399,11 @@
                         left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
-                })();
+                };
+                setTimeout(setLinea1, 1000);
 
                 //Diagonal 2
-                (function () {
+                function setLinea2() {
                     let posOrigen = posB;
                     let posFinal = posC;
                     let vector = {
@@ -425,10 +420,11 @@
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
                     return;
-                })();
+                };
+                setTimeout(setLinea2, 1000);
 
                 //Diagonal 3
-                (function () {
+                function setDiagonal3() {
                     let posOrigen = posB;
                     let posFinal = posD;
                     let vector = {
@@ -445,7 +441,8 @@
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
                     return;
-                })();
+                };
+                setTimeout(setDiagonal3, 1000);
 
                 //Bola operador central
                 if (!i1OperadorCentral.value) {
@@ -489,7 +486,7 @@
                 const posD = i2LugarD.value.getBoundingClientRect();
 
                 //Diagonal 1
-                (function () {
+                function i2SetDiagonal1() {
                     let posOrigen = posA;
                     let posFinal = posD;
                     let vector = {
@@ -505,10 +502,11 @@
                         left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
-                })();
+                };
+                setTimeout(i2SetDiagonal1, 1000);
 
                 //Diagonal 2
-                (function () {
+                function i2SetDiagonal2() {
                     let posOrigen = posB;
                     let posFinal = posC;
                     let vector = {
@@ -525,10 +523,11 @@
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
                     return;
-                })();
+                };
+                setTimeout(i2SetDiagonal2, 1000);
 
                 //Diagonal 3
-                (function () {
+                function i2SetDiagonal3() {
                     let posOrigen = posB;
                     let posFinal = posD;
                     let vector = {
@@ -545,7 +544,8 @@
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
                     return;
-                })();
+                };
+                setTimeout(i2SetDiagonal3, 1000);
 
                 if (!i2OperadorCentral.value) {
                     console.log(`No había operador central para ubicar bola 2`);
@@ -583,7 +583,7 @@
                 const posD = i3LugarD.value.getBoundingClientRect();
 
                 //Diagonal 1
-                (function () {
+                function i3SetDiagonal1() {
                     let posOrigen = posA;
                     let posFinal = posC;
                     let vector = {
@@ -599,10 +599,11 @@
                         left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
-                })();
+                };
+                setTimeout(i3SetDiagonal1, 1000);
 
                 //Diagonal 2
-                (function () {
+                function i3SetDiagonal2() {
                     let posOrigen = posB;
                     let posFinal = posD;
                     let vector = {
@@ -619,7 +620,8 @@
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
                     return;
-                })();
+                };
+                setTimeout(i3SetDiagonal2, 1000);
 
             })
 
@@ -648,7 +650,7 @@
                 const posD = i4LugarD.value.getBoundingClientRect();
 
                 //Diagonal 1
-                (function () {
+                function i4SetDiagonal1() {
                     let posOrigen = posA;
                     let posFinal = posD;
                     let vector = {
@@ -664,10 +666,11 @@
                         left: posOrigen.left + posOrigen.width / 2 - posContenedor.left + 'px',
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
-                })();
+                };
+                setTimeout(i4SetDiagonal1, 1000);
 
                 //Diagonal 2
-                (function () {
+                function i4SetDiagonal2() {
                     let posOrigen = posB;
                     let posFinal = posC;
                     let vector = {
@@ -684,7 +687,8 @@
                         top: posOrigen.top + posOrigen.height / 2 - posContenedor.top + 'px',
                     }
                     return;
-                })();
+                };
+                setTimeout(i4SetDiagonal2, 1000);
 
             })
             return {

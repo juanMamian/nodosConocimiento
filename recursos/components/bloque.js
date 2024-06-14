@@ -67,7 +67,7 @@ const bloqueComponent = {
             }
         }
     },
-    template: `<div class="bloque-component" :class="{ejemplo, herramientaInteractiva, spoiler, cuento}">
+    template: `<div class="componente-bloque" :class="{ejemplo, herramientaInteractiva, spoiler, cuento}">
                     <div class="zonaCabecera" :class="{ejemplo, herramientaInteractiva, spoiler, cuento}">
                         <img class="iconoBloque" :src="iconoSrc" />
                             <div v-if="spoiler" id="textoSpoiler">

@@ -1,4 +1,4 @@
-.recuadro{
+.componente-recuadro {
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -7,105 +7,117 @@
     padding: 25px;
     padding-right: 50px;
 }
-.recuadro.datoPrevio{
+
+.componente-recuadro.datoPrevio {
     background-color: var(--paletaPrevio);
 }
-.recuadro.datoNuevo{
+
+.componente-recuadro.datoNuevo {
     background-color: var(--paletaActual);
     color: whitesmoke;
 }
-.recuadro.descubrimiento{
+
+.componente-recuadro.descubrimiento {
     background-color: var(--paletaActual);
     color: whitesmoke;
 }
-.recuadro.instruccion{
+
+.componente-recuadro.instruccion {
     background-color: var(--paletaActual);
     color: whitesmoke;
 }
-.recuadro.instruccionPointer{
+
+.componente-recuadro.instruccionPointer {
     background-color: var(--paletaActual);
     color: whitesmoke;
 }
-.recuadro.instruccionTeclado{
+
+.componente-recuadro.instruccionTeclado {
     background-color: var(--paletaActual);
     color: whitesmoke;
 }
-.recuadro.instruccionTeclado .iconoRecuadro{
+
+.componente-recuadro.instruccionTeclado .iconoRecuadro {
     height: 20px;
 }
 
-.recuadro.reto{
+.componente-recuadro.reto {
     background-color: var(--paletaActual);
     color: whitesmoke;
 }
 
-.iconoRecuadro{
+.iconoRecuadro {
     height: 30px;
     margin-right: 20px;
 }
-.recuadro .textoRecuadro{
+
+.componente-recuadro .textoRecuadro {
     width: 100%;
 }
-.recuadro.infoResultado .textoRecuadro{
-    flex-grow: 1;
-    text-align: center;
-    font-size: 16px;
-}
-.recuadro.centrado .textoRecuadro{
-flex-grow: 1;
-}
 
-.recuadro.instruccionPointer .textoRecuadro{
+.componente-recuadro.infoResultado .textoRecuadro {
     flex-grow: 1;
     text-align: center;
     font-size: 16px;
 }
 
-.recuadro.instruccionTeclado .textoRecuadro{
+.componente-recuadro.centrado .textoRecuadro {
+    flex-grow: 1;
+}
+
+.componente-recuadro.instruccionPointer .textoRecuadro {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 16px;
+}
+
+.componente-recuadro.instruccionTeclado .textoRecuadro {
     flex-grow: 1;
     text-align: center;
     font-size: 16px;
 }
 
 
-.recuadro.instruccion .textoRecuadro{
+.componente-recuadro.instruccion .textoRecuadro {
     flex-grow: 1;
     text-align: center;
     font-size: 16px;
 }
 
-.recuadro.reto .textoRecuadro{
+.componente-recuadro.reto .textoRecuadro {
     flex-grow: 1;
     text-align: center;
     font-size: 16px;
 }
 
-.recuadro.infoResultado{
+.componente-recuadro.infoResultado {
     flex-grow: 0;
     width: fit-content;
-    color:black;
+    color: black;
 }
 
-.recuadro.infoResultado.correcto{
+.componente-recuadro.infoResultado.correcto {
     background-color: var(--paletaCheck);
 }
-.recuadro.infoResultado.incorrecto{
+
+.componente-recuadro.infoResultado.incorrecto {
     background-color: var(--paletaFail);
 }
 
-.recuadro.infoResultado .textoRecuadro{
+.componente-recuadro.infoResultado .textoRecuadro {
     flex-grow: 0;
 }
 
 
-@media (max-width: 500px){
-    .recuadro{
+@media (max-width: 500px) {
+    .componente-recuadro {
         flex-direction: column;
         gap: 20px;
         align-items: center;
         padding-right: 25px;
     }
-    .recuadro .iconoRecuadro{
+
+    .componente-recuadro .iconoRecuadro {
         margin: 10px auto;
     }
 }

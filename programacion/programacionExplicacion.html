@@ -1,243 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-	<script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
+    <script src="https://pe-pe-pe.herokuapp.com/public/resources/libraries/vue.js"></script>
 
-	<script src="https://juanmamian.github.io/recursos/components/bloque.js"></script>
-	<script src="https://juanmamian.github.io/recursos/components/enlace.js"></script>
-	<script src="https://juanmamian.github.io/recursos/components/recuadro.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/bloque.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/enlace.js"></script>
+    <script src="http://127.0.0.1:8080/recursos/components/recuadro.js"></script>
 
-	<link rel="stylesheet" href="https://juanmamian.github.io/recursos/estilos/estilosGenerales.css">
-	<link rel="stylesheet" href="https://juanmamian.github.io/recursos/estilos/estilosProgramacion.css">
-	<link rel="stylesheet" href="https://juanmamian.github.io/recursos/components/recuadroEstilo.css">
-	<link rel="stylesheet" href="https://juanmamian.github.io/recursos/components/bloqueEstilo.css">
-	<link rel="stylesheet" href="https://juanmamian.github.io/recursos/components/enlaceEstilo.css">
-	<title>Programación - explicación</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8080/recursos/components/enlaceEstilo.css">
+    <title>Programación - explicación</title>
 </head>
 
 <body>
-	<iframe src="https://peterhigginson.co.uk/lmc/" style="width: 100%; height: 80vh"></iframe>
-	<div id="doc">
-		<p>
-			La <span class="resaltado">programación</span> es una actividad que consiste en escribir
-			instrucciones para ser ejecutadas por un procesador.
-		</p>
+    <div id="doc">
+        <p>
+        La <span class="resaltado">programación</span> es una actividad que consiste en escribir instrucciones para ser ejecutadas por un procesador.
+        </p>
 
-		<p>
-			Un procesador conoce un conjunto pequeño de instrucciones de computación que puede ejecutar.
-		</p>
+	<p>
+            Un procesador conoce un conjunto pequeño de instrucciones de computación que puede ejecutar:
+	</p> 
 
-		<p>
-			Los procesadores pueden procesar instrucciones si están escritas en un código llamado <span
-				class="resaltado">lenguaje de máquina</span>.
-		</p>
-		<bloque-component tipo='ejemplo'>
-			<template #cabecera>
-				En este cuadro se muestra un procesador recibiendo instrucciones en forma de lenguaje de
-				máquina
-			</template>
-			<div class="zonaInteraccion" id="e1ZonaInteraccion">
-				<button class="boton" @click="generateInstruction">
-					Enviar instrucción en lenguaje de máquina
-				</button>
-				<div class="processor" id="e1Processor">
-				</div>
-			</div>
+	<p>
+	Los procesadores pueden procesar instrucciones si están escritas en un código llamado <span class="resaltado">lenguaje de máquina</span>.
+	</p>
+
+	<recuadro-component tipo="datoPrevio">
+		Un conjunto de instrucciones diseñadas para realizar una tarea de computación se llama <span class="resaltado">programa informático</span>
+	</recuadro-component>
 
 
-		</bloque-component>
-
-
-		<recuadro-component tipo="datoPrevio">
-			Un conjunto de instrucciones diseñadas para realizar una tarea de computación se llama <span
-				class="resaltado">programa informático</span>
-		</recuadro-component>
-
-		<bloque-component tipo='ejemplo'>
-			<template #cabecera>
-				En este cuadro se muestra un programa informático escrito en lenguaje de máquina
-			</template>
-
-			<div class="zonaInteraccion">
-				<div class="programaInformatico">
-					<div class="instruccion e2Instruccion" v-for="instruccion of e2Instrucciones">
-						{{instruccion}}
-					</div>
-				</div>
-				<button class="boton" @click="e2EjecutarPrograma">
-					Enviar al procesador
-				</button>
-
-				<div class="processor" id="e2Procesador">
-
-				</div>
-			</div>
-
-		</bloque-component>
-
-
-	</div>
+    </div>
 </body>
-
 </html>
 
 <script>
-	const app = new Vue({
+	const app= new Vue({
 		el: "#doc",
-		components: {
-			recuadroComponent,
-			bloqueComponent,
+		components:{
+			recuadroComponent
 		},
-		data() {
-			let instrucciones = [];
-			for (var i = 0; i < 13; i++) {
-				instrucciones.push(Math.random().toString(2).slice(2, 10));
-			}
+		data(){
 			return {
-				e2Instrucciones: instrucciones,
-				e2InstruccionAnimada: -1,
-				e2TimeoutAnimarInstruccion: null,
-			}
-		},
-		methods: {
-			generateInstruction() {
-				const instruction = document.createElement('div');
-				const procesador = document.querySelector("#e1Processor");
-				instruction.classList.add('instruction');
-				instruction.textContent = Math.random().toString(2).slice(2, 10);
-				procesador.appendChild(instruction);
-
-				setTimeout(() => {
-					console.log(`Eliminando`);
-					instruction.remove();
-					animarProcesador();
-				}, 2000);
-			},
-			e2EjecutarPrograma() {
-
-			},
-			e2AnimarInstruccion() {
-				const indexInstruccionAnimar = this.e2InstruccionAnimada + 1;
-				const instruccionFrom = document.querySelectorAll(".e2Instruccion")[indexInstruccionAnimar];
-				if (!instruccionFrom) {
-					console.log(`No hay siguiente instrucción`);
-					return;
-				}
-				const posInstruccionFrom = instruccionFrom.getBoundingClientRect();
-				const zona = querySelector("#e2ZonaInteraccion");
-				if (!zona) {
-					console.log(`No hay zona`);
-					return;
-				}
-				const posZona = zona.getBoundingClientRect();
-				const coordsInstruccionFrom = {
-					x: posInstruccionFrom.left - posZona.left,
-					y: posInstruccionFrom.top - posZona.top,
-				}
-				const procesador = document.querySelector("#e2Procesador");
-				if (!procesador) {
-					console.log(`No había procesador`);
-					return;
-				}
-				const nuevaInstruccion = document.createElement("div");
-				nuevaInstruccion.textContent = instruccionFrom.textContent;
-				nuevaInstruccion.classList.add("e2InstruccionVoladora");
 
 			}
-
 		},
-		computed: {
+		computed:{
 		},
 	});
-	function animarProcesador() {
-		const procesador = document.querySelector("#processor");
-		if (procesador) {
-			procesador.classList.add("brillante");
-			setTimeout(() => {
-				procesador.classList.remove("brillante");
-			}, 200);
-		}
-
-	}
-
 </script>
 <style>
-	.processor {
-		width: 120px;
-		height: 120px;
-		border-radius: 5px;
-		border: 4px solid black;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: var(--programacionColorProcesador);
-		position: relative;
-		left: 50%;
-		transform: translateX(-50%);
-		transition: background-color 0.3s;
-		margin-top: 200px;
-	}
-
-	.processor::after {
-		content: "Procesador"
-	}
-
-	.processor.brillante {
-		background-color: whitesmoke;
-	}
-
-	.instruction {
-		font-family: monospace;
-		font-size: 16px;
-		color: green;
-		position: absolute;
-		bottom: 100%;
-		left: 50%;
-		transform: translateX(-50%);
-		animation: floatDown 2s linear;
-	}
-
-	@keyframes floatDown {
-		0% {
-			bottom: calc(100% + 200px);
-		}
-
-		100% {
-			bottom: calc(100% - 20px);
-		}
-	}
-
-	@keyframes processorActivity {
-		0% {
-			background-color: #333;
-		}
-
-		50% {
-			background-color: #666;
-		}
-
-		100% {
-			background-color: #333;
-		}
-	}
-
-	#e1ZonaInteraccion {
-		min-height: 300px;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.programaInformatico {
-		border: 1px solid blue;
-		padding: 10px 10px;
-		margin: 5px auto;
-		width: min(240px, 95%);
-	}
-
-	.instruccion {
-		font-family: monospace;
-		font-size: 13px;
-		color: green;
-	}
 </style>

@@ -37,26 +37,26 @@ const recuadroComponent = {
         },
         srcIcono() {
             if (this.modo === 'incorrecto') {
-                return "https://juanmamian.github.io/recursos/iconos/circleEquis.svg";
+                return "http://127.0.0.1:8080/recursos/iconos/circleEquis.svg";
             }
 
 
             if (this.descubrimiento) {
-                return "https://juanmamian.github.io/recursos/iconos/iconoDescubrimiento.png";
+                return "http://127.0.0.1:8080/recursos/iconos/iconoDescubrimiento.png";
             }
             else if (this.instruccionPointer) {
-                return "https://juanmamian.github.io/recursos/iconos/handPointer.svg";
+                return "http://127.0.0.1:8080/recursos/iconos/handPointer.svg";
             }
             else if (this.instruccionTeclado) {
-                return "https://juanmamian.github.io/recursos/iconos/iconoInstruccionTeclado.svg";
+                return "http://127.0.0.1:8080/recursos/iconos/iconoInstruccionTeclado.svg";
             }
             else if (this.infoResultado) {
                 if (this.modo === 'correcto') {
-                    return "https://juanmamian.github.io/recursos/iconos/circleCheck.svg";
+                    return "http://127.0.0.1:8080/recursos/iconos/circleCheck.svg";
                 }
-                return "https://juanmamian.github.io/recursos/iconos/circleEquis.svg";
+                return "http://127.0.0.1:8080/recursos/iconos/circleEquis.svg";
             }
-            return "https://juanmamian.github.io/recursos/iconos/bombillo.png";
+            return "http://127.0.0.1:8080/recursos/iconos/bombillo.png";
 
         }
     },

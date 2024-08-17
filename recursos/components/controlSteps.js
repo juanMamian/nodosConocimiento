@@ -1,7 +1,7 @@
 export const componenteControlSteps = {
     template: `
         <div class="componenteControlSteps">
-            <img class="icono" src="https://juanmamian.github.io/recursos/iconos/shoePrints.svg">
+            <img class="icono" src="http://127.0.0.1:8080/recursos/iconos/shoePrints.svg">
             <input type="range" min="-1" :max="substeps.length-1" v-model.number="indexExecutedSubstep">
 
             <div class="contenedorRelato">
@@ -9,10 +9,10 @@ export const componenteControlSteps = {
                         {{esteStep.texto}}
                         <div class="contenedorIconoEjecutarAccion" v-for="( accion, indexEstaAccion ) of esteStep.acciones">
                             <button class="boton activador activo" v-if="getTupleSubstepIndex([indexEsteStep, indexEstaAccion])<=indexExecutedSubstep" @click="unsetExecutedTuple([indexEsteStep, indexEstaAccion])">
-                                <img src="https://juanmamian.github.io/recursos/iconos/squareCheck.svg" class="iconoEjecutarAccion" >
+                                <img src="http://127.0.0.1:8080/recursos/iconos/squareCheck.svg" class="iconoEjecutarAccion" >
                             </button>
                             <button class="boton" v-else @click="setExecutedTuple([indexEsteStep, indexEstaAccion])" :disabled="strictlyProgressive && indexExecutedSubstep+1!=getTupleSubstepIndex([indexEsteStep, indexEstaAccion])">
-                                <img src="https://juanmamian.github.io/recursos/iconos/circlePlay.svg" class="iconoEjecutarAccion">
+                                <img src="http://127.0.0.1:8080/recursos/iconos/circlePlay.svg" class="iconoEjecutarAccion">
                             </button>
                         </div>
                     </div>

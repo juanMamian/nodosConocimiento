@@ -14,7 +14,7 @@ const anuncioFullScreen={
     },
     computed:{
         iconoSrc(){
-            return "https://juanmamian.github.io/recursos/iconos/triangleExclamation.svg"
+            return "http://127.0.0.1:8080/recursos/iconos/triangleExclamation.svg"
             
         }
     },

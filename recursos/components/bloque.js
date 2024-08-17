@@ -30,21 +30,21 @@ const bloqueComponent = {
         },
         iconoSrc() {
             if (this.ejemplo) {
-                return "https://juanmamian.github.io/recursos/iconos/iconoEjemplo.svg"
+                return "http://127.0.0.1:8080/recursos/iconos/iconoEjemplo.svg"
             }
             else if (this.herramientaInteractiva) {
-                return "https://juanmamian.github.io/recursos/iconos/iconoHerramientaInteractiva.svg"
+                return "http://127.0.0.1:8080/recursos/iconos/iconoHerramientaInteractiva.svg"
             }
             else if (this.cuento) {
-                return "https://juanmamian.github.io/recursos/iconos/iconoCuento.svg"
+                return "http://127.0.0.1:8080/recursos/iconos/iconoCuento.svg"
             }
             else if (this.spoiler) {
-                return "https://juanmamian.github.io/recursos/iconos/iconoSpoiler.svg"
+                return "http://127.0.0.1:8080/recursos/iconos/iconoSpoiler.svg"
             }
             else if (this.evaluacion) {
-                return "https://juanmamian.github.io/recursos/iconos/iconoEvaluacion.svg"
+                return "http://127.0.0.1:8080/recursos/iconos/iconoEvaluacion.svg"
             }
-            return "https://juanmamian.github.io/recursos/iconos/puzzlePiece.svg"
+            return "http://127.0.0.1:8080/recursos/iconos/puzzlePiece.svg"
         },
         textoCerrarBoton() {
             if (this.textoBoton === 'Iniciar' || this.textoBoton === 'Intentar') {

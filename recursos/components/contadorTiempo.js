@@ -1,4 +1,4 @@
-import { componenteOcto } from "https://juanmamian.github.io/recursos/components/octo.js"
+import { componenteOcto } from "http://127.0.0.1:8080/recursos/components/octo.js"
 export const componenteContadorTiempo = {
     template: `
         <div class="componenteContadorTiempo">

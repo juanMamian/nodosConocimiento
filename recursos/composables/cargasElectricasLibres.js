@@ -1,4 +1,4 @@
-import "https://juanmamian.github.io/recursos/librerias/vue.global.js"
+import "http://127.0.0.1:8080/recursos/librerias/vue.global.js"
 const { ref, watch } = Vue;
 
 export const useUpdateMovimientoLibreCargasElectricas = function(vertices = [[0, 0], [100, 0], [100, 100], [0, 100]], periodoUpdate = 300) {//vertices holds an array of vertices describing the boundaries of the container.

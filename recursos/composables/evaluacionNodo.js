@@ -1,4 +1,4 @@
-import "http://127.0.0.1:8080/recursos/librerias/vue.global.js"
+import "https://juanmamian.github.io/nodosConocimiento/recursos/librerias/vue.global.js"
 const { ref } = Vue;
 
 export const useEvaluacionNodo = function(addToGenerarReto, addToReiniciarReto, recolectarRespuestaUsuario) {

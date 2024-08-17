@@ -50,7 +50,7 @@ const controlesAnimacion = {
         }
 
     },
-    template: '<div class="controlesAnimacion"> <button class="boton botonControl" @click="darPlay" :class="{deshabilitado: playing}"> <img src="http://127.0.0.1:8080/recursos/iconos/play.svg" /> </button> <button class="boton botonControl" @click="darPause" :class="{deshabilitado: paused || stopped}"> <img src="http://127.0.0.1:8080/recursos/iconos/pause.svg" /> </button> <button class="boton botonControl" @click="darStop" :class="{deshabilitado:stopped}"> <img src="http://127.0.0.1:8080/recursos/iconos/stop.svg" /> </button> </div>',
+    template: '<div class="controlesAnimacion"> <button class="boton botonControl" @click="darPlay" :class="{deshabilitado: playing}"> <img src="https://juanmamian.github.io/nodosConocimiento/recursos/iconos/play.svg" /> </button> <button class="boton botonControl" @click="darPause" :class="{deshabilitado: paused || stopped}"> <img src="https://juanmamian.github.io/nodosConocimiento/recursos/iconos/pause.svg" /> </button> <button class="boton botonControl" @click="darStop" :class="{deshabilitado:stopped}"> <img src="https://juanmamian.github.io/nodosConocimiento/recursos/iconos/stop.svg" /> </button> </div>',
 
 }
 

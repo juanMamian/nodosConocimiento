@@ -131,10 +131,10 @@
                 else {
                     let segundoValor = Math.round(Math.random() * rangoValor + minValor);
                     if (simbolo === '<') {
-                        segundoValor += primeraExpresion.valor + 1;
+                        segundoValor = primeraExpresion.valor + 1 + Math.abs(segundoValor);
                     }
                     if (simbolo === '>') {
-                        segundoValor -= primeraExpresion.valor - 1;
+                        segundoValor = primeraExpresion.valor - 1 - Math.abs(segundoValor);
                     }
                     segundaExpresion.valor = segundoValor;
                 }
@@ -171,10 +171,10 @@
                 else {
                     let segundoValor = Math.round(Math.random() * rangoValor + minValor);
                     if (simbolo === '<') {
-                        segundoValor += primeraExpresion.valor + 1;
+                        segundoValor = primeraExpresion.valor + 1 + Math.abs(segundoValor);
                     }
                     if (simbolo === '>') {
-                        segundoValor -= primeraExpresion.valor - 1;
+                        segundoValor = primeraExpresion.valor - 1 - Math.abs(segundoValor);
                     }
                     segundaExpresion.valor = segundoValor;
                 }

@@ -30,7 +30,7 @@
         <p>Comprendo el concepto de deducción de igualdades si: </p>
 
         <bloque-component tipo="evaluacion"
-            textoCabecera="Dada una comparación, puedo deducir cualquier cantidad de comparaciones.igualdades">
+            textoCabecera="Dada una comparación, puedo deducir cualquier cantidad de comparaciones.">
 
             <recuadro-component tipo='instruccionPointer'>
                 <div class='contenedorFlex'>
@@ -136,7 +136,7 @@
                     if (simbolo === '>') {
                         segundoValor -= primeraExpresion.valor - 1;
                     }
-                    segundaExpresion.valor = segundaExpresion.valor;
+                    segundaExpresion.valor = segundoValor;
                 }
 
                 if (Number(this.dificultadReto1) > 1) {
@@ -176,7 +176,7 @@
                     if (simbolo === '>') {
                         segundoValor -= primeraExpresion.valor - 1;
                     }
-                    segundaExpresion.valor = segundaExpresion.valor;
+                    segundaExpresion.valor = segundoValor;
                 }
 
                 if (Number(this.dificultadReto2) > 1) {

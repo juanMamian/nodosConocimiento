@@ -11,21 +11,16 @@
     <script id="MathJax-script" async
         src="https://juanmamian.github.io/nodosConocimiento/recursos/librerias/MathJax/es5/tex-chtml.js"></script>
 
-    <script
-        src="https://juanmamian.github.io/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
+    <script src="https://juanmamian.github.io/nodosConocimiento/mats/resources/expresionNumericaClass.js"></script>
 
     <script src="https://juanmamian.github.io/nodosConocimiento/recursos/components/bloque.js"></script>
     <script src="https://juanmamian.github.io/nodosConocimiento/recursos/components/enlace.js"></script>
     <script src="https://juanmamian.github.io/nodosConocimiento/recursos/components/recuadro.js"></script>
 
-    <link rel="stylesheet"
-        href="https://juanmamian.github.io/nodosConocimiento/recursos/estilos/estilosGenerales.css">
-    <link rel="stylesheet"
-        href="https://juanmamian.github.io/nodosConocimiento/recursos/components/recuadroEstilo.css">
-    <link rel="stylesheet"
-        href="https://juanmamian.github.io/nodosConocimiento/recursos/components/bloqueEstilo.css">
-    <link rel="stylesheet"
-        href="https://juanmamian.github.io/nodosConocimiento/recursos/components/enlaceEstilo.css">
+    <link rel="stylesheet" href="https://juanmamian.github.io/nodosConocimiento/recursos/estilos/estilosGenerales.css">
+    <link rel="stylesheet" href="https://juanmamian.github.io/nodosConocimiento/recursos/components/recuadroEstilo.css">
+    <link rel="stylesheet" href="https://juanmamian.github.io/nodosConocimiento/recursos/components/bloqueEstilo.css">
+    <link rel="stylesheet" href="https://juanmamian.github.io/nodosConocimiento/recursos/components/enlaceEstilo.css">
 
     <title>Igualdades equivalentes - evaluación</title>
 </head>
@@ -136,7 +131,7 @@
             hayCancelacion = true;
         }
 
-        if (expresion.operacion === ExpresionNumerica.getOperacionOpuesta(expresion.numero1.operacion) && expresion.numero2.valor === expresion.numero1.numero2.valor){
+        if (expresion.operacion === ExpresionNumerica.getOperacionOpuesta(expresion.numero1.operacion) && expresion.numero2.valor === expresion.numero1.numero2.valor) {
             hayCancelacion = true;
         }
         return hayCancelacion;
@@ -163,7 +158,7 @@
         },
         methods: {
             generarReto2() {
-                const operaciones = ["sumar", "restar entre", "multiplicar por", "dividir entre", "elevar a la", "radicar con índice"];
+                const operaciones = ["sumar", "restar", "multiplicar por", "dividir entre", "elevar a la", "radicar con índice"];
                 let laOperacion = operaciones[Math.floor(Math.random() * operaciones.length)];
                 laOperacion = laOperacion.charAt(0).toUpperCase() + laOperacion.slice(1);
 
@@ -184,7 +179,7 @@
                 let laExpresion = new ExpresionNumerica();
                 laExpresion.fillExpresion({keepInteger: true});
 
-                let umbralCancelacion=0.5/this.dificultadReto3;
+                let umbralCancelacion = 0.5 / this.dificultadReto3;
 
                 for (let i = 0; i < Number(this.dificultadReto3); i++) {
                     laExpresion = new ExpresionNumerica({
@@ -193,7 +188,7 @@
 
                     let generarCancelacion = Math.random() < umbralCancelacion;
                     if (generarCancelacion) {
-                        umbralCancelacion=umbralCancelacion/2;
+                        umbralCancelacion = umbralCancelacion / 2;
                         console.log("Insertando cancelación");
                         laExpresion.operacion = ExpresionNumerica.getOperacionOpuesta(laExpresion.numero1.operacion);
                         laExpresion.numero2 = new ExpresionNumerica({valor: laExpresion.numero1.numero2.valor});

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego del Ahorcado Animado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .game-container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #word-display {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #guess-input {
+            font-size: 18px;
+            padding: 5px;
+            width: 30px;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 5px 10px;
+            margin-left: 10px;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        canvas {
+            margin-top: 20px;
+        }
+
+        #score-display {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>Juego del Ahorcado</h1>
+        <div id="word-display"></div>
+        <input type="text" id="guess-input" maxlength="1">
+        <button id="guess-button" onclick="makeGuess()">Adivinar</button>
+        <div id="message"></div>
+        <canvas id="hangman-canvas" width="200" height="250"></canvas>
+        <div id="score-display"></div>
+        <button id="new-word-button" onclick="startNewGame()" style="display: none;">Nueva Palabra</button>
+    </div>
+
+    <script>
+        const words = ['', 'html', 'css', 'python', 'ahorcado', 'web', 'juego', 'programacion', 'computadora', 'internet'];
+        let word = '';
+        let guessedLetters = [];
+        let remainingGuesses = 6;
+        const canvas = document.getElementById('hangman-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Scoring system
+        let score = 0;
+        let streak = 0;
+        let gamesPlayed = 0;
+
+        // Animation variables
+        let animationStep = 0;
+        let animationInterval;
+
+        function initGame() {
+            word = words[Math.floor(Math.random() * words.length)];
+            guessedLetters = [];
+            remainingGuesses = 6;
+            updateDisplay();
+            drawHangman(0);
+            updateScoreDisplay();
+            document.getElementById('new-word-button').style.display = 'none';
+            document.getElementById('guess-button').disabled = false;
+            document.getElementById('guess-input').disabled = false;
+        }
+
+        function updateDisplay() {
+            let display = '';
+            for (let letter of word) {
+                if (guessedLetters.includes(letter)) {
+                    display += letter;
+                } else {
+                    display += '_';
+                }
+                display += ' ';
+            }
+            document.getElementById('word-display').textContent = display;
+        }
+
+        function makeGuess() {
+            const guessInput = document.getElementById('guess-input');
+            const guess = guessInput.value.toLowerCase();
+            guessInput.value = '';
+
+            if (guess.length !== 1 || !/[a-z]/.test(guess)) {
+                document.getElementById('message').textContent = 'Por favor, ingresa una sola letra.';
+                return;
+            }
+
+            if (guessedLetters.includes(guess)) {
+                document.getElementById('message').textContent = 'Ya adivinaste esa letra.';
+                return;
+            }
+
+            guessedLetters.push(guess);
+
+            if (word.includes(guess)) {
+                // Correct guess
+                score += 10;
+                updateScoreDisplay();
+            } else {
+                remainingGuesses--;
+                animateHangman();
+            }
+
+            updateDisplay();
+
+            if (word.split("").every(letter => guessedLetters.includes(letter))) {
+                //Win
+                endGame(true);
+            } else if (remainingGuesses === 0) {
+                // Loss
+                endGame(false);
+            } else {
+                document.getElementById('message').textContent = '';
+            }
+        }
+
+        function animateHangman() {
+            animationStep = 0;
+            clearInterval(animationInterval);
+            animationInterval = setInterval(() => {
+                animationStep++;
+                drawHangman(animationStep);
+                if (animationStep >= 6 - remainingGuesses) {
+                    clearInterval(animationInterval);
+                }
+            }, 100);
+        }
+
+        function drawHangman(step) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+
+            // Base
+            ctx.beginPath();
+            ctx.moveTo(20, 230);
+            ctx.lineTo(180, 230);
+            ctx.stroke();
+
+            // Poste
+            ctx.beginPath();
+            ctx.moveTo(40, 230);
+            ctx.lineTo(40, 20);
+            ctx.stroke();
+
+            // Soporte superior
+            ctx.beginPath();
+            ctx.moveTo(40, 20);
+            ctx.lineTo(120, 20);
+            ctx.stroke();
+
+            // Soga
+            ctx.beginPath();
+            ctx.moveTo(120, 20);
+            ctx.lineTo(120, 50);
+            ctx.stroke();
+
+            if (step > 0) {
+                // Cabeza
+                ctx.beginPath();
+                ctx.arc(120, 70, 20, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            if (step > 1) {
+                // Cuerpo
+                ctx.beginPath();
+                ctx.moveTo(120, 90);
+                ctx.lineTo(120, 150);
+                ctx.stroke();
+            }
+
+            if (step > 2) {
+                // Brazo izquierdo
+                ctx.beginPath();
+                ctx.moveTo(120, 100);
+                ctx.lineTo(90, 130);
+                ctx.stroke();
+            }
+
+            if (step > 3) {
+                // Brazo derecho
+                ctx.beginPath();
+                ctx.moveTo(120, 100);
+                ctx.lineTo(150, 130);
+                ctx.stroke();
+            }
+
+            if (step > 4) {
+                // Pierna izquierda
+                ctx.beginPath();
+                ctx.moveTo(120, 150);
+                ctx.lineTo(90, 190);
+                ctx.stroke();
+            }
+
+            if (step > 5) {
+                // Pierna derecha
+                ctx.beginPath();
+                ctx.moveTo(120, 150);
+                ctx.lineTo(150, 190);
+                ctx.stroke();
+            }
+        }
+
+        function updateScoreDisplay() {
+            const scoreDisplay = document.getElementById('score-display');
+            scoreDisplay.innerHTML = `
+                Puntuación: ${score}<br>
+                Racha de victorias: ${streak}<br>
+                Juegos jugados: ${gamesPlayed}
+            `;
+        }
+
+        function endGame(isWin) {
+            console.log("End game " + isWin);
+            if (isWin) {
+                score += 50;
+                streak++;
+                document.getElementById('message').textContent = '¡Felicidades! ¡Has ganado!';
+            } else {
+                streak = 0;
+                document.getElementById('message').textContent = `Juego terminado. La palabra era "${word}".`;
+            }
+            gamesPlayed++;
+            updateScoreDisplay();
+            document.getElementById('new-word-button').style.display = 'inline-block';
+            document.getElementById('guess-button').disabled = true;
+            document.getElementById('guess-input').disabled = true;
+        }
+
+        function startNewGame() {
+            initGame();
+            document.getElementById('message').textContent = '';
+        }
+
+        initGame();
+    </script>
+</body>
+
+</html>

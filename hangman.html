@@ -70,7 +70,7 @@
     </div>
 
     <script>
-        const words = ['bunde'];
+        const words = ['davidalejandro'];
         let word = '';
         let guessedLetters = [];
         let remainingGuesses = 6;
@@ -87,7 +87,8 @@
         let animationInterval;
 
         function initGame() {
-            word = words[Math.floor(Math.random() * words.length)];
+            //word = words[Math.floor(Math.random() * words.length)];
+            word = words[0];
             guessedLetters = [];
             remainingGuesses = 6;
             updateDisplay();

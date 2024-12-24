@@ -17,6 +17,9 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 
 	zonas = {}//Zonas para dibujo de conjuntos según su nivel. Ver: "trazar zonas".
 	pathsPorNivel = {} //Path2D que contienen los rectangulos correspondientes a cada nivel.
+	pathsExternosPorNivel = {} //Path2D que contienen los rectangulos correspondientes a cada nivel que no están contenidos en ningún otro conjunto.
+
+
 	constructor() {
 		super();
 		this.calcularMultiplicadorZoom()
@@ -98,7 +101,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 	}
 	handleWheel(evento) {
 		evento.preventDefault();
-		const step = 0.1;
+		const step = 0.03;
 		const boundingCanvas = this.elCanvas.getBoundingClientRect();
 		const posicionEvento = {
 			x: this.esquinaVista.x + (evento.clientX - boundingCanvas.left) / this.multiplicadorZoom,
@@ -230,15 +233,17 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 	dibujarTodo() {
 		this.lapiz.clearRect(0, 0, this.elCanvas.width, this.elCanvas.height);
 		this.calcularZonas();
-		this.trazarZonas();
+		//this.trazarZonas();
 		this.calcularPathsConjuntos();
 		this.trazarConjuntos();
 	}
 	calcularPathsConjuntos() {
 		//Crear el objeto "paths por nivel"
 		this.pathsPorNivel = {};
+		this.pathsExternosPorNivel = {};
 		for (let i = 0; i < this.nivelesVisibles.length; i++) {
 			this.pathsPorNivel[this.nivelesVisibles[i]] = new Path2D();
+			this.pathsExternosPorNivel[this.nivelesVisibles[i]] = new Path2D();
 		}
 
 		//Add conjuntos en cada zona.
@@ -285,7 +290,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 			}
 			let posicion = JSON.parse(JSON.stringify(posicionInicial));
 			while (posicion.x < zona.x + zona.width - 1 && posicion.y < zona.y + zona.height - 1 && posicion.x < this.elCanvas.width && posicion.y < this.elCanvas.height) {
-				this.addConjuntoToPathNivel(maxNivelDibujable, { x: posicion.x + espacioUnidad.width / 2, y: posicion.y + espacioUnidad.height / 2 });
+				this.addConjuntoToPathNivel(maxNivelDibujable, { x: posicion.x + espacioUnidad.width / 2, y: posicion.y + espacioUnidad.height / 2 }, undefined, true);
 				posicion.x += espacioUnidad.width;
 				if (posicion.x >= zona.x + zona.width || posicion.x >= this.elCanvas.width) {
 					posicion.x = posicionInicial.x;
@@ -301,13 +306,15 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 
 		});
 	}
-	addConjuntoToPathNivel(nivel, posicion) {
+	addConjuntoToPathNivel(nivel, posicion, size, esExterno) {
 		const path = new Path2D();
-		const size = this.calcularSizeConjuntoSegunNivel(nivel);
+		if (!size) {
+			size = this.calcularSizeConjuntoSegunNivel(nivel);
+		}
 
 		const { zonaMaxRelevancia, zoomDemasiadoPequeno, zoomDemasiadoGrande } = this.getBoundariesZoomConjuntoSegunNivel(nivel);
 		let porcentajePadding = 0;
-		const maxPorcentajePadding = nivel % 2 === 0 ? 4 : 11;
+		const maxPorcentajePadding = nivel % 2 === 0 ? 4 : 2;
 		if (this.zoom > zonaMaxRelevancia[0] && this.zoom < zonaMaxRelevancia[1]) {
 			porcentajePadding = maxPorcentajePadding;
 		}
@@ -317,28 +324,43 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		else if (this.zoom > zonaMaxRelevancia[1]) {
 			porcentajePadding = maxPorcentajePadding - (this.zoom - zonaMaxRelevancia[1]) * maxPorcentajePadding / (zoomDemasiadoGrande - zonaMaxRelevancia[1]);
 		}
-		const padding = size.height * porcentajePadding / 100;
+		if (porcentajePadding < 0) porcentajePadding = 0;
+		if (porcentajePadding > 100) porcentajePadding = 100;
+		const paddingVertical = size.height * porcentajePadding / 100;
+		let paddingHorizontal = size.width * porcentajePadding / 100;
 
 		const esquinas = [
 			{
-				x: posicion.x - size.width / 2 + padding,
-				y: posicion.y - size.height / 2 + padding,
+				x: posicion.x - size.width / 2 + paddingHorizontal,
+				y: posicion.y - size.height / 2 + paddingVertical,
 			},
 			{
-				x: posicion.x + size.width / 2 - padding,
-				y: posicion.y - size.height / 2 + padding,
+				x: posicion.x + size.width / 2 - paddingHorizontal,
+				y: posicion.y - size.height / 2 + paddingVertical,
 			},
 			{
-				x: posicion.x + size.width / 2 - padding,
-				y: posicion.y + size.height / 2 - padding,
+				x: posicion.x + size.width / 2 - paddingHorizontal,
+				y: posicion.y + size.height / 2 - paddingVertical,
 			},
 			{
-				x: posicion.x - size.width / 2 + padding,
-				y: posicion.y + size.height / 2 - padding,
+				x: posicion.x - size.width / 2 + paddingHorizontal,
+				y: posicion.y + size.height / 2 - paddingVertical,
 			},
 		];
 
-		const porcentajeRadioEsquina = 1;
+		let porcentajeRadioEsquina = 1;
+		if (nivel === 0) {
+			let maxPorcentajeRadioEsquina = 30;
+			porcentajeRadioEsquina = maxPorcentajeRadioEsquina;
+			if (this.zoom > zonaMaxRelevancia[0]) {
+				porcentajeRadioEsquina = maxPorcentajeRadioEsquina - maxPorcentajeRadioEsquina * (this.zoom - zonaMaxRelevancia[0]) / (zoomDemasiadoGrande - zonaMaxRelevancia[0]);
+			}
+			else if (this.zoom < zonaMaxRelevancia[0]) {
+				porcentajeRadioEsquina = maxPorcentajeRadioEsquina * (this.zoom - zoomDemasiadoPequeno) / (zonaMaxRelevancia[0] - zoomDemasiadoPequeno);
+			}
+			if (porcentajeRadioEsquina < 0) porcentajeRadioEsquina = 0;
+			if (porcentajeRadioEsquina > 100) porcentajeRadioEsquina = 100;
+		}
 		const radioEsquina = (esquinas[3].y - esquinas[0].y) * porcentajeRadioEsquina / 100;
 
 		path.moveTo((esquinas[0].x + esquinas[1].x) / 2, esquinas[0].y);
@@ -348,11 +370,20 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		path.arcTo(esquinas[0].x, esquinas[0].y, esquinas[1].x, esquinas[1].y, radioEsquina);
 		path.closePath();
 
-		if (!this.pathsPorNivel[nivel]) {
+		if (!esExterno && !this.pathsPorNivel[nivel]) {
 			console.log(`No había pathPorNivel para este nivel`);
 			throw "Path no disponible";
 		}
-		this.pathsPorNivel[nivel].addPath(path);
+		else if (esExterno && !this.pathsExternosPorNivel[nivel]) {
+			console.log(`No había pathPorNivel para este nivel`);
+			throw "Path no disponible";
+		}
+		if (esExterno) {
+			this.pathsExternosPorNivel[nivel].addPath(path);
+		}
+		else {
+			this.pathsPorNivel[nivel].addPath(path);
+		}
 
 		//Si hay conjuntos menores, llamar esta misma función para ellos.
 		const indexEsteNivelEnVisibles = this.nivelesVisibles.indexOf(nivel);
@@ -389,7 +420,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 			let posicion = JSON.parse(JSON.stringify(posicionInicial));
 			let contador = 0;
 			while (posicion.x < zona.x + zona.width - 1 && posicion.y < zona.y + zona.height - 1 && posicion.x < this.elCanvas.width && posicion.y < this.elCanvas.height) {
-				this.addConjuntoToPathNivel(nivelDibujable, { x: posicion.x + espacioUnidad.width / 2, y: posicion.y + espacioUnidad.height / 2 });
+				this.addConjuntoToPathNivel(nivelDibujable, { x: posicion.x + espacioUnidad.width / 2, y: posicion.y + espacioUnidad.height / 2 }, espacioUnidad, false);
 				posicion.x += espacioUnidad.width;
 				if (posicion.x >= zona.x + zona.width || posicion.x >= this.elCanvas.width) {
 					posicion.x = posicionInicial.x;
@@ -405,10 +436,10 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		}
 	}
 	getBoundariesZoomConjuntoSegunNivel(nivel) {
-		const zoomMaxRelevancia = nivel % 2 === 0 ? 2.1 - 0.5 * nivel : 2.0 - 0.5 * nivel; //Zoom en el que este conjunto debería estar más visible. Mediante padding y opacidad.
-		const zonaMaxRelevancia = [zoomMaxRelevancia - 0.1, zoomMaxRelevancia + 0.3];
-		const zoomDemasiadoPequeno = nivel % 2 == 0 ? zonaMaxRelevancia[0] - 0.7 : zonaMaxRelevancia[0] - 0.5; //Zoom en el que estos conjuntos son tan pequeños que no vale la pena renderizarlos.
-		const zoomDemasiadoGrande = zonaMaxRelevancia[1] + 0.5; //Zoom en el que estos conjuntos son tan grandes que no vale la pena renderizarlos.
+		const zoomMaxRelevancia = nivel % 2 === 0 ? 2.0 - 0.5 * nivel : 2.0 - 0.5 * nivel; //Zoom en el que este conjunto debería estar más visible. Mediante padding y opacidad.
+		const zonaMaxRelevancia = [zoomMaxRelevancia - 0.1, zoomMaxRelevancia + 0.1];
+		const zoomDemasiadoPequeno = nivel % 2 == 0 ? zonaMaxRelevancia[0] - 0.6 : zonaMaxRelevancia[0] - 0.4; //Zoom en el que estos conjuntos son tan pequeños que no vale la pena renderizarlos.
+		const zoomDemasiadoGrande = zonaMaxRelevancia[1] + 0.2; //Zoom en el que estos conjuntos son tan grandes que no vale la pena renderizarlos.
 
 		return {
 			zoomMaxRelevancia, zonaMaxRelevancia, zoomDemasiadoPequeno, zoomDemasiadoGrande
@@ -417,6 +448,44 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 	}
 	trazarConjuntos() {
 
+		Object.entries(this.pathsExternosPorNivel).forEach(entrada => {
+			const nivelPath = entrada[0];
+			const elPath = entrada[1];
+
+			const { zonaMaxRelevancia, zoomDemasiadoPequeno, zoomDemasiadoGrande } = this.getBoundariesZoomConjuntoSegunNivel(nivelPath)
+
+			let opacidad = 1;
+			const maxLineWidth = 6;
+			let lineWidth = maxLineWidth;
+			if (this.zoom < zoomDemasiadoPequeno) {
+				return;
+			}
+			lineWidth = maxLineWidth * (this.zoom - zoomDemasiadoPequeno) / (zoomDemasiadoGrande - zoomDemasiadoPequeno);
+			if (this.zoom > zonaMaxRelevancia[1]) {
+				opacidad = 1 - (this.zoom - zonaMaxRelevancia[1]) / (zoomDemasiadoGrande - zonaMaxRelevancia[1]);
+			}
+			else if (this.zoom < zonaMaxRelevancia[0]) {
+				opacidad = 0.4 + (this.zoom - zoomDemasiadoPequeno) / (zonaMaxRelevancia[0] - zoomDemasiadoPequeno);
+			}
+			if (opacidad < 0) opacidad = 0;
+			if (opacidad > 1) opacidad = 1;
+			if (lineWidth > maxLineWidth) lineWidth = maxLineWidth;
+			if (lineWidth < 0) lineWidth = 0;
+			//this.lapiz.globalAlpha = opacidad;
+			this.lapiz.lineWidth = lineWidth;
+
+			const color = RepresentacionDecimalNumero.calcularColorSegunNivel(nivelPath);
+			this.lapiz.strokeStyle = `rgb(${color.rojo},${color.verde},${color.azul}, ${opacidad})`;
+
+			/* if (nivelPath == 1 || nivelPath == 0) {
+				console.log(`Para el ${nivelPath}:`);
+				console.log(`	Zona max relevancia:${zonaMaxRelevancia}`);
+				console.log(`	Zoom actual: ${this.zoom}`);
+				console.log(`	Opacidad: ${opacidad}`);
+			} */
+
+			this.lapiz.stroke(elPath);
+		});
 		Object.entries(this.pathsPorNivel).forEach(entrada => {
 			const nivelPath = entrada[0];
 			const elPath = entrada[1];
@@ -424,7 +493,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 			const { zonaMaxRelevancia, zoomDemasiadoPequeno, zoomDemasiadoGrande } = this.getBoundariesZoomConjuntoSegunNivel(nivelPath)
 
 			let opacidad = 1;
-			const maxLineWidth = 10;
+			const maxLineWidth = 6;
 			let lineWidth = maxLineWidth;
 			if (this.zoom < zoomDemasiadoPequeno) {
 				return;

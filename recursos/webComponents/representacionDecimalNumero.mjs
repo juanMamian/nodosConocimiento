@@ -1,7 +1,7 @@
 //Representa un número como una grid de bolitas organizadas de forma que se puede analizar el sistema decimal.
 //10 unidades en fila forman una decena. 10 decenas en columna forman un centana (De forma cuadrada). 10 centenas en fila forman un mil, etc.
 export class RepresentacionDecimalNumero extends HTMLElement {
-	static observedAttributes = ["cantidad"];
+	static observedAttributes = ["cantidad", "niveles-incluidos"];
 
 	shadowRoot;
 
@@ -19,6 +19,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 	pathsPorNivel = {} //Path2D que contienen los rectangulos correspondientes a cada nivel.
 	pathsExternosPorNivel = {} //Path2D que contienen los rectangulos correspondientes a cada nivel que no están contenidos en ningún otro conjunto.
 
+	nivelesIncluidos;
 
 	constructor() {
 		super();
@@ -69,7 +70,9 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		this.elCanvas.addEventListener("dblclick", (e) => this.centrarRepresentacionNumero())
 
 
-		this.setNivelesVisiblesSegunZoom();
+		if (!this.nivelesIncluidos) {
+			this.setNivelesVisiblesSegunZoom();
+		}
 		this.dibujarTodo();
 		this.centrarRepresentacionNumero();
 	}
@@ -138,13 +141,25 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		}
 
 
-		this.setNivelesVisiblesSegunZoom();
+		if (!this.nivelesIncluidos) {
+			this.setNivelesVisiblesSegunZoom();
+		}
 		this.dibujarTodo();
 
 	}
 	attributeChangedCallback(nombre, valorAntes, valorAhora) {
 		if (nombre === "cantidad") {
 			this.cantidad = Number(valorAhora);
+		}
+		if (nombre === "niveles-incluidos") {
+			let nuevoArray = JSON.parse(valorAhora);
+			if (nuevoArray instanceof Array || nuevoArray.some(el => typeof el != Number)) {
+				this.nivelesIncluidos = nuevoArray;
+				this.nivelesVisibles = this.nivelesIncluidos.sort((a, b) => a < b);
+			}
+			else {
+				console.log(`Error, atributo ${nombre} debe ser un array`);
+			}
 		}
 	}
 	calcularZonas() {//Crear boundaries para el dibujado de conjuntos. Hay una zona en la que se pueden dibujar conjuntos de nivel 2, otra para los de nivel 1, etc. (En la zona de nivel 2 se puede dibujar cualquier conjunto menor o igual a 2).
@@ -294,7 +309,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 			while (posicion.x < zona.x + zona.width - 1 && posicion.y < zona.y + zona.height - 1 && posicion.x < this.elCanvas.width && posicion.y < this.elCanvas.height) {
 				this.addConjuntoToPathNivel(maxNivelDibujable, { x: posicion.x + espacioUnidad.width / 2, y: posicion.y + espacioUnidad.height / 2 }, undefined, true);
 				posicion.x += espacioUnidad.width;
-				if (posicion.x >= zona.x + zona.width || posicion.x >= this.elCanvas.width) {
+				if (posicion.x >= zona.x + zona.width - 1 || posicion.x >= this.elCanvas.width) {
 					posicion.x = posicionInicial.x;
 					posicion.y += espacioUnidad.height;
 				}
@@ -390,7 +405,6 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		//Si hay conjuntos menores, llamar esta misma función para ellos.
 		const indexEsteNivelEnVisibles = this.nivelesVisibles.indexOf(nivel);
 		if (indexEsteNivelEnVisibles < 0) {
-			console.log("adding conjunto que no está en niveles visibles");
 			return;
 		}
 
@@ -410,7 +424,6 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 				y: Math.pow(10, nivelDibujable % 2 === 0 ? Math.floor(diferenciaNiveles / 2) : Math.ceil(diferenciaNiveles / 2)),
 			}
 
-
 			const espacioUnidad = {
 				width: zona.width / cupo.x,
 				height: zona.height / cupo.y,
@@ -425,17 +438,12 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 			while (posicion.x < zona.x + zona.width - 1 && posicion.y < zona.y + zona.height - 1 && posicion.x < this.elCanvas.width && posicion.y < this.elCanvas.height) {
 				this.addConjuntoToPathNivel(nivelDibujable, { x: posicion.x + espacioUnidad.width / 2, y: posicion.y + espacioUnidad.height / 2 }, espacioUnidad, false);
 				posicion.x += espacioUnidad.width;
-				if (posicion.x >= zona.x + zona.width || posicion.x >= this.elCanvas.width) {
+				if (posicion.x >= zona.x + zona.width - 1 || posicion.x >= this.elCanvas.width) {
 					posicion.x = posicionInicial.x;
 					posicion.y += espacioUnidad.height;
 				}
 				contador++;
 			}
-			/* for (let i = 0; i < cupo.y; i++) {
-				for (let j = 0; j < cupo.x; j++) {
-					this.addConjuntoToPathNivel(nivelDibujable, { x: zona.x + espacioUnidad.width * (j + 0.5), y: zona.y + espacioUnidad.height * (i + 0.5) });
-				}
-			} */
 		}
 	}
 	getBoundariesZoomConjuntoSegunNivel(nivel) {
@@ -449,85 +457,60 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		}
 
 	}
+
 	trazarConjuntos() {
 
 		Object.entries(this.pathsExternosPorNivel).forEach(entrada => {
 			const nivelPath = entrada[0];
-			console.log(`Trazando path externo de nivel ${nivelPath}`);
 			const elPath = entrada[1];
 
-			const { zonaMaxRelevancia, zoomDemasiadoPequeno, zoomDemasiadoGrande } = this.getBoundariesZoomConjuntoSegunNivel(nivelPath)
-
-			let opacidad = 1;
-			const maxLineWidth = 6;
-			let lineWidth = maxLineWidth;
-			lineWidth = maxLineWidth * (this.zoom - zoomDemasiadoPequeno) / (zoomDemasiadoGrande - zoomDemasiadoPequeno);
-			if (this.zoom > zonaMaxRelevancia[1]) {
-				opacidad = 1 - (this.zoom - zonaMaxRelevancia[1]) / (zoomDemasiadoGrande - zonaMaxRelevancia[1]);
-			}
-			else if (this.zoom < zonaMaxRelevancia[0]) {
-				opacidad = 1;
-			}
-			if (opacidad < 0) opacidad = 0;
-			if (opacidad > 1) opacidad = 1;
-			if (lineWidth > maxLineWidth) lineWidth = maxLineWidth;
-			if (lineWidth < 0.4) lineWidth = 0.4;
-			//this.lapiz.globalAlpha = opacidad;
-			this.lapiz.lineWidth = lineWidth;
-			if (nivelPath == 0) {
-				console.log(`Opacidad: ${opacidad}`);
-			}
-
-			const color = RepresentacionDecimalNumero.calcularColorSegunNivel(nivelPath);
-			this.lapiz.strokeStyle = `rgb(${color.rojo},${color.verde},${color.azul}, ${opacidad})`;
-
-			/* if (nivelPath == 1 || nivelPath == 0) {
-				console.log(`Para el ${nivelPath}:`);
-				console.log(`	Zona max relevancia:${zonaMaxRelevancia}`);
-				console.log(`	Zoom actual: ${this.zoom}`);
-				console.log(`	Opacidad: ${opacidad}`);
-			} */
-
-			this.lapiz.stroke(elPath);
+			this.trazarMultipath(nivelPath, elPath, { externo: true });
 		});
 		Object.entries(this.pathsPorNivel).forEach(entrada => {
 			const nivelPath = entrada[0];
 			const elPath = entrada[1];
-
-			const { zonaMaxRelevancia, zoomDemasiadoPequeno, zoomDemasiadoGrande } = this.getBoundariesZoomConjuntoSegunNivel(nivelPath)
-
-			let opacidad = 1;
-			const maxLineWidth = 6;
-			let lineWidth = maxLineWidth;
-			if (this.zoom < zoomDemasiadoPequeno) {
-				return;
-			}
-			lineWidth = maxLineWidth * (this.zoom - zoomDemasiadoPequeno) / (zoomDemasiadoGrande - zoomDemasiadoPequeno);
-			if (this.zoom > zonaMaxRelevancia[1]) {
-				opacidad = 1 - (this.zoom - zonaMaxRelevancia[1]) / (zoomDemasiadoGrande - zonaMaxRelevancia[1]);
-			}
-			else if (this.zoom < zonaMaxRelevancia[0]) {
-				opacidad = (this.zoom - zoomDemasiadoPequeno) / (zonaMaxRelevancia[0] - zoomDemasiadoPequeno);
-			}
-			if (opacidad < 0) opacidad = 0;
-			if (opacidad > 1) opacidad = 1;
-			if (lineWidth > maxLineWidth) lineWidth = maxLineWidth;
-			if (lineWidth < 0) lineWidth = 0;
-			//this.lapiz.globalAlpha = opacidad;
-			this.lapiz.lineWidth = lineWidth;
-
-			const color = RepresentacionDecimalNumero.calcularColorSegunNivel(nivelPath);
-			this.lapiz.strokeStyle = `rgb(${color.rojo},${color.verde},${color.azul}, ${opacidad})`;
-
-			/* if (nivelPath == 1 || nivelPath == 0) {
-				console.log(`Para el ${nivelPath}:`);
-				console.log(`	Zona max relevancia:${zonaMaxRelevancia}`);
-				console.log(`	Zoom actual: ${this.zoom}`);
-				console.log(`	Opacidad: ${opacidad}`);
-			} */
-
-			this.lapiz.stroke(elPath);
+			this.trazarMultipath(nivelPath, elPath);
 		});
+	}
+	trazarMultipath(nivelPath, elPath, opciones) {
+
+		const { zonaMaxRelevancia, zoomDemasiadoPequeno, zoomDemasiadoGrande } = this.getBoundariesZoomConjuntoSegunNivel(nivelPath)
+
+		let opacidad = 1;
+		const maxLineWidth = 6;
+		let lineWidth = maxLineWidth;
+		lineWidth = maxLineWidth * (this.zoom - zoomDemasiadoPequeno) / (zoomDemasiadoGrande - zoomDemasiadoPequeno);
+		if (this.zoom > zonaMaxRelevancia[1]) {
+			opacidad = 1 - (this.zoom - zonaMaxRelevancia[1]) / (zoomDemasiadoGrande - zonaMaxRelevancia[1]);
+		}
+		else if (this.zoom < zonaMaxRelevancia[0]) {
+			if (opciones?.externo) {
+				opacidad = 1;
+			}
+			else {
+				opacidad = (this.zoom - zoomDemasiadoPequeno) / (zonaMaxRelevancia[0] - zoomDemasiadoPequeno)
+			}
+			if (this.nivelesIncluidos) {
+				if (opacidad < 0.5) opacidad = 0.5;
+			}
+		}
+		if (opacidad < 0) opacidad = 0;
+		if (opacidad > 1) opacidad = 1;
+		if (lineWidth > maxLineWidth) lineWidth = maxLineWidth;
+		if (lineWidth < 0.4) lineWidth = 0.4;
+		this.lapiz.lineWidth = lineWidth;
+
+		const color = RepresentacionDecimalNumero.calcularColorSegunNivel(nivelPath);
+		this.lapiz.strokeStyle = `rgb(${color.rojo},${color.verde},${color.azul}, ${opacidad})`;
+
+		/* if (nivelPath == 1 || nivelPath == 0) {
+			console.log(`Para el ${nivelPath}:`);
+			console.log(`	Zona max relevancia:${zonaMaxRelevancia}`);
+			console.log(`	Zoom actual: ${this.zoom}`);
+			console.log(`	Opacidad: ${opacidad}`);
+		} */
+
+		this.lapiz.stroke(elPath);
 	}
 	setNivelesVisiblesSegunZoom() { //Debe estar sorted de mayor a menor pues se iterará sobre este array al construir los subpaths.
 		this.calcularMultiplicadorZoom();

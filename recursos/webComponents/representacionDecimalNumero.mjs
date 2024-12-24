@@ -261,7 +261,9 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 				}
 			}
 			if (maxNivelDibujable == null) {//Ninguno de los niveles visibles podía ser dibujado en esta zona (Era zona para niveles bajos).
-				return;
+				maxNivelDibujable = nivelZona;
+				if (!this.pathsExternosPorNivel[nivelZona]) this.pathsExternosPorNivel[nivelZona] = new Path2D();
+
 			}
 
 			const diferenciaNiveles = nivelZona - maxNivelDibujable;
@@ -376,7 +378,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		}
 		else if (esExterno && !this.pathsExternosPorNivel[nivel]) {
 			console.log(`No había pathPorNivel para este nivel`);
-			throw "Path no disponible";
+			throw "Path externo no disponible";
 		}
 		if (esExterno) {
 			this.pathsExternosPorNivel[nivel].addPath(path);
@@ -388,7 +390,8 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		//Si hay conjuntos menores, llamar esta misma función para ellos.
 		const indexEsteNivelEnVisibles = this.nivelesVisibles.indexOf(nivel);
 		if (indexEsteNivelEnVisibles < 0) {
-			throw "Adding conjunto que no está en niveles visibles";
+			console.log("adding conjunto que no está en niveles visibles");
+			return;
 		}
 
 		let siguienteIndex = indexEsteNivelEnVisibles + 1;
@@ -450,6 +453,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 
 		Object.entries(this.pathsExternosPorNivel).forEach(entrada => {
 			const nivelPath = entrada[0];
+			console.log(`Trazando path externo de nivel ${nivelPath}`);
 			const elPath = entrada[1];
 
 			const { zonaMaxRelevancia, zoomDemasiadoPequeno, zoomDemasiadoGrande } = this.getBoundariesZoomConjuntoSegunNivel(nivelPath)
@@ -457,22 +461,22 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 			let opacidad = 1;
 			const maxLineWidth = 6;
 			let lineWidth = maxLineWidth;
-			if (this.zoom < zoomDemasiadoPequeno) {
-				return;
-			}
 			lineWidth = maxLineWidth * (this.zoom - zoomDemasiadoPequeno) / (zoomDemasiadoGrande - zoomDemasiadoPequeno);
 			if (this.zoom > zonaMaxRelevancia[1]) {
 				opacidad = 1 - (this.zoom - zonaMaxRelevancia[1]) / (zoomDemasiadoGrande - zonaMaxRelevancia[1]);
 			}
 			else if (this.zoom < zonaMaxRelevancia[0]) {
-				opacidad = 0.4 + (this.zoom - zoomDemasiadoPequeno) / (zonaMaxRelevancia[0] - zoomDemasiadoPequeno);
+				opacidad = 1;
 			}
 			if (opacidad < 0) opacidad = 0;
 			if (opacidad > 1) opacidad = 1;
 			if (lineWidth > maxLineWidth) lineWidth = maxLineWidth;
-			if (lineWidth < 0) lineWidth = 0;
+			if (lineWidth < 0.4) lineWidth = 0.4;
 			//this.lapiz.globalAlpha = opacidad;
 			this.lapiz.lineWidth = lineWidth;
+			if (nivelPath == 0) {
+				console.log(`Opacidad: ${opacidad}`);
+			}
 
 			const color = RepresentacionDecimalNumero.calcularColorSegunNivel(nivelPath);
 			this.lapiz.strokeStyle = `rgb(${color.rojo},${color.verde},${color.azul}, ${opacidad})`;

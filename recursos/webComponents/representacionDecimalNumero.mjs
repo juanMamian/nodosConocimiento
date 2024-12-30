@@ -21,6 +21,15 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 
 	nivelesIncluidos;
 
+	lastPointerPosition = {
+		x: null,
+		y: null
+	}
+	lastDistanciaPinch = null;
+
+	canceladorDeHandlers = new AbortController();
+	punterosActivos = new Map();
+
 	constructor() {
 		super();
 		this.calcularMultiplicadorZoom()
@@ -28,6 +37,8 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 	connectedCallback() {
 		console.log(`Conectado`);
 		const boundingThis = this.getBoundingClientRect();
+		const minAncho = 100;
+		let ancho = boundingThis.width || minAncho;
 		this.shadowRoot = this.attachShadow({ mode: "open" });
 
 		//Info zoom.
@@ -43,7 +54,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		//Info niveles.
 		const infoNiveles = document.createElement("div");
 		infoNiveles.setAttribute("id", "infoNiveles");
-		infoNiveles.textContent = "";
+		infoNiveles.textContent = "1";
 		this.shadowRoot.appendChild(infoNiveles);
 
 		//Canvas principal
@@ -60,6 +71,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		estilo.replaceSync(`
 			#elCanvas{
 			border: 2px dashed gray;
+			touch-action: none;
 			}
 		`);
 		this.shadowRoot.adoptedStyleSheets = [estilo];
@@ -68,6 +80,18 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		this.elCanvas.addEventListener("wheel", (e) => { this.handleWheel(e) }, { passive: false });
 		this.elCanvas.addEventListener("pointermove", (e) => this.handlePointerMove(e));
 		this.elCanvas.addEventListener("dblclick", (e) => this.centrarRepresentacionNumero())
+		this.elCanvas.addEventListener("pointerdown", (e) => this.punterosActivos.set(e.pointerId, e))
+		this.elCanvas.addEventListener("pointermove", (e) => this.punterosActivos.set(e.pointerId, e))
+		this.elCanvas.addEventListener("pointerup", (e) => {
+			this.punterosActivos.delete(e.pointerId)
+			this.lastDistanciaPinch = null;
+		})
+		this.elCanvas.addEventListener("pointercancel", (e) => {
+			this.punterosActivos.delete(e.pointerId);
+			this.lastDistanciaPinch = null;
+		})
+		document.addEventListener("pointerup", (e) => this.handlePointerup(e), { signal: this.canceladorDeHandlers.signal });
+
 
 
 		if (!this.nivelesIncluidos) {
@@ -75,6 +99,9 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		}
 		this.dibujarTodo();
 		this.centrarRepresentacionNumero();
+	}
+	disconnectedCallback() {
+		this.canceladorDeHandlers.abort();
 	}
 	centrarRepresentacionNumero() {
 		let zonaMaxima = Object.keys(this.zonas).reduce((acc, curr) => {
@@ -155,7 +182,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 			let nuevoArray = JSON.parse(valorAhora);
 			if (nuevoArray instanceof Array || nuevoArray.some(el => typeof el != Number)) {
 				this.nivelesIncluidos = nuevoArray;
-				this.nivelesVisibles = this.nivelesIncluidos.sort((a, b) => a < b);
+				this.nivelesVisibles = this.nivelesIncluidos.sort((a, b) => Number(b) - Number(a));
 			}
 			else {
 				console.log(`Error, atributo ${nombre} debe ser un array`);
@@ -229,13 +256,84 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 			this.lapiz.restore();
 		})
 	}
-	handlePointerMove(evento) {
-		if (evento instanceof MouseEvent && evento.buttons !== 1) {
-			return;
-		}
-		this.setEsquinaVista(this.esquinaVista.x - evento.movementX / this.multiplicadorZoom, this.esquinaVista.y - evento.movementY / this.multiplicadorZoom);
+	handlePointerup(evento) {
+		this.lastPointerPosition.x = null;
+		this.lastPointerPosition.y = null;
+		this.lastDistanciaPinch = null;
+	}
+	handleTouchmove(evento) {
+		if (evento.touches.length === 1) {
+			if (this.lastTouchmovePos.x != null && this.lastTouchmovePos.y != null) {
+				const delta = {
+					x: evento.touches[0].clientX - this.lastTouchmovePos.x,
+					y: evento.touches[0].clientY - this.lastTouchmovePos.y,
+				}
 
-		this.dibujarTodo();
+				this.setEsquinaVista(this.esquinaVista.x - delta.x / this.multiplicadorZoom, this.esquinaVista.y - delta.y / this.multiplicadorZoom);
+				evento.preventDefault();
+
+			}
+			this.lastTouchmovePos = {
+				x: evento.touches[0].clientX,
+				y: evento.touches[0].clientY,
+			}
+		}
+	}
+	handlePointerMove(evento) {
+		evento.preventDefault();
+		evento.stopPropagation();
+
+		if (this.punterosActivos.size === 1) { //Panning
+			if (evento instanceof MouseEvent && evento.buttons != 1) {
+				return;
+			}
+			if (this.lastPointerPosition.x != null && this.lastPointerPosition.y != null) {
+				this.elCanvas.setPointerCapture(evento.pointerId);
+				const delta = {
+					x: evento.clientX - this.lastPointerPosition.x,
+					y: evento.clientY - this.lastPointerPosition.y,
+				}
+				this.setEsquinaVista(this.esquinaVista.x - delta.x / this.multiplicadorZoom, this.esquinaVista.y - delta.y / this.multiplicadorZoom);
+
+				this.dibujarTodo();
+			}
+			this.lastPointerPosition.x = evento.clientX;
+			this.lastPointerPosition.y = evento.clientY;
+		}
+		else if (this.punterosActivos.size === 2) {
+			const punteros = Array.from(this.punterosActivos.values());
+			const diferencia = {
+				x: punteros[0].clientX - punteros[1].clientX,
+				y: punteros[0].clientY - punteros[1].clientY,
+			}
+			console.log(`Esquina vista: ${JSON.stringify(this.esquinaVista)}`);
+			const boundingCanvas = this.elCanvas.getBoundingClientRect();
+			const centroPinch = {
+				x: this.esquinaVista.x + ((punteros[0].clientX - boundingCanvas.left * 2 + punteros[1].clientX) / 2) / this.multiplicadorZoom,
+				y: this.esquinaVista.y + ((punteros[0].clientY - boundingCanvas.top * 2 + punteros[1].clientY) / 2) / this.multiplicadorZoom,
+			}
+			console.log(`Centro pinch: ${JSON.stringify(centroPinch)}`);
+
+			const distancia = Math.sqrt(Math.pow(diferencia.x, 2) + Math.pow(diferencia.y, 2));
+
+			if (this.lastDistanciaPinch == null) {
+				this.lastDistanciaPinch = distancia;
+			}
+			else {
+				const step = 0.035;
+				let nuevoZoom = this.zoom;
+				const umbralDistancia = 10;
+				if (distancia > this.lastDistanciaPinch + umbralDistancia) {
+					nuevoZoom += step;
+					this.lastDistanciaPinch = distancia;
+				}
+				else if (distancia < this.lastDistanciaPinch - umbralDistancia) {
+					nuevoZoom -= step;
+					this.lastDistanciaPinch = distancia;
+				}
+				this.setZoom(nuevoZoom, centroPinch);
+			}
+		}
 
 	}
 	setEsquinaVista(nuevoX, nuevoY) {
@@ -293,7 +391,6 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 			else {
 				cupo.y *= zona.factor;
 			}
-
 
 			const espacioUnidad = {
 				width: zona.width / cupo.x,
@@ -503,12 +600,6 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		const color = RepresentacionDecimalNumero.calcularColorSegunNivel(nivelPath);
 		this.lapiz.strokeStyle = `rgb(${color.rojo},${color.verde},${color.azul}, ${opacidad})`;
 
-		/* if (nivelPath == 1 || nivelPath == 0) {
-			console.log(`Para el ${nivelPath}:`);
-			console.log(`	Zona max relevancia:${zonaMaxRelevancia}`);
-			console.log(`	Zoom actual: ${this.zoom}`);
-			console.log(`	Opacidad: ${opacidad}`);
-		} */
 
 		this.lapiz.stroke(elPath);
 	}
@@ -520,7 +611,7 @@ export class RepresentacionDecimalNumero extends HTMLElement {
 		if (minimoConjuntoRectangularVisible % 2 === 0) minimoConjuntoRectangularVisible++;
 		this.nivelesVisibles = [minimoConjuntoCuadradoVisible, minimoConjuntoCuadradoVisible + 2, minimoConjuntoCuadradoVisible + 4,
 			minimoConjuntoRectangularVisible, minimoConjuntoRectangularVisible + 2, minimoConjuntoRectangularVisible + 4
-		].sort((a, b) => a < b);
+		].sort((a, b) => Number(b) - Number(a));
 
 		this.shadowRoot.querySelector("#infoNiveles").textContent = JSON.stringify(this.nivelesVisibles);
 	}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../../../../recursos/estilos/estiloEvaluaciones.css">
+    <link rel="stylesheet" href="../../../../recursos/estilos/paletaColores.css">
+    <script src="../../../../recursos/funciones/scriptsEvaluaciones.js">
+
+    </script>
+
+    <title>Promedio - evaluación</title>
+</head>
+
+<body>
+    <div id="contenedorPrincipal">
+
+        <div id="representacionPared" class="representacion">
+            <div id="imagenPared">
+                <img src="pared.webp" alt="Pared de ladrillos">
+                <div class="porcionPorcentual dePared">
+                </div>
+
+            </div>
+        </div>
+
+        <div id="instruccionRespuesta" class="instruccion">
+            ¿Qué parte de la pared ha sido pintada?
+        </div>
+
+        <div class="anuncio anuncioRespuestaIncorrecta">
+            Incorrecto...
+        </div>
+        <div class="anuncio anuncioRespuestaCorrecta">
+            ¡Correcto!
+        </div>
+
+
+        <div id="contenedorOpcionesRespuesta">
+            <div class="opcionRespuesta">
+            </div>
+            <div class="opcionRespuesta">
+            </div>
+            <div class="opcionRespuesta">
+            </div>
+            <div class="opcionRespuesta">
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    (function configurar() {
+        const elementosOpcionRespuesta = document.querySelectorAll(".opcionRespuesta");
+        console.log(`${elementosOpcionRespuesta.length} elementos opción`);
+        elementosOpcionRespuesta.forEach(elementoOpcion => {
+            elementoOpcion.addEventListener("click", function (evento) {
+                console.log(`Click`);
+                evaluarRespuestaUsuario(Number(this.innerText.slice(0, this.innerText.length - 1)));
+            })
+        });
+    })()
+
+    function generarReto() {
+        respuesta = Math.ceil(Math.random() * 10) * 10;
+        let opciones = [respuesta];
+        console.log(`Respuesta: ${respuesta}`);
+        for (let i = 1; i < 4; i++) {
+            opciones[i] = (opciones[i - 1] + 20) % 100;
+            console.log(`Opción: ${opciones[i]}`);
+        }
+        const elementosOpciones = document.querySelectorAll(".opcionRespuesta");
+        elementosOpciones.forEach((elemento, index) => {
+            elemento.innerText = opciones[index] + "%";
+        });
+
+        //Representar en pantalla
+        const porcionPorcentual = document.querySelector(".porcionPorcentual");
+        if (Object.values(porcionPorcentual.classList).includes("dePared")) {
+            porcionPorcentual.style.width = respuesta + "%";
+        }
+    }
+    generarReto();
+
+</script>
+<style>
+    .representacion {
+        margin: 1rem auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    #imagenPared {
+        position: relative;
+        width: fit-content;
+        border: 1px solid black;
+    }
+
+    .porcionPorcentual.dePared {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        background-color: red;
+        opacity: 0.5;
+    }
+
+    #contenedorOpcionesRespuesta {
+        display: flex;
+        gap: 1rem;
+        margin: 1rem auto;
+        justify-content: center;
+    }
+
+    .opcionRespuesta {
+        border: 1px solid black;
+        border-radius: 0.2rem;
+        height: 5rem;
+        width: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+</style>

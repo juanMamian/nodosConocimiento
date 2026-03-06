@@ -8,25 +8,7 @@
     text-align: center;
 }
 
-.anuncio {
+declaracion-respuesta {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin: 1rem auto;
-    width: min(200px, 90%);
-    padding: 1.5rem 1rem;
-    border-radius: 1rem;
-}
-
-.anuncioRespuestaCorrecta {
-    background-color: var(--correcto);
-    color: whitesmoke;
-    display: none;
-}
-
-.anuncioRespuestaIncorrecta {
-    background-color: var(--incorrecto);
-    color: whitesmoke;
-    display: none;
+    min-height: 5rem;
 }

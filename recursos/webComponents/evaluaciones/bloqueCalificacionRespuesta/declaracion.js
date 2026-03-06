@@ -29,6 +29,7 @@ class DeclaracionRespuesta extends HTMLElement {
             color: whitesmoke;
             margin: 1rem auto;
             display: none;
+            transition-timing-function: ease-out;
         }
         .anuncioCorrecto{
             background-color: var(--correcto);
@@ -44,14 +45,32 @@ class DeclaracionRespuesta extends HTMLElement {
     anunciarRespuestaCorrecta() {
         const anuncio = this.shadowRoot.querySelector(".anuncioCorrecto");
         const anuncioNo = this.shadowRoot.querySelector(".anuncioIncorrecto");
-        anuncio.style.display = "flex";
         anuncioNo.style.display = "none";
+        this.animarAnuncio(anuncio);
     }
     anunciarRespuestaIncorrecta() {
         const anuncio = this.shadowRoot.querySelector(".anuncioIncorrecto");
         const anuncioNo = this.shadowRoot.querySelector(".anuncioCorrecto");
         anuncioNo.style.display = "none";
         anuncio.style.display = "flex";
+        this.animarAnuncio(anuncio);
+    }
+    animarAnuncio(anuncio) {
+        anuncio.style.display = "flex";
+        anuncio.style.opacity = "0";
+        anuncio.style.transform = "translateY(-50%)";
+        setTimeout(() => {
+            anuncio.style.transition = "opacity 0.5s, transform 0.5s"
+        }, 5);
+
+        setTimeout(() => {
+            anuncio.style.opacity = "1";
+            anuncio.style.transform = "translateY(0%)";
+        }, 10);
+
+        setTimeout(() => {
+            anuncio.style.transition = "";
+        }, 500);
     }
 }
 customElements.define("declaracion-respuesta", DeclaracionRespuesta);

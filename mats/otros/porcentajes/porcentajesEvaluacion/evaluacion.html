@@ -65,6 +65,9 @@
         for (let i = 1; i < 4; i++) {
             opciones[i] = (opciones[i - 1] + 20) % 100;
         }
+        opciones.sort(() => {
+            return Math.random() - 0.5;
+        })
         const elementosOpciones = document.querySelectorAll(".opcionRespuesta");
         elementosOpciones.forEach((elemento, index) => {
             elemento.innerText = opciones[index] + "%";

@@ -1,5 +1,4 @@
 const sendHeight = () => {
-    console.log(`Sending height`);
     window.parent.postMessage(
         { type: 'resize', height: document.body.scrollHeight },
         '*' // or specify parent origin for security
@@ -14,16 +13,10 @@ if (document.readyState === 'complete') {
 window.addEventListener('resize', sendHeight);
 
 function anunciarRespuestaIncorrecta() {
-    const anuncioIncorrecto = document.querySelector(".anuncioRespuestaIncorrecta");
-    const anuncioCorrecto = document.querySelector(".anuncioRespuestaCorrecta");
-    anuncioIncorrecto.style.display = "flex";
-    anuncioCorrecto.style.display = "none";
+    document.querySelector("#declaracionRespuesta").anunciarRespuestaIncorrecta();
 }
 function anunciarRespuestaCorrecta() {
-    const anuncioCorrecto = document.querySelector(".anuncioRespuestaCorrecta");
-    const anuncioIncorrecto = document.querySelector(".anuncioRespuestaIncorrecta");
-    anuncioCorrecto.style.display = "flex";
-    anuncioIncorrecto.style.display = "none";
+    document.querySelector("#declaracionRespuesta").anunciarRespuestaCorrecta();
 }
 
 let respuesta = null;

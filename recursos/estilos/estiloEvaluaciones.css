@@ -1,6 +1,7 @@
 .opcionRespuesta {
     cursor: pointer;
     background-color: var(--acion);
+    box-shadow: 2px 2px 2px gray;
 }
 
 .instruccion {
@@ -14,7 +15,7 @@
     gap: 1rem;
     margin: 1rem auto;
     width: min(200px, 90%);
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
     border-radius: 1rem;
 }
 

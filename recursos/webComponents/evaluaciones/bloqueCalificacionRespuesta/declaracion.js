@@ -56,6 +56,7 @@ class DeclaracionRespuesta extends HTMLElement {
         this.animarAnuncio(anuncio);
     }
     animarAnuncio(anuncio) {
+        anuncio.scrollIntoView({ behavior: "smooth" });
         anuncio.style.display = "flex";
         anuncio.style.opacity = "0";
         anuncio.style.transform = "translateY(-50%)";

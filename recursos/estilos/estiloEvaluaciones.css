@@ -1,6 +1,6 @@
 .opcionRespuesta {
     cursor: pointer;
-    background-color: var(--acion);
+    background-color: var(--accion);
     box-shadow: 2px 2px 2px gray;
 }
 
@@ -11,4 +11,5 @@
 declaracion-respuesta {
     display: flex;
     min-height: 5rem;
+    flex-direction: column;
 }

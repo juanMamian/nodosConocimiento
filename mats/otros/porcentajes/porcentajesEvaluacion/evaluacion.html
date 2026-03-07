@@ -58,7 +58,7 @@
         });
     })()
 
-    function generarReto() {
+    function generadorReto() {
         respuesta = Math.ceil(Math.random() * 10) * 10;
         let opciones = [respuesta];
         for (let i = 1; i < 4; i++) {
@@ -90,6 +90,7 @@
     }
 
     #imagenPared {
+        display: flex;
         position: relative;
         width: fit-content;
         border: 1px solid black;

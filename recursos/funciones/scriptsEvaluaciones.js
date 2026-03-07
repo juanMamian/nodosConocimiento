@@ -22,7 +22,6 @@ function anunciarRespuestaCorrecta() {
 let respuesta = null;
 
 function evaluarRespuestaUsuario(respuestaUsuario) {
-    console.log(`Comparando ${respuestaUsuario} con ${respuesta}`);
     if (respuestaUsuario === respuesta) {
         anunciarRespuestaCorrecta();
     }
@@ -31,3 +30,23 @@ function evaluarRespuestaUsuario(respuestaUsuario) {
     }
 
 }
+
+function generarReto() {
+    try {
+        generadorReto()
+    } catch (error) {
+        console.log(`Error llamando el generador de reto: ${error}`);
+    }
+    const declaracionRespuesta = document.querySelector("#declaracionRespuesta");
+    if (declaracionRespuesta) {
+        declaracionRespuesta.reiniciar();
+    }
+}
+
+document.addEventListener("triggerRefreshPregunta", () => {
+    try {
+        generarReto();
+    } catch (error) {
+        console.log(`Error: ${error}`);
+    }
+})

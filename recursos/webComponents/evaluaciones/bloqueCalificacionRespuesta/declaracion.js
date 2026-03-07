@@ -12,7 +12,7 @@ class DeclaracionRespuesta extends HTMLElement {
         anuncioIncorrecto.classList = "anuncio anuncioIncorrecto";
         anuncioIncorrecto.textContent = "Incorrecto...";
 
-        const botonRefreshReto = document.createElement("div");
+        const botonRefreshReto = document.createElement("button");
         const imgRefresh = document.createElement("img");
         imgRefresh.src = "/recursos/iconos/refresh.svg";
         botonRefreshReto.classList = "boton"

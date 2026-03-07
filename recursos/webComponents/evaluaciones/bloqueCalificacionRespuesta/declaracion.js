@@ -14,7 +14,7 @@ class DeclaracionRespuesta extends HTMLElement {
 
         const botonRefreshReto = document.createElement("button");
         const imgRefresh = document.createElement("img");
-        imgRefresh.src = "/recursos/iconos/refresh.svg";
+        imgRefresh.src = "/nodosConocimiento/recursos/iconos/refresh.svg";
         botonRefreshReto.classList = "boton"
         botonRefreshReto.id = "botonRefreshReto"
         botonRefreshReto.appendChild(imgRefresh);

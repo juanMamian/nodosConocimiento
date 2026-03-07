@@ -123,6 +123,8 @@ class DeclaracionRespuesta extends HTMLElement {
         this.animarAnuncio(anuncio);
         setTimeout(() => {
             this.mostrarBotonRefresh();
+            const boton = this.shadowRoot.querySelector("#botonRefreshReto");
+            boton.focus();
         }, 700)
     }
     anunciarRespuestaIncorrecta() {

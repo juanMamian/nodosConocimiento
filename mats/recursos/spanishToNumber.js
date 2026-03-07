@@ -48,6 +48,33 @@ class SpanishNumbers {
      * SpanishNumbers.toNumber("doscientos cuarenta y tres mil setecientos doce")
      *                                               // 243_712
      */
+    static splitByAlternatives(input, separators) {
+        const normalized = input.trim().toLowerCase();
+
+        for (const separator of separators) {
+            const sep = separator.trim().toLowerCase();
+            const index = normalized.indexOf(sep);
+
+            if (index === -1) continue;
+
+            const left = input.slice(0, index).trim();
+            const right = input.slice(index + separator.length).trim();
+
+            if (left === "" || right === "") {
+                throw new Error(
+                    `Separator "${separator}" was found, but one side is empty. ` +
+                    `Got: left="${left}", right="${right}"`
+                );
+            }
+
+            return [left, right];
+        }
+
+        throw new Error(
+            `No valid separator found in "${input}". ` +
+            `Tried: ${separators.map(s => `"${s}"`).join(", ")}`
+        );
+    }
     static toNumber(word) {
         // Handle numeric input directly
         if (typeof word === "number") return Number.isFinite(word) ? Math.trunc(word) : NaN;

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/nodosConocimiento/recursos/estilos/estiloEvaluaciones.css">
+    <link rel="stylesheet" href="/nodosConocimiento/recursos/estilos/paletaColores.css">
+    <script src="/nodosConocimiento/recursos/funciones/scriptsEvaluaciones.js"> </script>
+    <script src="/nodosConocimiento/mats/webComponents/numeroBolitas.js"> </script>
+    <script
+        src="/nodosConocimiento/recursos/webComponents/evaluaciones/bloqueCalificacionRespuesta/declaracion.js"> </script>
+    <script src="/nodosConocimiento/mats/recursos/spanishToNumber.js"> </script>
+
+    <title>Descripción de división - evaluación</title>
+</head>
+
+<body>
+    <div id="contenedorPrincipal">
+        <representacion-numero-bolitas id="representacionNumero">
+        </representacion-numero-bolitas>
+        <button class="boton" id="botonDividir">
+            Dividir
+        </button>
+
+        <div id="bloqueRespuestaUsuario">
+            <div class="instruccion">
+                Describe lo que sucede
+            </div>
+            <input type="text" class="inputRespuestaUsuario" id="inputRespuestaUsuario" value="">
+            <button class="boton" id="botonAceptarRespuestaUsuario">
+                Aceptar
+            </button>
+        </div>
+
+        <declaracion-respuesta id="declaracionRespuesta">
+        </declaracion-respuesta>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const bloqueRespuestaUsuario = document.querySelector("#bloqueRespuestaUsuario");
+    const botonAceptarRespuestaUsuario = document.querySelector("#botonAceptarRespuestaUsuario");
+    const declaracionRespuesta = document.querySelector("#declaracionRespuesta");
+    const inputRespuestaUsuario = document.querySelector("#inputRespuestaUsuario");
+    const representacionNumero = document.querySelector("#representacionNumero");
+    let dividendo;
+    let divisor;
+
+    function reiniciarEspecifico() {
+        inputRespuestaUsuario.value = "";
+        bloqueRespuestaUsuario.style.display = "none"
+        botonDividir.style.display = "flex";
+        botonAceptarRespuestaUsuario.style.display = "flex";
+    }
+    function generadorReto() {
+        respuesta = Math.ceil(Math.random() * 5);
+        divisor = Math.ceil(Math.random() * 4) + 1;
+        dividendo = respuesta * divisor;
+
+        representacionNumero.setAttribute("numero", dividendo);
+    }
+
+    function dividir() {
+        representacionNumero.dividir(divisor, false);
+        botonDividir.style.display = "none";
+        bloqueRespuestaUsuario.style.display = "flex";
+        inputRespuestaUsuario.focus();
+    }
+    const botonDividir = document.querySelector("#botonDividir");
+    botonDividir.addEventListener("click", dividir);
+
+    function evaluarRespuestaUsuario() {
+        const respuestaUsuario = inputRespuestaUsuario.value;
+
+        let partes;
+        try {
+            partes = SpanishNumbers.splitByAlternatives(respuestaUsuario, ["dividido entre", "entre", "dividido", "/"]);
+        }
+        catch (error) {
+            console.log(`Error: ${error}`);
+            declaracionRespuesta.anunciarRespuestaIncorrecta();
+        }
+
+        if (partes.length != 2) {
+            throw "Error, debería haber 2 partes";
+        }
+        for (let i = 0; i < partes.length; i++) {
+            partes[i] = SpanishNumbers.toNumber(partes[i]);
+        }
+
+        if (partes[0] === dividendo && partes[1] === divisor) {
+            anunciarRespuestaCorrecta();
+            botonAceptarRespuestaUsuario.style.display = "none";
+        }
+        else {
+            anunciarRespuestaIncorrecta();
+            botonAceptarRespuestaUsuario.style.display = "flex";
+        }
+    }
+
+    botonAceptarRespuestaUsuario.addEventListener("click", evaluarRespuestaUsuario);
+    inputRespuestaUsuario.addEventListener("keypress", (e) => {
+        if (e.key === 'Enter') {
+            evaluarRespuestaUsuario()
+        }
+    });
+    generarReto();
+</script>
+<style>
+    .boton {
+        margin: 1rem auto;
+    }
+
+    .inputRespuestaUsuario {
+        margin: 0px auto;
+        display: block;
+        text-align: center;
+    }
+
+    #bloqueRespuestaUsuario {
+        margin-top: 2rem;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+</style>

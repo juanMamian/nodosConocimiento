@@ -13,3 +13,13 @@ declaracion-respuesta {
     min-height: 5rem;
     flex-direction: column;
 }
+
+.boton {
+    background-color: var(--acion);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 2px 2px 2px gray;
+}

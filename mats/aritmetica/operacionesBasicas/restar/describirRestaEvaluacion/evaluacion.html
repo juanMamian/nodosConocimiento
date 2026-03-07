@@ -56,6 +56,7 @@
         inputRespuestaUsuario.value = "";
         bloqueRespuestaUsuario.style.display = "none"
         botonRestar.style.display = "flex";
+        botonAceptarRespuestaUsuario.style.display = "flex";
     }
     function generadorReto() {
         minuendo = Math.ceil(Math.random() * 9 + 1);
@@ -69,8 +70,8 @@
     function restar() {
         representacionNumero.restar(sustraendo);
         const botonRestar = document.querySelector("#botonRestar");
-        botonRestar.style.display = "none";
         bloqueRespuestaUsuario.style.display = "flex";
+        botonRestar.style.display = "none";
     }
     const botonRestar = document.querySelector("#botonRestar");
     botonRestar.addEventListener("click", restar);
@@ -98,6 +99,7 @@
         }
         if (partes[0] === minuendo && partes[1] === sustraendo) {
             declaracionRespuesta.anunciarRespuestaCorrecta();
+            botonAceptarRespuestaUsuario.style.display = "none";
         }
         else {
             declaracionRespuesta.anunciarRespuestaIncorrecta();
@@ -105,6 +107,11 @@
     }
 
     botonAceptarRespuestaUsuario.addEventListener("click", evaluarRespuestaUsuario);
+    inputRespuestaUsuario.addEventListener("keypress", (e) => {
+        if (e.key === 'Enter') {
+            evaluarRespuestaUsuario()
+        }
+    });
     generarReto();
 </script>
 <style>

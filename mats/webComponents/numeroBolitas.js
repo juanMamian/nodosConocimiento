@@ -1,6 +1,8 @@
 class NumeroBolitas extends HTMLElement {
     static observedAttributes = ["numero"];
     static radioConjuntoDefault = 200;
+    static colorBolitasDefault = "red";
+    colorBolitas;
     radioConjunto;
     numero;
     constructor() {
@@ -8,6 +10,7 @@ class NumeroBolitas extends HTMLElement {
     }
     connectedCallback() {
         const shadowRoot = this.attachShadow({ mode: "open" });
+        this.colorBolitas = this.constructor.colorBolitasDefault;
 
         const conjunto = document.createElement("div");
         conjunto.id = "conjunto";
@@ -40,12 +43,24 @@ max-width: 30px;
 max-height: 30px;
 width: 10px;
 height: 10px;
-background-color: red;
+background-color: ${this.colorBolitas};
 position: absolute;
 transform: translate(-50%, -50%);
+transition: background-color 0.8s, opacity 0.8s;
+}
+.bolita.eliminada{
+background-color: black;
+opacity: 0.08;
 }
 `);
         shadowRoot.adoptedStyleSheets = [estilo];
+    }
+    restaurar() {
+        const conjunto = this.shadowRoot.querySelector("#conjunto");
+        const bolitas = conjunto.querySelectorAll(".bolita");
+        bolitas.forEach(bolita => {
+            bolita.classList.remove("eliminada");
+        })
     }
     restar(sustraendo) {
         if (sustraendo > this.numero) {
@@ -56,12 +71,7 @@ transform: translate(-50%, -50%);
 
         bolasSustraer.forEach((bolita, index) => {
             setTimeout(() => {
-                bolita.style.transition = "opacity 0.7s, background-color 0.7s";
-                bolita.style.opacity = 0;
-                bolita.style.backgroundColor = "black";
-                setTimeout(() => {
-                    bolita.remove();
-                }, 700);
+                bolita.classList.add("eliminada");
             }, index * 800);
         })
     }

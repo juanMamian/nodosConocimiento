@@ -30,6 +30,11 @@ class DeclaracionRespuesta extends HTMLElement {
 
         //Style
         const textoEstilo = `
+        :host{
+            display: flex;
+            min-height: 10rem;
+            flex-direction: column;
+        }
         *{
             box-sizing: border-box;
         }

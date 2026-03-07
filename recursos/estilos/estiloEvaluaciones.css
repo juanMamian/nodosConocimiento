@@ -8,11 +8,7 @@
     text-align: center;
 }
 
-declaracion-respuesta {
-    display: flex;
-    min-height: 5rem;
-    flex-direction: column;
-}
+declaracion-respuesta {}
 
 .boton {
     background-color: var(--acion);

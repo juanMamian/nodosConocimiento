@@ -37,16 +37,27 @@ function generarReto() {
     } catch (error) {
         console.log(`Error llamando el generador de reto: ${error}`);
     }
-    const declaracionRespuesta = document.querySelector("#declaracionRespuesta");
-    if (declaracionRespuesta) {
-        declaracionRespuesta.reiniciar();
+}
+function reiniciarGeneral() {
+    try {
+        const declaracionRespuesta = document.querySelector("#declaracionRespuesta");
+        if (declaracionRespuesta) {
+            declaracionRespuesta.reiniciar();
+        }
+        reiniciarEspecifico();
+    }
+    catch (error) {
+        console.log(`Error con reiniciar específico: ${error}`);
     }
 }
 
 document.addEventListener("triggerRefreshPregunta", () => {
     try {
+        reiniciarGeneral();
         generarReto();
     } catch (error) {
         console.log(`Error: ${error}`);
     }
 })
+
+reiniciarGeneral();

@@ -57,6 +57,9 @@ class DeclaracionRespuesta extends HTMLElement {
         .anuncioIncorrecto{
             background-color: var(--incorrecto);
         }
+        #botonRefreshReto{
+            display: none;
+        }
         .boton{
             cursor: pointer;
             display: flex;

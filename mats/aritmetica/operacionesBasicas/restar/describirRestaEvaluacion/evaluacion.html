@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/recursos/estilos/estiloEvaluaciones.css">
+    <link rel="stylesheet" href="/recursos/estilos/paletaColores.css">
+    <script src="/recursos/funciones/scriptsEvaluaciones.js"> </script>
+    <script src="/mats/webComponents/numeroBolitas.js"> </script>
+    <script src="/recursos/webComponents/evaluaciones/bloqueCalificacionRespuesta/declaracion.js"> </script>
+    <script src="/mats/recursos/spanishToNumber.js"> </script>
+
+    <title>Descripción de resta - evaluación</title>
+</head>
+
+<body>
+    <div id="contenedorPrincipal">
+        <representacion-numero-bolitas id="representacionNumero">
+        </representacion-numero-bolitas>
+        <button class="boton" id="botonRestar">
+            Restar
+        </button>
+
+        <div id="bloqueRespuestaUsuario">
+            <div class="instruccion">
+                Describe lo que sucede
+            </div>
+            <input type="text" class="inputRespuestaUsuario" id="inputRespuestaUsuario" value="">
+            <button class="boton" id="botonAceptarRespuestaUsuario">
+                Aceptar
+            </button>
+        </div>
+
+        <declaracion-respuesta id="declaracionRespuesta">
+        </declaracion-respuesta>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const bloqueRespuestaUsuario = document.querySelector("#bloqueRespuestaUsuario");
+    const botonAceptarRespuestaUsuario = document.querySelector("#botonAceptarRespuestaUsuario");
+    const declaracionRespuesta = document.querySelector("#declaracionRespuesta");
+    const inputRespuestaUsuario = document.querySelector("#inputRespuestaUsuario");
+    const representacionNumero = document.querySelector("#representacionNumero");
+    let sustraendo;
+    let minuendo;
+
+    function reiniciarEspecifico() {
+        inputRespuestaUsuario.value = "";
+        bloqueRespuestaUsuario.style.display = "none"
+        botonRestar.style.display = "flex";
+    }
+    function generadorReto() {
+        minuendo = Math.ceil(Math.random() * 9 + 1);
+        sustraendo = Math.ceil(Math.random() * minuendo);
+
+        respuesta = minuendo - sustraendo;
+
+        representacionNumero.setAttribute("numero", minuendo);
+    }
+
+    function restar() {
+        representacionNumero.restar(sustraendo);
+        const botonRestar = document.querySelector("#botonRestar");
+        botonRestar.style.display = "none";
+        bloqueRespuestaUsuario.style.display = "flex";
+    }
+    const botonRestar = document.querySelector("#botonRestar");
+    botonRestar.addEventListener("click", restar);
+
+    function evaluarRespuestaUsuario() {
+        const respuestaUsuario = inputRespuestaUsuario.value;
+
+        let posicionMenos = respuestaUsuario.indexOf("-");
+        let partes = [];
+        if (posicionMenos >= 0) {
+            partes = respuestaUsuario.split("-");
+        }
+        else {
+            posicionMenos = respuestaUsuario.indexOf("menos");
+            if (posicionMenos >= 0) {
+                partes = respuestaUsuario.split("menos");
+            }
+            else {
+                declaracionRespuesta.anunciarRespuestaIncorrecta();
+            }
+        }
+        for (let i = 0; i < partes.length; i++) {
+            partes[i] = partes[i].trim();
+            partes[i] = SpanishNumbers.toNumber(partes[i]);
+        }
+        if (partes[0] === minuendo && partes[1] === sustraendo) {
+            declaracionRespuesta.anunciarRespuestaCorrecta();
+        }
+        else {
+            declaracionRespuesta.anunciarRespuestaIncorrecta();
+        }
+    }
+
+    botonAceptarRespuestaUsuario.addEventListener("click", evaluarRespuestaUsuario);
+    generarReto();
+</script>
+<style>
+    .boton {
+        margin: 1rem auto;
+    }
+
+    .inputRespuestaUsuario {
+        margin: 0px auto;
+        display: block;
+        text-align: center;
+    }
+
+    #bloqueRespuestaUsuario {
+        margin-top: 2rem;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+</style>

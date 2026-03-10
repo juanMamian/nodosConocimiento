@@ -368,7 +368,22 @@ class NumeroBolitas extends HTMLElement {
     _sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+    distribuirBolitas() {
+        const posiciones = this.constructor.getPosicionesBolas(this.bolitas.length, this.radioBolitasRelativo);
+        for (let i = 0; i < posiciones.length; i++) {
+            if (!posiciones[i]) {
+                console.log(`Error: No había posición para la bolita ${i}`);
+                this.bolitas[i].top = "50%";
+                this.bolitas[i].left = "50%";
 
+            }
+            this.bolitas[i].style.top = Math.round(posiciones[i].y) + "%";
+            this.bolitas[i].style.left = Math.round(posiciones[i].x) + "%";
+        }
+    }
+    syncBolitas() {
+        this.bolitas = this.conjunto.querySelectorAll(".bolita");
+    }
     configurarNumero() {
         const conjunto = this.shadowRoot.querySelector("#conjunto");
         conjunto.querySelectorAll(".bolita").forEach(bolita => bolita.remove());
@@ -377,30 +392,11 @@ class NumeroBolitas extends HTMLElement {
         const ctx = this.canvas.getContext("2d");
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        const radioBolitasRelativo = this.calcularRadioBolitas(this.numero, 0.2);
-        const posiciones = this.getPosicionesBolas(this.numero, radioBolitasRelativo);
+        this.insertarBolas(new Array(this.numero).fill({}));
+        this.syncBolitas()
+        this.calcularRadioBolitas(0.2);
+        this.distribuirBolitas();
 
-        let infosCreacionBolitas = [];
-        for (let i = 0; i < this.numero; i++) {
-            infosCreacionBolitas[i] = {
-                x: posiciones[i].x,
-                y: posiciones[i].y,
-            }
-        }
-        this.insertarBolas(infosCreacionBolitas);
-        this.setRadiosBolitas();
-    }
-    setRadiosBolitas() {
-        const bolitas = this.conjunto.querySelectorAll(".bolita");
-        const cantidadBolitas = bolitas.length;
-        console.log(`Calculando radio para ${cantidadBolitas} bolitas `);
-        const radioBolitasRelativo = this.calcularRadioBolitas(cantidadBolitas, 0.2);
-        console.log(`Radio relativo queda en ${radioBolitasRelativo}`);
-        const radioBolitas = radioBolitasRelativo * this.radioConjunto;
-        bolitas.forEach(bolita => {
-            bolita.style.height = radioBolitasRelativo * 100 + "%";
-            bolita.style.width = radioBolitasRelativo * 100 + "%";
-        })
     }
 
     attributeChangedCallback(atributo, antes, ahora) {
@@ -414,11 +410,15 @@ class NumeroBolitas extends HTMLElement {
         }
     }
 
-    calcularRadioBolitas(n, cobertura = 0.25) {
-        return Math.min(Math.sqrt(cobertura / n), 0.9);
+    calcularRadioBolitas(cobertura = 0.25) {
+        this.radioBolitasRelativo = Math.min(Math.sqrt(cobertura / this.bolitas.length), 0.9);
+        this.bolitas.forEach(bolita => {
+            bolita.style.height = this.radioBolitasRelativo * 100 + "%";
+            bolita.style.width = this.radioBolitasRelativo * 100 + "%";
+        })
     }
 
-    getPosicionesBolas(n, r, guarda = 1000) {
+    static getPosicionesBolas(n, r, guarda = 1000) {
         if (n <= 0) throw new Error("n must be >= 1");
 
         const boundaryRadius = 1 - r;

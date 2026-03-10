@@ -1,11 +1,11 @@
 class NumeroBolitas extends HTMLElement {
-    static observedAttributes = ["numero"];
+    static observedAttributes = ["numero", "colorbolitas"];
     static radioConjuntoDefault = 200;
     static colorBolitasDefault = "red";
-    colorBolitas;
     radioConjunto;
     numero;
     canvas;
+    conjunto;
 
     constructor() {
         super();
@@ -13,10 +13,12 @@ class NumeroBolitas extends HTMLElement {
 
     connectedCallback() {
         const shadowRoot = this.attachShadow({ mode: "open" });
-        this.colorBolitas = this.constructor.colorBolitasDefault;
 
-        const conjunto = document.createElement("div");
-        conjunto.id = "conjunto";
+        let colorBolitas = this.getAttribute("colorBolitas") || this.constructor.colorBolitasDefault;
+        shadowRoot.host.style.setProperty("--colorBolitas", colorBolitas);
+
+        this.conjunto = document.createElement("div");
+        this.conjunto.id = "conjunto";
         this.radioConjunto = this.getAttribute("radioConjunto");
         if (this.radioConjunto == null) {
             this.radioConjunto = this.constructor.radioConjuntoDefault;
@@ -24,10 +26,9 @@ class NumeroBolitas extends HTMLElement {
 
         this.canvas = document.createElement("canvas");
         this.canvas.id = "canvasConjunto";
-        // FIX: was `canvas` (undefined), should be `this.canvas`
-        conjunto.appendChild(this.canvas);
+        this.conjunto.appendChild(this.canvas);
 
-        shadowRoot.appendChild(conjunto);
+        shadowRoot.appendChild(this.conjunto);
 
         // Style
         const estilo = new CSSStyleSheet();
@@ -52,7 +53,7 @@ class NumeroBolitas extends HTMLElement {
     max-height: 30px;
     width: 10px;
     height: 10px;
-    background-color: ${this.colorBolitas};
+    background-color: var(--colorBolitas, red);
     position: absolute;
     transform: translate(-50%, -50%);
     /* Smooth movement for dividir() animation */
@@ -84,7 +85,25 @@ class NumeroBolitas extends HTMLElement {
             bolita.classList.remove("eliminada");
         });
     }
-
+    insertarBolas(infos) {
+        infos.forEach(info => {
+            const elementoBola = document.createElement("div");
+            elementoBola.classList = "bolita";
+            if (info.y) {
+                elementoBola.style.top = info.y + "%";
+            }
+            else {
+                elementoBola.style.top = "50%";
+            }
+            if (info.x) {
+                elementoBola.style.left = info.x + "%";
+            }
+            else {
+                elementoBola.style.left = "50%";
+            }
+            this.conjunto.appendChild(elementoBola);
+        });
+    }
     restar(sustraendo) {
         if (sustraendo > this.numero) {
             throw "No se puede sustraer un número mayor al número";
@@ -359,25 +378,39 @@ class NumeroBolitas extends HTMLElement {
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         const radioBolitasRelativo = this.calcularRadioBolitas(this.numero, 0.2);
-        const radioBolitas = radioBolitasRelativo * this.radioConjunto;
         const posiciones = this.getPosicionesBolas(this.numero, radioBolitasRelativo);
 
+        let infosCreacionBolitas = [];
         for (let i = 0; i < this.numero; i++) {
-            const bolita = document.createElement("div");
-            bolita.classList = "bolita";
-            bolita.style.height = radioBolitas + "px";
-            bolita.style.width = radioBolitas + "px";
-            // FIX: x is horizontal → left; y is vertical → top
-            bolita.style.left = posiciones[i].x + "%";
-            bolita.style.top = posiciones[i].y + "%";
-            conjunto.appendChild(bolita);
+            infosCreacionBolitas[i] = {
+                x: posiciones[i].x,
+                y: posiciones[i].y,
+            }
         }
+        this.insertarBolas(infosCreacionBolitas);
+        this.setRadiosBolitas();
+    }
+    setRadiosBolitas() {
+        const bolitas = this.conjunto.querySelectorAll(".bolita");
+        const cantidadBolitas = bolitas.length;
+        console.log(`Calculando radio para ${cantidadBolitas} bolitas `);
+        const radioBolitasRelativo = this.calcularRadioBolitas(cantidadBolitas, 0.2);
+        console.log(`Radio relativo queda en ${radioBolitasRelativo}`);
+        const radioBolitas = radioBolitasRelativo * this.radioConjunto;
+        bolitas.forEach(bolita => {
+            bolita.style.height = radioBolitasRelativo * 100 + "%";
+            bolita.style.width = radioBolitasRelativo * 100 + "%";
+        })
     }
 
     attributeChangedCallback(atributo, antes, ahora) {
+        console.log(`Cambio en ${atributo}`);
         if (atributo === "numero") {
             this.numero = Number(ahora);
             this.configurarNumero();
+        }
+        else if (atributo === 'colorbolitas') {
+            this.shadowRoot && this.shadowRoot.style.setProperty("--colorBolitas", ahora);
         }
     }
 

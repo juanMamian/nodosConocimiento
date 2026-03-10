@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/nodosConocimiento/recursos/estilos/estiloEvaluaciones.css">
+    <link rel="stylesheet" href="/nodosConocimiento/recursos/estilos/paletaColores.css">
+    <script src="/nodosConocimiento/recursos/funciones/scriptsEvaluaciones.js"> </script>
+    <script src="/nodosConocimiento/mats/webComponents/numeroBolitas.js"> </script>
+    <script
+        src="/nodosConocimiento/recursos/webComponents/evaluaciones/bloqueCalificacionRespuesta/declaracion.js"> </script>
+    <script src="/nodosConocimiento/mats/recursos/spanishToNumber.js"> </script>
+
+    <title>Descripción de división - evaluación</title>
+</head>
+
+<body>
+    <div id="contenedorPrincipal">
+        <div id="contenedorConjuntos">
+            <representacion-numero-bolitas id="representacionNumero">
+            </representacion-numero-bolitas>
+            <representacion-numero-bolitas id="representacionSumador" colorBolitas="blue">
+            </representacion-numero-bolitas>
+        </div>
+        <button class="boton" id="botonSumar">
+            Sumar
+        </button>
+
+        <div id="bloqueRespuestaUsuario">
+            <div class="instruccion">
+                Describe lo que sucede
+            </div>
+            <input type="text" class="inputRespuestaUsuario" id="inputRespuestaUsuario" value="">
+            <button class="boton" id="botonAceptarRespuestaUsuario">
+                Aceptar
+            </button>
+        </div>
+
+        <declaracion-respuesta id="declaracionRespuesta">
+        </declaracion-respuesta>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const bloqueRespuestaUsuario = document.querySelector("#bloqueRespuestaUsuario");
+    const botonAceptarRespuestaUsuario = document.querySelector("#botonAceptarRespuestaUsuario");
+    const declaracionRespuesta = document.querySelector("#declaracionRespuesta");
+    const inputRespuestaUsuario = document.querySelector("#inputRespuestaUsuario");
+    const representacionNumero = document.querySelector("#representacionNumero");
+    const representacionSumador = document.querySelector("#representacionSumador");
+    let sumando1;
+    let sumando2;
+
+    function reiniciarEspecifico() {
+        representacionSumador.style.transition = "transform 0s";
+        representacionSumador.style.transform = "";
+        inputRespuestaUsuario.value = "";
+        bloqueRespuestaUsuario.style.display = "none"
+        botonSumar.style.display = "flex";
+        botonAceptarRespuestaUsuario.style.display = "flex";
+    }
+    function generadorReto() {
+        sumando1 = Math.ceil(Math.random() * 5) + 1;
+        sumando2 = Math.ceil(Math.random() * 5) + 1;
+
+        respuesta = sumando1 + sumando2;
+
+        representacionNumero.setAttribute("numero", sumando1);
+        representacionSumador.setAttribute("numero", sumando2);
+
+    }
+
+    function sumar() {
+        botonSumar.style.display = "none";
+        bloqueRespuestaUsuario.style.display = "flex";
+
+        representacionSumador.style.transition = "transform 1s";
+        representacionSumador.style.transform = "translateY(-100%)";
+
+        inputRespuestaUsuario.focus();
+    }
+    const botonSumar = document.querySelector("#botonSumar");
+    botonSumar.addEventListener("click", sumar);
+
+    function evaluarRespuestaUsuario() {
+        const respuestaUsuario = inputRespuestaUsuario.value;
+
+        let partes;
+        try {
+            partes = SpanishNumbers.splitByAlternatives(respuestaUsuario, ["mas", "más", "+"]);
+        }
+        catch (error) {
+            console.log(`Error: ${error}`);
+            declaracionRespuesta.anunciarRespuestaIncorrecta();
+        }
+
+        if (partes.length != 2) {
+            throw "Error, debería haber 2 partes";
+        }
+        for (let i = 0; i < partes.length; i++) {
+            partes[i] = SpanishNumbers.toNumber(partes[i]);
+        }
+
+        if (partes[0] === sumando1 && partes[1] === sumando2) {
+            anunciarRespuestaCorrecta();
+            botonAceptarRespuestaUsuario.style.display = "none";
+        }
+        else {
+            anunciarRespuestaIncorrecta();
+            botonAceptarRespuestaUsuario.style.display = "flex";
+        }
+    }
+
+    botonAceptarRespuestaUsuario.addEventListener("click", evaluarRespuestaUsuario);
+    inputRespuestaUsuario.addEventListener("keypress", (e) => {
+        if (e.key === 'Enter') {
+            evaluarRespuestaUsuario()
+        }
+    });
+    generarReto();
+</script>
+<style>
+    .boton {
+        margin: 1rem auto;
+    }
+
+    .inputRespuestaUsuario {
+        margin: 0px auto;
+        display: block;
+        text-align: center;
+    }
+
+    #bloqueRespuestaUsuario {
+        margin-top: 2rem;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    #contenedorConjuntos {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #representacionSumador {
+        transition: transform 1s;
+        opacity: 0.7;
+    }
+</style>

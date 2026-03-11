@@ -103,7 +103,6 @@ class NumeroBolitas extends HTMLElement {
                 y: (boxBolita.top + (boxBolita.height / 2) - boxConjunto.top) / boxConjunto.height,
             }
         })
-        console.log(`Retornando ${JSON.stringify(posiciones)}`);
         return posiciones;
     }
     asignarPosiciones(posiciones) {

@@ -1,6 +1,6 @@
 class NumeroBolitas extends HTMLElement {
     static observedAttributes = ["numero", "colorbolitas"];
-    static radioConjuntoDefault = 200;
+    static radioConjuntoDefault = 160;
     static colorBolitasDefault = "red";
     radioConjunto;
     numero;
@@ -29,6 +29,13 @@ class NumeroBolitas extends HTMLElement {
         this.conjunto.appendChild(this.canvas);
 
         shadowRoot.appendChild(this.conjunto);
+
+        let numeroAttr = this.getAttribute("numero");
+        if (numeroAttr == null) {
+            numeroAttr = 0;
+        }
+        this.numero = Number(numeroAttr);
+        this.configurarNumero();
 
         // Style
         const estilo = new CSSStyleSheet();
@@ -84,6 +91,30 @@ class NumeroBolitas extends HTMLElement {
         bolitas.forEach(bolita => {
             bolita.classList.remove("eliminada");
         });
+    }
+    listarPosiciones() {
+        const bolitas = this.conjunto.querySelectorAll(".bolita");
+        const boxConjunto = this.conjunto.getBoundingClientRect();
+        const posiciones = Array.from(bolitas).map(bolita => {
+            const boxBolita = bolita.getBoundingClientRect();
+
+            return {
+                x: (boxBolita.left + (boxBolita.width / 2) - boxConjunto.left) / boxConjunto.width,
+                y: (boxBolita.top + (boxBolita.height / 2) - boxConjunto.top) / boxConjunto.height,
+            }
+        })
+        console.log(`Retornando ${JSON.stringify(posiciones)}`);
+        return posiciones;
+    }
+    asignarPosiciones(posiciones) {
+        const bolitas = this.conjunto.querySelectorAll(".bolita");
+        for (let i = 0; i < bolitas.length; i++) {
+            if (!posiciones[i]) {
+                return
+            }
+            bolitas[i].style.left = posiciones[i].x * 100 + "%";
+            bolitas[i].style.top = posiciones[i].y * 100 + "%";
+        }
     }
     insertarBolas(infos) {
         infos.forEach(info => {
@@ -385,22 +416,22 @@ class NumeroBolitas extends HTMLElement {
         this.bolitas = this.conjunto.querySelectorAll(".bolita");
     }
     configurarNumero() {
-        const conjunto = this.shadowRoot.querySelector("#conjunto");
-        conjunto.querySelectorAll(".bolita").forEach(bolita => bolita.remove());
+        this.conjunto?.querySelectorAll(".bolita").forEach(bolita => bolita.remove());
 
         // Clear any division lines from a previous dividir() call
-        const ctx = this.canvas.getContext("2d");
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        const ctx = this.canvas?.getContext("2d");
+        ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.insertarBolas(new Array(this.numero).fill({}));
-        this.syncBolitas()
-        this.calcularRadioBolitas(0.2);
-        this.distribuirBolitas();
+        if (this.conjunto) {
+            this.insertarBolas(new Array(this.numero).fill({}));
+            this.syncBolitas()
+            this.calcularRadioBolitas(0.1);
+            this.distribuirBolitas();
+        }
 
     }
 
     attributeChangedCallback(atributo, antes, ahora) {
-        console.log(`Cambio en ${atributo}`);
         if (atributo === "numero") {
             this.numero = Number(ahora);
             this.configurarNumero();
@@ -419,7 +450,7 @@ class NumeroBolitas extends HTMLElement {
     }
 
     static getPosicionesBolas(n, r, guarda = 1000) {
-        if (n <= 0) throw new Error("n must be >= 1");
+        if (n <= 0) return [];
 
         const boundaryRadius = 1 - r;
         const minDistance = 2 * r * 1.04;

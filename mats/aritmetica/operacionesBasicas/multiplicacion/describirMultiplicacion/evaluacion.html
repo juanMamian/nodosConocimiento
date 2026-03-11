@@ -14,7 +14,7 @@
         src="/nodosConocimiento/recursos/webComponents/evaluaciones/bloqueCalificacionRespuesta/declaracion.js"> </script>
     <script src="/nodosConocimiento/mats/recursos/spanishToNumber.js"> </script>
 
-    <title>Descripción de suma - evaluación</title>
+    <title>Descripción de multiplicación - evaluación</title>
 </head>
 
 <body>
@@ -22,11 +22,12 @@
         <div id="contenedorConjuntos">
             <representacion-numero-bolitas id="representacionNumero">
             </representacion-numero-bolitas>
-            <representacion-numero-bolitas id="representacionSumador" colorBolitas="blue">
-            </representacion-numero-bolitas>
+            <div id="contenedorMultiplicacion">
+
+            </div>
         </div>
-        <button class="boton" id="botonSumar">
-            Sumar
+        <button class="boton" id="botonMultiplicar">
+            Multiplicar
         </button>
 
         <div id="bloqueRespuestaUsuario">
@@ -53,47 +54,71 @@
     const declaracionRespuesta = document.querySelector("#declaracionRespuesta");
     const inputRespuestaUsuario = document.querySelector("#inputRespuestaUsuario");
     const representacionNumero = document.querySelector("#representacionNumero");
-    const representacionSumador = document.querySelector("#representacionSumador");
-    let sumando1;
-    let sumando2;
+    const contenedorMultiplicacion = document.querySelector("#contenedorMultiplicacion");
+    const botonMultiplicar = document.querySelector("#botonMultiplicar");
+
+    let multiplicado;
+    let multiplicador;
+
+    botonMultiplicar.addEventListener("click", multiplicar);
 
     function reiniciarEspecifico() {
-        representacionSumador.style.transition = "transform 0s";
-        representacionSumador.style.transform = "";
         inputRespuestaUsuario.value = "";
         bloqueRespuestaUsuario.style.display = "none"
-        botonSumar.style.display = "flex";
+        botonMultiplicar.style.display = "flex";
         botonAceptarRespuestaUsuario.style.display = "flex";
+        representacionNumero.style.opacity = "1";
+
+        const representacionesNumero = contenedorMultiplicacion.querySelectorAll("representacion-numero-bolitas");
+        representacionesNumero.forEach(representacion => {
+            representacion.remove();
+        });
     }
     function generadorReto() {
-        sumando1 = Math.ceil(Math.random() * 5) + 1;
-        sumando2 = Math.ceil(Math.random() * 5) + 1;
+        multiplicado = Math.ceil(Math.random() * 5) + 1;
+        multiplicador = Math.ceil(Math.random() * 5) + 1;
 
-        respuesta = sumando1 + sumando2;
+        respuesta = multiplicado * multiplicador;
 
-        representacionNumero.setAttribute("numero", sumando1);
-        representacionSumador.setAttribute("numero", sumando2);
+        representacionNumero.setAttribute("numero", multiplicado);
+    }
+    function syncRepresentacionMultiplicacion() {
+        const representacionesNumero = contenedorMultiplicacion.querySelectorAll("representacion-numero-bolitas");
+        representacionesNumero.forEach(representacion => {
+            representacion.remove();
+        });
 
+        const posicionesBase = representacionNumero.listarPosiciones();
+        const step = 500;
+        for (let i = 0; i < multiplicador; i++) {
+            const clon = representacionNumero.cloneNode(true);
+            clon.setAttribute("colorBolitas", "blue");
+            contenedorMultiplicacion.appendChild(clon);
+            clon.asignarPosiciones(posicionesBase);
+            clon.style.opacity = "0";
+            setTimeout(() => {
+                clon.style.transition = "opacity 0.5s";
+                clon.style.opacity = "1";
+            }, 100 + step * i);
+        }
     }
 
-    function sumar() {
-        botonSumar.style.display = "none";
+    function multiplicar() {
+        botonMultiplicar.style.display = "none";
         bloqueRespuestaUsuario.style.display = "flex";
-
-        representacionSumador.style.transition = "transform 1s";
-        representacionSumador.style.transform = "translateY(-100%)";
+        representacionNumero.style.opacity = "0.1";
+        representacionNumero.style.transition = "opacity 0.5s, transform 0.5s";
+        syncRepresentacionMultiplicacion();
 
         inputRespuestaUsuario.focus();
     }
-    const botonSumar = document.querySelector("#botonSumar");
-    botonSumar.addEventListener("click", sumar);
 
     function evaluarRespuestaUsuario() {
         const respuestaUsuario = inputRespuestaUsuario.value;
 
         let partes;
         try {
-            partes = SpanishNumbers.splitByAlternatives(respuestaUsuario, ["mas", "más", "+"]);
+            partes = SpanishNumbers.splitByAlternatives(respuestaUsuario, ["por", "multiplicado por", "x", "*"]);
         }
         catch (error) {
             console.log(`Error: ${error}`);
@@ -107,7 +132,7 @@
             partes[i] = SpanishNumbers.toNumber(partes[i]);
         }
 
-        if (partes[0] === sumando1 && partes[1] === sumando2) {
+        if (partes[0] === multiplicado && partes[1] === multiplicador) {
             anunciarRespuestaCorrecta();
             botonAceptarRespuestaUsuario.style.display = "none";
         }
@@ -144,14 +169,15 @@
         gap: 1rem;
     }
 
-    #contenedorConjuntos {
+    #contenedorMultiplicacion {
         position: relative;
         display: flex;
-        flex-direction: column;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
-    #representacionSumador {
-        transition: transform 1s;
-        opacity: 0.7;
+    #contenedorMultiplicacion representacion-numero-bolitas {
+        margin: unset;
     }
 </style>

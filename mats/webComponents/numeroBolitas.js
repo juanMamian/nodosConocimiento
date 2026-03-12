@@ -211,7 +211,7 @@ class NumeroBolitas extends HTMLElement {
         const conjunto = this.shadowRoot.querySelector("#conjunto");
         const bolitas = Array.from(conjunto.querySelectorAll(".bolita"));
         const n = bolitas.length;
-        const r = this.calcularRadioBolitas(n, 0.25);
+        const r = this.radioBolitasRelativo;
 
         // Round-robin region assignment: ball i goes to region (i % divisor)
         const asignaciones = bolitas.map((_, i) => i % divisor);

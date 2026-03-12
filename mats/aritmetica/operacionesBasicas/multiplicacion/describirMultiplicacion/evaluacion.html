@@ -99,6 +99,7 @@
             setTimeout(() => {
                 clon.style.transition = "opacity 0.5s";
                 clon.style.opacity = "1";
+                clon.scrollIntoView({behavior: "smooth"});
             }, 100 + step * i);
         }
     }
@@ -118,7 +119,7 @@
 
         let partes;
         try {
-            partes = SpanishNumbers.splitByAlternatives(respuestaUsuario, ["por", "multiplicado por", "x", "*"]);
+            partes = SpanishNumbers.splitByAlternatives(respuestaUsuario, ["multiplicado por", "por", "x", "*"]);
         }
         catch (error) {
             console.log(`Error: ${error}`);

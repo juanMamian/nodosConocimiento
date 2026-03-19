@@ -21,7 +21,9 @@ function anunciarRespuestaCorrecta() {
 
 let respuesta = null;
 
-function evaluarRespuestaUsuario(respuestaUsuario) {
+function evaluarRespuestaUsuario() {
+	const respuestaUsuario = recolectarRespuestaUsuario();
+	console.log(`Comparando ${respuestaUsuario} con ${respuesta}`);
     if (respuestaUsuario === respuesta) {
         anunciarRespuestaCorrecta();
     }

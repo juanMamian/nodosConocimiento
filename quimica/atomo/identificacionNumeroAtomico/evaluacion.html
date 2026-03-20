@@ -1,0 +1,105 @@
+<!DOCTYPE html> <html lang="es">
+
+	<head> <meta charset="UTF-8"> <meta https-equiv="X-UA-Compatible"
+		content="IE=edge"> <meta name="viewport"
+			content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet"
+			href="/nodosConocimiento/recursos/estilos/estiloEvaluaciones.css">
+		<link rel="stylesheet"
+			href="/nodosConocimiento/recursos/estilos/paletaColores.css">
+		<script
+		src="/nodosConocimiento/recursos/funciones/scriptsEvaluaciones.js">
+		</script> <script
+		src="/nodosConocimiento/recursos/webComponents/evaluaciones/bloqueCalificacionRespuesta/declaracion.js">
+		</script> <script
+		src="/nodosConocimiento/quimica/recursos/webComponents/representacionAtomo.js"></script>
+		<script
+		src="/nodosConocimiento/quimica/recursos/atomo.js"></script>
+
+		<title>Identificación de número atómico - evaluación</title>
+	</head>
+
+	<body> 
+	
+		<div id="contenedorPrincipal"> <div id="contenedorAtomo">
+		<diagrama-atomo electrones="79" protones="79" neutrones="79"
+			legend="true"/> </div>	
+
+		<div class="instruccion"> Introduce los datos de este átomo
+		</div> 
+		<div class="bloqueInput"> 
+			<div class="instruccion">
+			Numero atómico 
+			</div> 
+			<input id="inputRespuestaUsuario" type="number">	
+		</div> 
+		<div class="bloqueInput"> 
+			<div class="instruccion"> 
+				Numero másico 
+			</div> 
+			<input id="inputRespuestaUsuario"
+				type="number">	
+		</div> 
+		<div class="bloqueInput"> 
+			<div class="instruccion"> 
+					Nombre
+			</div> 
+			<input id="inputRespuestaUsuario"
+				type="number">	
+		</div> 
+		<button class="boton" id="botonAceptarRespuestaUsuario">
+			Aceptar
+		</button>	
+		<declaracion-respuesta id="declaracionRespuesta" /> 
+		</div> 
+	</body>
+
+</html>
+
+<script> const diagramaAtomo = document.querySelector("diagrama-atomo"); let
+electrones = 1; let neutrones = 1; let protones = 1; const
+botonAceptarRespuestaUsuario=document.querySelector("#botonAceptarRespuestaUsuario");
+const inputRespuestaUsuario = document.querySelector("#inputRespuestaUsuario");
+botonAceptarRespuestaUsuario.addEventListener("click",
+	evaluarRespuestaUsuario);
+
+function generadorReto(){ console.log("Generando reto"); protones =
+	Math.ceil(Math.random()*20);
+	
+	console.log(`Con ${protones} protones`); const neutronesCounts =
+	Atomo.getNumerosNeutronesAproximados(protones);
+	console.log(`Hay ${neutronesCounts} cuentas`);
+	const index = Math.floor(Math.random()*neutronesCounts.length);
+	neutrones = neutronesCounts[index]; electrones = protones;
+	respuesta=protones;
+
+	diagramaAtomo.setAttribute("electrones", electrones);
+	diagramaAtomo.setAttribute("neutrones", neutrones);
+	diagramaAtomo.setAttribute("protones", protones);
+
+} function recolectarRespuestaUsuario()
+{
+	let objetoRespuesta={};
+	const respuestaZ = Number(inputRespuestaUsuarioZ.value.trim());
+	const respuestaA = Number(inputRespuestaUsuarioZ.value.trim());
+	const respuestaNombre = inputRespuestaUsuarioNombre.value.trim();
+
+	return {
+		z: respuestaZ,
+		a: respuestaA,
+		nombre: respuestaNombre,
+	}; 
+}
+generarReto(); 
+</script> 
+
+<style> 
+#contenedorPrincipal {
+display: flex;
+flex-direction: column; gap: 1rem; align-items: center; 
+}
+diagrama-atomo{
+margin: 1rem auto;
+}
+</style>

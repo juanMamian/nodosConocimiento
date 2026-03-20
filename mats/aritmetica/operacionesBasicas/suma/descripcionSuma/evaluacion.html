@@ -80,8 +80,24 @@
         botonSumar.style.display = "none";
         bloqueRespuestaUsuario.style.display = "flex";
 
-        representacionSumador.style.transition = "transform 1s";
-        representacionSumador.style.transform = "translateY(-100%)";
+        const posicionesBolasSumar = Array.from(representacionSumador.shadowRoot.querySelectorAll(".bolita")).map(bolita => {
+            const box = bolita.getBoundingClientRect();
+            return {
+                animateFrom: {
+                    x: box.left,
+                    y: box.top,
+                },
+                color: "blue",
+            }
+        });
+        const step = 500;
+        representacionNumero.insertarBolas(posicionesBolasSumar, step);
+        representacionSumador.shadowRoot.querySelectorAll(".bolita").forEach((bolita, index) => {
+            setTimeout(() => {
+                bolita.style.opacity = "0.3";
+                bolita.style.backgroundColor = "gray";
+            }, 20 + index * step);
+        });
 
         inputRespuestaUsuario.focus();
     }
@@ -152,6 +168,5 @@
 
     #representacionSumador {
         transition: transform 1s;
-        opacity: 0.7;
     }
 </style>

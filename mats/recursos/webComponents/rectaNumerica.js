@@ -42,6 +42,11 @@ class RectaNumerica extends HTMLElement {
         v ? this.setAttribute('resaltable-por-usuario', '') : this.removeAttribute('resaltable-por-usuario');
     }
 
+    get zoomable() { return this.hasAttribute('zoomable'); }
+    set zoomable(v) {
+        v ? this.setAttribute('zoomable', '') : this.removeAttribute('zoomable');
+    }
+
     get maxResaltables() { return Number(this.getAttribute('max-resaltables')); }
     set maxResaltables(v) {
         v ? this.setAttribute('max-resaltables', v) : this.removeAttribute('max-resaltables');
@@ -484,6 +489,9 @@ class RectaNumerica extends HTMLElement {
     }
 
     _doZoom(f, px) {
+        if (!this.zoomable) {
+            return;
+        }
         if (px === undefined) px = this._canvas.clientWidth / 2;
         var wp = (px - this._canvas.clientWidth / 2 - this._offset) / this._ppu();
         this._zoom = Math.max(0.0002, Math.min(8000, this._zoom * f));

@@ -42,6 +42,11 @@ class RectaNumerica extends HTMLElement {
         v ? this.setAttribute('resaltable-por-usuario', '') : this.removeAttribute('resaltable-por-usuario');
     }
 
+    get maxResaltables() { return Number(this.getAttribute('max-resaltables')); }
+    set maxResaltables(v) {
+        v ? this.setAttribute('max-resaltables', v) : this.removeAttribute('max-resaltables');
+    }
+
     get esconderNumeros() { return this.hasAttribute('esconder-numeros'); }
     set esconderNumeros(v) {
         v ? this.setAttribute('esconder-numeros', '') : this.removeAttribute('esconder-numeros');
@@ -56,7 +61,12 @@ class RectaNumerica extends HTMLElement {
      */
     resaltarNumero(n, opciones) {
         opciones = opciones || {};
+        while (this.maxResaltables != null && this.maxResaltables >= 1 && this._highlights.size >= this.maxResaltables) {
+            const first = this._highlights.values().next().value;
+            this._highlights.delete(first);
+        }
         this._highlights.add(this._key(n));
+
         if (opciones.centrar) {
             var movimiento = opciones.movimientoCentrar === 'deslizar' ? 'deslizar' : 'instantaneo';
             this._centerOn(n, movimiento);
@@ -391,8 +401,8 @@ class RectaNumerica extends HTMLElement {
             self._drag = false;
         };
         c.addEventListener('mousedown', this._onMousedown);
-        window.addEventListener('mousemove', this._onMousemove);
-        window.addEventListener('mouseup', this._onMouseup);
+        this._canvas.addEventListener('mousemove', this._onMousemove);
+        this._canvas.addEventListener('mouseup', this._onMouseup);
 
         this._onTouchstart = function (e) {
             e.preventDefault();
@@ -460,7 +470,7 @@ class RectaNumerica extends HTMLElement {
             this._highlights.delete(found);
         } else {
             var n = this._pixelToNumber(px);
-            this._highlights.add(this._key(n));
+            this.resaltarNumero(n);
         }
         this._draw();
         this._emitChange();

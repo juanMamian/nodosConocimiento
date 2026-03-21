@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/nodosConocimiento/recursos/estilos/estiloEvaluaciones.css">
+    <link rel="stylesheet" href="/nodosConocimiento/recursos/estilos/paletaColores.css">
+    <script src="/nodosConocimiento/recursos/funciones/scriptsEvaluaciones.js"> </script>
+    <script src="/nodosConocimiento/mats/webComponents/numeroBolitas.js"> </script>
+    <script
+        src="/nodosConocimiento/recursos/webComponents/evaluaciones/bloqueCalificacionRespuesta/declaracion.js"> </script>
+    <script src="/nodosConocimiento/mats/recursos/spanishToNumber.js"> </script>
+    <script src="/nodosConocimiento/mats/recursos/webComponents/rectaNumerica.js"> </script>
+
+    <title>Ubicación de número - evaluación</title>
+</head>
+
+<body>
+    <div id="contenedorPrincipal">
+
+        <div id="bloqueRespuestaUsuario">
+            <div class="instruccion" id="instruccionReto">
+                Ubica el número <div id="spanNumeroReto"></div>
+            </div>
+
+        </div>
+        <recta-numerica esconder-numeros resaltable-por-usuario max-resaltables="1">
+        </recta-numerica>
+
+        <button class="boton" id="botonAceptarRespuestaUsuario">
+            Aceptar
+        </button>
+        <declaracion-respuesta id="declaracionRespuesta">
+        </declaracion-respuesta>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const botonAceptarRespuestaUsuario = document.querySelector("#botonAceptarRespuestaUsuario");
+    const inputRespuestaUsuario = document.querySelector("#inputRespuestaUsuario");
+    const spanNumeroReto = document.querySelector("#spanNumeroReto")
+    const rectaNumerica = document.querySelector("recta-numerica");
+
+    function handleKeypress(evento) {
+        evento.stopPropagation();
+        if (evento.key === 'Enter') {
+            evaluarRespuestaUsuario();
+        }
+
+    }
+    botonAceptarRespuestaUsuario.addEventListener("click", evaluarRespuestaUsuario);
+
+    function generadorReto() {
+        respuesta = Math.round(Math.random() * 40) - 20;
+        rectaNumerica.limpiarResaltados();
+        spanNumeroReto.textContent = respuesta;
+    }
+    function recolectarRespuestaUsuario() {
+        const resaltados = rectaNumerica.leerResaltados();
+        if (resaltados.length < 1) {
+            return null;
+        }
+        return Number(resaltados[0]);
+    }
+    generadorReto();
+
+</script>
+<style>
+    recta-numerica {
+        margin: 1rem auto;
+        width: 90%;
+        height: 100px;
+    }
+
+    #contenedorPrincipal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    #bloqueRespuestaUsuario {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    #spanNumeroReto {
+        border: 1px dashed var(--accion);
+        padding: 0.1rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+    }
+
+    #instruccionReto {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin: 1rem auto;
+    }
+</style>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/nodosConocimiento/recursos/estilos/estiloEvaluaciones.css">
+    <link rel="stylesheet" href="/nodosConocimiento/recursos/estilos/paletaColores.css">
+    <script src="/nodosConocimiento/recursos/funciones/scriptsEvaluaciones.js"> </script>
+    <script src="/nodosConocimiento/mats/webComponents/numeroBolitas.js"> </script>
+    <script
+        src="/nodosConocimiento/recursos/webComponents/evaluaciones/bloqueCalificacionRespuesta/declaracion.js"> </script>
+    <script src="/nodosConocimiento/mats/recursos/spanishToNumber.js"> </script>
+    <script src="/nodosConocimiento/mats/recursos/webComponents/rectaNumerica.js"> </script>
+
+    <title>Identificación de punto - evaluación</title>
+</head>
+
+<body>
+    <div id="contenedorPrincipal">
+
+        <recta-numerica esconder-numeros>
+        </recta-numerica>
+        <div id="bloqueRespuestaUsuario">
+            <div class="instruccion">
+                Identifica el punto marcado
+            </div>
+            <input type="number" id="inputRespuestaUsuario">
+
+            <button class="boton" id="botonAceptarRespuestaUsuario">
+                Aceptar
+            </button>
+        </div>
+
+        <declaracion-respuesta id="declaracionRespuesta">
+        </declaracion-respuesta>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    const botonAceptarRespuestaUsuario = document.querySelector("#botonAceptarRespuestaUsuario");
+    const inputRespuestaUsuario = document.querySelector("#inputRespuestaUsuario");
+    const rectaNumerica = document.querySelector("recta-numerica");
+
+    function handleKeypress(evento) {
+        evento.stopPropagation();
+        if (evento.key === 'Enter') {
+            evaluarRespuestaUsuario();
+        }
+
+    }
+    inputRespuestaUsuario.addEventListener("keypress", handleKeypress);
+    botonAceptarRespuestaUsuario.addEventListener("click", evaluarRespuestaUsuario);
+
+    function generadorReto() {
+        respuesta = Math.round(Math.random() * 40) - 20;
+        rectaNumerica.limpiarResaltados();
+        rectaNumerica.resaltarNumero(respuesta, {centrar: true, movimientoCentrar: "deslizar"});
+    }
+    function recolectarRespuestaUsuario() {
+
+        return Number(inputRespuestaUsuario.value);
+    }
+    generadorReto();
+
+</script>
+<style>
+    recta-numerica {
+        margin: 1rem auto;
+        width: 90%;
+        height: 100px;
+    }
+
+    #contenedorPrincipal {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    #bloqueRespuestaUsuario {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+</style>

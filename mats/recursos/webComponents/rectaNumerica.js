@@ -176,7 +176,7 @@ class RectaNumerica extends HTMLElement {
         if (!W || !H) return;
 
         ctx.clearRect(0, 0, W, H);
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#ffffff40';
         ctx.fillRect(0, 0, W, H);
 
         var p = this._ppu();

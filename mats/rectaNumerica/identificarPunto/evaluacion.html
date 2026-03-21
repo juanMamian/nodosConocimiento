@@ -58,7 +58,7 @@
     botonAceptarRespuestaUsuario.addEventListener("click", evaluarRespuestaUsuario);
 
     function generadorReto() {
-        respuesta = Math.round(Math.random() * 40) - 20;
+        respuesta = Math.round(Math.random() * 20) - 10;
         rectaNumerica.limpiarResaltados();
         rectaNumerica.resaltarNumero(respuesta, {centrar: true, movimientoCentrar: "deslizar"});
     }
